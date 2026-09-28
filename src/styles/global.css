@@ -52,6 +52,10 @@ body.menu-open {
   overflow: hidden;
 }
 
+body.dialog-open {
+  overflow: hidden;
+}
+
 a {
   color: inherit;
 }
@@ -1001,6 +1005,14 @@ a {
   color: var(--ink-soft);
 }
 
+.newsletter-contacts {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .newsletter-summary {
   max-width: 48rem;
   padding: clamp(1.25rem, 4vw, 2rem);
@@ -1014,6 +1026,84 @@ a {
   color: var(--green);
   font-family: var(--font-display);
   font-size: 1.8rem;
+}
+
+.newsletter-summary-date {
+  margin: 0.35rem 0 1.25rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.newsletter-summary-section h3 {
+  margin: 1.6rem 0 0.45rem;
+  color: var(--green-dark);
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.newsletter-summary-section p {
+  margin: 0.8rem 0 0;
+}
+
+.newsletter-read-more {
+  margin-top: 1.25rem;
+}
+
+.newsletter-dialog {
+  width: min(calc(100% - 2rem), 46rem);
+  max-height: min(86dvh, 52rem);
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.newsletter-dialog::backdrop {
+  background: rgba(11, 32, 21, 0.58);
+  backdrop-filter: blur(4px);
+}
+
+.newsletter-dialog .dialog-content {
+  position: relative;
+  max-height: min(86dvh, 52rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  -webkit-overflow-scrolling: touch;
+}
+
+.newsletter-dialog .dialog-content h2 {
+  max-width: 18ch;
+  padding-right: 2rem;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+}
+
+.newsletter-dialog-sections {
+  margin-top: 1.5rem;
+}
+
+.newsletter-dialog-close {
+  position: absolute;
+  z-index: 1;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 1.6rem;
+  line-height: 1;
+  place-items: center;
 }
 
 .impact-callout {
@@ -1856,6 +1946,10 @@ a {
     gap: 0.75rem;
   }
 
+  .hero {
+    padding-bottom: 1rem;
+  }
+
   .brand-logo {
     width: 3.5rem;
     height: 3.5rem;
@@ -1945,6 +2039,10 @@ a {
   .content-section,
   .quick-actions {
     padding-block: 2.25rem;
+  }
+
+  .quick-actions {
+    padding-top: 0;
   }
 
   .event-body {

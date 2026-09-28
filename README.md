@@ -1,6 +1,6 @@
-# Friends of Ashley Website
+# The Friends of Ashley Website
 
-Design and implementation workspace for the Friends of Ashley (FOA), the parent teacher association for Ashley C of E Primary School in Walton-on-Thames.
+Design and implementation workspace for The Friends of Ashley (FOA), the parent teacher association for Ashley C of E Primary School in Walton-on-Thames.
 
 ## Current State
 
@@ -84,6 +84,8 @@ Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow installs l
 When resuming work, read that document first and begin with **Next Steps** and **Further Clarifications and Design Decisions Needed**.
 
 [`AGENTS.md`](AGENTS.md) contains durable instructions for AI agents, including the required session-closure and documentation workflow.
+
+[`docs/STYLE-GUIDE.md`](docs/STYLE-GUIDE.md) contains the public copy convention for the organisation name and related usage.
 
 ## Immediate Next Step
 

@@ -1,10 +1,10 @@
 # Agent Instructions
 
-This file contains durable working instructions for AI agents contributing to the Friends of Ashley website. Read it before making changes.
+This file contains durable working instructions for AI agents contributing to The Friends of Ashley website. Read it before making changes.
 
 ## Project Context
 
-- This is the website for Friends of Ashley (FOA), the PTA for Ashley C of E Primary School in Walton-on-Thames.
+- This is the website for The Friends of Ashley (FOA), the PTA for Ashley C of E Primary School in Walton-on-Thames.
 - The canonical product and engineering record is [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md).
 - Read the project brief before substantial design, content or architecture work.
 - Use [`README.md`](README.md) for a short repository orientation.

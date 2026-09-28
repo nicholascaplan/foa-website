@@ -1,8 +1,8 @@
-# Friends of Ashley Website: Project Brief and Status
+# The Friends of Ashley Website: Project Brief and Status
 
 **Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; current route and UX refinement pass complete
 **Last updated:** 28 September 2026  
-**Project:** Friends of Ashley (FOA) website  
+**Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 
 This is the canonical record of the project's current state, decisions, requirements and next actions. Update it whenever a material product, design, content or technical decision is made.
@@ -279,7 +279,7 @@ Specifically decide:
 - Mobile event rows should reserve width for the date and allow titles, details and status labels to wrap naturally without creating narrow text columns.
 - On the mobile homepage, keep the mission paragraph, action buttons and featured event as one compact sequence. Avoid inherited desktop gaps between those elements.
 - The Newsletter view should present one clearly identified Latest Newsletter followed by a Previous Newsletters section, with readable issue formatting rather than a duplicated archive/date column on mobile.
-- The older Back to School newsletter has no reliable publication date in the supplied source, so the prototype must not invent one.
+- The 28th September 2026 Autumn Term News & Fireworks Tickets newsletter is the latest published issue. The supplied Welcome Back from FOA newsletter is the previous issue, dated 16th September 2026, and its concise summary is shown in the archive.
 - Review responsive behavior down to approximately 320px; at the narrowest supported widths, secondary brand text and multi-column committee layouts may simplify to protect readability.
 
 ### Navigation simplification decision: 28 September 2026
@@ -299,6 +299,8 @@ Specifically decide:
 ### Mobile interaction refinement: 28 September 2026
 
 - The homepage quick-action rows no longer animate horizontal padding on hover. The previous padding change could alter text wrapping and shift following rows on touch devices; the interaction now keeps layout dimensions fixed and moves only the arrow with a composited transform.
+- Reduced the mobile homepage gap between the hero action buttons and the quick-action list by removing the stacked hero-bottom and quick-action-top spacing. Desktop spacing is unchanged.
+- The Newsletter archive opens the 16th September issue in a native dialog with its full approved letter content. The reader uses one dynamic-viewport-height scroll region, contains over-scroll and locks page scrolling while open so mobile readers can reliably reach both ends of the issue.
 
 ### Session closure decisions: 28 September 2026
 
@@ -360,7 +362,9 @@ Specifically decide:
 
 ### Route and sharing refinement pass: 28 September 2026
 
+- Public-facing copy uses "The Friends of Ashley" on first mention and "FOA" thereafter. Technical identifiers such as the shared email address remain unchanged; this convention is recorded in `docs/STYLE-GUIDE.md`.
 - Contact Us is available in the mobile menu and footer, with the shared FOA email address and the approved Google Form link.
+- The supplied Google Form is available as an unlinked, no-indexed experiment at `/playground.html`; the public Contact Us route continues to offer the shared FOA email address and an external Google Form link. Confirm form ownership, access, retention and privacy handling before production launch.
 - The public Accessibility page was removed; a public accessibility statement and formal accessibility testing are recorded as lower-priority future work.
 - The Community page was removed from the current Astro implementation, including navigation, footer, homepage actions and expected routes. The notice board remains a possible future feature rather than an active MVP route.
 - Reps Hub messages now include copy-to-clipboard actions with visible success/failure feedback. The cards use date circles but no longer show draft labels, expiry labels, workflow warnings or secondary fact pills.

@@ -6,11 +6,11 @@ import { withBase } from "../lib/urls";
 const featured = (await getCollection("events")).find(({ data }) => data.featured)?.data;
 if (!featured) throw new Error("A featured event is required");
 ---
-<BaseLayout title="Friends of Ashley" description="Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames.">
+  <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames.">
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
   <section class="hero">
     <div class="site-width hero-grid">
-       <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/whats-on/")}>See what's coming up <span aria-hidden="true">&rarr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help</a></div></div>
+       <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/whats-on/")}>See what's coming up <span aria-hidden="true">&rarr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help</a></div></div>
        <article class="event-feature"><EventDate date={featured.start} /><p class="eyebrow eyebrow--light">Next major event</p><h2>{featured.title}</h2><p>{featured.summary}</p><ul class="event-facts"><li><time datetime="2026-11-05T16:30">16:30</time> Gates open</li><li><time datetime="2026-11-05T17:00">17:00</time> Quiet display</li><li><time datetime="2026-11-05T18:00">18:00</time> Main display</li></ul><a class="button button--amber" href={withBase(featured.path!)}>Event details</a></article>
     </div>
   </section>

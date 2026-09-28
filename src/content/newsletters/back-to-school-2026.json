@@ -1,5 +1,36 @@
 {
   "title": "Welcome Back from FOA",
+  "published": "2026-09-16",
   "summary": "A start-of-year introduction to FOA, fundraising and key dates.",
+  "sections": [
+    {
+      "title": "Dear Parents and Carers,",
+      "paragraphs": [
+        "Welcome back! We hope you have all had a wonderful summer and are feeling refreshed, rested and ready for another brilliant year at Ashley.",
+        "As the new school year gets underway, we wanted to say a big hello from The Friends of Ashley (FOA) Committee, remind you who we are and what we do, and share some important dates for your diaries."
+      ]
+    },
+    {
+      "title": "A brilliant year behind us",
+      "paragraphs": [
+        "The FOA plays a huge part in bringing our community together, supporting the school and creating extra special experiences and opportunities for our children.",
+        "After an incredible year, including reaching the £21,000 playground fundraising target and raising £25,730, we are very excited about what we can achieve together this year."
+      ]
+    },
+    {
+      "title": "The Friends of Ashley: your school PTA",
+      "paragraphs": [
+        "Every parent, carer and teacher at Ashley is considered a member of the PTA. The FOA is supported and overseen by a committee of parent volunteers, elected at the Annual General Meeting.",
+        "The committee helps to organise fundraising, coordinate events, oversee FOA finances and make decisions about how our funds can best support the school and its children."
+      ]
+    },
+    {
+      "title": "Ways to get involved",
+      "paragraphs": [
+        "You do not need to be on the committee to be part of the FOA. You might help at an event, lend a hand with pre-loved uniform, share an idea, volunteer for an hour or two, or take charge of a seasonal event such as the Christmas Fayre or Summer fete.",
+        "Just coming along and showing your support really makes a difference."
+      ]
+    }
+  ],
   "latest": false
 }

@@ -37,8 +37,8 @@ function showRoute() {
 
   const heading = document.querySelector(`[data-view="${activeRoute}"] h1`);
   document.title = activeRoute === "home"
-    ? "Friends of Ashley | Ashley C of E Primary School PTA"
-    : `${heading?.textContent.trim()} | Friends of Ashley`;
+    ? "The Friends of Ashley | Ashley C of E Primary School PTA"
+    : `${heading?.textContent.trim()} | The Friends of Ashley`;
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 

@@ -15,9 +15,9 @@ const isCurrent = (href: string) =>
 
 <header class="site-header">
   <div class="site-width header-inner">
-    <a class="brand" href={withBase("/")} aria-label="Friends of Ashley home">
+        <a class="brand" href={withBase("/")} aria-label="The Friends of Ashley home">
       <img class="brand-logo" src={withBase("/FOA%20Logo.jpg")} alt="" width="68" height="68">
-      <span class="brand-copy"><strong>Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
+        <span class="brand-copy"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
     </a>
     <nav class="desktop-nav" aria-label="Primary navigation">
       {primary.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}

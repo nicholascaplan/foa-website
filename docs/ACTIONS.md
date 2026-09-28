@@ -1,4 +1,4 @@
-# Friends of Ashley Website Actions
+# The Friends of Ashley Website Actions
 
 ## Content
 

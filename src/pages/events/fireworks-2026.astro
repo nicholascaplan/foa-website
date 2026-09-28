@@ -15,7 +15,7 @@ const eventJsonLd = {
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   location: { "@type": "Place", name: event.location, address: { "@type": "PostalAddress", addressLocality: "Walton-on-Thames", addressCountry: "GB" } },
-  organizer: { "@type": "Organization", name: "Friends of Ashley", url: new URL(withBase("/"), Astro.site).href },
+  organizer: { "@type": "Organization", name: "The Friends of Ashley", url: new URL(withBase("/"), Astro.site).href },
   image: new URL(withBase("/fireworks.jpg"), Astro.site).href,
 };
 ---
