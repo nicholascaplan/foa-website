@@ -79,7 +79,7 @@ When the user says **"close session"**, **"end session"**, or clearly asks to wr
 4. Run appropriate verification for the files changed during the session.
 5. Summarise what was completed, what remains unresolved and the first recommended next action.
 6. Inspect Git status so the summary accurately identifies outstanding changes.
-7. If the repository has been connected to GitHub, ask the user whether they want the session changes committed. Do not commit or push without explicit approval.
+7. If the repository has been connected to GitHub, commit and push the completed session changes after documentation and verification. Do not commit or push unrelated changes, and do not commit or push if the user explicitly asks not to.
 
 Documentation updates happen before asking about a commit. A session should not be considered closed while material decisions exist only in the conversation.
 

@@ -660,11 +660,10 @@ a {
   gap: 0.8rem;
   color: inherit;
   text-decoration: none;
-  transition: padding 160ms ease, color 160ms ease;
+  transition: color 160ms ease;
 }
 
 .quick-row:hover {
-  padding-inline: 0.65rem;
   color: var(--green);
 }
 
@@ -691,6 +690,11 @@ a {
 .quick-arrow {
   justify-self: end;
   font-size: 1.45rem;
+  transition: transform 160ms ease;
+}
+
+.quick-row:hover .quick-arrow {
+  transform: translateX(0.25rem);
 }
 
 .tinted-section {

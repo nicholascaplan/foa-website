@@ -281,6 +281,16 @@ Specifically decide:
 - The older Back to School newsletter has no reliable publication date in the supplied source, so the prototype must not invent one.
 - Review responsive behavior down to approximately 320px; at the narrowest supported widths, secondary brand text and multi-column committee layouts may simplify to protect readability.
 
+### Navigation simplification decision: 28 September 2026
+
+- Keep the header and mobile menu focused on five parent-task routes: Home, What's On, Get Involved, Community and Uniform.
+- Remove Newsletter, Committee, Reps Hub and About FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
+- Keep Committee, Reps Hub and About FOA discoverable through Get Involved; keep Newsletter, About FOA, Contact and policy pages available through the footer and relevant page content.
+
+### Mobile interaction refinement: 28 September 2026
+
+- The homepage quick-action rows no longer animate horizontal padding on hover. The previous padding change could alter text wrapping and shift following rows on touch devices; the interaction now keeps layout dimensions fixed and moves only the arrow with a composited transform.
+
 ### Session closure decisions: 28 September 2026
 
 - Keep the current static prototype as a temporary single-file, hash-routed review tool.
@@ -365,7 +375,7 @@ Specifically decide:
 - Core Fireworks date, time, price, under-two policy, attractions and event lead are confirmed; verify remaining capacity, refund, weather and accessibility details.
 - Verify Uniform sale dates, prices and donation instructions against the latest FOA calendar before launch.
 - Committee membership and roles for 2026/27 are confirmed.
-- Verify the Co-Secretary role, expected commitment and contact route.
+- The supplied Co-Secretary role description confirms a manageable, termly role that can be done solo or shared: agree agendas with the Co-Chairs, send reminders and agendas, take and share meeting minutes roughly once a term, maintain licences and compliance documents, and help organise the shared Google Drive. The shared FOA email remains the public contact route; the outgoing secretaries can provide an informal chat before commitment.
 - Confirm who is authorised to approve website content.
 
 ### Step 5: Select ticketing approach
@@ -1011,7 +1021,7 @@ The following content appears in the current prototype but is not yet considered
 - Event access and facilities
 - Fireworks refund, cancellation and bad-weather policy
 - Uniform donation instructions and accepted/rejected items
-- Co-Secretary time commitment
+- Final wording and publication review for the Co-Secretary recruitment copy
 - Production domain
 - Arabic translation quality
 - Final ticket provider
