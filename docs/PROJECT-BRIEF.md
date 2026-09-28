@@ -22,7 +22,7 @@ A responsive static prototype was created and has now been migrated into a stati
 - Mobile navigation
 - An external ticket-provider handoff
 - Home, What's On, Uniform, Get Involved and Committee
-- Reps Hub, Newsletter, About, Contact and Privacy
+- Reps Hub, Newsletter, About and Contact
 
 The first Astro implementation and current route/UX refinement pass are complete. The next phase is generated-site visual review and operational content resolution; formal accessibility testing, a public accessibility statement and CMS selection remain later work.
 
@@ -53,7 +53,7 @@ The first Astro implementation and current route/UX refinement pass are complete
 The repository currently contains:
 
 - `index.html`
-  - Single-file, hash-routed responsive prototype for Home, What's On, Uniform, Get Involved, Community, Committee, Reps Hub, Newsletter, About, Contact, Privacy and Fireworks
+  - Single-file, hash-routed responsive prototype for Home, What's On, Uniform, Get Involved, Community, Committee, Reps Hub, Newsletter, About, Contact and Fireworks
   - Task-oriented desktop and mobile navigation that changes views without a new page load
   - Co-Secretary vacancy strip
   - Warm editorial hero
@@ -258,6 +258,9 @@ Specifically decide:
 - If the Community Notice Board returns, the Committee will own its review, expiry and takedowns.
 - Meeting locations and schedules may be public.
 - The Contact Us route now offers the shared FOA email address and the approved Google contact form.
+- The draft Privacy route and footer link were removed; no privacy notice is currently published, and the final privacy wording and publication timing remain open.
+- About FOA now links to Meet the Committee directly below its introductory copy.
+- Reps Hub copy uses ordinal date style, and successful copy-to-clipboard feedback clears after three seconds.
 - Fireworks facts are approved for this prototype. The supplied calendar provides provisional 2026 Uniform sale dates and operating details; these require a final pre-launch confirmation.
 - The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Reception Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
 - The project owner confirms Christmas Fayre is Saturday 5 December. The supplied calendar states Saturday 28 November, so treat the calendar entry as superseded and verify the final public date before launch.
@@ -284,6 +287,14 @@ Specifically decide:
 - Keep the header and mobile menu focused on four parent-task routes: Home, What's On, Get Involved and Uniform.
 - Remove Newsletter, Committee, Reps Hub and About FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
 - Keep Committee, Reps Hub and About FOA discoverable through Get Involved; keep Newsletter, About FOA, Contact and policy pages available through the footer and relevant page content.
+
+### Content and route refinement: 28 September 2026
+
+- Use ordinal day formatting in public date copy, including `5th November`, `6th November` and `4th December`.
+- Remove the unpublished Privacy route rather than presenting draft wording as a public page.
+- Keep the final privacy notice as a pre-publication requirement once ownership, processors, retention and contact handling are approved.
+- Provide a prominent About FOA link to the Committee page near the top of the route.
+- Clear the Reps Hub's successful "Copied to clipboard." status after three seconds.
 
 ### Mobile interaction refinement: 28 September 2026
 
@@ -432,7 +443,7 @@ Implemented in the current hash-routed review prototype:
 5. Reps Hub with shareable class-representative messages and copy-to-clipboard actions
 6. Community Notice Board deferred from the current public implementation
 7. About FOA and funding-impact view
-8. Contact and draft Privacy views
+8. Contact view
 9. Newsletter page with latest and previous newsletter sections
 10. Welcome Tea completed-event example
 11. Private prototype sold-out, cancelled and completed state patterns
@@ -441,7 +452,7 @@ Still to refine after stakeholder review:
 
 - Final Reps Hub copy approval and native-share feedback
 - Decide whether to restore a public Community Notice Board route and define approved content and stale-content behavior
-- Final Privacy wording
+- Decide when and how to publish the final privacy notice
 - Final biographies and replacement committee portraits
 - Final external ticket link and remaining event policies
 
@@ -487,7 +498,7 @@ Record where people hesitate, misinterpret labels or miss information.
 - Optimise production images and provide final image dimensions once replacement portraits are supplied.
 - Canonical and social metadata, Event structured data, sitemap and robots rules are implemented.
 - Add privacy and safeguarding content.
-- The draft Privacy route is implemented; approved final wording is pending. A public Accessibility page is deferred.
+- No Privacy route is currently published; approved final wording and publication timing remain pending. A public Accessibility page is deferred.
 - Type/build checks, generated-site link validation, a homepage smoke test and a gated GitHub Pages deployment workflow are implemented; automated accessibility checks remain pending.
 
 ### Step 10: Verify and launch
@@ -861,7 +872,6 @@ GitHub Pages + custom domain
 /about/
 /contact/
 /newsletter/
-/privacy/
 /404.html
 ```
 
