@@ -297,9 +297,9 @@ Specifically decide:
 - Typed local content collections are the interim source until a CMS is selected.
 - The original review prototype is archived under `prototype/`.
 - Local development is documented in `README.md`: run `npm install` once, then `npm run dev` and open the URL printed by Astro.
-- Current automation covers Astro/TypeScript diagnostics, content schema validation, production static generation and dependency auditing.
-- There are no unit, component, browser end-to-end, automated accessibility, broken-link or visual regression tests yet.
-- The first recommended next action is a phone and desktop review of the generated Astro site, followed by automated accessibility and broken-link checks.
+- At that point, automation covered Astro/TypeScript diagnostics, content schema validation, production static generation and dependency auditing.
+- Generated-site smoke and internal-link tests were added in the later GitHub Pages deployment session recorded below.
+- Browser end-to-end, automated accessibility and visual regression tests have not yet been added.
 
 ### Local mobile-preview session closure: 28 September 2026
 
@@ -315,6 +315,9 @@ Specifically decide:
 - The initial test suite verifies key homepage content and crawls generated internal links and assets.
 - The review URL is `https://nicholascaplan.github.io/foa-website/`; the final custom domain and DNS remain pending.
 - Astro navigation, metadata and public assets support both the repository review base path and a future root deployment.
+- GitHub Pages is enabled for Actions deployment, and the first gated build and deployment completed successfully.
+- The local `main` branch tracks `origin/main` after fetching the newly created remote branch.
+- The first recommended next action is a real-device phone and desktop review, followed by automated accessibility coverage.
 
 ### Step 2: Confirm brand inputs
 
@@ -988,7 +991,7 @@ Before launch, the implementation should pass:
 - Formatting and linting
 - Type checking
 - Production build
-- Broken-link checking
+- Broken-link checking (implemented for generated internal links and assets)
 - Automated accessibility checks
 - Keyboard testing
 - Representative screen-reader testing
@@ -997,7 +1000,7 @@ Before launch, the implementation should pass:
 - Metadata and structured-data validation
 - CMS draft/publish/expiry testing
 - Ticket-provider end-to-end link testing
-- GitHub Pages deployment verification
+- GitHub Pages deployment verification (implemented for the review deployment)
 
 ## 9. Known Provisional Content
 

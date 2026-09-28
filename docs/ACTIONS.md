@@ -23,8 +23,8 @@
 ## Production planning
 
 - Continue the Astro implementation with typed local content collections until the CMS is selected. Keep the models compatible with a later CMS adapter.
-- Configure the canonical `SITE_URL` repository variable and confirm GitHub Pages/custom-domain ownership before the first deployment.
+- Confirm the final custom domain, DNS and production ownership. The temporary GitHub Pages review deployment is live under `nicholascaplan/foa-website`.
 - Select the CMS, then confirm editor ownership, preview workflow and annual access handover before integrating it.
-- Add automated accessibility and broken-link checks after the first generated-site visual review.
+- Add automated accessibility checks after the first generated-site visual review. Generated internal-link and asset validation already runs in the deployment gate.
 - Add browser end-to-end coverage for primary navigation, the mobile menu and key parent journeys.
 - Consider screenshot-based visual regression coverage once the generated-site design has been approved.
