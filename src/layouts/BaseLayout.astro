@@ -1,0 +1,39 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import DevMobilePreview from "../components/DevMobilePreview.astro";
+import { withBase } from "../lib/urls";
+import "../styles/global.css";
+
+interface Props { title: string; description: string; image?: string; noindex?: boolean; }
+const { title, description, image = "/FOA%20Logo.jpg", noindex = false } = Astro.props;
+const pageTitle = title === "Friends of Ashley" ? "Friends of Ashley | Ashley C of E Primary School PTA" : `${title} | Friends of Ashley`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(withBase(image), Astro.site);
+const fireworksImage = `url("${withBase("/fireworks.jpg")}")`;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content={description}>
+    {noindex && <meta name="robots" content="noindex">}
+    <link rel="canonical" href={canonical}>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Friends of Ashley">
+    <meta property="og:title" content={pageTitle}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content={socialImage}>
+    <meta name="twitter:card" content="summary_large_image">
+    <title>{pageTitle}</title>
+  </head>
+  <body style={`--fireworks-image: ${fireworksImage}`}>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Header />
+    <main id="main-content"><slot /></main>
+    <Footer />
+    {import.meta.env.DEV && <DevMobilePreview />}
+  </body>
+</html>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { withBase } from "../lib/urls";
+const messages = [
+  { label: "Draft · expires 5 Nov", title: "Fireworks on the Field", body: "FOA Fireworks is on Thursday 5 November, 16:30-18:30, with the quiet display at 17:30 and main display at 18:00. Tickets are £8.50 per person; under-2s are free. The booking link will follow.", href: "/events/fireworks-2026/" },
+  { label: "Draft · expires 4 Dec", title: "Pre-loved uniform", body: "The next sales are Friday 6 November and Friday 4 December at 15:25 in the school playground. New-logo items and coats are £3; all other items are £1. Card only.", href: "/uniform/" },
+  { label: "Draft · expires 5 Dec", title: "Christmas Fayre", body: "Save the date: Saturday 5 December. Rachel and Sophie are leading this year's Fayre and will share class stalls, donations and volunteer details soon.", href: "/whats-on/" },
+];
+---
+<BaseLayout title="Reps Hub" description="Draft Friends of Ashley messages for class representatives to review." noindex>
+  <PageHero eyebrow="Prototype workflow" title="Reps Hub" intro="Draft messages for class representatives to review and share from a canonical FOA source." />
+  <section class="content-section content-section--compact"><div class="site-width"><div class="draft-callout"><strong>Not approved for distribution.</strong> These newsletter-based drafts demonstrate the future review and expiry workflow. Copy and share controls will only be enabled after approval.</div><div class="message-grid">{messages.map((message) => <article class="message-card"><span class="category-label">{message.label}</span><h2>{message.title}</h2><p>{message.body}</p><a class="text-link" href={withBase(message.href)}>Check the source page</a></article>)}</div></div></section>
+</BaseLayout>

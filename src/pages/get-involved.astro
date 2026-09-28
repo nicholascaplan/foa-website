@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { withBase } from "../lib/urls";
+---
+<BaseLayout title="Get Involved" description="Ways to volunteer, attend meetings and support Friends of Ashley.">
+  <PageHero eyebrow="Everyone is welcome" title="Small help makes a real difference." intro="Meetings are informal and open to parents, carers and staff." />
+  <section class="content-section content-section--compact"><div class="site-width"><article class="vacancy-card"><p class="eyebrow">A small role with a real impact</p><h2>Could you be our next Co-Secretary?</h2><p class="draft-callout">The role's final responsibilities and time commitment must be confirmed before launch.</p><ul class="vacancy-details"><li>Help prepare simple meeting agendas</li><li>Help record useful meeting notes</li><li>Share the role with a friend if you prefer</li><li>Help keep meetings simple, useful and welcoming</li></ul><div class="vacancy-actions"><a class="button button--dark" href="mailto:thefriendsofashley@gmail.com?subject=FOA%20Co-Secretary%20role">Ask us about the role</a><a class="button button--secondary" href={withBase("/committee/")}>Meet the committee</a></div></article></div></section>
+  <section class="content-section tinted-section content-section--compact"><div class="site-width"><p class="eyebrow">Volunteer teams</p><h2 class="editorial-heading">Could you help lead an event?</h2><p class="section-copy">Rachel and Sophie are leading this year's Christmas Fayre. FOA is also looking for someone to shadow Helen at Fireworks 2026 and learn how to lead the event in 2027, with no pressure.</p><div class="link-grid"><a class="info-card info-card--link" href={withBase("/reps/")}><h3>Reps Hub</h3><p>Review draft messages for class groups.</p></a><a class="info-card info-card--link" href={withBase("/about/")}><h3>About FOA</h3><p>See what membership and fundraising mean.</p></a></div></div></section>
+</BaseLayout>

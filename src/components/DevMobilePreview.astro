@@ -1,0 +1,54 @@
+<button class="dev-mobile-preview" type="button" data-mobile-preview>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+    <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+    <path d="M10.5 18.5h3"></path>
+  </svg>
+  Mobile preview
+</button>
+
+<script>
+  document.querySelector<HTMLButtonElement>("[data-mobile-preview]")?.addEventListener("click", () => {
+    const width = 390;
+    const height = Math.min(844, window.screen.availHeight - 80);
+    const left = Math.max(0, window.screen.availWidth - width - 24);
+    window.open(window.location.href, "foa-mobile-preview", `popup,width=${width},height=${height},left=${left},top=40`);
+  });
+</script>
+
+<style>
+  .dev-mobile-preview {
+    position: fixed;
+    z-index: 80;
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--white);
+    background: var(--green-dark);
+    box-shadow: var(--shadow);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .dev-mobile-preview:hover {
+    background: var(--green);
+  }
+
+  .dev-mobile-preview svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (max-width: 47.99rem) {
+    .dev-mobile-preview {
+      display: none;
+    }
+  }
+</style>

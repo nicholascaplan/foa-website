@@ -1,0 +1,16 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+const newsletters = await getCollection("newsletters");
+const latest = newsletters.find(({ data }) => data.latest)?.data;
+const previous = newsletters.filter(({ data }) => !data.latest);
+const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" });
+---
+<BaseLayout title="Newsletter" description="The latest Friends of Ashley news and previous newsletter summaries.">
+  <PageHero eyebrow="FOA updates" title="Newsletter" intro="The latest news and an archive of previous FOA updates." />
+  <section class="content-section content-section--compact"><div class="site-width newsletter-page">
+    <section class="newsletter-section"><div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest?.title}</h2>{latest?.published && <p>{dateFormat.format(latest.published)}</p>}</div><article class="newsletter-issue"><p class="newsletter-intro">Ashley families raised £25,730 last year, and the new KS1 playground equipment is scheduled for installation over the October half term.</p><h3>Committee 2026/27</h3><p>This year's committee is Helen Platt and Sarah Parish, Co-Chairs; Clare Birks and Darren Malone, Co-Treasurers; Nick Caplan and Cristy Amponsah, Co-Comms; and Lizzie Grillo, Fundraising Initiatives Lead. Co-Secretary is vacant.</p><h3>Ways to help</h3><p>The Co-Secretary role is a flexible way to help with agendas and meeting minutes. Rachel and Sophie are leading the Christmas Fayre. Anyone interested in running Fireworks 2027 can contact FOA to shadow Helen at this year's event with no pressure.</p><h3>Autumn dates</h3><ul class="newsletter-dates"><li><strong>Reception Welcome Tea</strong><span>Saturday 3 October · 13:00-14:30</span></li><li><strong>Fireworks on the Field</strong><span>Thursday 5 November · 16:30-18:30</span></li><li><strong>Pre-loved uniform</strong><span>Friday 6 November and Friday 4 December · 15:25</span></li><li><strong>Christmas Fayre</strong><span>Saturday 5 December</span></li></ul><h3>Useful contacts</h3><p><a class="text-link" href="mailto:thefriendsofashley@gmail.com">FOA general enquiries</a> · <a class="text-link" href="https://www.tinyurl.com/foa-feedback">FOA feedback</a> · <a class="text-link" href="mailto:foapreloveduniform@gmail.com">Pre-loved uniform</a></p></article></section>
+    <section class="newsletter-section"><div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier FOA updates, kept concise and readable.</p></div>{previous.map(({ data }) => <article class="newsletter-summary"><p class="newsletter-summary-label">{data.title}</p><p>{data.summary}</p><p>The supplied source does not include a reliable publication date, so none is shown here.</p></article>)}</section>
+  </div></section>
+</BaseLayout>

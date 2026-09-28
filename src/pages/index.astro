@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EventDate from "../components/EventDate.astro";
+import { withBase } from "../lib/urls";
+const featured = (await getCollection("events")).find(({ data }) => data.featured)?.data;
+if (!featured) throw new Error("A featured event is required");
+---
+<BaseLayout title="Friends of Ashley" description="Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames.">
+  <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
+  <section class="hero">
+    <div class="site-width hero-grid">
+      <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/whats-on/")}>See what's coming up <span aria-hidden="true">&darr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help</a></div></div>
+      <article class="event-feature"><EventDate date={featured.start} /><p class="eyebrow eyebrow--light">Next major event</p><h2>{featured.title}</h2><p>{featured.summary}</p><ul class="event-facts"><li><time datetime="2026-11-05T16:30">16:30</time> Gates open</li><li><time datetime="2026-11-05T17:30">17:30</time> Quiet display</li><li><time datetime="2026-11-05T18:00">18:00</time> Main display</li></ul><a class="button button--amber" href={withBase(featured.path!)}>Event details</a></article>
+    </div>
+  </section>
+  <section class="quick-actions"><div class="site-width"><div class="quick-list">
+    <a class="quick-row" href={withBase("/events/fireworks-2026/")}><span class="quick-number">01</span><span><h3>Plan for Fireworks</h3><p>Times, tickets and what to expect on the night.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+    <a class="quick-row" href={withBase("/uniform/")}><span class="quick-number">02</span><span><h3>Find or donate uniform</h3><p>Sale dates, donation point and price list.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+    <a class="quick-row" href={withBase("/get-involved/")}><span class="quick-number">03</span><span><h3>Get involved</h3><p>Roles, meetings and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+    <a class="quick-row" href={withBase("/community/")}><span class="quick-number">04</span><span><h3>Read community notices</h3><p>Committee-reviewed local notices.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+  </div></div></section>
+</BaseLayout>

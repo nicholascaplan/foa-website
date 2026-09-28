@@ -1,0 +1,72 @@
+---
+import { withBase } from "../lib/urls";
+
+const primary = [
+  { href: "/", label: "Home" },
+  { href: "/whats-on/", label: "What's On" },
+  { href: "/get-involved/", label: "Get Involved" },
+  { href: "/community/", label: "Community" },
+  { href: "/uniform/", label: "Uniform" },
+];
+const secondary = [
+  { href: "/newsletter/", label: "Newsletter" },
+  { href: "/committee/", label: "Committee" },
+  { href: "/reps/", label: "Reps Hub" },
+  { href: "/about/", label: "About FOA" },
+];
+const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "") || "/";
+const isCurrent = (href: string) =>
+  href === "/" ? currentPath === href : currentPath.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="site-width header-inner">
+    <a class="brand" href={withBase("/")} aria-label="Friends of Ashley home">
+      <img class="brand-logo" src={withBase("/FOA%20Logo.jpg")} alt="" width="68" height="68">
+      <span class="brand-copy"><strong>Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {primary.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
+    </nav>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true" data-mobile-menu>
+  <div class="mobile-menu-panel">
+    <div class="mobile-menu-head">
+      <strong>Explore FOA</strong>
+      <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>
+    </div>
+    <nav aria-label="Mobile navigation">
+      {[...primary, ...secondary].map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
+    </nav>
+  </div>
+</div>
+
+<script>
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const openButton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const closeButton = document.querySelector<HTMLButtonElement>("[data-menu-close]");
+
+  const setMenu = (open: boolean) => {
+    if (!menu || !openButton) return;
+    menu.classList.toggle("is-open", open);
+    menu.setAttribute("aria-hidden", String(!open));
+    openButton.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("menu-open", open);
+    (open ? closeButton : openButton)?.focus();
+  };
+
+  openButton?.addEventListener("click", () => setMenu(true));
+  closeButton?.addEventListener("click", () => setMenu(false));
+  menu?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target === menu || target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.classList.contains("is-open")) setMenu(false);
+  });
+</script>

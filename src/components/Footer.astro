@@ -1,0 +1,24 @@
+---
+import { withBase } from "../lib/urls";
+
+const links = [
+  ["/whats-on/", "What's On"], ["/get-involved/", "Get Involved"],
+  ["/committee/", "Committee"], ["/reps/", "Reps Hub"],
+  ["/community/", "Community"], ["/uniform/", "Uniform"],
+  ["/newsletter/", "Newsletter"], ["/about/", "About FOA"],
+  ["/contact/", "Contact"], ["/privacy/", "Privacy"],
+  ["/accessibility/", "Accessibility"],
+];
+---
+
+<footer class="site-footer">
+  <div class="site-width">
+    <div class="footer-grid">
+      <div class="footer-brand"><h2>Friends of Ashley</h2><p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p></div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        {links.map(([href, label]) => <a href={withBase(href)}>{label}</a>)}
+      </nav>
+    </div>
+    <div class="footer-bottom"><span>Registered Charity No. 1042944</span><span>Parent-led. Child-focused. All welcome.</span></div>
+  </div>
+</footer>

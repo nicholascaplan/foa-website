@@ -1,0 +1,10 @@
+---
+interface Props { date: Date; compact?: boolean; }
+const { date, compact = false } = Astro.props;
+const month = new Intl.DateTimeFormat("en-GB", { month: "short", timeZone: "Europe/London" }).format(date).toUpperCase();
+const day = new Intl.DateTimeFormat("en-GB", { day: "2-digit", timeZone: "Europe/London" }).format(date);
+const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London" }).format(date);
+---
+<span class={compact ? "compact-date" : "event-date"}>
+  <span>{month}</span><strong>{day}</strong><span class="relative-date" data-event-date={isoDate} hidden></span>
+</span>
