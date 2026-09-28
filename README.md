@@ -4,7 +4,7 @@ Design and implementation workspace for the Friends of Ashley (FOA), the parent 
 
 ## Current State
 
-The repository now contains the first static Astro implementation of all approved prototype routes:
+The repository now contains the first static Astro implementation of the currently approved public routes:
 
 - `src/pages/`: separate generated pages with normal path-based links
 - `src/layouts/` and `src/components/`: shared page shell, navigation, event and content components
@@ -15,7 +15,7 @@ The repository now contains the first static Astro implementation of all approve
 - `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
 
-The site includes canonical and social metadata, Event structured data, a sitemap, robots rules and a useful 404 page. Privacy, accessibility, Reps Hub and unresolved operational content remain clearly marked as draft or provisional.
+The site includes canonical and social metadata, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, Reps Hub includes copy-to-clipboard actions, and Privacy plus unresolved operational content remain clearly marked as draft or provisional. The Community Notice Board and public accessibility statement are deferred to later scope.
 
 ## Local Development
 
@@ -87,4 +87,4 @@ When resuming work, read that document first and begin with **Next Steps** and *
 
 ## Immediate Next Step
 
-Review the deployed Astro site on phone and desktop, then add automated accessibility checks. Resolve the content and operational blockers in `docs/ACTIONS.md` before the production-domain launch.
+Review the deployed Astro site on phone and desktop, then resolve the content and operational blockers in `docs/ACTIONS.md` before the production-domain launch. Formal accessibility testing, a public accessibility statement and a future Community Notice Board decision are lower-priority follow-up work.

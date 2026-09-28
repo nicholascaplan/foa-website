@@ -1,6 +1,6 @@
 # Friends of Ashley Website: Project Brief and Status
 
-**Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review  
+**Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; current route and UX refinement pass complete
 **Last updated:** 28 September 2026  
 **Project:** Friends of Ashley (FOA) website  
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
@@ -21,10 +21,10 @@ A responsive static prototype was created and has now been migrated into a stati
 - The Fireworks on the Field event page
 - Mobile navigation
 - An external ticket-provider handoff
-- Home, What's On, Uniform, Get Involved, Community and Committee
-- Reps Hub, Newsletter, About, Contact, Privacy and Accessibility
+- Home, What's On, Uniform, Get Involved and Committee
+- Reps Hub, Newsletter, About, Contact and Privacy
 
-The first Astro implementation is complete. The next phase is generated-site visual and accessibility review, followed by operational content resolution and CMS selection; CMS integration remains intentionally deferred.
+The first Astro implementation and current route/UX refinement pass are complete. The next phase is generated-site visual review and operational content resolution; formal accessibility testing, a public accessibility statement and CMS selection remain later work.
 
 ## 2. Where We Have Got To
 
@@ -53,7 +53,7 @@ The first Astro implementation is complete. The next phase is generated-site vis
 The repository currently contains:
 
 - `index.html`
-  - Single-file, hash-routed responsive prototype for Home, What's On, Uniform, Get Involved, Community, Committee, Reps Hub, Newsletter, About, Contact, Privacy, Accessibility and Fireworks
+  - Single-file, hash-routed responsive prototype for Home, What's On, Uniform, Get Involved, Community, Committee, Reps Hub, Newsletter, About, Contact, Privacy and Fireworks
   - Task-oriented desktop and mobile navigation that changes views without a new page load
   - Co-Secretary vacancy strip
   - Warm editorial hero
@@ -152,13 +152,12 @@ Agreed top-level navigation:
 1. Home
 2. What's On
 3. Get Involved
-4. Community
-5. Uniform
+4. Uniform
 
 Expected grouping:
 
 - Committee and Reps Hub belong under Get Involved.
-- The Notice Board belongs under Community.
+- The Community Notice Board is deferred and has no current public route.
 - Individual events use reusable event pages.
 - What's On should be a chronological list before considering a calendar grid.
 - What's On should show upcoming events first, followed by a clearly separate **Earlier this year** section for selected completed events. Welcome Tea is the first example to include, using the supplied poster as the source for event information.
@@ -173,8 +172,7 @@ The intended order is:
 3. What's On preview
 4. Volunteer vacancy or participation prompt
 5. FOA purpose and three pillars
-6. Community notice preview
-7. Contact, governance and legal information
+6. Contact, governance and legal information
 
 ### Personal information
 
@@ -252,14 +250,14 @@ Specifically decide:
 - Keep the prototype in one fast-loading HTML file while using hash routes to provide focused, non-scrolling page views during review.
 - The phone preview must be instant and must not load a duplicate iframe.
 - Increase the header logo display size.
-- Order primary navigation as Home, What's On, Get Involved, Community and Uniform.
+- Order primary navigation as Home, What's On, Get Involved and Uniform.
 - The approved FOA logo has been supplied and replaces the prototype leaf mark.
 - Ashley School branding must not be used at this stage.
 - Committee names, roles and portraits may be published subject to the existing final pre-publication check. Replace the current low-resolution portraits before production launch.
 - Concise committee biographies are likely wanted. Confirm their wording and presentation in a later content-review step; do not use desktop-only tooltips for core biographical content.
-- The Committee will own Community Notice Board review, expiry and takedowns.
+- If the Community Notice Board returns, the Committee will own its review, expiry and takedowns.
 - Meeting locations and schedules may be public.
-- A Formspree contact route is a later implementation task.
+- The Contact Us route now offers the shared FOA email address and the approved Google contact form.
 - Fireworks facts are approved for this prototype. The supplied calendar provides provisional 2026 Uniform sale dates and operating details; these require a final pre-launch confirmation.
 - The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Reception Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
 - The project owner confirms Christmas Fayre is Saturday 5 December. The supplied calendar states Saturday 28 November, so treat the calendar entry as superseded and verify the final public date before launch.
@@ -283,7 +281,7 @@ Specifically decide:
 
 ### Navigation simplification decision: 28 September 2026
 
-- Keep the header and mobile menu focused on five parent-task routes: Home, What's On, Get Involved, Community and Uniform.
+- Keep the header and mobile menu focused on four parent-task routes: Home, What's On, Get Involved and Uniform.
 - Remove Newsletter, Committee, Reps Hub and About FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
 - Keep Committee, Reps Hub and About FOA discoverable through Get Involved; keep Newsletter, About FOA, Contact and policy pages available through the footer and relevant page content.
 
@@ -338,6 +336,27 @@ Specifically decide:
 - Verification passed with `SITE_URL=https://nicholascaplan.github.io BASE_PATH=/foa-website npm run verify`, including Astro diagnostics, static generation and generated-link/asset checks; `git diff --check` also passed.
 - The next action remains real-device phone and desktop review, followed by automated accessibility coverage.
 
+### UX refinement pass: 28 September 2026
+
+- Event status pills were removed from event lists and past-event cards; the event date, title and practical details carry the hierarchy without extra status badges.
+- Uniform sale rows now link directly to the Uniform page, and uniform prices use small amber price tags for clearer scanning.
+- The Uniform page now uses the supplied donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
+- The Co-Secretary email actions now open a pre-addressed email with a subject and a short editable message body.
+- The decorative circle was removed from the Co-Secretary vacancy card after mobile review feedback.
+- Committee names use a stable single-line mobile treatment so names such as Cristy Amponsah do not wrap inconsistently between cards.
+- Unconfirmed Fireworks operational caveats were removed from the public event page. Only confirmed event facts remain visible in this review pass.
+- The supplied Fireworks image is currently reused as a CSS background on the homepage and event page and can take approximately one second to appear on slower connections. Image loading/performance improvement is recorded as a follow-up before launch; optimise/compress or preload the asset after the visual direction is settled.
+
+### Route and sharing refinement pass: 28 September 2026
+
+- Contact Us is available in the mobile menu and footer, with the shared FOA email address and the approved Google Form link.
+- The public Accessibility page was removed; a public accessibility statement and formal accessibility testing are recorded as lower-priority future work.
+- The Community page was removed from the current Astro implementation, including navigation, footer, homepage actions and expected routes. The notice board remains a possible future feature rather than an active MVP route.
+- Reps Hub messages now include copy-to-clipboard actions with visible success/failure feedback. The cards use date circles but no longer show draft labels, expiry labels, workflow warnings or secondary fact pills.
+- Reps Hub source links are labelled "Learn more" and the page uses class-representative wording rather than prototype/workflow wording.
+- The Fireworks quiet display is scheduled for 17:00 across the current production pages, Reps Hub copy and project record.
+- Homepage quick-action numbers were removed, and the "See what's coming up" CTA uses a right arrow because it navigates to What's On rather than scrolling.
+
 ### Step 2: Confirm brand inputs
 
 **Status:** Partially confirmed
@@ -356,12 +375,12 @@ Specifically decide:
 - The Christmas Fayre is confirmed for Saturday 5 December 2026; the earlier 28 November calendar entry is superseded.
 - Rachel and Sophie are leading the 2026 Christmas Fayre.
 - The existing charity wording and registered charity number are confirmed as correct.
-- The Fireworks facts in the 28 September newsletter are confirmed: Thursday 5 November, 16:30-18:30, quiet display at 17:30, main display at 18:00, tickets £8.50 per person, under-2s free, and Helen Platt as event lead.
+- The Fireworks facts in the 28 September newsletter are confirmed: Thursday 5 November, 16:30-18:30, quiet display at 17:00, main display at 18:00, tickets £8.50 per person, under-2s free, and Helen Platt as event lead.
 - Confirmed Fireworks attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
 - The newsletter confirms Pre-loved Uniform prices as £3 for coats and new-logo items, £1 for all other items, with card-only payment.
 - The Welcome Tea is intentionally shown as completed in the review prototype, despite its 3 October 2026 source date, because the chosen review state represents a post-event view.
 - Sold-out and cancelled event treatments are private prototype patterns only and must not be presented as real FOA event statuses.
-- Newsletter-based Reps Hub messages are drafts for workflow review, not approved messages for distribution.
+- Reps Hub messages are available as shareable copy with copy-to-clipboard actions, subject to final FOA content approval.
 
 ### Step 3: Confirm content and public-data policy
 
@@ -382,7 +401,7 @@ Specifically decide:
 
 - Charity number and current organisation wording are confirmed.
 - Core Fireworks date, time, price, under-two policy, attractions and event lead are confirmed; verify remaining capacity, refund, weather and accessibility details.
-- Verify Uniform sale dates, prices and donation instructions against the latest FOA calendar before launch.
+- Verify Uniform sale dates, prices and the review-provided donation instruction against the latest FOA operational guidance before launch.
 - Committee membership and roles for 2026/27 are confirmed.
 - The supplied Co-Secretary role description confirms a manageable, termly role that can be done solo or shared: agree agendas with the Co-Chairs, send reminders and agendas, take and share meeting minutes roughly once a term, maintain licences and compliance documents, and help organise the shared Google Drive. The shared FOA email remains the public contact route; the outgoing secretaries can provide an informal chat before commitment.
 - Confirm who is authorised to approve website content.
@@ -410,19 +429,19 @@ Implemented in the current hash-routed review prototype:
 2. Uniform hub using the latest confirmed newsletter details
 3. Get Involved landing page
 4. Committee page with all seven confirmed members
-5. Reps Hub with clearly labelled newsletter-based draft messages
-6. Moderated Community Notice Board empty state
+5. Reps Hub with shareable class-representative messages and copy-to-clipboard actions
+6. Community Notice Board deferred from the current public implementation
 7. About FOA and funding-impact view
-8. Contact, draft Privacy and draft Accessibility views
+8. Contact and draft Privacy views
 9. Newsletter page with latest and previous newsletter sections
 10. Welcome Tea completed-event example
 11. Private prototype sold-out, cancelled and completed state patterns
 
 Still to refine after stakeholder review:
 
-- Approved Reps Hub copy, review dates, expiry dates and copy/native-share feedback
-- Real approved Community Notice Board content and stale-content behavior
-- Final Privacy and Accessibility wording
+- Final Reps Hub copy approval and native-share feedback
+- Decide whether to restore a public Community Notice Board route and define approved content and stale-content behavior
+- Final Privacy wording
 - Final biographies and replacement committee portraits
 - Final external ticket link and remaining event policies
 
@@ -439,7 +458,7 @@ Suggested tasks:
 3. Find the next uniform sale.
 4. Copy the Fireworks information for a class WhatsApp group.
 5. Understand what the Co-Secretary role involves.
-6. Find a community notice.
+6. Review whether a future Community Notice Board should return.
 
 Record where people hesitate, misinterpret labels or miss information.
 
@@ -467,8 +486,8 @@ Record where people hesitate, misinterpret labels or miss information.
 - Integrate the selected CMS.
 - Optimise production images and provide final image dimensions once replacement portraits are supplied.
 - Canonical and social metadata, Event structured data, sitemap and robots rules are implemented.
-- Add privacy, accessibility and safeguarding content.
-- Draft Privacy and Accessibility routes are implemented; approved final wording is pending.
+- Add privacy and safeguarding content.
+- The draft Privacy route is implemented; approved final wording is pending. A public Accessibility page is deferred.
 - Type/build checks, generated-site link validation, a homepage smoke test and a gated GitHub Pages deployment workflow are implemented; automated accessibility checks remain pending.
 
 ### Step 10: Verify and launch
@@ -477,7 +496,7 @@ Record where people hesitate, misinterpret labels or miss information.
 
 - Content review by FOA.
 - School/brand approval where required.
-- Accessibility testing.
+- Low-priority accessibility statement and formal accessibility testing.
 - Mobile performance testing on a constrained connection.
 - RTL testing if a translated locale is included at launch.
 - Link and metadata validation.
@@ -512,7 +531,7 @@ Record where people hesitate, misinterpret labels or miss information.
 - Are individual biographies useful, and who approves them?
 - Should the committee page show elected dates or terms?
 - Is the shared Gmail address the permanent public contact route?
-- Is a contact form desirable, and who will handle submissions?
+- Confirm ownership, retention and access handling for the Google contact form.
 
 ### Events and ticketing
 
@@ -597,11 +616,9 @@ The MVP is a static, committee-managed public website containing:
 - Committee page
 - Co-Secretary vacancy
 - Reps Hub with approved share templates
-- Editorial Community Notice Board
 - About FOA and three pillars
 - Shared contact information
 - Privacy notice
-- Accessibility statement
 - Safeguarding/contact guidance where appropriate
 - SEO metadata, sitemap and canonical URLs
 - GitHub Pages deployment
@@ -609,6 +626,7 @@ The MVP is a static, committee-managed public website containing:
 
 ### Potential later scope
 
+- Accessibility statement and formal accessibility testing
 - Additional fully translated locales
 - Native device sharing improvements
 - Add-to-calendar downloads
@@ -642,7 +660,7 @@ The MVP is a static, committee-managed public website containing:
 
 #### Global navigation
 
-- Users must be able to reach Home, What's On, Uniform, Get Involved and Community from every public page.
+- Users must be able to reach Home, What's On, Uniform and Get Involved from every public page.
 - Mobile navigation must be an actual menu, not a page-cycling control.
 - Browser back, forward, refresh, bookmarks and shared links must work through real URLs.
 - The current page must be identifiable in navigation.
@@ -650,7 +668,7 @@ The MVP is a static, committee-managed public website containing:
 #### Homepage
 
 - Show the most important current event or announcement prominently.
-- Show direct routes to current events, uniform, Reps Hub and community notices.
+- Show direct routes to current events, uniform and Reps Hub.
 - Show an upcoming-event preview.
 - Show current volunteer needs.
 - Explain FOA's purpose and three pillars without displacing practical information.
@@ -840,12 +858,10 @@ GitHub Pages + custom domain
 /get-involved/
 /committee/
 /reps/
-/community/
 /about/
 /contact/
 /newsletter/
 /privacy/
-/accessibility/
 /404.html
 ```
 
@@ -1029,13 +1045,13 @@ The following content appears in the current prototype but is not yet considered
 - The meaning and accessibility characteristics of the quiet display
 - Event access and facilities
 - Fireworks refund, cancellation and bad-weather policy
-- Uniform donation instructions and accepted/rejected items
+- Final verification of the Uniform donation instruction and accepted/rejected items
 - Final wording and publication review for the Co-Secretary recruitment copy
 - Production domain
 - Arabic translation quality
 - Final ticket provider
-- Final Privacy and Accessibility wording
-- Reps Hub messages, which remain unapproved workflow drafts
+- Final Privacy wording and Google Form data-handling details
+- Reps Hub copy, which remains subject to final FOA content approval
 
 These items must not lose their prototype/draft qualification until confirmed by an authorised FOA owner.
 

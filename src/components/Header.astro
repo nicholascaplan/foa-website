@@ -5,9 +5,9 @@ const primary = [
   { href: "/", label: "Home" },
   { href: "/whats-on/", label: "What's On" },
   { href: "/get-involved/", label: "Get Involved" },
-  { href: "/community/", label: "Community" },
   { href: "/uniform/", label: "Uniform" },
 ];
+const mobileOnly = { href: "/contact/", label: "Contact Us" };
 const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "") || "/";
 const isCurrent = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
@@ -36,6 +36,7 @@ const isCurrent = (href: string) =>
     </div>
     <nav aria-label="Mobile navigation">
       {primary.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
+      <a href={withBase(mobileOnly.href)} aria-current={isCurrent(mobileOnly.href) ? "page" : undefined}>{mobileOnly.label}</a>
     </nav>
   </div>
 </div>

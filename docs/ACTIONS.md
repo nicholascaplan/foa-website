@@ -6,8 +6,8 @@
 
 - Obtain higher-resolution committee portraits before the production site is launched. The current supplied photos may remain in the design prototype but should not be treated as final production assets.
 - Confirm whether concise approved committee biographies will be published. If so, design them as visible, readable content rather than desktop-only tooltips.
-- Set up and approve the Formspree contact route when the contact page is implemented.
-- Approve final Privacy and Accessibility wording after the required ownership, processor, retention and accessibility testing decisions are complete.
+- Confirm ownership, retention and access handling for the Google contact form.
+- Approve final Privacy wording after the required ownership, processor and retention decisions are complete.
 
 ## Brand assets
 
@@ -18,7 +18,7 @@
 
 - Select the external Fireworks ticketing provider and confirm capacity, refunds/cancellations, bad-weather handling, accessibility, data processing and the final checkout URL. The final integration will be a normal link to the provider.
 - Reconfirm Pre-loved Uniform donation instructions before launch. Prices and payment are confirmed by the newsletter: £3 for coats and new-logo items, £1 for all other items, card only.
-- Replace the draft Reps Hub messages with approved copy, review dates and expiry dates before enabling copy or native-share actions.
+- Confirm final FOA approval for the Reps Hub messages before launch.
 
 ## Production planning
 

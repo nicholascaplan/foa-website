@@ -13,6 +13,7 @@ const events = defineCollection({
     status: z.enum(["confirmed", "tickets-planned", "save-the-date", "completed"]),
     statusLabel: z.string(),
     path: z.string().optional(),
+    ctaLabel: z.string().optional(),
     featured: z.boolean().default(false),
     archive: z.boolean().default(false),
     image: z.string().optional(),

@@ -12,8 +12,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute
     const Wrapper = data.path ? "a" : "article";
     return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined}>
       <EventDate date={data.start} compact />
-      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : data.start.getHours() === 12 && data.start.getMinutes() === 0 ? "" : `, ${timeFormatter.format(data.start)}`} · {data.location}</p></span>
-      <span class:list={["event-status", data.status === "tickets-planned" && "event-status--sale"]}>{data.statusLabel}</span>
+      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : data.start.getHours() === 12 && data.start.getMinutes() === 0 ? "" : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}</span>
     </Wrapper>;
   })}
 </div>

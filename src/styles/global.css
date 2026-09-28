@@ -653,7 +653,7 @@ a {
 
 .quick-row {
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   padding: 1.35rem 0;
   border-bottom: 1px solid var(--line);
   align-items: center;
@@ -665,12 +665,6 @@ a {
 
 .quick-row:hover {
   color: var(--green);
-}
-
-.quick-number {
-  color: var(--amber);
-  font-family: var(--font-display);
-  font-size: 1.25rem;
 }
 
 .quick-row h3 {
@@ -729,10 +723,6 @@ a {
   grid-template-columns: 3.8rem minmax(0, 1fr);
 }
 
-.event-list-item .event-status {
-  grid-column: 2;
-}
-
 .compact-date {
   position: relative;
   display: grid;
@@ -774,7 +764,6 @@ a {
   font-size: 0.9rem;
 }
 
-.event-status,
 .category-label {
   width: max-content;
   padding: 0.3rem 0.6rem;
@@ -783,22 +772,6 @@ a {
   background: rgba(255, 253, 248, 0.72);
   font-size: 0.72rem;
   font-weight: 800;
-}
-
-.event-status--sale {
-  color: #5f3505;
-  background: var(--amber-light);
-}
-
-.event-status--sold-out,
-.event-status--cancelled {
-  color: #7b1f1f;
-  background: #f6d8d3;
-}
-
-.event-status--completed {
-  color: #405248;
-  background: #dde3dc;
 }
 
 .past-event {
@@ -843,10 +816,59 @@ a {
 
 .status-patterns article,
 .message-card {
+  position: relative;
   padding: 1.4rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
+}
+
+.message-date {
+  display: inline-grid;
+  width: 4.4rem;
+  height: 4.4rem;
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  color: var(--green-dark);
+  background: var(--green-light);
+  place-content: center;
+  text-align: center;
+}
+
+.message-date span {
+  font-size: 0.65rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.message-date strong {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.message-actions {
+  display: flex;
+  margin-top: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem 1rem;
+}
+
+.message-actions .button {
+  min-height: 2.7rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+}
+
+.copy-feedback {
+  min-height: 1.5em;
+  margin: 0.8rem 0 0;
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 750;
 }
 
 .pattern-library {
@@ -1017,17 +1039,6 @@ a {
   border: 1px solid #e2ad58;
   border-radius: var(--radius-lg);
   background: #fff4d7;
-}
-
-.vacancy-card::after {
-  position: absolute;
-  right: -4rem;
-  bottom: -7rem;
-  width: 16rem;
-  height: 16rem;
-  border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 50%;
-  content: "";
 }
 
 .vacancy-card h2 {
@@ -1506,6 +1517,39 @@ a {
   margin-top: 0.45rem;
 }
 
+.price-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: 0.65rem;
+}
+
+.price-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.price-tag {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #e2ad58;
+  border-radius: 999px;
+  color: #5f3505;
+  background: var(--amber-light);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.donation-note {
+  padding: 1rem 1.1rem;
+  border-left: 4px solid var(--green);
+  color: var(--green-dark);
+  background: var(--green-light);
+}
+
 /* Committee page */
 .page-hero {
   padding: clamp(3.5rem, 9vw, 7rem) 0;
@@ -1579,6 +1623,14 @@ a {
   font-size: clamp(1.35rem, 4vw, 1.8rem);
   font-weight: 500;
   line-height: 1.05;
+}
+
+.event-list-cta {
+  display: inline-block;
+  margin-top: 0.55rem;
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 800;
 }
 
 .member-details p {
@@ -1689,15 +1741,11 @@ a {
 
 @media (min-width: 36rem) {
   .quick-row {
-    grid-template-columns: 3rem 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .event-list-item {
-    grid-template-columns: 4.2rem 1fr auto;
-  }
-
-  .event-list-item .event-status {
-    grid-column: auto;
+    grid-template-columns: 4.2rem minmax(0, 1fr);
   }
 
   .schedule li {
@@ -1934,7 +1982,11 @@ a {
   }
 
   .member-details h2 {
-    font-size: 1.2rem;
+    overflow: hidden;
+    font-size: clamp(0.95rem, 4vw, 1.05rem);
+    letter-spacing: -0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .member-details p {
