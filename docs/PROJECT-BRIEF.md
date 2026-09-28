@@ -329,6 +329,15 @@ Specifically decide:
 - The local `main` branch tracks `origin/main` after fetching the newly created remote branch.
 - The first recommended next action is a real-device phone and desktop review, followed by automated accessibility coverage.
 
+### Deployed asset-path fix: 28 September 2026
+
+- The deployed Committee portraits were not loading because `src/pages/committee.astro` emitted root-relative image URLs such as `/helen.jpeg`, which bypassed the temporary GitHub Pages `/foa-website/` base path.
+- The archived or past-event poster in `src/pages/whats-on.astro` had the same root-relative asset-path issue.
+- Both references now use the shared `withBase()` helper, preserving compatibility with the repository deployment path and the future custom-domain root.
+- The source audit found no other equivalent root-relative asset or internal-route issues.
+- Verification passed with `SITE_URL=https://nicholascaplan.github.io BASE_PATH=/foa-website npm run verify`, including Astro diagnostics, static generation and generated-link/asset checks; `git diff --check` also passed.
+- The next action remains real-device phone and desktop review, followed by automated accessibility coverage.
+
 ### Step 2: Confirm brand inputs
 
 **Status:** Partially confirmed

@@ -59,7 +59,7 @@ npm audit
 
 - `npm run check` performs Astro and TypeScript diagnostics, including content-collection schema validation.
 - `npm run build` verifies that every static route and production asset can be generated.
-- `npm test` checks key rendered homepage content and verifies that every generated internal link and asset resolves.
+- `npm test` checks key rendered homepage content and verifies that every generated internal link and asset resolves, including repository-base-path asset URLs.
 - `npm run verify` runs the type, build and test gates in the same order used by GitHub Actions.
 - `npm audit` checks installed dependencies against published security advisories.
 

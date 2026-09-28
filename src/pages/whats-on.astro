@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import EventList from "../components/EventList.astro";
+import { withBase } from "../lib/urls";
 const events = await getCollection("events");
 const upcoming = events.filter(({ data }) => !data.archive).sort((a, b) => a.data.start.valueOf() - b.data.start.valueOf());
 const past = events.filter(({ data }) => data.archive).sort((a, b) => b.data.start.valueOf() - a.data.start.valueOf());
@@ -10,5 +11,5 @@ const past = events.filter(({ data }) => data.archive).sort((a, b) => b.data.sta
 <BaseLayout title="What's On" description="Upcoming Friends of Ashley events and selected events from earlier this year.">
   <PageHero eyebrow="Dates for the diary" title="What's on at Ashley" intro="A chronological view of the next things families need to know." />
   <section class="content-section content-section--compact"><div class="site-width"><div class="section-heading"><p class="eyebrow">Coming up</p><h2>Upcoming events</h2></div><EventList events={upcoming} /></div></section>
-  <section class="content-section tinted-section content-section--compact"><div class="site-width"><div class="section-heading"><p class="eyebrow">Earlier this year</p><h2>Past events</h2></div>{past.map(({ data }) => <article class="past-event"><img src={`/${encodeURIComponent(data.image ?? "")}`} alt={data.imageAlt} width="714" height="1000"><div><span class="event-status event-status--completed">{data.statusLabel}</span><h3>{data.title}</h3><p>{data.summary}</p></div></article>)}</div></section>
+  <section class="content-section tinted-section content-section--compact"><div class="site-width"><div class="section-heading"><p class="eyebrow">Earlier this year</p><h2>Past events</h2></div>{past.map(({ data }) => <article class="past-event"><img src={withBase(`/${encodeURIComponent(data.image ?? "")}`)} alt={data.imageAlt} width="714" height="1000"><div><span class="event-status event-status--completed">{data.statusLabel}</span><h3>{data.title}</h3><p>{data.summary}</p></div></article>)}</div></section>
 </BaseLayout>
