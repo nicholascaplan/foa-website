@@ -11,7 +11,7 @@ Agent working conventions, including the session-closure protocol, are recorded 
 
 ## 1. Executive Summary
 
-FOA needs a fast, welcoming and maintainable public website for parents, carers and staff. Its primary purpose is to answer practical questions quickly, reduce repeated or outdated WhatsApp messages, explain what FOA does and make participation feel approachable.
+The FOA needs a fast, welcoming and maintainable public website for parents, carers and staff. Its primary purpose is to answer practical questions quickly, reduce repeated or outdated WhatsApp messages, explain what The FOA does and make participation feel approachable.
 
 The agreed design direction is a **warm, modern editorial community noticeboard**. It combines the quick access of the original Bento concept with a calmer hierarchy, larger typography, fewer cards and less app-like visual language.
 
@@ -84,7 +84,7 @@ The repository currently contains:
    - Committee portrait assets supplied by the project owner
    - `welcome tea.png`, the supplied Welcome Tea poster for the past-event example
    - Supplied Fireworks event image
-  - `logo-big.png`, a supplied FOA purpose/three-pillars graphic containing the Ashley School mark
+  - `logo-big.png`, a supplied purpose/three-pillars graphic for The FOA containing the Ashley School mark
   - The event image is used on the homepage and Fireworks page
   - Committee portraits are used on the Committee page at intentionally modest display sizes
   - The purpose graphic is not yet used because Ashley School branding is currently out of scope
@@ -122,7 +122,7 @@ These decisions are considered confirmed unless the project owner explicitly rev
 - The homepage should first answer: "What do I need to know or do right now?"
 - Practical information takes priority over explaining the organisation.
 - Content should be concise, plain-English and suitable for readers who use English as an additional language.
-- A Newsletter page will provide a blog-style archive for the latest and previous FOA newsletters.
+- A Newsletter page will provide a blog-style archive for the latest and previous newsletters from The FOA.
 - An FAQs page is a later, low-priority addition and is not required for the immediate prototype work.
 
 ### Design
@@ -136,7 +136,7 @@ These decisions are considered confirmed unless the project owner explicitly rev
 - Use the supplied Fireworks image as a focal event image while keeping all event facts available as structured text.
 - Use the supplied committee portraits on the Committee page.
 - Keep portrait presentation compact because the source files are low resolution.
-- Replace the prototype leaf mark with the approved FOA logo in `assets/FOA Logo.jpg`.
+- Replace the prototype leaf mark with the approved logo for The FOA in `assets/FOA Logo.jpg`.
 - Do not use Ashley School branding at this stage.
 - Heritage green is the primary brand colour.
 - Amber is primarily for events and celebratory emphasis.
@@ -171,7 +171,7 @@ The intended order is:
 2. Immediate parent tasks
 3. What's On preview
 4. Volunteer vacancy or participation prompt
-5. FOA purpose and three pillars
+5. The FOA purpose and three pillars
 6. Contact, governance and legal information
 
 ### Personal information
@@ -179,7 +179,7 @@ The intended order is:
 - Prototype committee content should use names and roles only.
 - Do not display children's year groups in the prototype.
 - Do not attribute public notices using a parent's name plus their child's year group.
-- Use the shared FOA contact address rather than individual contact details.
+- Use the shared contact address for The FOA rather than individual contact details.
 - The project owner has requested that supplied committee portraits be included.
 - A final names, roles and publication-consent check remains part of pre-launch content approval.
 - The 2026/27 committee names and roles are confirmed: Helen Platt and Sarah Parish, Co-Chairs; Clare Birks and Darren Malone, Co-Treasurers; Nick Caplan and Cristy Amponsah, Co-Comms; Lizzie Grillo, Fundraising Initiatives Lead; Co-Secretary vacant.
@@ -200,7 +200,7 @@ The intended order is:
 - The ticket-provider CTA must clearly describe that the user is leaving for an external checkout.
 - The current dialog is a prototype placeholder only.
 - Remove unverified promises about payment methods, accounts and instant e-tickets until a provider is selected.
-- The production ticket journey will be a simple normal link to the selected external ticketing site, not an embedded or FOA-built checkout.
+- The production ticket journey will be a simple normal link to the selected external ticketing site, not an embedded checkout or one built by The FOA.
 
 ### Notice Board
 
@@ -228,13 +228,13 @@ This is the ordered backlog to use when asking, "What are the next steps?"
 ### Step 1: Review the current prototype
 
 **Status:** In progress; review has moved to the deployed generated Astro site  
-**Owner:** Project owner and representative FOA stakeholders
+**Owner:** Project owner and representative stakeholders from The FOA
 
 Review the generated Astro routes on both phone and desktop at `https://nicholascaplan.github.io/foa-website/` or with `npm run dev`. The archived hash-routed prototype in `prototype/` is retained only as a design reference.
 
 Specifically decide:
 
-- Does the warm editorial direction feel like FOA and Ashley?
+- Does the warm editorial direction feel like The FOA and Ashley?
 - Is the homepage hierarchy correct?
 - Is Fireworks too dominant or appropriately prominent?
 - Does the serif/sans typography feel trustworthy and approachable?
@@ -251,15 +251,15 @@ Specifically decide:
 - The phone preview must be instant and must not load a duplicate iframe.
 - Increase the header logo display size.
 - Order primary navigation as Home, What's On, Get Involved and Uniform.
-- The approved FOA logo has been supplied and replaces the prototype leaf mark.
+- The approved logo for The FOA has been supplied and replaces the prototype leaf mark.
 - Ashley School branding must not be used at this stage.
 - Committee names, roles and portraits may be published subject to the existing final pre-publication check. Replace the current low-resolution portraits before production launch.
 - Concise committee biographies are likely wanted. Confirm their wording and presentation in a later content-review step; do not use desktop-only tooltips for core biographical content.
 - If the Community Notice Board returns, the Committee will own its review, expiry and takedowns.
 - Meeting locations and schedules may be public.
-- The Contact Us route now offers the shared FOA email address and the approved Google contact form.
+- The Contact Us route now offers the shared email address for The FOA and the approved Google contact form.
 - The draft Privacy route and footer link were removed; no privacy notice is currently published, and the final privacy wording and publication timing remain open.
-- About FOA now links to Meet the Committee directly below its introductory copy.
+- About The FOA now links to Meet the Committee directly below its introductory copy.
 - Reps Hub copy uses ordinal date style, and successful copy-to-clipboard feedback clears after three seconds.
 - Fireworks facts are approved for this prototype. The supplied calendar provides provisional 2026 Uniform sale dates and operating details; these require a final pre-launch confirmation.
 - The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Reception Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
@@ -270,7 +270,7 @@ Specifically decide:
 
 - Remove the persistent prototype-status banner so reviewers can assess the public-facing experience without implementation caveats occupying the first viewport.
 - Mobile pages must show useful task or event information earlier and use a substantially smaller heading scale.
-- On the mobile homepage, place the current featured event before the FOA mission statement. Desktop may retain the editorial mission-and-event composition.
+- On the mobile homepage, place the current featured event before the mission statement for The FOA. Desktop may retain the editorial mission-and-event composition.
 - Remove the "What do you need today?" heading; the task options should be self-explanatory.
 - Event and sale dates that match the visitor's local date should be labelled **Today** or **Tomorrow** automatically. Do not apply these labels to newsletter publication dates or document metadata.
 - The desktop phone-preview mode must use explicit mobile typography because CSS viewport units still refer to the desktop browser viewport when the page body is visually constrained.
@@ -279,21 +279,21 @@ Specifically decide:
 - Mobile event rows should reserve width for the date and allow titles, details and status labels to wrap naturally without creating narrow text columns.
 - On the mobile homepage, keep the mission paragraph, action buttons and featured event as one compact sequence. Avoid inherited desktop gaps between those elements.
 - The Newsletter view should present one clearly identified Latest Newsletter followed by a Previous Newsletters section, with readable issue formatting rather than a duplicated archive/date column on mobile.
-- The 28th September 2026 Autumn Term News & Fireworks Tickets newsletter is the latest published issue. The supplied Welcome Back from FOA newsletter is the previous issue, dated 16th September 2026, and its concise summary is shown in the archive.
+- The 28th September 2026 Autumn Term News & Fireworks Tickets newsletter is the latest published issue. The supplied Welcome Back from The FOA newsletter is the previous issue, dated 16th September 2026, and its concise summary is shown in the archive.
 - Review responsive behavior down to approximately 320px; at the narrowest supported widths, secondary brand text and multi-column committee layouts may simplify to protect readability.
 
 ### Navigation simplification decision: 28 September 2026
 
 - Keep the header and mobile menu focused on four parent-task routes: Home, What's On, Get Involved and Uniform.
-- Remove Newsletter, Committee, Reps Hub and About FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
-- Keep Committee, Reps Hub and About FOA discoverable through Get Involved; keep Newsletter, About FOA, Contact and policy pages available through the footer and relevant page content.
+- Remove Newsletter, Committee, Reps Hub and About The FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
+- Keep Committee, Reps Hub and About The FOA discoverable through Get Involved; keep Newsletter, About The FOA, Contact and policy pages available through the footer and relevant page content.
 
 ### Content and route refinement: 28 September 2026
 
 - Use ordinal day formatting in public date copy, including `5th November`, `6th November` and `4th December`.
 - Remove the unpublished Privacy route rather than presenting draft wording as a public page.
 - Keep the final privacy notice as a pre-publication requirement once ownership, processors, retention and contact handling are approved.
-- Provide a prominent About FOA link to the Committee page near the top of the route.
+- Provide a prominent About The FOA link to the Committee page near the top of the route.
 - Clear the Reps Hub's successful "Copied to clipboard." status after three seconds.
 
 ### Mobile interaction refinement: 28 September 2026
@@ -362,27 +362,28 @@ Specifically decide:
 
 ### Route and sharing refinement pass: 28 September 2026
 
-- Public-facing copy uses "The Friends of Ashley" on first mention and "FOA" thereafter. Technical identifiers such as the shared email address remain unchanged; this convention is recorded in `docs/STYLE-GUIDE.md`.
-- Contact Us is available in the mobile menu and footer, with the shared FOA email address and the approved Google Form link.
-- The supplied Google Form is available as an unlinked, no-indexed experiment at `/playground.html`; the public Contact Us route continues to offer the shared FOA email address and an external Google Form link. Confirm form ownership, access, retention and privacy handling before production launch.
+- Public-facing copy uses "The Friends of Ashley" on first mention and "The FOA" thereafter, including in titles and labels. Bare "FOA" is not used as the organisation name in copy. Technical identifiers such as the shared email address remain unchanged; this convention is recorded in `docs/STYLE-GUIDE.md`.
+- Contact Us is available in the mobile menu and footer, with the shared email address for The FOA and the approved Google Form link.
+- The supplied Google Form is available as an unlinked, no-indexed experiment at `/playground.html`; the public Contact Us route continues to offer the shared email address for The FOA and an external Google Form link. Confirm form ownership, access, retention and privacy handling before production launch.
 - The public Accessibility page was removed; a public accessibility statement and formal accessibility testing are recorded as lower-priority future work.
 - The Community page was removed from the current Astro implementation, including navigation, footer, homepage actions and expected routes. The notice board remains a possible future feature rather than an active MVP route.
 - Reps Hub messages now include copy-to-clipboard actions with visible success/failure feedback. The cards use date circles but no longer show draft labels, expiry labels, workflow warnings or secondary fact pills.
 - Reps Hub source links are labelled "Learn more" and the page uses class-representative wording rather than prototype/workflow wording.
 - The Fireworks quiet display is scheduled for 17:00 across the current production pages, Reps Hub copy and project record.
 - Homepage quick-action numbers were removed, and the "See what's coming up" CTA uses a right arrow because it navigates to What's On rather than scrolling.
+- The About page's Contribution, Collaboration and Community pillars use compact inline numbers beside their headings, avoiding unnecessary vertical whitespace on mobile while retaining the three-column desktop layout.
 
 ### Step 2: Confirm brand inputs
 
 **Status:** Partially confirmed
 
-- The approved FOA logo is available in `assets/FOA Logo.jpg`.
+- The approved logo for The FOA is available in `assets/FOA Logo.jpg`.
 - Do not use Ashley School branding at this stage.
-- `assets/logo-big.png` is better treated as a brand-purpose/three-pillars graphic than as the primary logo. Its strongest potential placement is beside the About FOA or homepage purpose section.
+- `assets/logo-big.png` is better treated as a brand-purpose/three-pillars graphic than as the primary logo. Its strongest potential placement is beside the About The FOA or homepage purpose section.
 - Do not add `logo-big.png` to the public prototype until use of its embedded Ashley School mark is approved or a school-mark-free version is supplied.
 - If approved, keep its contribution, collaboration and community messages as accessible HTML text rather than relying on small text embedded in the image.
 - Obtain any official colour values and brand-use restrictions.
-- The prototype leaf mark is replaced by the approved FOA logo.
+- The prototype leaf mark is replaced by the approved logo for The FOA.
 - System fonts remain the default. Future self-hosted typography directions can be reviewed when a final brand refinement is needed.
 
 ### Content confirmations: 28 September 2026
@@ -394,8 +395,8 @@ Specifically decide:
 - Confirmed Fireworks attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
 - The newsletter confirms Pre-loved Uniform prices as £3 for coats and new-logo items, £1 for all other items, with card-only payment.
 - The Welcome Tea is intentionally shown as completed in the review prototype, despite its 3 October 2026 source date, because the chosen review state represents a post-event view.
-- Sold-out and cancelled event treatments are private prototype patterns only and must not be presented as real FOA event statuses.
-- Reps Hub messages are available as shareable copy with copy-to-clipboard actions, subject to final FOA content approval.
+- Sold-out and cancelled event treatments are private prototype patterns only and must not be presented as real event statuses from The FOA.
+- Reps Hub messages are available as shareable copy with copy-to-clipboard actions, subject to final content approval from The FOA.
 
 ### Step 3: Confirm content and public-data policy
 
@@ -408,7 +409,7 @@ Specifically decide:
 - Define notice-board attribution rules.
 - The Committee owns notice review, expiry and takedowns.
 - Meeting locations and schedules may be public.
-- Confirm the wording of the inclusive FOA membership statement against the FOA constitution.
+- Confirm the wording of the inclusive membership statement for The FOA against the constitution of The FOA.
 
 ### Step 4: Verify remaining operational content
 
@@ -416,9 +417,9 @@ Specifically decide:
 
 - Charity number and current organisation wording are confirmed.
 - Core Fireworks date, time, price, under-two policy, attractions and event lead are confirmed; verify remaining capacity, refund, weather and accessibility details.
-- Verify Uniform sale dates, prices and the review-provided donation instruction against the latest FOA operational guidance before launch.
+- Verify Uniform sale dates, prices and the review-provided donation instruction against the latest operational guidance from The FOA before launch.
 - Committee membership and roles for 2026/27 are confirmed.
-- The supplied Co-Secretary role description confirms a manageable, termly role that can be done solo or shared: agree agendas with the Co-Chairs, send reminders and agendas, take and share meeting minutes roughly once a term, maintain licences and compliance documents, and help organise the shared Google Drive. The shared FOA email remains the public contact route; the outgoing secretaries can provide an informal chat before commitment.
+- The supplied Co-Secretary role description confirms a manageable, termly role that can be done solo or shared: agree agendas with the Co-Chairs, send reminders and agendas, take and share meeting minutes roughly once a term, maintain licences and compliance documents, and help organise the shared Google Drive. The shared email for The FOA remains the public contact route; the outgoing secretaries can provide an informal chat before commitment.
 - Confirm who is authorised to approve website content.
 
 ### Step 5: Select ticketing approach
@@ -426,7 +427,7 @@ Specifically decide:
 **Status:** Pending and required before event implementation
 
 - Select the external ticketing provider.
-- Confirm provider fees and FOA ownership.
+- Confirm provider fees and ownership by The FOA.
 - Confirm capacity and whether the confirmed £8.50 standard ticket and free under-two entry require advance reservation by ticket type.
 - Confirm refunds, cancellations and bad-weather handling.
 - Confirm checkout accessibility and data-processing responsibilities.
@@ -446,7 +447,7 @@ Implemented in the current hash-routed review prototype:
 4. Committee page with all seven confirmed members
 5. Reps Hub with shareable class-representative messages and copy-to-clipboard actions
 6. Community Notice Board deferred from the current public implementation
-7. About FOA and funding-impact view
+7. About The FOA and funding-impact view
 8. Contact view
 9. Newsletter page with latest and previous newsletter sections
 10. Welcome Tea completed-event example
@@ -509,7 +510,7 @@ Record where people hesitate, misinterpret labels or miss information.
 
 **Status:** Future
 
-- Content review by FOA.
+- Content review by The FOA.
 - School/brand approval where required.
 - Low-priority accessibility statement and formal accessibility testing.
 - Mobile performance testing on a constrained connection.
@@ -523,11 +524,11 @@ Record where people hesitate, misinterpret labels or miss information.
 
 ### Brand and tone
 
-- Is there an approved FOA logo?
+- Is there an approved logo for The FOA?
 - Can the Ashley School logo, name or visual identity be used, and under what restrictions?
-- Can the embedded Ashley School mark in `assets/logo-big.png` be published, or can FOA provide a version without it?
+- Can the embedded Ashley School mark in `assets/logo-big.png` be published, or can The FOA provide a version without it?
 - Should the final tone lean slightly more playful, more formal or remain as currently prototyped?
-- Is a serif display typeface acceptable for FOA?
+- Is a serif display typeface acceptable for The FOA?
 - Is occasional illustration desired, or should typography and simple graphics remain the main visual language?
 
 ### Homepage and navigation
@@ -580,7 +581,7 @@ Record where people hesitate, misinterpret labels or miss information.
 
 ### Community Notice Board
 
-- Can parents submit notices, or only contact FOA by email?
+- Can parents submit notices, or only contact The FOA by email?
 - Which notice categories are permitted?
 - Are commercial services allowed?
 - Who moderates and approves notices?
@@ -599,7 +600,7 @@ Record where people hesitate, misinterpret labels or miss information.
 
 ### Content management and operations
 
-- The current repository owner is `nicholascaplan`; confirm whether production ownership should later move to an FOA-managed account or organisation.
+- The current repository owner is `nicholascaplan`; confirm whether production ownership should later move to an account or organisation managed by The FOA.
 - Who owns the Sanity project if selected?
 - Which committee members need editing access?
 - How are editors added and removed each school year?
@@ -631,7 +632,7 @@ The MVP is a static, committee-managed public website containing:
 - Committee page
 - Co-Secretary vacancy
 - Reps Hub with approved share templates
-- About FOA and three pillars
+- About The FOA and three pillars
 - Shared contact information
 - Privacy notice
 - Safeguarding/contact guidance where appropriate
@@ -656,8 +657,8 @@ The MVP is a static, committee-managed public website containing:
 ### Explicitly out of scope for MVP
 
 - Auctions or bidding
-- Processing payments directly on the FOA site
-- Issuing tickets directly from the FOA site
+- Processing payments directly on the site for The FOA
+- Issuing tickets directly from the site for The FOA
 - User accounts for parents
 - An open, unmoderated community feed
 - Public self-service notice publishing
@@ -686,7 +687,7 @@ The MVP is a static, committee-managed public website containing:
 - Show direct routes to current events, uniform and Reps Hub.
 - Show an upcoming-event preview.
 - Show current volunteer needs.
-- Explain FOA's purpose and three pillars without displacing practical information.
+- Explain The FOA's purpose and three pillars without displacing practical information.
 - Show public contact and charity information in the footer.
 
 #### What's On
@@ -717,7 +718,7 @@ The MVP is a static, committee-managed public website containing:
 - Show the current price list.
 - Explain accepted and rejected items.
 - Explain available payment methods.
-- Include a contact route for questions or size requests if FOA supports them.
+- Include a contact route for questions or size requests if The FOA supports them.
 
 #### Get Involved and Committee
 
@@ -725,7 +726,7 @@ The MVP is a static, committee-managed public website containing:
 - Show current approved committee names and roles.
 - Show active volunteer vacancies.
 - Explain expected time commitment and available support.
-- Provide a shared FOA contact action.
+- Provide a shared contact action for The FOA.
 - Do not expose unnecessary information about children.
 
 #### Reps Hub
@@ -1065,9 +1066,9 @@ The following content appears in the current prototype but is not yet considered
 - Arabic translation quality
 - Final ticket provider
 - Final Privacy wording and Google Form data-handling details
-- Reps Hub copy, which remains subject to final FOA content approval
+- Reps Hub copy, which remains subject to final content approval from The FOA
 
-These items must not lose their prototype/draft qualification until confirmed by an authorised FOA owner.
+These items must not lose their prototype/draft qualification until confirmed by an authorised owner from The FOA.
 
 ## 10. How to Resume This Project
 

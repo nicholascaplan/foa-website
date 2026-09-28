@@ -27,7 +27,7 @@ This file contains durable working instructions for AI agents contributing to Th
 - Heritage green is the primary brand colour; amber is mainly for events and celebration.
 - Use restrained cards, large legible typography and minimal dependence on photography.
 - English is the current primary language; one Arabic RTL example demonstrates layout support.
-- Ticket purchases will use an external provider rather than an FOA-built checkout.
+- Ticket purchases will use an external provider rather than a checkout built by The FOA.
 - The Community Notice Board is editorial and committee-managed for MVP.
 - Auctions, parent accounts and unmoderated publishing are out of scope for MVP.
 
@@ -39,7 +39,7 @@ This file contains durable working instructions for AI agents contributing to Th
 - The supplied committee portraits may be used in the prototype.
 - Committee presentation should use names and roles only unless additional approved content is provided.
 - Do not publish child year groups or other unnecessary child-related information.
-- Do not add personal contact details; use the shared FOA contact route.
+- Do not add personal contact details; use the shared contact route for The FOA.
 - A final pre-publication check is still required for committee names, roles and portrait consent.
 - Safety-critical and transactional translations require human review.
 

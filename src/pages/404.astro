@@ -3,5 +3,5 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/urls";
 ---
 <BaseLayout title="Page not found" description="The requested page from The Friends of Ashley could not be found." noindex>
-  <section class="content-section"><div class="site-width empty-state"><p class="eyebrow">404</p><h1 class="editorial-heading">That page isn't here.</h1><p>Try the homepage or browse the next FOA events.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/")}>Go to the homepage</a><a class="button button--secondary" href={withBase("/whats-on/")}>See what's on</a></div></div></section>
+  <section class="content-section"><div class="site-width empty-state"><p class="eyebrow">404</p><h1 class="editorial-heading">That page isn't here.</h1><p>Try the homepage or browse the next events from The FOA.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/")}>Go to the homepage</a><a class="button button--secondary" href={withBase("/whats-on/")}>See what's on</a></div></div></section>
 </BaseLayout>

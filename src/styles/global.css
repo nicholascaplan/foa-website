@@ -1175,19 +1175,23 @@ a {
 }
 
 .pillar {
-  padding: 1.5rem 0;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  column-gap: 0.5rem;
+  padding: 1.25rem 0;
   border-top: 1px solid var(--line);
 }
 
 .pillar-number {
-  display: block;
-  margin-bottom: 1.8rem;
+  grid-column: 1;
+  align-self: baseline;
   color: var(--amber);
   font-family: var(--font-display);
   font-size: 1.1rem;
 }
 
 .pillar h3 {
+  grid-column: 2;
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.8rem;
@@ -1195,7 +1199,8 @@ a {
 }
 
 .pillar p {
-  margin: 0.75rem 0 0;
+  grid-column: 2;
+  margin: 0.5rem 0 0;
   color: var(--ink-soft);
 }
 

@@ -15,7 +15,7 @@ const footerLinks = [
   ["/whats-on/", "What's On"], ["/get-involved/", "Get Involved"],
   ["/committee/", "Committee"], ["/reps/", "Reps Hub"],
   ["/uniform/", "Uniform"], ["/newsletter/", "Newsletter"],
-  ["/about/", "About FOA"], ["/contact/", "Contact Us"],
+  ["/about/", "About The FOA"], ["/contact/", "Contact Us"],
 ];
 
 const links = (items: string[][]) => items
@@ -50,19 +50,19 @@ export const GET: APIRoute = () => new Response(`<!doctype html>
     </header>
     <div class="mobile-menu" id="mobile-menu" aria-hidden="true" data-mobile-menu>
       <div class="mobile-menu-panel">
-        <div class="mobile-menu-head"><strong>Explore FOA</strong><button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button></div>
+        <div class="mobile-menu-head"><strong>Explore The FOA</strong><button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button></div>
         <nav aria-label="Mobile navigation">${links(navigation)}<a href="${withBase("/contact/")}">Contact Us</a></nav>
       </div>
     </div>
     <main id="main-content">
       <section class="view-hero">
-        <div class="site-width"><p class="eyebrow">Contact FOA</p><h1>Start with the shared inbox.</h1><p>Questions, ideas and offers of help are welcome.</p></div>
+        <div class="site-width"><p class="eyebrow">Contact The FOA</p><h1>Start with the shared inbox.</h1><p>Questions, ideas and offers of help are welcome.</p></div>
       </section>
       <section class="content-section content-section--compact">
         <div class="site-width split-layout">
           <div>
             <h2 class="editorial-heading">Get in touch</h2>
-            <p class="section-copy">Use the shared FOA address so the right committee member can respond.</p>
+            <p class="section-copy">Use the shared address for The FOA so the right committee member can respond.</p>
             <a class="button button--primary" href="mailto:thefriendsofashley@gmail.com">Email The Friends of Ashley</a>
           </div>
           <article class="info-card contact-form-card">

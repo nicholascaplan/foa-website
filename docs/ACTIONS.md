@@ -12,13 +12,13 @@
 ## Brand assets
 
 - Confirm whether the Ashley School mark embedded in `assets/logo-big.png` is approved for public use, or obtain a school-mark-free version.
-- Once approved, test `logo-big.png` as a supporting purpose graphic beside the About FOA or homepage three-pillars section. Keep the three pillar labels and explanations as HTML text so they remain readable and accessible on mobile.
+- Once approved, test `logo-big.png` as a supporting purpose graphic beside the About The FOA or homepage three-pillars section. Keep the three pillar labels and explanations as HTML text so they remain readable and accessible on mobile.
 
 ## Pending operational decisions
 
 - Select the external Fireworks ticketing provider and confirm capacity, refunds/cancellations, bad-weather handling, accessibility, data processing and the final checkout URL. The final integration will be a normal link to the provider.
 - Reconfirm Pre-loved Uniform donation instructions before launch. Prices and payment are confirmed by the newsletter: £3 for coats and new-logo items, £1 for all other items, card only.
-- Confirm final FOA approval for the Reps Hub messages before launch.
+- Confirm final approval from The FOA for the Reps Hub messages before launch.
 
 ## Production planning
 

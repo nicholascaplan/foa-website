@@ -36,9 +36,9 @@ test("newsletter shows the latest issue and previous issue in order", async () =
   const newsletter = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
   assert.match(newsletter, /Autumn Term News &amp; Fireworks Tickets/);
   assert.match(newsletter, /28th September 2026/);
-  assert.match(newsletter, /Welcome Back from FOA/);
+  assert.match(newsletter, /Welcome Back from The FOA/);
   assert.match(newsletter, /16th September 2026/);
-  assert.match(newsletter, /A start-of-year introduction to FOA, fundraising and key dates\./);
+  assert.match(newsletter, /A start-of-year introduction to The FOA, fundraising and key dates\./);
   assert.match(newsletter, /Dear Parents and Carers,/);
   assert.match(newsletter, /Welcome back! We hope you have all had a wonderful summer/);
   assert.match(newsletter, /Just coming along and showing your support really makes a difference\./);

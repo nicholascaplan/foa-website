@@ -10,7 +10,7 @@ The repository now contains the first static Astro implementation of the current
 - `src/layouts/` and `src/components/`: shared page shell, navigation, event and content components
 - `src/content/`: typed local collections for events, newsletters and committee members
 - `src/styles/global.css`: central design tokens and responsive component styles
-- `assets/`: public FOA brand assets, event images, committee portraits and source documents
+- `assets/`: public brand assets for The FOA, event images, committee portraits and source documents
 - `prototype/`: archived single-file, hash-routed design review prototype
 - `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
