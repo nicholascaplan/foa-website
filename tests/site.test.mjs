@@ -48,6 +48,17 @@ test("newsletter shows the latest issue and previous issue in order", async () =
   assert.match(newsletter, /class="newsletter-dialog-sections"/);
 });
 
+test("JustGiving donations are linked from the footer and fundraising impact", async () => {
+  const homepage = await readFile(path.join(dist, "index.html"), "utf8");
+  const about = await readFile(path.join(dist, "about", "index.html"), "utf8");
+  const justGivingUrl = "https://www.justgiving.com/charity/Friends-of-Ashley";
+
+  assert.match(homepage, new RegExp(`href="${justGivingUrl}"`));
+  assert.match(homepage, /Donate via JustGiving/);
+  assert.match(about, new RegExp(`href="${justGivingUrl}"`));
+  assert.match(about, /Last year's impact[\s\S]*Donate via JustGiving/);
+});
+
 test("all generated internal links and assets resolve", async () => {
   const htmlFiles = (await filesUnder(dist)).filter((file) => file.endsWith(".html"));
   const missing = [];

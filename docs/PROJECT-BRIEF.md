@@ -373,6 +373,21 @@ Specifically decide:
 - Homepage quick-action numbers were removed, and the "See what's coming up" CTA uses a right arrow because it navigates to What's On rather than scrolling.
 - The About page's Contribution, Collaboration and Community pillars use compact inline numbers beside their headings, avoiding unnecessary vertical whitespace on mobile while retaining the three-column desktop layout.
 
+### Test strategy: 28 September 2026
+
+- The risk-based automated test strategy is documented in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
+- Existing Astro/TypeScript, build and generated-site link checks remain the fast foundation.
+- The first implementation milestone is Playwright coverage for shared mobile navigation plus representative `axe-core` accessibility scans.
+- Newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage follow in that order.
+- Broad screenshot regression is deferred until the generated-site visual design is approved; CMS, ticket-provider, analytics and locale tests remain conditional on those features being introduced.
+
+### JustGiving donations: 28 September 2026
+
+- The confirmed JustGiving charity page is `https://www.justgiving.com/charity/Friends-of-Ashley`.
+- A persistent "Donate via JustGiving" external link is available in the site footer.
+- The About The FOA page repeats the donation action alongside the fundraising-impact content, where visitors have context for how support is used.
+- The task-focused primary navigation and homepage remain unchanged so the donation action does not compete with current events and practical parent tasks.
+
 ### Step 2: Confirm brand inputs
 
 **Status:** Partially confirmed
@@ -1051,6 +1066,8 @@ Before launch, the implementation should pass:
 - CMS draft/publish/expiry testing
 - Ticket-provider end-to-end link testing
 - GitHub Pages deployment verification (implemented for the review deployment)
+
+The scope, layering, CI cadence and implementation order for these gates are defined in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
 
 ## 9. Known Provisional Content
 

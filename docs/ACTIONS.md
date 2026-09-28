@@ -25,6 +25,6 @@
 - Continue the Astro implementation with typed local content collections until the CMS is selected. Keep the models compatible with a later CMS adapter.
 - Confirm the final custom domain, DNS and production ownership. The temporary GitHub Pages review deployment is live under `nicholascaplan/foa-website`.
 - Select the CMS, then confirm editor ownership, preview workflow and annual access handover before integrating it.
-- Add automated accessibility checks after the first generated-site visual review. Generated internal-link and asset validation already runs in the deployment gate.
-- Add browser end-to-end coverage for primary navigation, the mobile menu and key parent journeys.
-- Consider screenshot-based visual regression coverage once the generated-site design has been approved.
+- Implement the first milestone in `docs/TEST-STRATEGY.md`: add Playwright infrastructure, mobile-navigation browser coverage and representative automated accessibility scans. Generated internal-link and asset validation already runs in the deployment gate.
+- Follow with newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage.
+- Add selective screenshot-based visual regression only after the generated-site design has been approved.

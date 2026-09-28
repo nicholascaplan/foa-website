@@ -87,6 +87,8 @@ When resuming work, read that document first and begin with **Next Steps** and *
 
 [`docs/STYLE-GUIDE.md`](docs/STYLE-GUIDE.md) contains the public copy convention for the organisation name and related usage.
 
+[`docs/TEST-STRATEGY.md`](docs/TEST-STRATEGY.md) defines the risk-based automated and manual test layers, CI cadence and phased implementation order.
+
 ## Immediate Next Step
 
 Review the deployed Astro site on phone and desktop, then resolve the content and operational blockers in `docs/ACTIONS.md` before the production-domain launch. Formal accessibility testing, a public accessibility statement and a future Community Notice Board decision are lower-priority follow-up work.
