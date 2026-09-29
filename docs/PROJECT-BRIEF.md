@@ -371,6 +371,13 @@ Specifically decide:
 - Unconfirmed Fireworks operational caveats were removed from the public event page. Only confirmed event facts remain visible in this review pass.
 - The supplied Fireworks image is currently reused as a CSS background on the homepage and event page and can take approximately one second to appear on slower connections. Image loading/performance improvement is recorded as a follow-up before launch; optimise/compress or preload the asset after the visual direction is settled.
 
+### Committee vacancy card refinement: 29 September 2026
+
+- The Committee page now presents the vacant Co-Secretary role as an eighth card in the committee grid, completing the desktop row while keeping the vacancy visibly distinct from confirmed members.
+- The vacancy card uses the same border, rounded shell and full-height white role panel as the named member cards. Its upper panel uses a lightly patterned amber surface to signal an invitation rather than a confirmed portrait.
+- The vacancy invitation uses the upright copy "Join the team" rather than "Your name here?", avoiding the impression that text is standing in for a portrait. The "A seat is waiting" pill sits in the upper-right corner, with no stars or angled text.
+- The card links to the shared Co-Secretary enquiry email, and the existing full-width recruitment callout remains below the grid.
+
 ### Route and sharing refinement pass: 28 September 2026
 
 - Public-facing copy uses "The Friends of Ashley" on first mention and "The FOA" thereafter, including in titles and labels. Bare "FOA" is not used as the organisation name in copy. Technical identifiers such as the shared email address remain unchanged; this convention is recorded in `docs/STYLE-GUIDE.md`.
