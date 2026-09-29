@@ -15,7 +15,7 @@ The repository now contains the first static Astro implementation of the current
 - `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
 
-The site includes canonical and social metadata, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, Reps Hub includes copy-to-clipboard actions, and unresolved operational content remains clearly marked as draft or provisional. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
+The site includes canonical and social metadata, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
 
 ## Local Development
 

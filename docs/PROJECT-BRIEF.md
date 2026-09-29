@@ -1,7 +1,7 @@
 # The Friends of Ashley Website: Project Brief and Status
 
 **Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; a separate public holding page is deployed while the custom domain is verified
-**Last updated:** 28 September 2026  
+**Last updated:** 29 September 2026
 **Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 
@@ -111,6 +111,7 @@ The repository currently contains:
 - A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
 - The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
 - `npm run verify` passes Astro/TypeScript diagnostics, the production build, a rendered-homepage smoke test and a generated internal-link/asset crawl. `npm audit` reports zero vulnerabilities.
+- Public-facing draft/readiness warnings were removed from the production Committee and Reps Hub routes and the archived prototype. The Christmas Fayre summary now states only the confirmed lead names, and the Reps Hub messages no longer promise unpublished follow-up details.
 
 ## 3. Decisions Made
 
