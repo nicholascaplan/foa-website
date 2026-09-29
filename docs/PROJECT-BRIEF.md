@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief and Status
 
-**Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; current route and UX refinement pass complete
+**Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; a separate public holding page is deployed while the custom domain is verified
 **Last updated:** 28 September 2026  
 **Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
@@ -107,7 +107,8 @@ The repository currently contains:
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
 - Only the mobile menu and Today/Tomorrow event labels use client-side JavaScript.
 - Canonical, Open Graph and Twitter metadata, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
-- A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review; the final custom domain remains to be configured.
+- A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
+- A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
 - The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
 - `npm run verify` passes Astro/TypeScript diagnostics, the production build, a rendered-homepage smoke test and a generated internal-link/asset crawl. `npm audit` reports zero vulnerabilities.
 
@@ -348,6 +349,16 @@ Specifically decide:
 - The source audit found no other equivalent root-relative asset or internal-route issues.
 - Verification passed with `SITE_URL=https://nicholascaplan.github.io BASE_PATH=/foa-website npm run verify`, including Astro diagnostics, static generation and generated-link/asset checks; `git diff --check` also passed.
 - The next action remains real-device phone and desktop review, followed by automated accessibility coverage.
+
+### Pre-launch holding-page deployment: 28 September 2026
+
+- The production domain is `thefriendsofashley.org`.
+- The custom domain is intentionally assigned to the standalone public repository `nicholascaplan/foa-holding-page`, not the main site repository. This preserves `https://nicholascaplan.github.io/foa-website/` as the full in-progress implementation and review URL.
+- The holding-page repository has a dependency-free static page, `noindex, nofollow` metadata and a GitHub Actions Pages deployment workflow. Its temporary Pages URL is `https://nicholascaplan.github.io/foa-holding-page/`.
+- GitHub Pages deployment for the holding page completed successfully after Pages was enabled for the repository.
+- At 123 Reg, the apex DNS uses GitHub Pages A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`; `www` is a CNAME to `nicholascaplan.github.io`. Previous website A records for the apex, `www` and wildcard host were removed. Existing email, SPF, DKIM, DMARC and nameserver records remain in place.
+- GitHub Pages DNS verification and HTTPS are complete for the holding-page repository. Test both `https://thefriendsofashley.org` and `https://www.thefriendsofashley.org` as part of the normal public-site review.
+- At launch, move the custom-domain assignment from `foa-holding-page` to `foa-website`, update the main deployment to `SITE_URL=https://thefriendsofashley.org` with `BASE_PATH=/`, then verify the generated root-domain site. DNS records can remain unchanged.
 
 ### UX refinement pass: 28 September 2026
 

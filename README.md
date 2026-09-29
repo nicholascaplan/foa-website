@@ -44,7 +44,7 @@ npm run preview
 
 The canonical production origin is configured through `SITE_URL`. It is not required for ordinary local development.
 
-The current mobile-review deployment is published at <https://nicholascaplan.github.io/foa-website/>. The build uses a repository base path for that temporary URL while retaining support for a future custom-domain root.
+The current mobile-review deployment is published at <https://nicholascaplan.github.io/foa-website/>. The build uses a repository base path for that temporary URL while retaining support for a future custom-domain root. The public pre-launch holding page is deliberately deployed from the separate `nicholascaplan/foa-holding-page` repository, so the in-progress full site remains available at this review URL.
 
 ## Automated Verification
 
@@ -68,6 +68,8 @@ These are initial deployment gates, not a complete automated test suite. Browser
 ## Deployment
 
 Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow installs locked dependencies, runs `npm run verify`, uploads `dist/` only after those checks pass, and then deploys the artifact through GitHub Pages. Failed checks prevent the deployment job from starting.
+
+The planned public domain is `thefriendsofashley.org`. It remains attached to the holding-page repository until launch, when its GitHub Pages custom-domain assignment will move to this repository and this workflow will be updated for the root-domain build.
 
 ## Project Record
 
