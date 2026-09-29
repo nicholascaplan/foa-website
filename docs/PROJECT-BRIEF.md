@@ -494,6 +494,7 @@ Still to refine after stakeholder review:
 - Decide when and how to publish the final privacy notice
 - Final biographies and replacement committee portraits
 - Final external ticket link and remaining event policies
+- Consider a low-priority archive of all previous event posters, billed as **Inspiration**. Decide later whether it belongs on a standalone page, with room to experiment with different arrangements, or within What's On.
 
 ### Step 7: Test the information architecture
 
