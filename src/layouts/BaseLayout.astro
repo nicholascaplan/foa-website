@@ -5,12 +5,12 @@ import DevMobilePreview from "../components/DevMobilePreview.astro";
 import { withBase } from "../lib/urls";
 import "../styles/global.css";
 
-interface Props { title: string; description: string; image?: string; noindex?: boolean; }
-const { title, description, image = "/FOA%20Logo.jpg", noindex = false } = Astro.props;
+interface Props { title: string; description: string; image?: string; preloadImage?: string; noindex?: boolean; }
+const { title, description, image = "/FOA%20Logo.jpg", preloadImage, noindex = false } = Astro.props;
 const pageTitle = title === "The Friends of Ashley" ? "The Friends of Ashley | Ashley C of E Primary School PTA" : `${title} | The Friends of Ashley`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(withBase(image), Astro.site);
-const fireworksImage = `url("${withBase("/fireworks.jpg")}")`;
+const fireworksImage = `url("${withBase("/fireworks-1600.jpg")}")`;
 ---
 <!doctype html>
 <html lang="en-GB">
@@ -27,6 +27,7 @@ const fireworksImage = `url("${withBase("/fireworks.jpg")}")`;
     <meta property="og:url" content={canonical}>
     <meta property="og:image" content={socialImage}>
     <meta name="twitter:card" content="summary_large_image">
+    {preloadImage && <link rel="preload" as="image" href={withBase(preloadImage)} fetchpriority="high">}
     <title>{pageTitle}</title>
   </head>
   <body style={`--fireworks-image: ${fireworksImage}`}>

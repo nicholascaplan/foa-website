@@ -54,9 +54,43 @@ test("JustGiving donations are linked from the footer and fundraising impact", a
   const justGivingUrl = "https://www.justgiving.com/charity/Friends-of-Ashley";
 
   assert.match(homepage, new RegExp(`href="${justGivingUrl}"`));
-  assert.match(homepage, /Donate via JustGiving/);
+  assert.match(homepage, /<span>Donate<\/span><span>via JustGiving/);
+  assert.match(homepage, /aria-label="Donate via JustGiving \(opens in a new tab\)"/);
   assert.match(about, new RegExp(`href="${justGivingUrl}"`));
   assert.match(about, /Last year's impact[\s\S]*Donate via JustGiving/);
+});
+
+test("Fireworks conditionally reveals its return link and shows a ticket-link placeholder", async () => {
+  const fireworks = await readFile(path.join(dist, "events", "fireworks-2026", "index.html"), "utf8");
+  const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");
+
+  assert.match(fireworks, new RegExp(`href="${basePath}/whats-on/" data-whats-on-return-path="${basePath}/whats-on/" hidden`));
+  assert.match(fireworks, /Back to What's On/);
+  assert.match(fireworks, /document\.referrer/);
+  assert.match(fireworks, /dataset\.whatsOnReturnPath/);
+  assert.match(fireworks, /window\.location\.origin/);
+  assert.match(fireworks, /Ticket link to follow\./);
+  assert.match(fireworks, /fireworks-1600\.jpg/);
+  assert.match(whatsOn, /View event details/);
+});
+
+test("external links communicate their destination and open safely in a new tab", async () => {
+  const htmlFiles = (await filesUnder(dist)).filter((file) => file.endsWith(".html"));
+  const externalLinkTags = [];
+  let externalLinkIndicators = 0;
+
+  for (const file of htmlFiles) {
+    const html = await readFile(file, "utf8");
+    externalLinkTags.push(...html.matchAll(/<a\s+[^>]*href="https?:\/\/[^>]+>/g).map((match) => match[0]));
+    externalLinkIndicators += html.match(/class="external-link-icon"/g)?.length ?? 0;
+  }
+
+  assert.ok(externalLinkTags.length > 0);
+  for (const link of externalLinkTags) {
+    assert.match(link, /target="_blank"/);
+    assert.match(link, /rel="noopener noreferrer"/);
+  }
+  assert.ok(externalLinkIndicators >= externalLinkTags.length);
 });
 
 test("all generated internal links and assets resolve", async () => {

@@ -6,7 +6,7 @@ import { withBase } from "../lib/urls";
 const featured = (await getCollection("events")).find(({ data }) => data.featured)?.data;
 if (!featured) throw new Error("A featured event is required");
 ---
-  <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames.">
+  <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/fireworks-1600.jpg">
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
   <section class="hero">
     <div class="site-width hero-grid">

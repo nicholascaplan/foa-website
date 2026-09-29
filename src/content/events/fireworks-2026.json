@@ -7,6 +7,7 @@
   "status": "tickets-planned",
   "statusLabel": "Tickets planned",
   "path": "/events/fireworks-2026/",
+  "ctaLabel": "View event details",
   "featured": true,
   "lead": "Helen Platt",
   "ticketPrice": "£8.50 per person; under-2s free",

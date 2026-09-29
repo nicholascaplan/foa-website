@@ -16,7 +16,7 @@ const links = [
       <div class="footer-brand"><h2>The Friends of Ashley</h2><p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p></div>
       <nav class="footer-links" aria-label="Footer navigation">
         {links.map(([href, label]) => <a href={withBase(href)}>{label}</a>)}
-        <a href="https://www.justgiving.com/charity/Friends-of-Ashley" target="_blank" rel="noreferrer">Donate via JustGiving</a>
+        <a class="footer-donation-link" href="https://www.justgiving.com/charity/Friends-of-Ashley" target="_blank" rel="noopener noreferrer" aria-label="Donate via JustGiving (opens in a new tab)"><span>Donate</span><span>via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span></span></a>
       </nav>
     </div>
     <div class="footer-bottom"><span>Registered Charity No. 1042944</span><span>Parent-led. Child-focused. All welcome.</span></div>
