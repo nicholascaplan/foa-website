@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief and Status
 
-**Status:** First full-route Astro implementation complete and deploying to GitHub Pages for mobile review; a separate public holding page is deployed while the custom domain is verified
+**Status:** First full-route Astro implementation complete; production `www`-domain build is configured and awaiting GitHub Pages custom-domain reassignment from the holding page
 **Last updated:** 29 September 2026
 **Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
@@ -390,6 +390,12 @@ Specifically decide:
 - At 123 Reg, the apex DNS uses GitHub Pages A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`; `www` is a CNAME to `nicholascaplan.github.io`. Previous website A records for the apex, `www` and wildcard host were removed. Existing email, SPF, DKIM, DMARC and nameserver records remain in place.
 - GitHub Pages DNS verification and HTTPS are complete for the holding-page repository. Test both `https://thefriendsofashley.org` and `https://www.thefriendsofashley.org` as part of the normal public-site review.
 - At launch, move the custom-domain assignment from `foa-holding-page` to `foa-website`, update the main deployment to `SITE_URL=https://thefriendsofashley.org` with `BASE_PATH=/`, then verify the generated root-domain site. DNS records can remain unchanged.
+
+### Production-domain build configuration: 30 September 2026
+
+- The `foa-website` GitHub Actions deployment now builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`, producing root-relative production links, metadata, sitemap entries and assets.
+- Launch requires only the GitHub Pages custom-domain reassignment: remove the existing custom domain from `nicholascaplan/foa-holding-page`, add `www.thefriendsofashley.org` to `nicholascaplan/foa-website`, then deploy `main` or manually dispatch the workflow.
+- The existing 123 Reg GitHub Pages DNS records do not need to change. Verify that `https://www.thefriendsofashley.org` loads the site and `https://thefriendsofashley.org` redirects to it after GitHub Pages has issued the certificate for this repository.
 
 ### UX refinement pass: 28 September 2026
 

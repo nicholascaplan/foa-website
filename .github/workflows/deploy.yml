@@ -26,8 +26,8 @@ jobs:
       - run: npm ci
       - run: npm run verify
         env:
-          SITE_URL: https://nicholascaplan.github.io
-          BASE_PATH: /foa-website
+          SITE_URL: https://www.thefriendsofashley.org
+          BASE_PATH: /
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
