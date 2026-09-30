@@ -52,7 +52,7 @@ test("What's On includes the date-driven Welcome Tea transition", async () => {
   assert.match(whatsOn, /A chance for new Ashley families to meet one another and enjoy tea and cake/);
   assert.match(whatsOn, /Europe\/London/);
   assert.match(stylesheet, /\[hidden\]\{display:none!important\}/);
-  assert.match(stylesheet, /\.event-carousel-slides\{[^}]*aspect-ratio:863\/1260/);
+  assert.match(stylesheet, /\.event-carousel-slides\{[^}]*aspect-ratio:4\/5/);
 });
 
 test("newsletter shows the latest issue and previous issue in order", async () => {
