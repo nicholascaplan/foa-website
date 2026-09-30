@@ -2,29 +2,17 @@
 import type { CollectionEntry } from "astro:content";
 import EventDate from "./EventDate.astro";
 import { withBase } from "../lib/urls";
-interface Props { events: CollectionEntry<"events">[]; }
-const { events } = Astro.props;
+interface Props { events: CollectionEntry<"events">[]; showBeforeArchive?: boolean; }
+const { events, showBeforeArchive = false } = Astro.props;
 const formatter = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 ---
 <div class="event-list">
   {events.map(({ data }) => {
     const Wrapper = data.path ? "a" : "article";
-    return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined}>
+    return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom : undefined}>
       <EventDate date={data.start} compact />
       <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : data.start.getHours() === 12 && data.start.getMinutes() === 0 ? "" : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}</span>
     </Wrapper>;
   })}
 </div>
-
-<script>
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  document.querySelectorAll<HTMLElement>("[data-event-date]").forEach((label) => {
-    const eventDate = new Date(`${label.dataset.eventDate}T00:00:00`);
-    const daysAway = Math.round((eventDate.getTime() - today.getTime()) / 86400000);
-    const text = daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : "";
-    label.textContent = text;
-    label.hidden = !text;
-  });
-</script>

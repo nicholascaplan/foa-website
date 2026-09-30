@@ -384,7 +384,7 @@ a {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(2rem, 6vw, 7.5rem) 0 2.5rem;
+  padding: clamp(2rem, 4vw, 4.5rem) 0 2.5rem;
 }
 
 .hero::after {
@@ -520,16 +520,56 @@ a {
   font-weight: 750;
 }
 
+.event-carousel {
+  min-width: 0;
+}
+
+.event-carousel-slides {
+  position: relative;
+  display: grid;
+}
+
 .event-feature {
   position: relative;
+  display: flex;
+  min-height: 36rem;
   overflow: hidden;
   padding: clamp(1.4rem, 4vw, 2.3rem);
   border-radius: var(--radius-lg);
+  flex-direction: column;
+  align-items: flex-start;
   color: #fff7e8;
   background:
-    linear-gradient(180deg, rgba(7, 27, 16, 0.2), rgba(7, 27, 16, 0.94) 58%),
-    var(--fireworks-image) center / cover;
+    linear-gradient(180deg, rgba(7, 27, 16, 0.58), rgba(7, 27, 16, 0.96) 72%),
+    var(--event-feature-image, var(--fireworks-image)) center / cover;
   box-shadow: var(--shadow);
+}
+
+.event-feature[hidden] {
+  display: none;
+}
+
+.event-feature--poster {
+  min-height: 0;
+  padding: 0;
+  background: var(--surface);
+}
+
+.event-feature--poster::before,
+.event-feature--poster::after {
+  display: none;
+}
+
+.event-poster-link {
+  display: block;
+  width: 100%;
+  background: var(--surface);
+}
+
+.event-poster-link img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .event-feature::before,
@@ -627,12 +667,20 @@ a {
   color: #c9d9cc;
 }
 
+.event-feature > .eyebrow {
+  margin: 0 0 0.75rem;
+}
+
 .event-facts {
   display: grid;
   margin: 0 0 1.5rem;
   padding: 0;
   list-style: none;
   gap: 0.55rem;
+}
+
+.event-feature .event-facts {
+  margin-top: auto;
 }
 
 .event-facts li {
@@ -659,6 +707,94 @@ a {
 
 .event-meta strong {
   color: #ffd28b;
+}
+
+.event-carousel-controls {
+  display: flex;
+  margin-top: 0.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+}
+
+.event-carousel-controls[hidden] {
+  display: none;
+}
+
+.carousel-control {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--green-dark);
+  background: transparent;
+  cursor: pointer;
+  place-items: center;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.carousel-control svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.25;
+}
+
+.carousel-control [data-resume-icon] {
+  display: none;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.event-carousel[data-rotation-paused="true"] [data-pause-icon] {
+  display: none;
+}
+
+.event-carousel[data-rotation-paused="true"] [data-resume-icon] {
+  display: block;
+}
+
+.carousel-control:hover {
+  color: var(--green);
+  background: rgba(20, 83, 45, 0.08);
+}
+
+.carousel-progress {
+  position: absolute;
+  z-index: 2;
+  right: var(--radius-lg);
+  bottom: 0;
+  left: var(--radius-lg);
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.carousel-progress[hidden] {
+  display: none;
+}
+
+.carousel-progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.event-carousel[data-rotation-paused="true"] .carousel-progress {
+  background: rgba(20, 83, 45, 0.16);
+}
+
+.event-carousel[data-rotation-paused="true"] .carousel-progress > span {
+  opacity: 0;
 }
 
 .quick-actions,
@@ -2122,8 +2258,16 @@ a {
     gap: 1.25rem;
   }
 
-  .event-feature {
+  .event-carousel {
     order: -1;
+  }
+
+  .event-feature {
+    min-height: 31rem;
+  }
+
+  .event-feature--poster {
+    min-height: 0;
   }
 
   .hero-copy h1 {
@@ -2299,4 +2443,6 @@ a {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .carousel-progress > span { opacity: 0; }
 }

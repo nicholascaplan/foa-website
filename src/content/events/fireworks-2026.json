@@ -8,7 +8,18 @@
   "statusLabel": "Tickets planned",
   "path": "/events/fireworks-2026/",
   "ctaLabel": "View event details",
-  "featured": true,
+  "image": "fireworks-1600.jpg",
+  "imageAlt": "Fireworks over Ashley School field",
+  "homepageFeature": {
+    "eyebrow": "Next major event",
+    "facts": [
+      { "label": "16:30", "detail": "Gates open" },
+      { "label": "17:00", "detail": "Quiet display" },
+      { "label": "18:00", "detail": "Main display" }
+    ],
+    "ctaLabel": "Event details",
+    "ctaPath": "/events/fireworks-2026/"
+  },
   "lead": "Helen Platt",
   "ticketPrice": "£8.50 per person; under-2s free",
   "reviewed": "2026-09-28"

@@ -8,3 +8,15 @@ const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-di
 <span class={compact ? "compact-date" : "event-date"}>
   <span>{month}</span><strong>{day}</strong><span class="relative-date" data-event-date={isoDate} hidden></span>
 </span>
+
+<script>
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  document.querySelectorAll<HTMLElement>("[data-event-date]").forEach((label) => {
+    const eventDate = new Date(`${label.dataset.eventDate}T00:00:00`);
+    const daysAway = Math.round((eventDate.getTime() - today.getTime()) / 86400000);
+    const text = daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : "";
+    label.textContent = text;
+    label.hidden = !text;
+  });
+</script>

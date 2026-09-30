@@ -52,6 +52,7 @@ This file contains durable working instructions for AI agents contributing to Th
 - Keep event facts in one future structured source rather than duplicating them once production implementation begins.
 - Avoid external runtime dependencies during the current prototype phase unless explicitly approved.
 - Verify local links, referenced assets, JavaScript syntax and whitespace after edits.
+- After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a fresh development server and make an HTTP request to every affected route. Confirm a successful response and the expected content; do not rely only on `astro check`, a static production build or an already-running development server, because Astro's development content store can temporarily retain stale collection state after schema changes.
 
 ## Documentation Workflow
 

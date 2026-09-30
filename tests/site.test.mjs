@@ -28,12 +28,26 @@ const outputPath = (urlPath) => {
 test("homepage contains the primary mobile-review content", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   assert.match(homepage, /Helping Ashley children/);
+  assert.match(homepage, /Reception Welcome Tea/);
   assert.match(homepage, /Fireworks on the Field/);
+  assert.equal(homepage.match(/<article[^>]+data-carousel-slide/g)?.length, 2);
+  assert.match(homepage, /data-event-carousel/);
+  assert.match(homepage, /data-carousel-progress/);
+  assert.match(homepage, /class="event-feature event-feature--poster"/);
+  assert.match(homepage, /<img src="\/welcome%20tea\.png" alt="Welcome Tea poster:/);
   assert.match(homepage, /<meta name="viewport"/);
   assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.svg" type="image/svg\\+xml">`));
   assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.png" type="image/png">`));
   await stat(path.join(dist, "favicon.svg"));
   await stat(path.join(dist, "favicon.png"));
+});
+
+test("What's On includes the date-driven Welcome Tea transition", async () => {
+  const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");
+  assert.match(whatsOn, /data-show-before="2026-10-04"/);
+  assert.match(whatsOn, /data-show-from="2026-10-04"/);
+  assert.match(whatsOn, /A chance for new Ashley families to meet one another and enjoy tea and cake/);
+  assert.match(whatsOn, /Europe\/London/);
 });
 
 test("newsletter shows the latest issue and previous issue in order", async () => {
