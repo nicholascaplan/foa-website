@@ -30,6 +30,10 @@ test("homepage contains the primary mobile-review content", async () => {
   assert.match(homepage, /Helping Ashley children/);
   assert.match(homepage, /Fireworks on the Field/);
   assert.match(homepage, /<meta name="viewport"/);
+  assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.svg" type="image/svg\\+xml">`));
+  assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.png" type="image/png">`));
+  await stat(path.join(dist, "favicon.svg"));
+  await stat(path.join(dist, "favicon.png"));
 });
 
 test("newsletter shows the latest issue and previous issue in order", async () => {
