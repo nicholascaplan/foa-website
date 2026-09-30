@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Fundraising Progress Options | The Friends of Ashley</title>
+    <style>
+      :root {
+        --ink: #193127;
+        --ink-soft: #4f6358;
+        --paper: #f6f1e7;
+        --paper-deep: #eee5d6;
+        --surface: #fffdf8;
+        --green: #14532d;
+        --green-dark: #0b3920;
+        --green-light: #dfeadd;
+        --amber: #d97706;
+        --amber-light: #f8e4b7;
+        --line: #d9d0c1;
+        --white: #ffffff;
+        --shadow: 0 18px 45px rgba(34, 58, 44, 0.09);
+        --radius-sm: 0.75rem;
+        --radius-md: 1.25rem;
+        --radius-lg: 2rem;
+        --max-width: 75rem;
+        --font-display: Georgia, "Times New Roman", serif;
+        --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+      }
+
+      html.mobile-preview {
+        background: #d8cdbb;
+      }
+
+      html.mobile-preview body {
+        width: min(100%, 24.375rem);
+        min-height: 100vh;
+        margin-inline: auto;
+        box-shadow: 0 0 0 1px rgba(25, 49, 39, 0.16), 0 0 3rem rgba(34, 58, 44, 0.18);
+      }
+
+      body::before {
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        content: "";
+        pointer-events: none;
+        background-image: radial-gradient(rgba(20, 83, 45, 0.055) 0.7px, transparent 0.7px);
+        background-size: 8px 8px;
+      }
+
+      button { font: inherit; }
+
+      :focus-visible {
+        outline: 3px solid #f0a928;
+        outline-offset: 3px;
+      }
+
+      .site-width {
+        width: min(calc(100% - 2rem), var(--max-width));
+        margin-inline: auto;
+      }
+
+      .preview-toggle {
+        position: fixed;
+        z-index: 1;
+        right: 1rem;
+        bottom: 1rem;
+        min-height: 2.7rem;
+        padding: 0.55rem 0.85rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        background: var(--surface);
+        cursor: pointer;
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .preview-toggle:hover,
+      .preview-toggle[aria-pressed="true"] {
+        border-color: var(--green);
+        color: var(--white);
+        background: var(--green);
+      }
+
+      .eyebrow {
+        margin: 0 0 0.75rem;
+        color: var(--green);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        line-height: 1.3;
+        text-transform: uppercase;
+      }
+
+      h2,
+      h3,
+      p { margin-top: 0; }
+
+      h2,
+      h3 { font-family: var(--font-display); font-weight: 500; }
+
+      .state-picker {
+        padding: 1.25rem 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 253, 248, 0.55);
+      }
+
+      .state-picker .site-width {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .state-picker p { margin: 0; font-size: 0.87rem; font-weight: 800; }
+
+      .state-buttons {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.55rem;
+        padding-bottom: 0.15rem;
+      }
+
+      .state-button {
+        min-height: 2.7rem;
+        padding: 0.55rem 0.85rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        background: var(--surface);
+        cursor: pointer;
+        font-size: 0.86rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .state-button:hover,
+      .state-button[aria-pressed="true"] {
+        border-color: var(--green);
+        color: var(--white);
+        background: var(--green);
+      }
+
+      .options {
+        padding: clamp(3rem, 7vw, 6rem) 0;
+      }
+
+      .section-heading { max-width: 43rem; margin-bottom: 2.5rem; }
+
+      .section-heading h2 {
+        margin-bottom: 0.8rem;
+        font-size: clamp(2.25rem, 6vw, 4.2rem);
+        letter-spacing: -0.045em;
+        line-height: 1;
+      }
+
+      .section-heading p:last-child { margin-bottom: 0; color: var(--ink-soft); }
+
+      .option-list { display: grid; gap: 3rem; }
+
+      .option {
+        display: grid;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .option-copy { padding: clamp(1.5rem, 4vw, 2.5rem); }
+
+      .option-number {
+        color: var(--amber);
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+      }
+
+      .option h3 {
+        margin: 0.45rem 0 0.75rem;
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+
+      .option-copy > p:last-child { margin-bottom: 0; color: var(--ink-soft); }
+
+      .option-fit {
+        display: inline-flex;
+        margin-top: 1.25rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 999px;
+        color: var(--green-dark);
+        background: var(--green-light);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .preview-area {
+        display: grid;
+        min-height: 20rem;
+        padding: clamp(1.25rem, 3vw, 2rem);
+        place-items: center;
+      }
+
+      .preview-area--hero {
+        color: #fff7e8;
+        background: var(--green-dark);
+      }
+
+      .preview-area--strip { background: var(--paper-deep); }
+
+      .preview-area--impact {
+        align-items: stretch;
+        background: var(--green-light);
+      }
+
+      .preview-caption {
+        width: 100%;
+        margin: 0 0 0.85rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .preview-area--hero .preview-caption { color: #c8ddc7; }
+
+      .hero-demo { width: min(100%, 38rem); }
+
+      .hero-demo h4 {
+        max-width: 11ch;
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2.25rem, 6vw, 4.1rem);
+        font-weight: 500;
+        letter-spacing: -0.04em;
+        line-height: 0.95;
+      }
+
+      .hero-demo > p {
+        max-width: 36rem;
+        margin: 0.75rem 0 1.5rem;
+        color: #c9d9cc;
+      }
+
+      .progress-panel {
+        width: 100%;
+        padding: clamp(1.1rem, 3vw, 1.45rem);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .progress-topline,
+      .progress-details,
+      .progress-end {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .progress-topline span,
+      .progress-details span { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+
+      .progress-topline strong {
+        color: #ffd28b;
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 6vw, 3.2rem);
+        font-weight: 500;
+        letter-spacing: -0.035em;
+        line-height: 1;
+      }
+
+      .progress-track {
+        height: 0.75rem;
+        margin: 1.1rem 0 0.75rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .progress-fill {
+        width: var(--progress);
+        height: 100%;
+        min-width: var(--empty-marker, 0);
+        border-radius: inherit;
+        background: #f3ad38;
+        transition: width 300ms ease;
+      }
+
+      .progress-details { color: #d0dfd3; font-size: 0.84rem; }
+
+      .strip-demo {
+        width: min(100%, 48rem);
+        padding: 1.15rem 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: 0 10px 24px rgba(34, 58, 44, 0.06);
+      }
+
+      .strip-demo-title { margin: 0; color: var(--green); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+
+      .strip-demo h4 {
+        margin: 0.25rem 0 1rem;
+        font-family: var(--font-display);
+        font-size: clamp(1.65rem, 4vw, 2.35rem);
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+      }
+
+      .strip-progress { display: grid; gap: 0.55rem; }
+
+      .strip-progress .progress-topline strong { color: var(--green-dark); font-size: 1.45rem; }
+      .strip-progress .progress-topline span { color: var(--ink-soft); font-size: 0.7rem; }
+      .strip-progress .progress-track { height: 0.6rem; margin: 0; background: var(--paper-deep); }
+      .strip-progress .progress-fill { background: var(--green); }
+      .strip-progress .progress-details { color: var(--ink-soft); font-size: 0.78rem; }
+
+      .impact-demo {
+        display: grid;
+        width: 100%;
+        max-width: 31rem;
+        padding: clamp(1.5rem, 4vw, 2.25rem);
+        border-radius: var(--radius-lg);
+        color: var(--white);
+        background: var(--green-dark);
+        box-shadow: var(--shadow);
+      }
+
+      .impact-demo .eyebrow { color: #c8ddc7; }
+
+      .impact-demo h4 {
+        max-width: 11ch;
+        margin: 0;
+        color: #ffd28b;
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 6vw, 3.75rem);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+        line-height: 0.95;
+      }
+
+      .impact-demo > p:not(.eyebrow) { margin: 1rem 0 1.4rem; color: #d3e0d5; }
+      .impact-demo .progress-panel { padding: 0; border: 0; background: none; }
+      .impact-demo .progress-topline strong { font-size: 1.8rem; }
+      .impact-demo .progress-track { height: 0.7rem; }
+
+      .state-gallery { padding: 0 0 clamp(3.5rem, 8vw, 7rem); }
+
+      .state-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+        gap: 1rem;
+      }
+
+      .state-card {
+        padding: 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+      }
+
+      .state-card h3 { margin: 0; color: var(--green-dark); font-size: 1.7rem; }
+      .state-card p { margin: 0.2rem 0 1rem; color: var(--ink-soft); font-size: 0.85rem; }
+      .state-card .progress-track { height: 0.55rem; margin: 0; background: var(--paper-deep); }
+      .state-card .progress-fill { background: var(--green); }
+      .state-card--complete { border-color: #d8a048; background: #fff8e8; }
+      .state-card--complete .progress-fill { background: var(--amber); }
+
+      .footer-note {
+        padding: 2rem 0;
+        color: #c8ddc7;
+        background: var(--green-dark);
+      }
+
+      .footer-note p { max-width: 55rem; margin: 0; font-size: 0.88rem; }
+
+      /* The preview runs in a desktop browser, so these mirror narrow-viewport rules. */
+      html.mobile-preview .option {
+        grid-template-columns: 1fr;
+      }
+
+      html.mobile-preview .state-picker .site-width {
+        grid-template-columns: 1fr;
+        align-items: initial;
+      }
+
+      html.mobile-preview .site-width {
+        width: min(calc(100% - 1.5rem), var(--max-width));
+      }
+
+      html.mobile-preview .options {
+        padding-block: 2rem 3rem;
+      }
+
+      html.mobile-preview .section-heading {
+        margin-bottom: 1.5rem;
+      }
+
+      html.mobile-preview .section-heading h2 {
+        font-size: 2.25rem;
+        line-height: 1.02;
+      }
+
+      html.mobile-preview .option-list {
+        gap: 1.5rem;
+      }
+
+      html.mobile-preview .option-copy {
+        padding: 1.4rem;
+      }
+
+      html.mobile-preview .option h3 {
+        font-size: 2rem;
+        line-height: 1.02;
+      }
+
+      html.mobile-preview .preview-area {
+        min-height: 0;
+        padding: 1.25rem;
+      }
+
+      html.mobile-preview .hero-demo h4 {
+        font-size: 2.75rem;
+        line-height: 0.96;
+      }
+
+      html.mobile-preview .hero-demo > p {
+        margin-bottom: 1.25rem;
+        font-size: 1rem;
+      }
+
+      html.mobile-preview .impact-demo h4 {
+        font-size: 2.6rem;
+        line-height: 0.98;
+      }
+
+      html.mobile-preview .progress-panel {
+        padding: 1rem;
+      }
+
+      html.mobile-preview .progress-topline {
+        align-items: center;
+      }
+
+      html.mobile-preview .progress-topline strong {
+        font-size: 2.35rem;
+        white-space: nowrap;
+      }
+
+      html.mobile-preview .progress-topline span {
+        max-width: 7ch;
+        font-size: 0.68rem;
+      }
+
+      html.mobile-preview .progress-details {
+        align-items: start;
+        font-size: 0.72rem;
+        line-height: 1.35;
+      }
+
+      html.mobile-preview .progress-details span:last-child {
+        max-width: 9ch;
+        text-align: right;
+      }
+
+      html.mobile-preview .strip-demo h4 {
+        font-size: 1.75rem;
+      }
+
+      html.mobile-preview .strip-progress .progress-topline strong {
+        font-size: 1.35rem;
+      }
+
+      html.mobile-preview .state-gallery {
+        padding-bottom: 3rem;
+      }
+
+      html.mobile-preview .state-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      @media (min-width: 48rem) {
+        .state-picker .site-width { grid-template-columns: auto minmax(0, 1fr); align-items: center; }
+        .option { grid-template-columns: minmax(14rem, 0.67fr) minmax(0, 1fr); }
+        .option-copy { align-self: center; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .progress-fill { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="preview-toggle" type="button" aria-pressed="false">Mobile preview</button>
+
+    <main>
+      <section class="state-picker" aria-labelledby="state-picker-title">
+        <div class="site-width">
+          <p id="state-picker-title">Preview the same stage in each option</p>
+          <div class="state-buttons" role="group" aria-label="Choose an illustrative fundraising total">
+            <button class="state-button" type="button" data-raised="0" aria-pressed="true">£0</button>
+            <button class="state-button" type="button" data-raised="1000" aria-pressed="false">£1,000</button>
+            <button class="state-button" type="button" data-raised="5000" aria-pressed="false">£5,000</button>
+            <button class="state-button" type="button" data-raised="12500" aria-pressed="false">£12,500</button>
+            <button class="state-button" type="button" data-raised="20000" aria-pressed="false">£20,000</button>
+            <button class="state-button" type="button" data-raised="25000" aria-pressed="false">£25,000</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="options">
+        <div class="site-width">
+          <div class="section-heading">
+            <h2>Different levels of prominence.</h2>
+          </div>
+
+          <div class="option-list">
+            <article class="option">
+              <div class="option-copy">
+                <span class="option-number">01</span>
+                <h3>Feature it with the campaign story.</h3>
+                <p>Place the progress bar within a dedicated fundraising feature, with enough room to explain what the goal will help make possible and include the donation action.</p>
+                <span class="option-fit">Best for: an active, time-bound appeal</span>
+              </div>
+              <div class="preview-area preview-area--hero">
+                <div class="hero-demo">
+                  <p class="preview-caption">Homepage or campaign landing feature</p>
+                  <h4>One school community. One shared goal.</h4>
+                  <p>Help us fund a future project for Ashley children.</p>
+                  <div class="progress-panel" data-progress-component>
+                    <div class="progress-topline"><span>Raised so far</span><strong data-raised>£0</strong></div>
+                    <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-fill></div></div>
+                    <div class="progress-details"><span data-percent>0% of £25,000</span><span data-remaining>£25,000 to go</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="option">
+              <div class="option-copy">
+                <span class="option-number">02</span>
+                <h3>Keep it as a calm campaign update.</h3>
+                <p>A compact noticeboard-style strip gives the campaign a home between existing content. It is present but does not take priority over current events and practical parent tasks.</p>
+                <span class="option-fit">Best for: the homepage during a longer appeal</span>
+              </div>
+              <div class="preview-area preview-area--strip">
+                <div class="strip-demo" data-progress-component>
+                  <p class="strip-demo-title">Fundraising update</p>
+                  <h4>Towards our £25,000 goal</h4>
+                  <div class="strip-progress">
+                    <div class="progress-topline"><span data-percent>0% raised</span><strong data-raised>£0</strong></div>
+                    <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-fill></div></div>
+                    <div class="progress-details"><span data-remaining>£25,000 to go</span><span>Every donation helps</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="option">
+              <div class="option-copy">
+                <span class="option-number">03</span>
+                <h3>Connect it to the wider impact story.</h3>
+                <p>Extend the existing About The FOA impact area with a current fundraising goal. This gives donations context while keeping the day-to-day homepage focused on events, uniform and getting involved.</p>
+                <span class="option-fit">Best for: the About The FOA page</span>
+              </div>
+              <div class="preview-area preview-area--impact">
+                <div class="impact-demo" data-progress-component>
+                  <p class="eyebrow">Current appeal</p>
+                  <h4>Growing something good together.</h4>
+                  <p>A shared goal for a future project at Ashley.</p>
+                  <div class="progress-panel">
+                    <div class="progress-topline"><span>Raised</span><strong data-raised>£0</strong></div>
+                    <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-fill></div></div>
+                    <div class="progress-details"><span data-percent>0% of £25,000</span><span data-remaining>£25,000 to go</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="state-gallery" aria-labelledby="gallery-title">
+        <div class="site-width">
+          <div class="section-heading">
+            <p class="eyebrow">All progress states</p>
+            <h2 id="gallery-title">From first donation to goal reached.</h2>
+          </div>
+          <div class="state-gallery-grid">
+            <article class="state-card"><h3>£0</h3><p>0% of £25,000. The campaign is ready to begin.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 0%; --empty-marker: 0.22rem"></div></div></article>
+            <article class="state-card"><h3>£1,000</h3><p>4% of £25,000. £24,000 to go.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 4%"></div></div></article>
+            <article class="state-card"><h3>£5,000</h3><p>20% of £25,000. A clear first milestone.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 20%"></div></div></article>
+            <article class="state-card"><h3>£12,500</h3><p>50% of £25,000. Halfway there.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 50%"></div></div></article>
+            <article class="state-card"><h3>£20,000</h3><p>80% of £25,000. The final push.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 80%"></div></div></article>
+            <article class="state-card state-card--complete"><h3>£25,000</h3><p>100% of £25,000. Goal reached, ready to celebrate.</p><div class="progress-track" aria-hidden="true"><div class="progress-fill" style="--progress: 100%"></div></div></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      <div class="site-width"><p>This is an unlinked review artifact. Before publication, The FOA should confirm the campaign purpose, approved target, source and update cadence for the total, donation route, and what should happen once the goal is reached.</p></div>
+    </footer>
+
+    <script>
+      const target = 25000;
+      const formatter = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 });
+      const components = document.querySelectorAll("[data-progress-component]");
+      const buttons = document.querySelectorAll("button[data-raised]");
+      const previewToggle = document.querySelector(".preview-toggle");
+
+      function updateProgress(raised) {
+        const percentage = Math.min((raised / target) * 100, 100);
+        const remaining = Math.max(target - raised, 0);
+
+        components.forEach((component) => {
+          component.querySelectorAll("[data-raised]").forEach((element) => { element.textContent = formatter.format(raised); });
+          component.querySelectorAll("[data-percent]").forEach((element) => { element.textContent = `${percentage}% of £25,000`; });
+          component.querySelectorAll("[data-remaining]").forEach((element) => { element.textContent = remaining === 0 ? "Goal reached" : `${formatter.format(remaining)} to go`; });
+          component.querySelectorAll("[data-fill]").forEach((element) => {
+            element.style.setProperty("--progress", `${percentage}%`);
+            element.style.setProperty("--empty-marker", raised === 0 ? "0.22rem" : "0");
+          });
+        });
+
+        buttons.forEach((button) => { button.setAttribute("aria-pressed", String(Number(button.dataset.raised) === raised)); });
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => updateProgress(Number(button.dataset.raised)));
+      });
+
+      previewToggle.addEventListener("click", () => {
+        const isMobilePreview = document.documentElement.classList.toggle("mobile-preview");
+        previewToggle.setAttribute("aria-pressed", String(isMobilePreview));
+        previewToggle.textContent = isMobilePreview ? "Full-width preview" : "Mobile preview";
+      });
+
+      updateProgress(0);
+    </script>
+  </body>
+</html>

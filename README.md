@@ -4,18 +4,20 @@ Design and implementation workspace for The Friends of Ashley (FOA), the parent 
 
 ## Current State
 
-The repository now contains the first static Astro implementation of the currently approved public routes:
+The repository now contains the first static Astro implementation of the currently approved public routes. The Meeting Minutes route currently publishes the 16 September 2026 AGM minutes from `assets/`:
 
 - `src/pages/`: separate generated pages with normal path-based links
 - `src/layouts/` and `src/components/`: shared page shell, navigation, event and content components
 - `src/content/`: typed local collections for events, newsletters and committee members
+- `src/pages/meeting-minutes.astro`: public archive landing page for approved FOA meeting minutes
 - `src/styles/global.css`: central design tokens and responsive component styles
 - `assets/`: public brand assets for The FOA, event images, committee portraits and source documents
 - `prototype/`: archived single-file, hash-routed design review prototype
+- `fundraising-progress-options.html`: unlinked, standalone design review page for provisional fundraising-progress placements and states
 - `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
 
-The site includes canonical and social metadata, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
+The site includes canonical and social metadata, a logo-based favicon, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
 
 ## Local Development
 
@@ -31,7 +33,7 @@ Start the Astro development server:
 npm run dev
 ```
 
-Open the local URL printed by Astro, normally `http://localhost:4321/`. The development server watches the source files and refreshes the site after changes. Stop it with `Ctrl+C`.
+The command opens the local site in your default browser, normally at `http://localhost:4321/`. The development server watches the source files and refreshes the site after changes. Stop it with `Ctrl+C`.
 
 On desktop, use the **Mobile preview** button in the bottom-right corner to open the current route in a 390px-wide browser window. The button is available only under `npm run dev` and is omitted from production builds. If the browser blocks the new window, allow pop-ups for the local Astro address.
 

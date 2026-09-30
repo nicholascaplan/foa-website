@@ -106,7 +106,8 @@ The repository currently contains:
 - Shared layouts and components provide global navigation, footer, page heroes, event lists and date labels.
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
 - Only the mobile menu and Today/Tomorrow event labels use client-side JavaScript.
-- Canonical, Open Graph and Twitter metadata, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
+- Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
+- The favicon uses a purpose-built, high-contrast `FOA` SVG monogram in the approved heritage-green, warm-ivory and amber palette so it remains legible at browser-tab sizes. The supplied logo is retained as a PNG fallback.
 - A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
 - A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
 - The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
@@ -125,6 +126,7 @@ These decisions are considered confirmed unless the project owner explicitly rev
 - Practical information takes priority over explaining the organisation.
 - Content should be concise, plain-English and suitable for readers who use English as an additional language.
 - A Newsletter page will provide a blog-style archive for the latest and previous newsletters from The FOA.
+- A Meeting Minutes page provides an archive for approved FOA meeting records; the first published entry is the 16 September 2026 AGM minutes.
 - An FAQs page is a later, low-priority addition and is not required for the immediate prototype work.
 
 ### Design
@@ -158,7 +160,8 @@ Agreed top-level navigation:
 
 Expected grouping:
 
-- Committee and Reps Hub belong under Get Involved.
+- Committee, Reps Hub and Meeting Minutes belong under Get Involved.
+- Public meeting minutes use a dedicated `/meeting-minutes/` archive linked from Get Involved and the footer, with approved minutes published only after review and removal of personal or sensitive information where needed.
 - The Community Notice Board is deferred and has no current public route.
 - Individual events use reusable event pages.
 - What's On should be a chronological list before considering a calendar grid.
@@ -203,6 +206,7 @@ The intended order is:
 - The current dialog is a prototype placeholder only.
 - Remove unverified promises about payment methods, accounts and instant e-tickets until a provider is selected.
 - The production ticket journey will be a simple normal link to the selected external ticketing site, not an embedded checkout or one built by The FOA.
+- Until the ticket provider and checkout URL are selected, the Fireworks event page must show the non-interactive status “Ticket link to follow.” rather than implying ticket purchase is available.
 
 ### Notice Board
 
@@ -222,10 +226,36 @@ The intended order is:
 - Production CSS should be built locally; do not use the Tailwind CDN.
 - Prefer zero client-side JavaScript for static content and small isolated scripts only where interaction is required.
 - Configure production for a custom-domain root rather than a repository subpath. The final hostname is still pending.
+- A contextual event-page return link may be shown only when the visitor arrived from the same-site source route. The Fireworks **Back to What's On** link remains hidden for direct, homepage, external and other internal arrivals.
 
 ## 4. Next Steps
 
 This is the ordered backlog to use when asking, "What are the next steps?"
+
+### Prioritised review and launch backlog: 29 September 2026
+
+The categories below consolidate the current outstanding work. Complete P1 items before the full-site launch unless a documented decision defers them. P2 and P3 work is valuable but must not delay the launch-critical work.
+
+#### P1: Launch readiness, privacy and measurement
+
+- **Cookie consent:** decide whether the selected analytics, embedded services and other non-essential technologies require consent; implement a compliant consent experience before enabling them. Do not add a banner that claims consent is needed until the actual processing and legal basis are confirmed.
+- **Analytics:** after the site is live and the measurement decision is confirmed, configure Google Analytics and the required reporting. This work is dependent on the cookie/privacy decision and must not collect analytics before consent requirements are resolved.
+- **Operational launch content:** select the external ticketing provider and final URL; confirm event capacity, refunds, cancellation/bad-weather handling, accessibility and data-processing responsibilities; reconfirm Pre-loved Uniform instructions; approve Reps Hub copy; approve final privacy wording and Google Form ownership, access and retention.
+- **Launch controls:** move the custom-domain assignment from the holding-page repository, configure root-domain production builds, complete FOA content and brand approval, validate tickets, links and metadata, and perform constrained-connection mobile performance testing.
+
+#### P2: Information architecture and content clarity
+
+- **Committee calls to action:** review whether the Committee page makes the routes to Reps Hub and About The FOA sufficiently clear. If not, replace ambiguous labels with more explicit task-focused calls to action and test them with parents/carers.
+- **About/Committee relationship:** decide whether About The FOA should also include a concise committee summary. Keep the full Committee page as the canonical source; avoid duplicated member details unless there is a clear navigation benefit.
+- **User testing:** run the planned 5–7 parent/carer task-based information-architecture review, including whether visitors understand Get Involved, Reps Hub, About The FOA, the Co-Secretary role and the Fireworks ticket journey.
+- **Committee content:** obtain replacement high-resolution portraits, complete final publication consent, and decide whether to publish approved short biographies.
+- **Future content:** decide whether to restore a moderated Community Notice Board; determine final privacy-notice publication timing; consider the low-priority past-event-poster Inspiration archive.
+
+#### P3: Platform and quality improvements
+
+- **Automated quality:** implement the first `TEST-STRATEGY.md` milestone: Playwright mobile-navigation coverage and representative axe-core accessibility scans. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
+- **Content operations:** select and integrate a CMS only after editor ownership, preview/publishing, annual handover, urgent-update and failed-build procedures are confirmed.
+- **Optional future enhancements:** publish an accessibility statement after formal testing, consider additional reviewed translations and RTL testing, and evaluate fundraising progress, native sharing, calendar downloads, FAQs and other later-scope work.
 
 ### Step 1: Review the current prototype
 
@@ -406,6 +436,13 @@ Specifically decide:
 - A persistent "Donate via JustGiving" external link is available in the site footer.
 - The About The FOA page repeats the donation action alongside the fundraising-impact content, where visitors have context for how support is used.
 - The task-focused primary navigation and homepage remain unchanged so the donation action does not compete with current events and practical parent tasks.
+
+### Fundraising-progress design review: 29 September 2026
+
+- `fundraising-progress-options.html` is an unlinked, no-index standalone review artifact for a potential fundraising-progress feature.
+- It compares three possible placements: a campaign feature, a compact homepage update and an About The FOA impact-card extension.
+- The comparison uses a provisional £25,000 target and illustrative states at £0, £1,000, £5,000, £12,500, £20,000 and £25,000. No campaign purpose, target, total or update cadence is confirmed for public publication.
+- Before implementation, confirm the fundraising purpose, approved target, data owner and update process, donation action, homepage placement and end-of-campaign treatment.
 
 ### Step 2: Confirm brand inputs
 
