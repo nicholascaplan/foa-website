@@ -1288,8 +1288,16 @@ a {
   text-underline-offset: 0.25rem;
 }
 
+.footer-link-tail {
+  white-space: nowrap;
+}
+
 .footer-donation-link > span:not(.visually-hidden) {
   display: block;
+}
+
+.footer-donation-link > span:last-child {
+  white-space: nowrap;
 }
 
 .footer-bottom {

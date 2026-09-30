@@ -105,6 +105,7 @@ The repository currently contains:
 - The former single-file review tool is archived in `prototype/`.
 - Shared layouts and components provide global navigation, footer, page heroes, event lists and date labels.
 - The footer navigation uses independent link columns so wrapped external links do not create uneven gaps between columns; the persistent Ashley School and JustGiving links remain clearly labelled as opening in a new tab.
+- The footer's Ashley School and JustGiving links are balanced across the two columns, with external-link arrows kept attached to their final words at narrow widths.
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
 - Only the mobile menu and Today/Tomorrow event labels use client-side JavaScript.
 - Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
@@ -249,7 +250,7 @@ The categories below consolidate the current outstanding work. Complete P1 items
 - **Committee calls to action:** review whether the Committee page makes the routes to Reps Hub and About The FOA sufficiently clear. If not, replace ambiguous labels with more explicit task-focused calls to action and test them with parents/carers.
 - **About/Committee relationship:** decide whether About The FOA should also include a concise committee summary. Keep the full Committee page as the canonical source; avoid duplicated member details unless there is a clear navigation benefit.
 - **User testing:** run the planned 5–7 parent/carer task-based information-architecture review, including whether visitors understand Get Involved, Reps Hub, About The FOA, the Co-Secretary role and the Fireworks ticket journey.
-- **Committee content:** obtain replacement high-resolution portraits, complete final publication consent, and decide whether to publish approved short biographies.
+- **Committee content:** obtain the remaining replacement high-resolution portraits, complete final publication consent, and decide whether to publish approved short biographies. Nick Caplan's replacement portrait is now in use.
 - **Future content:** decide whether to restore a moderated Community Notice Board; determine final privacy-notice publication timing; consider the low-priority past-event-poster Inspiration archive.
 
 #### P3: Platform and quality improvements
@@ -457,6 +458,8 @@ Specifically decide:
 
 - The initial browser coverage, CI Chromium installation, Helen portrait replacement, Ashley School footer link, mobile-menu inert state and related documentation/configuration changes are included in the current worktree and are being committed together at the project owner's request.
 - The footer external links were refined after visual review: independent columns prevent the wrapped two-line donation and school links from imposing row gaps on one another.
+- The footer links were rebalanced after a mobile visual review: Ashley School Website now sits in the left column, Donate via JustGiving sits in the right column, and both external-link arrows stay attached to the final words.
+- Nick Caplan's committee portrait reference was updated from `nick.jpeg` to the replacement `assets/nick.jpg`; the previous asset was removed from the tracked asset set.
 
 ### JustGiving donations: 28 September 2026
 
