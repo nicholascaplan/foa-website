@@ -29,3 +29,4 @@
 - Implement the first milestone in `docs/TEST-STRATEGY.md`: add Playwright infrastructure, mobile-navigation browser coverage and representative automated accessibility scans. Generated internal-link and asset validation already runs in the deployment gate.
 - Follow with newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage.
 - Add selective screenshot-based visual regression only after the generated-site design has been approved.
+- Consider adding a dark mode option as low-priority follow-up work; do not implement it as part of the current launch scope.

@@ -24,7 +24,7 @@ A responsive static prototype was created and has now been migrated into a stati
 - Home, What's On, Uniform, Get Involved and Committee
 - Reps Hub, Newsletter, About and Contact
 
-The first Astro implementation and current route/UX refinement pass are complete. The next phase is generated-site visual review and operational content resolution; formal accessibility testing, a public accessibility statement and CMS selection remain later work.
+The first Astro implementation, route/UX refinement pass and initial browser-test milestone are complete. The next phase is post-launch operational cleanup and deeper interaction coverage; formal manual accessibility testing, a public accessibility statement and CMS selection remain later work.
 
 ## 2. Where We Have Got To
 
@@ -104,6 +104,7 @@ The repository currently contains:
 - Astro 7 now generates separate HTML pages for all agreed routes; the hash router is not used in production pages.
 - The former single-file review tool is archived in `prototype/`.
 - Shared layouts and components provide global navigation, footer, page heroes, event lists and date labels.
+- The footer navigation uses independent link columns so wrapped external links do not create uneven gaps between columns; the persistent Ashley School and JustGiving links remain clearly labelled as opening in a new tab.
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
 - Only the mobile menu and Today/Tomorrow event labels use client-side JavaScript.
 - Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
@@ -111,7 +112,7 @@ The repository currently contains:
 - A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
 - A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
 - The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
-- `npm run verify` passes Astro/TypeScript diagnostics, the production build, a rendered-homepage smoke test and a generated internal-link/asset crawl. `npm audit` reports zero vulnerabilities.
+- `npm run verify` covers Astro/TypeScript diagnostics, the production build, generated-site contracts, Chromium navigation journeys and representative axe accessibility scans. `npm audit` reports zero vulnerabilities.
 - Public-facing draft/readiness warnings were removed from the production Committee and Reps Hub routes and the archived prototype. The Christmas Fayre summary now states only the confirmed lead names, and the Reps Hub messages no longer promise unpublished follow-up details.
 
 ## 3. Decisions Made
@@ -253,9 +254,10 @@ The categories below consolidate the current outstanding work. Complete P1 items
 
 #### P3: Platform and quality improvements
 
-- **Automated quality:** implement the first `TEST-STRATEGY.md` milestone: Playwright mobile-navigation coverage and representative axe-core accessibility scans. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
+- **Automated quality:** confirm the first Playwright and axe-core suite in CI. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
 - **Content operations:** select and integrate a CMS only after editor ownership, preview/publishing, annual handover, urgent-update and failed-build procedures are confirmed.
 - **Optional future enhancements:** publish an accessibility statement after formal testing, consider additional reviewed translations and RTL testing, and evaluate fundraising progress, native sharing, calendar downloads, FAQs and other later-scope work.
+- **Dark mode:** consider a dark mode option as a low-priority follow-up; it is not implemented and must not delay launch work.
 
 ### Step 1: Review the current prototype
 
@@ -352,7 +354,7 @@ Specifically decide:
 - Local development is documented in `README.md`: run `npm install` once, then `npm run dev` and open the URL printed by Astro.
 - At that point, automation covered Astro/TypeScript diagnostics, content schema validation, production static generation and dependency auditing.
 - Generated-site smoke and internal-link tests were added in the later GitHub Pages deployment session recorded below.
-- Browser end-to-end, automated accessibility and visual regression tests have not yet been added.
+- Browser end-to-end and automated accessibility coverage were added in the initial browser-coverage milestone below; visual regression tests remain deferred.
 
 ### Local mobile-preview session closure: 28 September 2026
 
@@ -441,6 +443,20 @@ Specifically decide:
 - The first implementation milestone is Playwright coverage for shared mobile navigation plus representative `axe-core` accessibility scans.
 - Newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage follow in that order.
 - Broad screenshot regression is deferred until the generated-site visual design is approved; CMS, ticket-provider, analytics and locale tests remain conditional on those features being introduced.
+
+### Initial browser coverage: 30 September 2026
+
+- Playwright and `@axe-core/playwright` now run against the locally served production build as part of `npm test` and the deployment verification gate.
+- Browser coverage protects normal navigation to the main task routes and the mobile menu's accessible state, focus restoration, route list, close button, Escape-key and backdrop behaviour.
+- Representative routes and the open newsletter dialog are scanned for serious and critical axe findings. This automated baseline supplements rather than replaces manual accessibility testing.
+- The closed off-canvas mobile menu is now inert, preventing hidden links from receiving keyboard focus.
+- GitHub Actions installs Chromium before verification. Local Chromium execution was subsequently exercised successfully for the navigation suite; the deployment workflow remains the authoritative full-suite run.
+- The next coverage increment is newsletter-dialog and Reps Hub clipboard success/failure behaviour, followed by expanded generated metadata and ordering contracts. These are higher value than adding duplicate page tests because they cover the remaining bespoke client-side interactions and collection-driven deployment contracts.
+
+### Session closure: 30 September 2026
+
+- The initial browser coverage, CI Chromium installation, Helen portrait replacement, Ashley School footer link, mobile-menu inert state and related documentation/configuration changes are included in the current worktree and are being committed together at the project owner's request.
+- The footer external links were refined after visual review: independent columns prevent the wrapped two-line donation and school links from imposing row gaps on one another.
 
 ### JustGiving donations: 28 September 2026
 
@@ -578,7 +594,7 @@ Record where people hesitate, misinterpret labels or miss information.
 
 ### Step 9: Build the production site
 
-**Status:** In progress; first full-route static implementation complete
+**Status:** Substantially complete; production static implementation and deployment are in place, with operational launch cleanup remaining
 
 - Astro 7 is initialised.
 - Approved prototype components and tokens are migrated.
@@ -588,11 +604,11 @@ Record where people hesitate, misinterpret labels or miss information.
 - Canonical and social metadata, Event structured data, sitemap and robots rules are implemented.
 - Add privacy and safeguarding content.
 - No Privacy route is currently published; approved final wording and publication timing remain pending. A public Accessibility page is deferred.
-- Type/build checks, generated-site link validation, a homepage smoke test and a gated GitHub Pages deployment workflow are implemented; automated accessibility checks remain pending.
+- Type/build checks, generated-site contracts, Chromium navigation journeys, representative automated accessibility scans and a gated GitHub Pages deployment workflow are implemented.
 
 ### Step 10: Verify and launch
 
-**Status:** Future
+**Status:** In progress; production deployment is complete and final operational/content verification remains
 
 - Content review by The FOA.
 - School/brand approval where required.
@@ -727,6 +743,7 @@ The MVP is a static, committee-managed public website containing:
 ### Potential later scope
 
 - Accessibility statement and formal accessibility testing
+- Dark mode option (low priority; not implemented)
 - Additional fully translated locales
 - Native device sharing improvements
 - Add-to-calendar downloads

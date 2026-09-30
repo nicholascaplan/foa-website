@@ -71,6 +71,14 @@ test("JustGiving donations are linked from the footer and fundraising impact", a
   assert.match(about, /Last year's impact[\s\S]*Donate via JustGiving/);
 });
 
+test("the school website is linked from the footer", async () => {
+  const homepage = await readFile(path.join(dist, "index.html"), "utf8");
+  const schoolUrl = "https://www.ashleyschool.org.uk/";
+
+  assert.match(homepage, new RegExp(`href="${schoolUrl}"`));
+  assert.match(homepage, /aria-label="Visit Ashley School website \(opens in a new tab\)"/);
+});
+
 test("Fireworks conditionally reveals its return link and shows a ticket-link placeholder", async () => {
   const fireworks = await readFile(path.join(dist, "events", "fireworks-2026", "index.html"), "utf8");
   const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");

@@ -1,12 +1,20 @@
 ---
 import { withBase } from "../lib/urls";
 
-const links = [
-  ["/whats-on/", "What's On"], ["/get-involved/", "Get Involved"],
-  ["/committee/", "Committee"], ["/reps/", "Reps Hub"],
-  ["/uniform/", "Uniform"],
-   ["/newsletter/", "Newsletter"], ["/meeting-minutes/", "Meeting Minutes"], ["/about/", "About The FOA"],
-  ["/contact/", "Contact Us"],
+const linkColumns = [
+  [
+    ["/whats-on/", "What's On"],
+    ["/committee/", "Committee"],
+    ["/uniform/", "Uniform"],
+    ["/meeting-minutes/", "Meeting Minutes"],
+    ["/contact/", "Contact Us"],
+  ],
+  [
+    ["/get-involved/", "Get Involved"],
+    ["/reps/", "Reps Hub"],
+    ["/newsletter/", "Newsletter"],
+    ["/about/", "About The FOA"],
+  ],
 ];
 ---
 
@@ -15,8 +23,14 @@ const links = [
     <div class="footer-grid">
       <div class="footer-brand"><h2>The Friends of Ashley</h2><p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p></div>
       <nav class="footer-links" aria-label="Footer navigation">
-        {links.map(([href, label]) => <a href={withBase(href)}>{label}</a>)}
-        <a class="footer-donation-link" href="https://www.justgiving.com/charity/Friends-of-Ashley" target="_blank" rel="noopener noreferrer" aria-label="Donate via JustGiving (opens in a new tab)"><span>Donate</span><span>via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span></span></a>
+        <div class="footer-link-column">
+          {linkColumns[0].map(([href, label]) => <a href={withBase(href)}>{label}</a>)}
+          <a class="footer-donation-link" href="https://www.justgiving.com/charity/Friends-of-Ashley" target="_blank" rel="noopener noreferrer" aria-label="Donate via JustGiving (opens in a new tab)"><span>Donate</span><span>via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span></span></a>
+        </div>
+        <div class="footer-link-column">
+          {linkColumns[1].map(([href, label]) => <a href={withBase(href)}>{label}</a>)}
+          <a href="https://www.ashleyschool.org.uk/" target="_blank" rel="noopener noreferrer" aria-label="Visit Ashley School website (opens in a new tab)">Ashley School website <span class="external-link-icon" aria-hidden="true">↗</span></a>
+        </div>
       </nav>
     </div>
     <div class="footer-bottom"><span>Registered Charity No. 1042944</span><span>Parent-led. Child-focused. All welcome.</span></div>

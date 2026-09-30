@@ -138,7 +138,7 @@ npm run test:e2e       # Playwright journeys and accessibility checks
 npm run verify         # Required pull-request and deployment gate
 ```
 
-During the first implementation phase, keep `npm test` as the convenient aggregate test command. `npm run verify` should remain the authoritative CI gate and should run the production build before tests that consume `dist/`.
+During the first implementation phase, keep `npm test` as the convenient aggregate command. It creates a fresh production build before running tests that consume `dist/`. `npm run verify` remains the authoritative CI gate and adds Astro and TypeScript diagnostics before `npm test`.
 
 Recommended cadence:
 
@@ -161,13 +161,13 @@ Tests should fail with a message that identifies the broken route, reference or 
 
 ## Implementation Order
 
-1. Add Playwright and `@axe-core/playwright`, production-preview test configuration, and scripts without changing public behaviour.
-2. Add mobile-menu browser tests and representative accessibility scans. This gives the broadest immediate protection for shared UI and is the first implementation milestone.
-3. Add newsletter-dialog and Reps Hub clipboard success/failure coverage.
-4. Expand generated-site tests for expected routes, metadata, structured data, sitemap/robots and collection ordering.
+1. Add Playwright and `@axe-core/playwright`, production-preview test configuration, and scripts without changing public behaviour. **Complete.**
+2. Add mobile-menu browser tests and representative accessibility scans. This gives the broadest immediate protection for shared UI and is the first implementation milestone. **Implemented; local Chromium suite exercised successfully.**
+3. Add newsletter-dialog and Reps Hub clipboard success/failure coverage. **Next.**
+4. Expand generated-site tests for expected routes, metadata, structured data, sitemap/robots and collection ordering. **Next after interaction coverage.**
 5. Add fixed-clock date-label tests and key parent journeys.
 6. Add cross-browser CI coverage after the Chromium suite is stable and fast.
 7. Add selective visual regression and performance baselines after design approval.
 8. Extend the suite when CMS, ticketing, analytics or translated locales are introduced.
 
-The first implementation should therefore be Playwright infrastructure, mobile navigation tests and automated accessibility scans, not screenshot testing or low-value template unit tests.
+The first implementation milestone is now in place. The next coverage increment is newsletter-dialog and Reps Hub clipboard success/failure testing, followed by expanded generated-site contracts. Prioritise these because they protect the site's two remaining bespoke client-side interactions and can fail without breaking static route generation. Keep visual regression, cross-browser expansion and conditional CMS/ticketing/analytics tests deferred until the current Chromium baseline and operational content are stable.

@@ -16,6 +16,7 @@ The repository now contains the first static Astro implementation of the current
 - `fundraising-progress-options.html`: unlinked, standalone design review page for provisional fundraising-progress placements and states
 - `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
+- `tests/e2e/`: Playwright navigation and representative axe accessibility tests
 
 The site includes canonical and social metadata, a logo-based favicon, Event structured data, a sitemap, robots rules and a useful 404 page. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
 
@@ -55,17 +56,21 @@ Run the current automated checks with:
 ```sh
 npm run check
 npm run build
-npm test
+npm run test:site
+npx playwright install chromium # first browser-test run only
+npm run test:e2e
 npm audit
 ```
 
 - `npm run check` performs Astro and TypeScript diagnostics, including content-collection schema validation.
 - `npm run build` verifies that every static route and production asset can be generated.
-- `npm test` checks key rendered homepage content and verifies that every generated internal link and asset resolves, including repository-base-path asset URLs.
+- `npm run test:site` checks key rendered content and verifies that every generated internal link and asset resolves, including repository-base-path asset URLs.
+- `npm run test:e2e` checks main navigation, mobile-menu state and focus behaviour, and serious or critical axe accessibility findings across representative routes.
+- `npm test` creates a fresh production build, then runs both generated-site and browser suites against it.
 - `npm run verify` runs the type, build and test gates in the same order used by GitHub Actions.
 - `npm audit` checks installed dependencies against published security advisories.
 
-These are initial deployment gates, not a complete automated test suite. Browser end-to-end tests, automated accessibility tests and visual regression tests have not yet been added.
+These are risk-based deployment gates rather than exhaustive coverage. Newsletter-dialog and clipboard interaction tests, fixed-clock date-label tests, expanded generated metadata contracts and visual regression tests remain to be added.
 
 ## Deployment
 
@@ -95,4 +100,4 @@ When resuming work, read that document first and begin with **Next Steps** and *
 
 ## Immediate Next Step
 
-Review the deployed Astro site on phone and desktop, then resolve the content and operational blockers in `docs/ACTIONS.md` before the production-domain launch. Formal accessibility testing, a public accessibility statement and a future Community Notice Board decision are lower-priority follow-up work.
+Confirm the new browser suite in CI, address any baseline accessibility findings, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`; formal manual accessibility testing and a public accessibility statement remain later work.
