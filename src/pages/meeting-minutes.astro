@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { withBase } from "../lib/urls";
+---
+
+<BaseLayout title="FOA Meeting Minutes" description="Approved meeting minutes from The Friends of Ashley.">
+  <PageHero eyebrow="The FOA's record" title="Meeting minutes" intro="Read approved minutes from The Friends of Ashley meetings. Minutes are published once they have been reviewed and agreed." />
+  <section class="content-section content-section--compact">
+    <div class="site-width">
+      <div class="section-heading">
+        <p class="eyebrow">Approved minutes</p>
+        <h2>Annual general meetings</h2>
+        <p>Minutes are published once they have been reviewed and agreed. Personal or sensitive information is removed where needed.</p>
+      </div>
+      <article class="info-card">
+        <p class="eyebrow">16th September 2026</p>
+        <h3>Annual General Meeting</h3>
+        <p>Read the approved minutes from The FOA's 2026 Annual General Meeting.</p>
+        <p><a class="button button--secondary" href={withBase("/Meeting%20Minutes%20-%20AGM%20-%2016th%20September%202026")} target="_blank" rel="noopener noreferrer">Read AGM minutes <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (PDF opens in a new tab)</span></a></p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

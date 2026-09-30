@@ -48,6 +48,13 @@ test("newsletter shows the latest issue and previous issue in order", async () =
   assert.match(newsletter, /class="newsletter-dialog-sections"/);
 });
 
+test("meeting minutes publishes the AGM archive entry and document", async () => {
+  const minutes = await readFile(path.join(dist, "meeting-minutes", "index.html"), "utf8");
+  assert.match(minutes, /Annual General Meeting/);
+  assert.match(minutes, /Meeting%20Minutes%20-%20AGM%20-%2016th%20September%202026/);
+  await stat(path.join(dist, "Meeting Minutes - AGM - 16th September 2026"));
+});
+
 test("JustGiving donations are linked from the footer and fundraising impact", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   const about = await readFile(path.join(dist, "about", "index.html"), "utf8");
