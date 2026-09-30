@@ -23,8 +23,8 @@
 ## Production planning
 
 - Continue the Astro implementation with typed local content collections until the CMS is selected. Keep the models compatible with a later CMS adapter.
-- Review the public holding page at `https://www.thefriendsofashley.org` alongside the full Astro implementation at `https://nicholascaplan.github.io/foa-website/`.
-- The deployment workflow now builds this site with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`. To launch, remove the existing custom-domain assignment from `nicholascaplan/foa-holding-page`, add `www.thefriendsofashley.org` to this repository's GitHub Pages settings and deploy `main`. The existing DNS records remain unchanged; confirm the apex domain redirects to `www`.
+- GitHub Pages now serves the production site at `https://www.thefriendsofashley.org` with Enforce HTTPS enabled. Confirm the apex domain redirects to `www` as a final public-site check.
+- The separate 123 Reg Standard SSL product is not needed for GitHub Pages. Cancel it or disable renewal after confirming the live site and redirect continue to work; do not change the existing DNS records.
 - Select the CMS, then confirm editor ownership, preview workflow and annual access handover before integrating it.
 - Implement the first milestone in `docs/TEST-STRATEGY.md`: add Playwright infrastructure, mobile-navigation browser coverage and representative automated accessibility scans. Generated internal-link and asset validation already runs in the deployment gate.
 - Follow with newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage.

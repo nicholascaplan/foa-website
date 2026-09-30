@@ -1,7 +1,7 @@
 # The Friends of Ashley Website: Project Brief and Status
 
-**Status:** First full-route Astro implementation complete; production `www`-domain build is configured and awaiting GitHub Pages custom-domain reassignment from the holding page
-**Last updated:** 29 September 2026
+**Status:** Production `www`-domain build is deployed through GitHub Pages with HTTPS enabled; post-launch operational cleanup remains
+**Last updated:** 30 September 2026
 **Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 
@@ -396,6 +396,12 @@ Specifically decide:
 - The `foa-website` GitHub Actions deployment now builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`, producing root-relative production links, metadata, sitemap entries and assets.
 - Launch requires only the GitHub Pages custom-domain reassignment: remove the existing custom domain from `nicholascaplan/foa-holding-page`, add `www.thefriendsofashley.org` to `nicholascaplan/foa-website`, then deploy `main` or manually dispatch the workflow.
 - The existing 123 Reg GitHub Pages DNS records do not need to change. Verify that `https://www.thefriendsofashley.org` loads the site and `https://thefriendsofashley.org` redirects to it after GitHub Pages has issued the certificate for this repository.
+
+### Production HTTPS confirmation: 30 September 2026
+
+- GitHub Pages accepted `www.thefriendsofashley.org`, reported a successful DNS check and enabled **Enforce HTTPS** for the `foa-website` repository.
+- The 123 Reg Standard SSL product is separate from GitHub Pages hosting, is priced at £59.99 annually and is not required for this site. The project owner should cancel it or disable renewal in 123 Reg after confirming the live URLs continue to work.
+- The 123 Reg SSL cancellation and the final apex-to-`www` redirect check are operational follow-ups, not repository changes.
 
 ### UX refinement pass: 28 September 2026
 
