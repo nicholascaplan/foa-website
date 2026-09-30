@@ -16,7 +16,7 @@ const hasPermanentPastEvents = past.some(({ data }) => data.archive && !data.arc
 </BaseLayout>
 
 <script>
-  const updateEventSections = () => {
+  const updateEventSections = (dateOverride?: string) => {
     const parts = new Intl.DateTimeFormat("en-GB", {
       timeZone: "Europe/London",
       year: "numeric",
@@ -24,7 +24,7 @@ const hasPermanentPastEvents = past.some(({ data }) => data.archive && !data.arc
       day: "2-digit",
     }).formatToParts(new Date());
     const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
-    const dateKey = `${part("year")}-${part("month")}-${part("day")}`;
+    const dateKey = dateOverride ?? `${part("year")}-${part("month")}-${part("day")}`;
 
     document.querySelectorAll<HTMLElement>("[data-show-before]").forEach((event) => {
       event.hidden = dateKey >= event.dataset.showBefore!;
@@ -34,10 +34,14 @@ const hasPermanentPastEvents = past.some(({ data }) => data.archive && !data.arc
     });
     const pastSection = document.querySelector<HTMLElement>("[data-past-events-section]");
     if (pastSection) pastSection.hidden = !pastSection.querySelector(".past-event:not([hidden])");
+    document.documentElement.dataset.eventsDate = dateKey;
     document.documentElement.dataset.eventsReady = "true";
   };
 
   updateEventSections();
-  window.addEventListener("foa:refresh-events", updateEventSections);
+  window.addEventListener("foa:refresh-events", (event) => {
+    const dateOverride = event instanceof CustomEvent && typeof event.detail === "string" ? event.detail : undefined;
+    updateEventSections(dateOverride);
+  });
   window.setInterval(updateEventSections, 60000);
 </script>

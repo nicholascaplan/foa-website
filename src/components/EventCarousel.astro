@@ -120,8 +120,8 @@ const { events } = Astro.props;
       carousel.dataset.rotationPaused = String(userPaused);
     };
 
-    const refreshEvents = () => {
-      const dateKey = ukDateKey();
+    const refreshEvents = (dateOverride?: string) => {
+      const dateKey = dateOverride ?? ukDateKey();
       if (dateKey === currentDateKey) return;
       currentDateKey = dateKey;
       slides = allSlides.filter((slide) => !slide.dataset.showBefore || dateKey < slide.dataset.showBefore);
@@ -164,7 +164,10 @@ const { events } = Astro.props;
 
     updatePauseControl();
     refreshEvents();
-    window.addEventListener("foa:refresh-events", refreshEvents);
+    window.addEventListener("foa:refresh-events", (event) => {
+      const dateOverride = event instanceof CustomEvent && typeof event.detail === "string" ? event.detail : undefined;
+      refreshEvents(dateOverride);
+    });
     window.setInterval(refreshEvents, 60000);
   }
 </script>
