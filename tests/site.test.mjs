@@ -44,10 +44,14 @@ test("homepage contains the primary mobile-review content", async () => {
 
 test("What's On includes the date-driven Welcome Tea transition", async () => {
   const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");
+  const stylesheetPath = whatsOn.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
+  assert.ok(stylesheetPath, "What's On should include a stylesheet");
+  const stylesheet = await readFile(outputPath(stylesheetPath), "utf8");
   assert.match(whatsOn, /data-show-before="2026-10-04"/);
   assert.match(whatsOn, /data-show-from="2026-10-04"/);
   assert.match(whatsOn, /A chance for new Ashley families to meet one another and enjoy tea and cake/);
   assert.match(whatsOn, /Europe\/London/);
+  assert.match(stylesheet, /\[hidden\]\{display:none!important\}/);
 });
 
 test("newsletter shows the latest issue and previous issue in order", async () => {
