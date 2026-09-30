@@ -467,6 +467,7 @@ Specifically decide:
 - Carousel browser coverage now covers automatic rotation, pause/resume, manual navigation, the Sunday transition and the single-slide state. Generated-site coverage verifies the slide count, poster asset and archive boundary attributes.
 - `astro check`, the production build, generated-site tests and fresh-development HTTP smoke tests passed during this session. Local Playwright execution remains blocked by the sandbox's unavailable bundled Chromium and blocked system Chrome; CI remains the browser verification path.
 - Desktop homepage hero top spacing was tightened while mobile spacing was left unchanged.
+- The carousel viewport uses the supplied Welcome Tea poster's portrait ratio for every slide, so Fireworks and future featured events retain the same dimensions and do not reflow the homepage during rotation.
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility. Component `display: grid` and `display: flex` declarations had overridden the browser's default hidden styling, leaving the Welcome Tea visible in Upcoming events even after the Sunday date logic ran successfully; generated-site coverage now verifies the hidden rule is present in built CSS.
 
 ### Session closure: 30 September 2026
