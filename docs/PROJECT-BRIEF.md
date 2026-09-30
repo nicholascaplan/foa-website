@@ -107,7 +107,7 @@ The repository currently contains:
 - The footer navigation uses independent link columns so wrapped external links do not create uneven gaps between columns; the persistent Ashley School and JustGiving links remain clearly labelled as opening in a new tab.
 - The footer's Ashley School and JustGiving links are balanced across the two columns, with external-link arrows kept attached to their final words at narrow widths.
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
-- Client-side JavaScript is limited to focused interactions: the mobile menu, Today/Tomorrow event labels, the homepage event carousel, time-sensitive event placement, the newsletter dialog and Reps Hub clipboard actions.
+- Client-side JavaScript is limited to focused interactions: the mobile menu, Today/Tomorrow event labels, time-sensitive event placement, the newsletter dialog and Reps Hub clipboard actions.
 - Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
 - The favicon uses a purpose-built, high-contrast `FOA` SVG monogram in the approved heritage-green, warm-ivory and amber palette so it remains legible at browser-tab sizes. The supplied logo is retained as a PNG fallback.
 - A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
@@ -146,10 +146,9 @@ These decisions are considered confirmed unless the project owner explicitly rev
 - Do not use Ashley School branding at this stage.
 - Heritage green is the primary brand colour.
 - Amber is primarily for events and celebratory emphasis.
-- The homepage event hero is a restrained carousel for Reception Welcome Tea and Fireworks on the Field only. It rotates every five seconds, provides previous, next and pause controls, pauses during hover or keyboard interaction, and does not auto-rotate when reduced motion is requested.
-- Carousel controls use compact icon-only buttons with 44px tap targets, while the two-pixel progress indicator is attached to the active card's lower edge. Paused and reduced-motion states show no active progress fill.
-- Desktop homepage hero spacing is capped more tightly so the headline and event carousel begin closer to the vacancy strip; mobile spacing remains unchanged.
-- The Welcome Tea carousel slide displays the supplied poster in full as a linked image rather than using it as a cropped background or placing duplicate event copy over it. Fireworks retains the editorial text-over-image card treatment.
+- The supplied Welcome Tea poster is the intact linked homepage hero card through Saturday 3 October 2026. It has an `Upcoming event` label and a `Welcome Tea` heading, and is capped to a compact portrait-card width on mobile. From Sunday 4 October, the Fireworks on the Field editorial card replaces it in the same hero position.
+- The homepage introduction must precede the current-event card on mobile as well as desktop, so visitors first understand The FOA before seeing the immediate event prompt.
+- Desktop homepage hero spacing is capped more tightly so the headline and current event card begin closer to the vacancy strip; mobile spacing remains unchanged.
 - Warm ivory/paper surfaces replace the earlier slate-heavy visual treatment.
 - Use a legible sans-serif body face and a restrained serif display face.
 - The current prototype uses system fonts to avoid external font dependencies during design review.
@@ -172,7 +171,8 @@ Expected grouping:
 - Individual events use reusable event pages.
 - What's On should be a chronological list before considering a calendar grid.
 - What's On should show upcoming events first, followed by a clearly separate **Earlier this year** section for selected completed events. Welcome Tea is the first example to include, using the supplied poster as the source for event information.
-- Reception Welcome Tea remains in Upcoming events through Saturday 3 October 2026 and automatically moves to Past events from Sunday 4 October in UK time. Its homepage carousel slide follows the same cutoff.
+- Welcome Tea remains in Upcoming events through Saturday 3 October 2026 and automatically moves to Past events from Sunday 4 October in UK time. Its homepage poster hero card follows the same cutoff, at which point the Fireworks card becomes visible.
+- The confirmed Friday 2 October 2026 pre-loved uniform sale is listed in What's On at 15:25 in the school playground, card-only and subject to weather.
 - Past events must not be mixed into the upcoming list or presented as current calls to action; completed event pages may remain available for context, photos/posters and sharing.
 
 ### Homepage hierarchy
@@ -260,6 +260,7 @@ The categories below consolidate the current outstanding work. Complete P1 items
 
 #### P3: Platform and quality improvements
 
+- **Uptime monitoring:** select and configure an external uptime checker for the public `www` domain, including an agreed alert recipient and a documented response owner.
 - **Automated quality:** confirm the first Playwright and axe-core suite in CI. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
 - **Content operations:** select and integrate a CMS only after editor ownership, preview/publishing, annual handover, urgent-update and failed-build procedures are confirmed.
 - **Optional future enhancements:** publish an accessibility statement after formal testing, consider additional reviewed translations and RTL testing, and evaluate fundraising progress, native sharing, calendar downloads, FAQs and other later-scope work.
@@ -302,7 +303,7 @@ Specifically decide:
 - About The FOA now links to Meet the Committee directly below its introductory copy.
 - Reps Hub copy uses ordinal date style, and successful copy-to-clipboard feedback clears after three seconds.
 - Fireworks facts are approved for this prototype. The supplied calendar provides provisional 2026 Uniform sale dates and operating details; these require a final pre-launch confirmation.
-- The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Reception Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
+- The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
 - The project owner confirms Christmas Fayre is Saturday 5 December. The supplied calendar states Saturday 28 November, so treat the calendar entry as superseded and verify the final public date before launch.
 - Ticketing selection and policy decisions remain pending.
 
@@ -459,16 +460,15 @@ Specifically decide:
 - GitHub Actions installs Chromium before verification. Local Chromium execution was subsequently exercised successfully for the navigation suite; the deployment workflow remains the authoritative full-suite run.
 - The next coverage increment is newsletter-dialog and Reps Hub clipboard success/failure behaviour, followed by expanded generated metadata and ordering contracts. These are higher value than adding duplicate page tests because they cover the remaining bespoke client-side interactions and collection-driven deployment contracts.
 
-### Welcome Tea carousel and date transition: 30 September 2026
+### Welcome Tea feature and date transition: 30 September 2026
 
-- The homepage hero now contains a two-slide carousel for Reception Welcome Tea and Fireworks on the Field. It rotates every five seconds, supports compact previous, pause/play and next controls, and uses a two-pixel progress line attached to the active card.
-- The supplied Welcome Tea poster is displayed as a complete linked portrait image rather than a cropped background with duplicate text. Fireworks retains the editorial text-over-image slide.
-- Reception Welcome Tea is upcoming through Saturday 3 October 2026 and moves to Past events from Sunday 4 October using the UK calendar date. The homepage removes the tea slide and carousel controls when only Fireworks remains.
-- Carousel browser coverage now covers automatic rotation, pause/resume, manual navigation, the Sunday transition and the single-slide state. Generated-site coverage verifies the slide count, poster asset and archive boundary attributes.
+- The homepage hero uses mutually exclusive current-event cards: the intact linked Welcome Tea poster through Saturday 3 October, then the Fireworks editorial card from Sunday 4 October.
+- Welcome Tea is upcoming through Saturday 3 October 2026 and moves to Past events from Sunday 4 October using the UK calendar date. Its homepage poster card hides and Fireworks reveals at the same cutoff.
+- Generated-site coverage verifies the poster asset and both date boundary attributes. Date-placement browser coverage remains required in CI.
 - `astro check`, the production build, generated-site tests and fresh-development HTTP smoke tests passed during this session. Local Playwright execution remains blocked by the sandbox's unavailable bundled Chromium and blocked system Chrome; CI remains the browser verification path.
-- Desktop homepage hero top spacing was tightened while mobile spacing was left unchanged.
-- The carousel viewport uses a shared 4:5 ratio so slides do not reflow the homepage during rotation. The Welcome Tea poster remains uncropped with subtle warm-ivory side margins; Fireworks retains a proportionate editorial card without excessive empty image space.
+- The homepage introduction appears before the current-event card at every viewport, so visitors understand The FOA before seeing an immediate event prompt. The compact poster card has an `Upcoming event` label, a `Welcome Tea` heading and additional spacing before the poster.
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility. Component `display: grid` and `display: flex` declarations had overridden the browser's default hidden styling, leaving the Welcome Tea visible in Upcoming events even after the Sunday date logic ran successfully; generated-site coverage now verifies the hidden rule is present in built CSS.
+- The confirmed Friday 2 October pre-loved uniform sale is now structured event content, listed at 15:25 in the school playground with its card-only and weather qualification.
 
 ### Session closure: 30 September 2026
 

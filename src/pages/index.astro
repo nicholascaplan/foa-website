@@ -1,18 +1,20 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import EventCarousel from "../components/EventCarousel.astro";
+import EventDate from "../components/EventDate.astro";
 import { withBase } from "../lib/urls";
-const featuredEvents = (await getCollection("events"))
-  .filter(({ data }) => data.homepageFeature)
-  .sort((a, b) => a.data.start.valueOf() - b.data.start.valueOf());
+const events = await getCollection("events");
+const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
+const welcomeTea = events.find(({ id }) => id === "welcome-tea-2026")?.data;
+if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missing");
 ---
   <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/welcome%20tea.png">
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
   <section class="hero">
     <div class="site-width hero-grid">
        <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/whats-on/")}>See what's coming up <span aria-hidden="true">&rarr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help</a></div></div>
-       {featuredEvents.length > 0 && <EventCarousel events={featuredEvents} />}
+        <article class="event-feature event-feature--poster" data-show-before={welcomeTea.archiveFrom}><p class="eyebrow">Upcoming event</p><h2>{welcomeTea.title}</h2><a class="event-poster-link" href={withBase("/whats-on/")}><img src={withBase(`/${encodeURIComponent(welcomeTea.image!)}`)} alt={welcomeTea.imageAlt} width="863" height="1260"></a></article>
+        <article class="event-feature" data-show-from={welcomeTea.archiveFrom} hidden><EventDate date={fireworks.start} /><p class="eyebrow eyebrow--light">Next major event</p><h2>{fireworks.title}</h2><p>{fireworks.summary}</p><ul class="event-facts"><li><strong>16:30</strong> Gates open</li><li><strong>17:00</strong> Quiet display</li><li><strong>18:00</strong> Main display</li></ul><a class="button button--amber" href={withBase(fireworks.path!)}>Event details</a></article>
     </div>
   </section>
   <section class="quick-actions"><div class="site-width"><div class="quick-list">
@@ -21,3 +23,24 @@ const featuredEvents = (await getCollection("events"))
      <a class="quick-row" href={withBase("/get-involved/")}><span><h3>Get involved</h3><p>Roles, meetings and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
   </div></div></section>
 </BaseLayout>
+
+<script>
+  const updateHomepageEvents = (dateOverride?: string) => {
+    const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+    const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
+    const dateKey = dateOverride ?? `${part("year")}-${part("month")}-${part("day")}`;
+    document.querySelectorAll<HTMLElement>("[data-show-before]").forEach((event) => {
+      event.hidden = dateKey >= event.dataset.showBefore!;
+    });
+    document.querySelectorAll<HTMLElement>("[data-show-from]").forEach((event) => {
+      event.hidden = dateKey < event.dataset.showFrom!;
+    });
+  };
+
+  updateHomepageEvents();
+  window.addEventListener("foa:refresh-events", (event) => {
+    const dateOverride = event instanceof CustomEvent && typeof event.detail === "string" ? event.detail : undefined;
+    updateHomepageEvents(dateOverride);
+  });
+  window.setInterval(updateHomepageEvents, 60000);
+</script>

@@ -1,0 +1,10 @@
+{
+  "title": "Pre-loved uniform sale",
+  "summary": "Card-only pre-loved uniform sale, subject to weather.",
+  "start": "2026-10-02T15:25:00+01:00",
+  "location": "School playground",
+  "status": "confirmed",
+  "statusLabel": "Confirmed",
+  "path": "/uniform/",
+  "ctaLabel": "See uniform details"
+}

@@ -28,13 +28,15 @@ const outputPath = (urlPath) => {
 test("homepage contains the primary mobile-review content", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   assert.match(homepage, /Helping Ashley children/);
-  assert.match(homepage, /Reception Welcome Tea/);
+  assert.match(homepage, /Welcome Tea poster:/);
+  assert.match(homepage, /Upcoming event/);
+  assert.match(homepage, /Welcome Tea/);
   assert.match(homepage, /Fireworks on the Field/);
-  assert.equal(homepage.match(/<article[^>]+data-carousel-slide/g)?.length, 2);
-  assert.match(homepage, /data-event-carousel/);
-  assert.match(homepage, /data-carousel-progress/);
-  assert.match(homepage, /class="event-feature event-feature--poster"/);
+  assert.match(homepage, /class="event-feature event-feature--poster" data-show-before="2026-10-04"/);
+  assert.match(homepage, /class="event-poster-link" href="\/whats-on\/"/);
+  assert.match(homepage, /class="event-feature" data-show-from="2026-10-04" hidden/);
   assert.match(homepage, /<img src="\/welcome%20tea\.png" alt="Welcome Tea poster:/);
+  assert.doesNotMatch(homepage, /data-event-carousel|data-carousel-progress|data-carousel-slide/);
   assert.match(homepage, /<meta name="viewport"/);
   assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.svg" type="image/svg\\+xml">`));
   assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.png" type="image/png">`));
@@ -49,10 +51,14 @@ test("What's On includes the date-driven Welcome Tea transition", async () => {
   const stylesheet = await readFile(outputPath(stylesheetPath), "utf8");
   assert.match(whatsOn, /data-show-before="2026-10-04"/);
   assert.match(whatsOn, /data-show-from="2026-10-04"/);
+  assert.match(whatsOn, /Pre-loved uniform sale/);
+  assert.match(whatsOn, /Friday 2 October, 15:25 · School playground/);
   assert.match(whatsOn, /A chance for new Ashley families to meet one another and enjoy tea and cake/);
   assert.match(whatsOn, /Europe\/London/);
   assert.match(stylesheet, /\[hidden\]\{display:none!important\}/);
-  assert.match(stylesheet, /\.event-carousel-slides\{[^}]*aspect-ratio:4\/5/);
+  assert.match(stylesheet, /\.event-feature--poster\{/);
+  assert.match(stylesheet, /\.event-poster-link\{/);
+  assert.doesNotMatch(stylesheet, /\.event-carousel-slides/);
 });
 
 test("newsletter shows the latest issue and previous issue in order", async () => {

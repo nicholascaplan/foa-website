@@ -87,7 +87,7 @@ Initial browser scenarios:
 6. Verify Today/Tomorrow labels using a fixed browser clock near a date boundary rather than depending on the day the test runs.
 7. Confirm the development-only mobile-preview control is absent from the production build.
 
-Homepage event-carousel coverage is implemented in `tests/e2e/event-carousel.spec.ts`: fixed-clock tests cover five-second rotation, pause/resume, manual navigation, the UK-time Welcome Tea transition into Past events, and removal of carousel controls when one slide remains. Generated-site contracts in `tests/site.test.mjs` cover the two-slide markup, supplied poster image and archive boundary attributes.
+Generated-site contracts in `tests/site.test.mjs` cover the homepage Welcome Tea poster and Fireworks hero-switch boundary attributes. Browser coverage for the UK-time date transition remains required in CI.
 
 Keep browser coverage concentrated on shared navigation and unique interactions. Static pages with no distinct behaviour should be covered by generated-site and accessibility checks rather than repetitive end-to-end tests.
 
@@ -165,11 +165,11 @@ Tests should fail with a message that identifies the broken route, reference or 
 
 1. Add Playwright and `@axe-core/playwright`, production-preview test configuration, and scripts without changing public behaviour. **Complete.**
 2. Add mobile-menu browser tests and representative accessibility scans. This gives the broadest immediate protection for shared UI and is the first implementation milestone. **Implemented; local Chromium suite exercised successfully.**
-3. Add newsletter-dialog and Reps Hub clipboard success/failure coverage. **Next; carousel and date-transition coverage is implemented.**
+3. Add newsletter-dialog, Reps Hub clipboard success/failure and fixed-clock event-transition coverage. **Next.**
 4. Expand generated-site tests for expected routes, metadata, structured data, sitemap/robots and collection ordering. **Next after interaction coverage.**
 5. Add fixed-clock date-label tests and key parent journeys.
 6. Add cross-browser CI coverage after the Chromium suite is stable and fast.
 7. Add selective visual regression and performance baselines after design approval.
 8. Extend the suite when CMS, ticketing, analytics or translated locales are introduced.
 
-The first implementation milestone is now in place. Carousel and date-transition coverage has been added. The next coverage increment is newsletter-dialog and Reps Hub clipboard success/failure testing, followed by expanded generated-site contracts. Prioritise these because they protect the site's remaining bespoke client-side interactions and can fail without breaking static route generation. Keep visual regression, cross-browser expansion and conditional CMS/ticketing/analytics tests deferred until the current Chromium baseline and operational content are stable.
+The first implementation milestone is now in place. The next coverage increment is newsletter-dialog, Reps Hub clipboard success/failure and fixed-clock event-transition testing, followed by expanded generated-site contracts. Prioritise these because they protect the site's remaining bespoke client-side interactions and can fail without breaking static route generation. Keep visual regression, cross-browser expansion and conditional CMS/ticketing/analytics tests deferred until the current Chromium baseline and operational content are stable.

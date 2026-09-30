@@ -18,7 +18,7 @@ The repository now contains the first static Astro implementation of the current
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
 - `tests/e2e/`: Playwright navigation and representative axe accessibility tests
 
-The site includes canonical and social metadata, a logo-based favicon, Event structured data, a sitemap, robots rules and a useful 404 page. The homepage has an accessible two-event carousel, and Reception Welcome Tea moves from Upcoming to Past events automatically from Sunday 4 October 2026 in UK time. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
+The site includes canonical and social metadata, a logo-based favicon, Event structured data, a sitemap, robots rules and a useful 404 page. The homepage features the intact Welcome Tea poster until it moves from Upcoming to Past events automatically on Sunday 4 October 2026 in UK time; Fireworks then becomes the primary event card. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
 
 ## Local Development
 
@@ -100,4 +100,4 @@ When resuming work, read that document first and begin with **Next Steps** and *
 
 ## Immediate Next Step
 
-Confirm the carousel and date-transition browser suite in CI, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`; formal manual accessibility testing and a public accessibility statement remain later work.
+Confirm the date-transition browser coverage in CI, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`; formal manual accessibility testing and a public accessibility statement remain later work.

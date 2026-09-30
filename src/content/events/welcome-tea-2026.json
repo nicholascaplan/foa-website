@@ -1,5 +1,5 @@
 {
-  "title": "Reception Welcome Tea",
+  "title": "Welcome Tea",
   "summary": "A relaxed afternoon for new Ashley families to meet one another and enjoy tea and cake.",
   "start": "2026-10-03T13:00:00+01:00",
   "end": "2026-10-03T14:30:00+01:00",
@@ -9,16 +9,5 @@
   "archiveFrom": "2026-10-04",
   "image": "welcome tea.png",
   "imageAlt": "Welcome Tea poster: Saturday 3rd October, 1:00 to 2:30pm at Ashley School. A chance to meet new families and enjoy tea and cake.",
-  "pastSummary": "A chance for new Ashley families to meet one another and enjoy tea and cake.",
-  "homepageFeature": {
-    "eyebrow": "Welcome event",
-    "facts": [
-      { "label": "13:00", "detail": "Welcome Tea begins" },
-      { "label": "14:30", "detail": "Event finishes" },
-      { "label": "Where", "detail": "Ashley School" }
-    ],
-    "ctaLabel": "See all events",
-    "ctaPath": "/whats-on/",
-    "layout": "poster"
-  }
+  "pastSummary": "A chance for new Ashley families to meet one another and enjoy tea and cake."
 }

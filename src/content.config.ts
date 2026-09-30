@@ -19,13 +19,6 @@ const events = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     pastSummary: z.string().optional(),
-    homepageFeature: z.object({
-      eyebrow: z.string(),
-      facts: z.array(z.object({ label: z.string(), detail: z.string() })),
-      ctaLabel: z.string(),
-      ctaPath: z.string(),
-      layout: z.enum(["editorial", "poster"]).default("editorial"),
-    }).optional(),
     lead: z.string().optional(),
     ticketPrice: z.string().optional(),
     reviewed: z.coerce.date().optional(),
