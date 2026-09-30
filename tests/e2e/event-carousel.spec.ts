@@ -30,10 +30,10 @@ test.describe("homepage event carousel", () => {
 });
 
 test("Welcome Tea moves to Past events on Sunday", async ({ page }) => {
-  // Use an unambiguous UTC instant after the UK-local Sunday boundary.
-  await page.clock.install({ time: new Date("2026-10-04T01:00:00Z") });
-
   await page.goto("/whats-on/");
+  // Set the clock after navigation, then exercise the same refresh path used at midnight.
+  await page.clock.install({ time: new Date("2026-10-04T01:00:00Z") });
+  await page.evaluate(() => window.dispatchEvent(new Event("foa:refresh-events")));
   await expect(page.locator("html")).toHaveAttribute("data-events-ready", "true");
   const upcoming = page.locator("section").filter({ has: page.getByRole("heading", { name: "Upcoming events" }) });
   await expect(upcoming.getByText("Reception Welcome Tea")).toBeHidden();
@@ -41,6 +41,8 @@ test("Welcome Tea moves to Past events on Sunday", async ({ page }) => {
   await expect(page.locator(".past-event").getByRole("heading", { name: "Reception Welcome Tea" })).toBeVisible();
 
   await page.goto("/");
+  await page.clock.install({ time: new Date("2026-10-04T01:00:00Z") });
+  await page.evaluate(() => window.dispatchEvent(new Event("foa:refresh-events")));
   await expect(page.getByRole("heading", { name: "Reception Welcome Tea" })).toBeHidden();
   await expect(page.getByRole("heading", { name: "Fireworks on the Field" })).toBeVisible();
   await expect(page.locator("[data-carousel-controls]")).toBeHidden();

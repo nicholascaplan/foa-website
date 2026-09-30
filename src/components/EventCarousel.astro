@@ -164,6 +164,7 @@ const { events } = Astro.props;
 
     updatePauseControl();
     refreshEvents();
+    window.addEventListener("foa:refresh-events", refreshEvents);
     window.setInterval(refreshEvents, 60000);
   }
 </script>

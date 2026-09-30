@@ -38,5 +38,6 @@ const hasPermanentPastEvents = past.some(({ data }) => data.archive && !data.arc
   };
 
   updateEventSections();
+  window.addEventListener("foa:refresh-events", updateEventSections);
   window.setInterval(updateEventSections, 60000);
 </script>
