@@ -10,6 +10,7 @@ const routes = [
   "/newsletter/",
   "/reps/",
   "/contact/",
+  "/privacy/",
   "/404.html",
 ];
 

@@ -7,7 +7,8 @@
 - Obtain higher-resolution committee portraits before the production site is launched. The current supplied photos may remain in the design prototype but should not be treated as final production assets.
 - Confirm whether concise approved committee biographies will be published. If so, design them as visible, readable content rather than desktop-only tooltips.
 - Confirm ownership, retention and access handling for the Google contact form.
-- Approve final Privacy wording after the required ownership, processor and retention decisions are complete.
+- Confirm and record the approved access and retention arrangements for the shared FOA inbox and Google contact form. The Privacy Notice now identifies these as pending operational details.
+- Google Analytics is consent-controlled with measurement ID `G-V2X8ZMQ5XZ`: the tag is absent until a visitor allows analytics cookies, and rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. Keep the existing 2-month event/user retention, disabled reset-on-activity, disabled Google Signals and user-provided-data capabilities, active email redaction, and no advertising, cross-domain or connected-site integrations.
 
 ## Brand assets
 

@@ -104,6 +104,21 @@ test("the school website is linked from the footer", async () => {
   assert.match(homepage, /aria-label="Visit Ashley School website \(opens in a new tab\)"/);
 });
 
+test("privacy notice covers contact handling and consented Google Analytics", async () => {
+  const homepage = await readFile(path.join(dist, "index.html"), "utf8");
+  const privacy = await readFile(path.join(dist, "privacy", "index.html"), "utf8");
+
+  assert.match(homepage, new RegExp(`href="${basePath}/privacy/"`));
+  assert.match(privacy, /Website enquiries/);
+  assert.match(privacy, /Google Analytics/);
+  assert.match(privacy, /Allow analytics cookies/);
+  assert.match(privacy, /Cookie preferences/);
+  assert.match(privacy, /Google's Privacy Policy/);
+  assert.match(homepage, /G-V2X8ZMQ5XZ/);
+  assert.match(homepage, /data-google-analytics/);
+  assert.match(homepage, /analytics_storage/);
+});
+
 test("Fireworks conditionally reveals its return link and shows a ticket-link placeholder", async () => {
   const fireworks = await readFile(path.join(dist, "events", "fireworks-2026", "index.html"), "utf8");
   const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");

@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 import DevMobilePreview from "../components/DevMobilePreview.astro";
 import { withBase } from "../lib/urls";
 import "../styles/global.css";
@@ -37,6 +38,7 @@ const fireworksImage = `url("${withBase("/fireworks-1600.jpg")}")`;
     <Header />
     <main id="main-content"><slot /></main>
     <Footer />
+    <CookieBanner />
     {import.meta.env.DEV && <DevMobilePreview />}
   </body>
 </html>

@@ -1,0 +1,132 @@
+---
+import { withBase } from "../lib/urls";
+---
+<aside class="cookie-banner" aria-labelledby="cookie-banner-title" data-cookie-banner hidden>
+  <div class="cookie-banner-copy">
+    <p class="eyebrow">Your choice</p>
+    <h2 id="cookie-banner-title">Analytics cookies</h2>
+    <p>We would like to use Google Analytics cookies to understand how visitors use this site and improve it. They are off unless you allow them. <a href={withBase("/privacy/")}>Privacy notice</a></p>
+  </div>
+  <div class="cookie-banner-actions">
+    <button class="button button--primary" type="button" data-cookie-choice="analytics">Allow analytics cookies</button>
+    <button class="button button--secondary" type="button" data-cookie-choice="essential">Reject analytics cookies</button>
+  </div>
+</aside>
+
+<script>
+  const storageKey = "foa-cookie-preferences";
+  const measurementId = "G-V2X8ZMQ5XZ";
+  const banner = document.querySelector<HTMLElement>("[data-cookie-banner]");
+  const preferenceButtons = document.querySelectorAll<HTMLButtonElement>("[data-cookie-choice]");
+  const preferencesButtons = document.querySelectorAll<HTMLButtonElement>("[data-cookie-preferences]");
+  const analyticsWindow = window as Window & {
+    dataLayer?: unknown[][];
+    gtag?: (...args: unknown[]) => void;
+  };
+
+  const getPreference = () => {
+    try {
+      return window.localStorage.getItem(storageKey);
+    } catch {
+      return null;
+    }
+  };
+
+  const announcePreference = (preference: string | null) => {
+    window.dispatchEvent(new CustomEvent("foa:cookie-consent", { detail: { preference } }));
+  };
+
+  const sendAnalyticsConsent = (value: "granted" | "denied") => {
+    analyticsWindow.gtag?.("consent", "update", { analytics_storage: value });
+  };
+
+  const removeAnalyticsCookies = () => {
+    const expires = "Max-Age=0; path=/; SameSite=Lax";
+    const domains = location.hostname === "localhost" ? [""] : ["", `; domain=.${location.hostname.replace(/^www\./, "")}`];
+
+    document.cookie.split(";").forEach((entry) => {
+      const name = entry.trim().split("=", 1)[0];
+      if (!name.startsWith("_ga")) return;
+      domains.forEach((domain) => {
+        document.cookie = `${name}=; ${expires}${domain}`;
+      });
+    });
+  };
+
+  const loadAnalytics = () => {
+    if (analyticsWindow.gtag) {
+      sendAnalyticsConsent("granted");
+      return;
+    }
+
+    if (document.querySelector("[data-google-analytics]")) return;
+
+    analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+    analyticsWindow.gtag = (...args) => analyticsWindow.dataLayer?.push(args);
+    analyticsWindow.gtag("consent", "default", { analytics_storage: "granted" });
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    script.dataset.googleAnalytics = "true";
+    script.addEventListener("load", () => {
+      if (getPreference() !== "analytics") {
+        sendAnalyticsConsent("denied");
+        return;
+      }
+      analyticsWindow.gtag?.("js", new Date());
+      analyticsWindow.gtag?.("config", measurementId);
+    });
+    document.head.append(script);
+  };
+
+  const disableAnalytics = () => {
+    sendAnalyticsConsent("denied");
+    removeAnalyticsCookies();
+  };
+
+  const showBanner = () => {
+    if (!banner) return;
+    banner.hidden = false;
+  };
+
+  const savePreference = (preference: string) => {
+    try {
+      window.localStorage.setItem(storageKey, preference);
+    } catch {
+      // The site remains usable when a browser blocks local storage.
+    }
+    if (banner) banner.hidden = true;
+    if (preference === "analytics") loadAnalytics();
+    else disableAnalytics();
+    announcePreference(preference);
+  };
+
+  const savedPreference = getPreference();
+  if (savedPreference) {
+    if (savedPreference === "analytics") loadAnalytics();
+    else disableAnalytics();
+    announcePreference(savedPreference);
+  } else {
+    showBanner();
+  }
+
+  preferenceButtons.forEach((button) => {
+    button.addEventListener("click", () => savePreference(button.dataset.cookieChoice || "essential"));
+  });
+
+  preferencesButtons.forEach((button) => {
+    button.addEventListener("click", showBanner);
+  });
+
+  window.addEventListener("foa:reset-cookie-preferences", () => {
+    try {
+      window.localStorage.removeItem(storageKey);
+    } catch {
+      // The banner can still be reopened when browser storage is unavailable.
+    }
+    disableAnalytics();
+    announcePreference(null);
+    showBanner();
+  });
+</script>

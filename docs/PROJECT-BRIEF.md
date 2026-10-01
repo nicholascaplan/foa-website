@@ -1,7 +1,7 @@
 # The Friends of Ashley Website: Project Brief and Status
 
 **Status:** Production `www`-domain build is deployed through GitHub Pages with HTTPS enabled; post-launch operational cleanup remains
-**Last updated:** 30 September 2026
+**Last updated:** 1 October 2026
 **Project:** The Friends of Ashley (FOA) website
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 
@@ -109,12 +109,16 @@ The repository currently contains:
 - Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
 - Client-side JavaScript is limited to focused interactions: the mobile menu, Today/Tomorrow event labels, time-sensitive event placement, the newsletter dialog and Reps Hub clipboard actions.
 - Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
-- The favicon uses a purpose-built, high-contrast `FOA` SVG monogram in the approved heritage-green, warm-ivory and amber palette so it remains legible at browser-tab sizes. The supplied logo is retained as a PNG fallback.
+- The favicon uses a purpose-built, high-contrast white-square favicon with a bold heritage-green `F` monogram so it remains legible at browser-tab sizes. A matching PNG fallback is supplied.
 - A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
 - A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
 - The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
 - `npm run verify` covers Astro/TypeScript diagnostics, the production build, generated-site contracts, Chromium navigation journeys and representative axe accessibility scans. `npm audit` reports zero vulnerabilities.
 - Public-facing draft/readiness warnings were removed from the production Committee and Reps Hub routes and the archived prototype. The Christmas Fayre summary now states only the confirmed lead names, and the Reps Hub messages no longer promise unpublished follow-up details.
+- A compact site-wide Cookie preferences banner now lets visitors reject or allow Google Analytics cookies. It is non-blocking, remembers the choice locally and is reopenable from the footer.
+- Local development includes a production-omitted Reset cookie consent control beside Mobile preview. It clears the locally stored preference and immediately reopens the banner for repeat testing.
+- A public `/privacy/` route now covers website enquiries, the external Google Form and consented Google Analytics. It links from the footer and the cookie banner. Shared-inbox and Google Form access/retention arrangements remain explicitly pending confirmation before analytics is activated.
+- Google Analytics is now configured for `G-V2X8ZMQ5XZ` but is only requested after a visitor selects Allow analytics cookies. Rejecting or withdrawing consent prevents future loading, denies analytics storage on the current page and removes known Analytics cookies. The confirmed minimal Google Analytics configuration uses 2-month event/user retention with reset-on-activity disabled, Google Signals and user-provided data disabled, email redaction enabled, and no advertising, cross-domain or connected-site integrations.
 
 ## 3. Decisions Made
 
@@ -245,9 +249,8 @@ The categories below consolidate the current outstanding work. Complete P1 items
 
 #### P1: Launch readiness, privacy and measurement
 
-- **Cookie consent:** decide whether the selected analytics, embedded services and other non-essential technologies require consent; implement a compliant consent experience before enabling them. Do not add a banner that claims consent is needed until the actual processing and legal basis are confirmed.
-- **Analytics:** after the site is live and the measurement decision is confirmed, configure Google Analytics and the required reporting. This work is dependent on the cookie/privacy decision and must not collect analytics before consent requirements are resolved.
-- **Operational launch content:** select the external ticketing provider and final URL; confirm event capacity, refunds, cancellation/bad-weather handling, accessibility and data-processing responsibilities; reconfirm Pre-loved Uniform instructions; approve Reps Hub copy; approve final privacy wording and Google Form ownership, access and retention.
+- **Cookie consent and analytics:** the consent interface, Privacy Notice and consent-controlled Google Analytics integration are complete. Confirm the deployed journey in CI and after the next production release; do not add other optional technologies without extending the notice and consent control.
+- **Operational launch content:** select the external ticketing provider and final URL; confirm event capacity, refunds, cancellation/bad-weather handling, accessibility and data-processing responsibilities; reconfirm Pre-loved Uniform instructions; approve Reps Hub copy; confirm the shared inbox and Google Form ownership, access and retention arrangements recorded as pending in the Privacy Notice.
 - **Launch controls:** move the custom-domain assignment from the holding-page repository, configure root-domain production builds, complete FOA content and brand approval, validate tickets, links and metadata, and perform constrained-connection mobile performance testing.
 
 #### P2: Information architecture and content clarity
@@ -263,6 +266,7 @@ The categories below consolidate the current outstanding work. Complete P1 items
 - **Uptime monitoring:** select and configure an external uptime checker for the public `www` domain, including an agreed alert recipient and a documented response owner.
 - **Automated quality:** confirm the first Playwright and axe-core suite in CI. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
 - **Content operations:** select and integrate a CMS only after editor ownership, preview/publishing, annual handover, urgent-update and failed-build procedures are confirmed.
+- **AI-powered support bot:** assess a future AI support bot for common parent/carer questions, including approved knowledge sources, committee ownership, privacy and safeguarding boundaries, human escalation, accessibility, cost and failure handling; do not include it in the static MVP or allow it to answer safety-critical, transactional or sensitive queries without reviewed safeguards.
 - **Optional future enhancements:** publish an accessibility statement after formal testing, consider additional reviewed translations and RTL testing, and evaluate fundraising progress, native sharing, calendar downloads, FAQs and other later-scope work.
 - **Dark mode:** consider a dark mode option as a low-priority follow-up; it is not implemented and must not delay launch work.
 

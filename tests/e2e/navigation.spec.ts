@@ -18,6 +18,25 @@ test("main task routes are reachable through normal navigation", async ({ page }
   }
 });
 
+test("cookie choices are unobtrusive, remembered and can be changed", async ({ page }) => {
+  await page.goto("/");
+
+  const banner = page.locator("[data-cookie-banner]");
+  await expect(banner).toBeVisible();
+  await page.getByRole("button", { name: "Reject analytics cookies" }).click();
+  await expect(banner).toBeHidden();
+  await expect(page.locator("[data-google-analytics]")).toHaveCount(0);
+
+  await page.reload();
+  await expect(banner).toBeHidden();
+
+  await page.getByRole("button", { name: "Cookie preferences" }).click();
+  await expect(banner).toBeVisible();
+  await page.getByRole("button", { name: "Allow analytics cookies" }).click();
+  await expect(banner).toBeHidden();
+  await expect(page.locator("[data-google-analytics]")).toHaveCount(1);
+});
+
 test.describe("mobile navigation", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 

@@ -1373,6 +1373,69 @@ a {
   font-size: 0.82rem;
 }
 
+.footer-preferences {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.cookie-banner {
+  position: fixed;
+  z-index: 70;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  width: min(calc(100% - 2rem), 31rem);
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  gap: 1rem;
+}
+
+.cookie-banner .eyebrow {
+  margin-bottom: 0.4rem;
+}
+
+.cookie-banner h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.cookie-banner p:not(.eyebrow) {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.cookie-banner p a {
+  color: var(--green);
+  font-weight: 750;
+  text-underline-offset: 0.2rem;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cookie-banner-actions .button {
+  min-height: 2.65rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
+}
+
 .prototype-note {
   padding: 0.8rem 1rem;
   border-bottom: 1px solid #e6c98f;
@@ -2306,6 +2369,20 @@ a {
 
   .member-vacancy a {
     font-size: 0.72rem;
+  }
+
+  .cookie-banner {
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .cookie-banner-actions .button {
+    flex: 1 1 10rem;
   }
 }
 

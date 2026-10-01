@@ -18,7 +18,7 @@ The repository now contains the first static Astro implementation of the current
 - `tests/site.test.mjs`: generated-site smoke and internal-link tests
 - `tests/e2e/`: Playwright navigation and representative axe accessibility tests
 
-The site includes canonical and social metadata, a logo-based favicon, Event structured data, a sitemap, robots rules and a useful 404 page. The homepage features the intact Welcome Tea poster until it moves from Upcoming to Past events automatically on Sunday 4 October 2026 in UK time; Fireworks then becomes the primary event card. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board, privacy notice and public accessibility statement are deferred to later scope.
+The site includes canonical and social metadata, a compact FOA favicon, Event structured data, a sitemap, robots rules, a Privacy Notice and a useful 404 page. The homepage features the intact Welcome Tea poster until it moves from Upcoming to Past events automatically on Sunday 4 October 2026 in UK time; Fireworks then becomes the primary event card. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Google Analytics loads only after a visitor allows analytics cookies; the footer lets visitors change that choice. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board and public accessibility statement are deferred to later scope.
 
 ## Local Development
 
@@ -36,7 +36,7 @@ npm run dev
 
 The command opens the local site in your default browser, normally at `http://localhost:4321/`. The development server watches the source files and refreshes the site after changes. Stop it with `Ctrl+C`.
 
-On desktop, use the **Mobile preview** button in the bottom-right corner to open the current route in a 390px-wide browser window. The button is available only under `npm run dev` and is omitted from production builds. If the browser blocks the new window, allow pop-ups for the local Astro address.
+On desktop, use the stacked **Mobile preview** and **Reset cookie consent** controls on the left side of the page. Mobile preview opens the current route in a 390px-wide browser window; Reset cookie consent clears the locally stored analytics-cookie preference and reopens the banner. Both controls are available only under `npm run dev` and are omitted from production builds. If the browser blocks the preview window, allow pop-ups for the local Astro address.
 
 To review the production build locally:
 
@@ -100,4 +100,4 @@ When resuming work, read that document first and begin with **Next Steps** and *
 
 ## Immediate Next Step
 
-Confirm the date-transition browser coverage in CI, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`; formal manual accessibility testing and a public accessibility statement remain later work.
+Confirm the consent-controlled Google Analytics journey and the date-transition browser coverage in CI, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`, particularly the shared-inbox and Google Form retention arrangements; formal manual accessibility testing and a public accessibility statement remain later work.
