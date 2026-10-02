@@ -1,1212 +1,307 @@
-# The Friends of Ashley Website: Project Brief and Status
+# The Friends of Ashley Website: Project Brief
 
-**Status:** Production `www`-domain build is deployed through GitHub Pages with HTTPS enabled; post-launch operational cleanup remains
-**Last updated:** 1 October 2026
-**Project:** The Friends of Ashley (FOA) website
+**Last updated:** 2 October 2026 (structure reorganised; see [`README.md`](README.md))
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
+**Live site:** <https://www.thefriendsofashley.org/>
 
-This is the canonical record of the project's current state, decisions, requirements and next actions. Update it whenever a material product, design, content or technical decision is made.
+This is the canonical record of **what the site is, what has been decided and how it is built**. It deliberately contains no backlog or status narrative:
 
-Agent working conventions, including the session-closure protocol, are recorded in [`../AGENTS.md`](../AGENTS.md).
+- Outstanding work, open questions and provisional content live in [`ACTIONS.md`](ACTIONS.md).
+- Agent behaviour rules live in [`../AGENTS.md`](../AGENTS.md).
+- Testing lives in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
+- The documentation rules and rationale are in [`README.md`](README.md).
 
-## 1. Executive Summary
+Contents: 1 Summary · 2 Decisions · 3 Scope · 4 Requirements · 5 Technical specification
 
-The FOA needs a fast, welcoming and maintainable public website for parents, carers and staff. Its primary purpose is to answer practical questions quickly, reduce repeated or outdated WhatsApp messages, explain what The FOA does and make participation feel approachable.
+## 1. Summary
 
-The agreed design direction is a **warm, modern editorial community noticeboard**. It combines the quick access of the original Bento concept with a calmer hierarchy, larger typography, fewer cards and less app-like visual language.
+The FOA needs a fast, welcoming and maintainable public website for parents, carers and staff. Its purpose is to answer practical questions quickly, reduce repeated or outdated WhatsApp messages, explain what The FOA does and make participation feel approachable.
 
-A responsive static prototype was created and has now been migrated into a static Astro implementation with separate routes for:
+Design character: a **warm, modern editorial community noticeboard**: the quick access of a bento layout with calmer hierarchy, larger typography, fewer cards and less app-like visual language.
 
-- The homepage
-- The Fireworks on the Field event page
-- Mobile navigation
-- An external ticket-provider handoff
-- Home, What's On, Uniform, Get Involved and Committee
-- Reps Hub, Newsletter, About and Contact
+Implementation: Astro 7 static site with typed local content collections, built locally with project CSS and deployed through GitHub Pages. The earlier hash-routed prototype is archived in `prototype/` as a design reference only.
 
-The first Astro implementation, route/UX refinement pass and initial browser-test milestone are complete. The next phase is post-launch operational cleanup and deeper interaction coverage; formal manual accessibility testing, a public accessibility statement and CMS selection remain later work.
+### Routes
 
-## 2. Where We Have Got To
+```text
+/                       Home
+/whats-on/              What's On
+/events/fireworks-2026/ Fireworks on the Field
+/uniform/               Uniform
+/get-involved/          Get Involved
+/committee/             Committee
+/reps/                  Reps Hub
+/meeting-minutes/       Meeting Minutes archive
+/about/                 About The FOA
+/contact/               Contact Us
+/newsletter/            Newsletter
+/privacy/               Privacy Notice
+/404.html               Not found
+```
 
-### Discovery and review completed
+The Community Notice Board and a public accessibility statement are deferred and have no route. Final event URL conventions remain open (see [`ACTIONS.md`](ACTIONS.md)).
 
-- Reviewed the original engineering specification.
-- Reviewed the initial interactive HTML design playground.
-- Assessed information architecture, usability, visual hierarchy, accessibility, internationalisation, privacy, safeguarding, content governance and technical feasibility.
-- Identified that the original prototype was a useful design sandbox but not implementation-ready.
-- Identified that the most important pre-build issues were content hierarchy, operational ownership, personal-data policy, multilingual scope, ticketing and notice-board moderation.
+## 2. Decisions
 
-### Design direction agreed
-
-- Use the original Community Bulletin/Bento idea as the foundation.
-- Borrow direct utility patterns from the Frictionless App concept.
-- Avoid presenting the public site as a SaaS dashboard or administrative application.
-- Use a warm editorial character with school heritage cues.
-- Prioritise current events and practical parent tasks over organisational messaging.
-- Use task-oriented top-level navigation.
-- Use names and roles only for committee members in the prototype.
-- Demonstrate English content plus one representative RTL layout rather than pretending all six languages are complete.
-- Use an external ticket-provider call to action instead of a simulated internal checkout.
-
-### Higher-fidelity prototype completed
-
-The repository currently contains:
-
-- `index.html`
-  - Single-file, hash-routed responsive prototype for Home, What's On, Uniform, Get Involved, Community, Committee, Reps Hub, Newsletter, About, Contact and Fireworks
-  - Task-oriented desktop and mobile navigation that changes views without a new page load
-  - Co-Secretary vacancy strip
-  - Warm editorial hero
-  - Featured Fireworks event
-  - Quick parent actions
-  - What's On preview
-  - Volunteer recruitment feature
-  - Moderated community notice preview
-  - Upcoming and past event separation, including the Welcome Tea completed-event treatment
-  - Clearly private prototype patterns for sold-out, cancelled and completed events
-  - Newsletter page with a Latest Newsletter section and Previous Newsletters section
-  - Readable 28 September 2026 issue and supplied Back to School issue summary
-  - Honest empty, draft-policy and pending-ticket states where approved production content is unavailable
-- `styles.css`
-  - Brand and component tokens
-  - Responsive layouts
-  - Mobile menu and instant phone-preview styles
-  - Visible focus states
-  - Reduced-motion support
-  - Mobile-first spacing and typography overrides, including explicit desktop phone-preview overrides
-- `script.js`
-  - Working mobile navigation
-  - Escape-key mobile-menu closing
-  - Hash-route view switching
-  - Instant desktop-only phone preview that resizes the loaded prototype instead of loading an iframe
-  - Automatic Today/Tomorrow labels for event and sale dates only
-- `assets/`
-   - Committee portrait assets supplied by the project owner
-   - `welcome tea.png`, the supplied Welcome Tea poster for the past-event example
-   - Supplied Fireworks event image
-  - `logo-big.png`, a supplied purpose/three-pillars graphic for The FOA containing the Ashley School mark
-  - The event image is used on the homepage and Fireworks page
-  - Committee portraits are used on the Committee page at intentionally modest display sizes
-  - The purpose graphic is not yet used because Ashley School branding is currently out of scope
-  - `FOA KEY EVENTS CALENDAR 2026-2027 (1).pdf` is the reference for confirmed 2026 event and Preloved Uniform dates
-
-### Verification completed
-
-- JavaScript syntax passes `node --check`.
-- Git whitespace checks pass.
-- Local file references resolve.
-- All prototype views are served from `index.html`; local asset references resolve.
-- Core semantic elements, labels, skip links and reduced-motion handling are present.
-- Full visual regression and browser automation testing has not yet been added.
-
-### Astro implementation completed
-
-- Astro 7 now generates separate HTML pages for all agreed routes; the hash router is not used in production pages.
-- The former single-file review tool is archived in `prototype/`.
-- Shared layouts and components provide global navigation, footer, page heroes, event lists and date labels.
-- The footer navigation uses independent link columns so wrapped external links do not create uneven gaps between columns; the persistent Ashley School and JustGiving links remain clearly labelled as opening in a new tab.
-- The footer's Ashley School and JustGiving links are balanced across the two columns, with external-link arrows kept attached to their final words at narrow widths.
-- Typed local content collections are the confirmed interim source for events, newsletters and committee members until a CMS is selected.
-- Client-side JavaScript is limited to focused interactions: the mobile menu, Today/Tomorrow event labels, time-sensitive event placement, the newsletter dialog and Reps Hub clipboard actions.
-- Canonical, Open Graph and Twitter metadata, a logo-based favicon, Event structured data, sitemap generation, robots rules and a 404 page are implemented.
-- The favicon uses a purpose-built, high-contrast white-square favicon with a bold heritage-green `F` monogram so it remains legible at browser-tab sizes. A matching PNG fallback is supplied.
-- A GitHub Pages workflow checks, tests, builds and deploys the static output at `https://nicholascaplan.github.io/foa-website/` for mobile review.
-- A separate `nicholascaplan/foa-holding-page` GitHub Pages repository now hosts the public pre-launch holding page at `https://thefriendsofashley.org/`.
-- The temporary review deployment uses the `/foa-website/` repository base path. The project still targets root hosting when a custom domain is selected.
-- `npm run verify` covers Astro/TypeScript diagnostics, the production build, generated-site contracts, Chromium navigation journeys and representative axe accessibility scans. `npm audit` reports zero vulnerabilities.
-- Public-facing draft/readiness warnings were removed from the production Committee and Reps Hub routes and the archived prototype. The Christmas Fayre summary now states only the confirmed lead names, and the Reps Hub messages no longer promise unpublished follow-up details.
-- A compact site-wide Cookie preferences banner now lets visitors reject or allow Google Analytics cookies. It is non-blocking, remembers the choice locally and is reopenable from the footer.
-- Local development includes a production-omitted Reset cookie consent control beside Mobile preview. It clears the locally stored preference and immediately reopens the banner for repeat testing.
-- A public `/privacy/` route now covers website enquiries, the external Google Form and consented Google Analytics. It links from the footer and the cookie banner. Shared-inbox and Google Form access/retention arrangements remain explicitly pending confirmation before analytics is activated.
-- Google Analytics is now configured for `G-V2X8ZMQ5XZ` but is only requested after a visitor selects Allow analytics cookies. Rejecting or withdrawing consent prevents future loading, denies analytics storage on the current page and removes known Analytics cookies. The confirmed minimal Google Analytics configuration uses 2-month event/user retention with reset-on-activity disabled, Google Signals and user-provided data disabled, email redaction enabled, and no advertising, cross-domain or connected-site integrations.
-
-## 3. Decisions Made
-
-These decisions are considered confirmed unless the project owner explicitly revises them.
+These are confirmed unless the project owner explicitly revises them. Edit entries in place when decisions change; do not append contradicting entries.
 
 ### Product and audience
 
-- The primary audience is busy parents and carers using phones, often outside the school at drop-off or pickup.
-- The website is a public information and community site, not an internal committee administration system.
-- The homepage should first answer: "What do I need to know or do right now?"
-- Practical information takes priority over explaining the organisation.
-- Content should be concise, plain-English and suitable for readers who use English as an additional language.
-- A Newsletter page will provide a blog-style archive for the latest and previous newsletters from The FOA.
-- A Meeting Minutes page provides an archive for approved FOA meeting records; the first published entry is the 16 September 2026 AGM minutes.
-- An FAQs page is a later, low-priority addition and is not required for the immediate prototype work.
+- The audience is busy parents and carers using phones, often at drop-off or pickup.
+- It is a public information and community site, not an internal committee administration system.
+- The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
+- Content is concise, plain-English and suitable for readers who use English as an additional language.
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. The newsletter archive opens the 16 September issue in a native dialog.
+- The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16 September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
+- A FAQs page is later, low-priority scope.
 
 ### Design
 
-- Overall character: **warm modern editorial**.
-- Concept direction: simplified Community Bulletin/Bento, with selective utility patterns from the Frictionless App.
-- The site should feel community-led rather than corporate or software-like.
-- Use restrained cards and badges rather than putting every item in a visually equal container.
-- Use confident editorial typography and generous spacing.
-- Avoid depending on photography for the overall design.
-- Use the supplied Fireworks image as a focal event image while keeping all event facts available as structured text.
-- Use the supplied committee portraits on the Committee page.
-- Keep portrait presentation compact because the source files are low resolution.
-- Replace the prototype leaf mark with the approved logo for The FOA in `assets/FOA Logo.jpg`.
-- Do not use Ashley School branding at this stage.
-- Heritage green is the primary brand colour.
-- Amber is primarily for events and celebratory emphasis.
-- The supplied Welcome Tea poster is the intact linked homepage hero card through Saturday 3 October 2026. It has an `Upcoming event` label and a `Welcome Tea` heading, and is capped to a compact portrait-card width on mobile. From Sunday 4 October, the Fireworks on the Field editorial card replaces it in the same hero position.
-- The homepage introduction must precede the current-event card on mobile as well as desktop, so visitors first understand The FOA before seeing the immediate event prompt.
-- Desktop homepage hero spacing is capped more tightly so the headline and current event card begin closer to the vacancy strip; mobile spacing remains unchanged.
-- Warm ivory/paper surfaces replace the earlier slate-heavy visual treatment.
-- Use a legible sans-serif body face and a restrained serif display face.
-- The current prototype uses system fonts to avoid external font dependencies during design review.
-- Keep the current Georgia and system-sans typography for now; review a future self-hosted font pairing only if it provides a clear brand benefit.
+- Warm modern editorial; community-led rather than corporate or software-like.
+- Restrained cards and badges; confident editorial typography; generous spacing. Do not depend on photography.
+- Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
+- Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
+- Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
+- The supplied Fireworks image is the focal event image, but all event facts must also be available as structured text.
+- Committee portraits are shown compactly because source files are low resolution.
+- The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
+- The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.
+- Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows through Saturday 3 October 2026. From Sunday 4 October (UK calendar date) the Fireworks editorial card replaces it. Welcome Tea moves from Upcoming to Past events at the same cutoff.
+- Event and sale dates matching the visitor's local date are labelled **Today** or **Tomorrow** automatically. Do not apply to newsletter dates or document metadata.
+- Public date copy uses ordinal days (`5th November`).
+- No event status pills in event lists or past-event cards.
+- A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.
+- Quick-action rows must not animate padding on hover (it shifts text wrapping on touch devices).
+- The Committee page shows the vacant Co-Secretary role as an eighth card, visually distinct from confirmed members, linking to the shared Co-Secretary enquiry email; a full-width recruitment callout remains below the grid.
+- Footer: independent link columns; Ashley School Website and Donate via JustGiving links open in a new tab and are labelled as such.
+- Removed on purpose: draft/readiness banners in public pages; the hash router; the earlier public Community and Accessibility pages.
 
 ### Information architecture
 
-Agreed top-level navigation:
+- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**.
+- Committee, Reps Hub and Meeting Minutes belong under Get Involved. Newsletter, About, Contact and policy pages are reached through the footer and relevant page content. Contact Us is also in the mobile menu.
+- What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
+- Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
+- The 2026 Pre-loved Uniform sales are Fridays 2 October, 6 November and 4 December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
+- Homepage order: current important event or status; immediate parent tasks; What's On preview; volunteer prompt; purpose and three pillars; contact, governance and legal information.
 
-1. Home
-2. What's On
-3. Get Involved
-4. Uniform
+### Personal information and safeguarding
 
-Expected grouping:
+- Committee presentation uses names and roles only, plus an approved portrait. Names and roles for 2026/27 are confirmed: Helen Platt and Sarah Parish (Co-Chairs); Clare Birks and Darren Malone (Co-Treasurers); Nick Caplan and Cristy Amponsah (Co-Comms); Lizzie Grillo (Fundraising Initiatives Lead); Co-Secretary vacant.
+- Do not publish child year groups, or attribute notices to a parent plus a child's year group.
+- Use the shared FOA contact route (email address and approved Google Form), not individual contact details.
+- Meeting locations and schedules may be public.
+- Charity wording and registered charity number are confirmed as correct.
+- Final pre-publication consent check for committee names, roles and portraits is outstanding (see [`ACTIONS.md`](ACTIONS.md)).
 
-- Committee, Reps Hub and Meeting Minutes belong under Get Involved.
-- Public meeting minutes use a dedicated `/meeting-minutes/` archive linked from Get Involved and the footer, with approved minutes published only after review and removal of personal or sensitive information where needed.
-- The Community Notice Board is deferred and has no current public route.
-- Individual events use reusable event pages.
-- What's On should be a chronological list before considering a calendar grid.
-- What's On should show upcoming events first, followed by a clearly separate **Earlier this year** section for selected completed events. Welcome Tea is the first example to include, using the supplied poster as the source for event information.
-- Welcome Tea remains in Upcoming events through Saturday 3 October 2026 and automatically moves to Past events from Sunday 4 October in UK time. Its homepage poster hero card follows the same cutoff, at which point the Fireworks card becomes visible.
-- The confirmed Friday 2 October 2026 pre-loved uniform sale is listed in What's On at 15:25 in the school playground, card-only and subject to weather.
-- Past events must not be mixed into the upcoming list or presented as current calls to action; completed event pages may remain available for context, photos/posters and sharing.
+### Language
 
-### Homepage hierarchy
-
-The intended order is:
-
-1. Current important event or status
-2. Immediate parent tasks
-3. What's On preview
-4. Volunteer vacancy or participation prompt
-5. The FOA purpose and three pillars
-6. Contact, governance and legal information
-
-### Personal information
-
-- Prototype committee content should use names and roles only.
-- Do not display children's year groups in the prototype.
-- Do not attribute public notices using a parent's name plus their child's year group.
-- Use the shared contact address for The FOA rather than individual contact details.
-- The project owner has requested that supplied committee portraits be included.
-- A final names, roles and publication-consent check remains part of pre-launch content approval.
-- The 2026/27 committee names and roles are confirmed: Helen Platt and Sarah Parish, Co-Chairs; Clare Birks and Darren Malone, Co-Treasurers; Nick Caplan and Cristy Amponsah, Co-Comms; Lizzie Grillo, Fundraising Initiatives Lead; Co-Secretary vacant.
-- All seven supplied committee portraits may be used in the design prototype. Higher-resolution replacements are required before production launch.
-
-### Language and internationalisation
-
-- The current prototype is English-first.
-- It includes one Arabic RTL demonstration to validate layout direction.
-- Do not display a six-language selector that only translates part of the site.
-- Published safety, ticketing, accessibility, privacy and operational translations require human review.
-- Language names should be the primary labels; national flags should not stand in for languages.
+- English-first. One Arabic RTL demonstration validates layout direction.
+- Do not show a language selector that translates only part of the site.
+- Safety, ticketing, accessibility, privacy and operational translations require human review.
+- Name languages in text; do not use flags.
 
 ### Ticketing
 
-- The FOA site should not pretend to process payments itself.
-- The MVP will link to a selected external ticketing provider.
-- The ticket-provider CTA must clearly describe that the user is leaving for an external checkout.
-- The current dialog is a prototype placeholder only.
-- Remove unverified promises about payment methods, accounts and instant e-tickets until a provider is selected.
-- The production ticket journey will be a simple normal link to the selected external ticketing site, not an embedded checkout or one built by The FOA.
-- Until the ticket provider and checkout URL are selected, the Fireworks event page must show the non-interactive status “Ticket link to follow.” rather than implying ticket purchase is available.
+- The site never processes payments or issues tickets. The Fireworks ticket journey is a normal link to an external provider, clearly described as leaving the site; no embedded checkout.
+- Until a provider and URL are confirmed, the event page shows the non-interactive status "Ticket link to follow."
+- Remove unverified promises (payment methods, accounts, instant e-tickets).
+- Confirmed Fireworks facts: Thursday 5 November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead; attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
+- Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
+- Christmas Fayre is Saturday 5 December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3 October.
 
 ### Notice Board
 
-- The MVP should be committee-managed and editorial, not an open user-generated feed.
-- Public self-publishing is out of scope for the MVP.
-- Notice submission, if introduced, must be moderated.
-- Notices require publication and expiry dates so stale content is removed.
-- Until approved real notices are supplied, the prototype should show an honest empty state rather than invented public notices.
-
-### Technical direction
-
-- The production frontend is Astro 7 with static output.
-- Typed local Astro content collections are the interim content source until the CMS is selected.
-- The Astro implementation must use separate generated HTML pages and normal path-based links. Do not carry the prototype's hash routing into production.
-- GitHub Pages remains the preferred hosting target.
-- Sanity remains a candidate CMS but has not been finally selected or integrated.
-- Production CSS should be built locally; do not use the Tailwind CDN.
-- Prefer zero client-side JavaScript for static content and small isolated scripts only where interaction is required.
-- Configure production for a custom-domain root rather than a repository subpath. The final hostname is still pending.
-- A contextual event-page return link may be shown only when the visitor arrived from the same-site source route. The Fireworks **Back to What's On** link remains hidden for direct, homepage, external and other internal arrivals.
-
-## 4. Next Steps
-
-This is the ordered backlog to use when asking, "What are the next steps?"
-
-### Prioritised review and launch backlog: 29 September 2026
-
-The categories below consolidate the current outstanding work. Complete P1 items before the full-site launch unless a documented decision defers them. P2 and P3 work is valuable but must not delay the launch-critical work.
-
-#### P1: Launch readiness, privacy and measurement
-
-- **Cookie consent and analytics:** the consent interface, Privacy Notice and consent-controlled Google Analytics integration are complete. Confirm the deployed journey in CI and after the next production release; do not add other optional technologies without extending the notice and consent control.
-- **Operational launch content:** select the external ticketing provider and final URL; confirm event capacity, refunds, cancellation/bad-weather handling, accessibility and data-processing responsibilities; reconfirm Pre-loved Uniform instructions; approve Reps Hub copy; confirm the shared inbox and Google Form ownership, access and retention arrangements recorded as pending in the Privacy Notice.
-- **Launch controls:** move the custom-domain assignment from the holding-page repository, configure root-domain production builds, complete FOA content and brand approval, validate tickets, links and metadata, and perform constrained-connection mobile performance testing.
-
-#### P2: Information architecture and content clarity
-
-- **Committee calls to action:** review whether the Committee page makes the routes to Reps Hub and About The FOA sufficiently clear. If not, replace ambiguous labels with more explicit task-focused calls to action and test them with parents/carers.
-- **About/Committee relationship:** decide whether About The FOA should also include a concise committee summary. Keep the full Committee page as the canonical source; avoid duplicated member details unless there is a clear navigation benefit.
-- **User testing:** run the planned 5–7 parent/carer task-based information-architecture review, including whether visitors understand Get Involved, Reps Hub, About The FOA, the Co-Secretary role and the Fireworks ticket journey.
-- **Committee content:** obtain the remaining replacement high-resolution portraits, complete final publication consent, and decide whether to publish approved short biographies. Nick Caplan's replacement portrait is now in use.
-- **Future content:** decide whether to restore a moderated Community Notice Board; determine final privacy-notice publication timing; consider the low-priority past-event-poster Inspiration archive.
-
-#### P3: Platform and quality improvements
-
-- **Uptime monitoring:** select and configure an external uptime checker for the public `www` domain, including an agreed alert recipient and a documented response owner.
-- **Automated quality:** confirm the first Playwright and axe-core suite in CI. Follow with newsletter-dialog, clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage; add visual regression only after design approval.
-- **Content operations:** select and integrate a CMS only after editor ownership, preview/publishing, annual handover, urgent-update and failed-build procedures are confirmed.
-- **AI-powered support bot:** assess a future AI support bot for common parent/carer questions, including approved knowledge sources, committee ownership, privacy and safeguarding boundaries, human escalation, accessibility, cost and failure handling; do not include it in the static MVP or allow it to answer safety-critical, transactional or sensitive queries without reviewed safeguards.
-- **Optional future enhancements:** publish an accessibility statement after formal testing, consider additional reviewed translations and RTL testing, and evaluate fundraising progress, native sharing, calendar downloads, FAQs and other later-scope work.
-- **Dark mode:** consider a dark mode option as a low-priority follow-up; it is not implemented and must not delay launch work.
-
-### Step 1: Review the current prototype
-
-**Status:** In progress; review has moved to the deployed generated Astro site  
-**Owner:** Project owner and representative stakeholders from The FOA
-
-Review the generated Astro routes on both phone and desktop at `https://nicholascaplan.github.io/foa-website/` or with `npm run dev`. The archived hash-routed prototype in `prototype/` is retained only as a design reference.
-
-Specifically decide:
-
-- Does the warm editorial direction feel like The FOA and Ashley?
-- Is the homepage hierarchy correct?
-- Is Fireworks too dominant or appropriately prominent?
-- Does the serif/sans typography feel trustworthy and approachable?
-- Is the amount of content right for a mobile homepage?
-- Does the navigation terminology make sense to parents?
-- Should the prototype become warmer, more playful or more formal?
-
-### Review decisions: 27 September 2026
-
-- The warm editorial direction, current serif/sans balance and Fireworks prominence are approved for this prototype phase.
-- Keep the current level of playfulness for now.
-- The homepage hierarchy works, but the homepage should not carry all content as a single long page. Move the supporting content to focused routes.
-- Keep the prototype in one fast-loading HTML file while using hash routes to provide focused, non-scrolling page views during review.
-- The phone preview must be instant and must not load a duplicate iframe.
-- Increase the header logo display size.
-- Order primary navigation as Home, What's On, Get Involved and Uniform.
-- The approved logo for The FOA has been supplied and replaces the prototype leaf mark.
-- Ashley School branding must not be used at this stage.
-- Committee names, roles and portraits may be published subject to the existing final pre-publication check. Replace the current low-resolution portraits before production launch.
-- Concise committee biographies are likely wanted. Confirm their wording and presentation in a later content-review step; do not use desktop-only tooltips for core biographical content.
-- If the Community Notice Board returns, the Committee will own its review, expiry and takedowns.
-- Meeting locations and schedules may be public.
-- The Contact Us route now offers the shared email address for The FOA and the approved Google contact form.
-- The draft Privacy route and footer link were removed; no privacy notice is currently published, and the final privacy wording and publication timing remain open.
-- About The FOA now links to Meet the Committee directly below its introductory copy.
-- Reps Hub copy uses ordinal date style, and successful copy-to-clipboard feedback clears after three seconds.
-- Fireworks facts are approved for this prototype. The supplied calendar provides provisional 2026 Uniform sale dates and operating details; these require a final pre-launch confirmation.
-- The supplied calendar confirms the 2026 Preloved Uniform sales: Friday 2 October, Friday 6 November and Friday 4 December, all at 15:25 in the playground and subject to weather. It also confirms Welcome Tea on Saturday 3 October and Fireworks on Thursday 5 November.
-- The project owner confirms Christmas Fayre is Saturday 5 December. The supplied calendar states Saturday 28 November, so treat the calendar entry as superseded and verify the final public date before launch.
-- Ticketing selection and policy decisions remain pending.
-
-### Mobile design review: 28 September 2026
-
-- Remove the persistent prototype-status banner so reviewers can assess the public-facing experience without implementation caveats occupying the first viewport.
-- Mobile pages must show useful task or event information earlier and use a substantially smaller heading scale.
-- On the mobile homepage, place the current featured event before the mission statement for The FOA. Desktop may retain the editorial mission-and-event composition.
-- Remove the "What do you need today?" heading; the task options should be self-explanatory.
-- Event and sale dates that match the visitor's local date should be labelled **Today** or **Tomorrow** automatically. Do not apply these labels to newsletter publication dates or document metadata.
-- The desktop phone-preview mode must use explicit mobile typography because CSS viewport units still refer to the desktop browser viewport when the page body is visually constrained.
-- Desktop breakpoint layouts must also be explicitly neutralised in phone-preview mode. Constraining the body width does not stop desktop media queries from applying to grids and cards.
-- Past-event cards should use a compact image crop with the event summary below it on mobile, rather than a desktop side-by-side layout or a page-dominating poster.
-- Mobile event rows should reserve width for the date and allow titles, details and status labels to wrap naturally without creating narrow text columns.
-- On the mobile homepage, keep the mission paragraph, action buttons and featured event as one compact sequence. Avoid inherited desktop gaps between those elements.
-- The Newsletter view should present one clearly identified Latest Newsletter followed by a Previous Newsletters section, with readable issue formatting rather than a duplicated archive/date column on mobile.
-- The 28th September 2026 Autumn Term News & Fireworks Tickets newsletter is the latest published issue. The supplied Welcome Back from The FOA newsletter is the previous issue, dated 16th September 2026, and its concise summary is shown in the archive.
-- Review responsive behavior down to approximately 320px; at the narrowest supported widths, secondary brand text and multi-column committee layouts may simplify to protect readability.
-
-### Navigation simplification decision: 28 September 2026
-
-- Keep the header and mobile menu focused on four parent-task routes: Home, What's On, Get Involved and Uniform.
-- Remove Newsletter, Committee, Reps Hub and About The FOA from the primary/mobile menu rather than presenting nine equal-priority destinations.
-- Keep Committee, Reps Hub and About The FOA discoverable through Get Involved; keep Newsletter, About The FOA, Contact and policy pages available through the footer and relevant page content.
-
-### Content and route refinement: 28 September 2026
-
-- Use ordinal day formatting in public date copy, including `5th November`, `6th November` and `4th December`.
-- Remove the unpublished Privacy route rather than presenting draft wording as a public page.
-- Keep the final privacy notice as a pre-publication requirement once ownership, processors, retention and contact handling are approved.
-- Provide a prominent About The FOA link to the Committee page near the top of the route.
-- Clear the Reps Hub's successful "Copied to clipboard." status after three seconds.
-
-### Mobile interaction refinement: 28 September 2026
-
-- The homepage quick-action rows no longer animate horizontal padding on hover. The previous padding change could alter text wrapping and shift following rows on touch devices; the interaction now keeps layout dimensions fixed and moves only the arrow with a composited transform.
-- Reduced the mobile homepage gap between the hero action buttons and the quick-action list by removing the stacked hero-bottom and quick-action-top spacing. Desktop spacing is unchanged.
-- The Newsletter archive opens the 16th September issue in a native dialog with its full approved letter content. The reader uses one dynamic-viewport-height scroll region, contains over-scroll and locks page scrolling while open so mobile readers can reliably reach both ends of the issue.
-
-### Session closure decisions: 28 September 2026
-
-- Keep the current static prototype as a temporary single-file, hash-routed review tool.
-- Do not carry hash routing into production. The approved Astro implementation will generate separate pages with normal path-based links.
-- Use `assets/fireworks.jpg` as the current Fireworks image asset.
-- The persistent prototype disclaimer was removed from the review UI.
-- The mobile homepage prioritises the current featured event and no longer uses the “What do you need today?” heading.
-- The Newsletter page now presents the latest issue first and previous newsletters below it. The Back to School issue is shown without an invented publication date.
-- The Newsletter recipient-metadata note was removed from the review UI.
-
-### Astro implementation session closure: 28 September 2026
-
-- All approved views are implemented as separate static Astro 7 routes with normal path-based links.
-- Typed local content collections are the interim source until a CMS is selected.
-- The original review prototype is archived under `prototype/`.
-- Local development is documented in `README.md`: run `npm install` once, then `npm run dev` and open the URL printed by Astro.
-- At that point, automation covered Astro/TypeScript diagnostics, content schema validation, production static generation and dependency auditing.
-- Generated-site smoke and internal-link tests were added in the later GitHub Pages deployment session recorded below.
-- Browser end-to-end and automated accessibility coverage were added in the initial browser-coverage milestone below; visual regression tests remain deferred.
-
-### Local mobile-preview session closure: 28 September 2026
-
-- `src/components/DevMobilePreview.astro` adds a development-only Mobile preview control to the shared layout.
-- The control opens the current route in a real 390px-wide browser window, so the site's normal responsive media queries apply.
-- The control is omitted from production builds and is documented in the README local-development instructions.
-- If the browser blocks the preview window, local pop-ups must be allowed for the Astro development address.
-
-### GitHub Pages review deployment: 28 September 2026
-
-- The repository is `nicholascaplan/foa-website`.
-- Pushes to `main` run the verification gate before GitHub Pages deployment.
-- The initial test suite verifies key homepage content and crawls generated internal links and assets.
-- The review URL is `https://nicholascaplan.github.io/foa-website/`; the final custom domain and DNS remain pending.
-- Astro navigation, metadata and public assets support both the repository review base path and a future root deployment.
-- GitHub Pages is enabled for Actions deployment, and the first gated build and deployment completed successfully.
-- The local `main` branch tracks `origin/main` after fetching the newly created remote branch.
-- The first recommended next action is a real-device phone and desktop review, followed by automated accessibility coverage.
-
-### Deployed asset-path fix: 28 September 2026
-
-- The deployed Committee portraits were not loading because `src/pages/committee.astro` emitted root-relative image URLs such as `/helen.jpeg`, which bypassed the temporary GitHub Pages `/foa-website/` base path.
-- The archived or past-event poster in `src/pages/whats-on.astro` had the same root-relative asset-path issue.
-- Both references now use the shared `withBase()` helper, preserving compatibility with the repository deployment path and the future custom-domain root.
-- The source audit found no other equivalent root-relative asset or internal-route issues.
-- Verification passed with `SITE_URL=https://nicholascaplan.github.io BASE_PATH=/foa-website npm run verify`, including Astro diagnostics, static generation and generated-link/asset checks; `git diff --check` also passed.
-- The next action remains real-device phone and desktop review, followed by automated accessibility coverage.
-
-### Pre-launch holding-page deployment: 28 September 2026
-
-- The production domain is `thefriendsofashley.org`.
-- The custom domain is intentionally assigned to the standalone public repository `nicholascaplan/foa-holding-page`, not the main site repository. This preserves `https://nicholascaplan.github.io/foa-website/` as the full in-progress implementation and review URL.
-- The holding-page repository has a dependency-free static page, `noindex, nofollow` metadata and a GitHub Actions Pages deployment workflow. Its temporary Pages URL is `https://nicholascaplan.github.io/foa-holding-page/`.
-- GitHub Pages deployment for the holding page completed successfully after Pages was enabled for the repository.
-- At 123 Reg, the apex DNS uses GitHub Pages A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`; `www` is a CNAME to `nicholascaplan.github.io`. Previous website A records for the apex, `www` and wildcard host were removed. Existing email, SPF, DKIM, DMARC and nameserver records remain in place.
-- GitHub Pages DNS verification and HTTPS are complete for the holding-page repository. Test both `https://thefriendsofashley.org` and `https://www.thefriendsofashley.org` as part of the normal public-site review.
-- At launch, move the custom-domain assignment from `foa-holding-page` to `foa-website`, update the main deployment to `SITE_URL=https://thefriendsofashley.org` with `BASE_PATH=/`, then verify the generated root-domain site. DNS records can remain unchanged.
-
-### Production-domain build configuration: 30 September 2026
-
-- The `foa-website` GitHub Actions deployment now builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`, producing root-relative production links, metadata, sitemap entries and assets.
-- Launch requires only the GitHub Pages custom-domain reassignment: remove the existing custom domain from `nicholascaplan/foa-holding-page`, add `www.thefriendsofashley.org` to `nicholascaplan/foa-website`, then deploy `main` or manually dispatch the workflow.
-- The existing 123 Reg GitHub Pages DNS records do not need to change. Verify that `https://www.thefriendsofashley.org` loads the site and `https://thefriendsofashley.org` redirects to it after GitHub Pages has issued the certificate for this repository.
-
-### Production HTTPS confirmation: 30 September 2026
-
-- GitHub Pages accepted `www.thefriendsofashley.org`, reported a successful DNS check and enabled **Enforce HTTPS** for the `foa-website` repository.
-- The 123 Reg Standard SSL product is separate from GitHub Pages hosting, is priced at £59.99 annually and is not required for this site. The project owner should cancel it or disable renewal in 123 Reg after confirming the live URLs continue to work.
-- The 123 Reg SSL cancellation and the final apex-to-`www` redirect check are operational follow-ups, not repository changes.
-
-### UX refinement pass: 28 September 2026
-
-- Event status pills were removed from event lists and past-event cards; the event date, title and practical details carry the hierarchy without extra status badges.
-- Uniform sale rows now link directly to the Uniform page, and uniform prices use small amber price tags for clearer scanning.
-- The Uniform page now uses the supplied donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
-- The Co-Secretary email actions now open a pre-addressed email with a subject and a short editable message body.
-- The decorative circle was removed from the Co-Secretary vacancy card after mobile review feedback.
-- Committee names use a stable single-line mobile treatment so names such as Cristy Amponsah do not wrap inconsistently between cards.
-- Unconfirmed Fireworks operational caveats were removed from the public event page. Only confirmed event facts remain visible in this review pass.
-- The supplied Fireworks image is currently reused as a CSS background on the homepage and event page and can take approximately one second to appear on slower connections. Image loading/performance improvement is recorded as a follow-up before launch; optimise/compress or preload the asset after the visual direction is settled.
-
-### Committee vacancy card refinement: 29 September 2026
-
-- The Committee page now presents the vacant Co-Secretary role as an eighth card in the committee grid, completing the desktop row while keeping the vacancy visibly distinct from confirmed members.
-- The vacancy card uses the same border, rounded shell and full-height white role panel as the named member cards. Its upper panel uses a lightly patterned amber surface to signal an invitation rather than a confirmed portrait.
-- The vacancy invitation uses the upright copy "Join the team" rather than "Your name here?", avoiding the impression that text is standing in for a portrait. The "A seat is waiting" pill sits in the upper-right corner, with no stars or angled text.
-- The card links to the shared Co-Secretary enquiry email, and the existing full-width recruitment callout remains below the grid.
-
-### Route and sharing refinement pass: 28 September 2026
-
-- Public-facing copy uses "The Friends of Ashley" on first mention and "The FOA" thereafter, including in titles and labels. Bare "FOA" is not used as the organisation name in copy. Technical identifiers such as the shared email address remain unchanged; this convention is recorded in `docs/STYLE-GUIDE.md`.
-- Contact Us is available in the mobile menu and footer, with the shared email address for The FOA and the approved Google Form link.
-- The supplied Google Form is available as an unlinked, no-indexed experiment at `/playground.html`; the public Contact Us route continues to offer the shared email address for The FOA and an external Google Form link. Confirm form ownership, access, retention and privacy handling before production launch.
-- The public Accessibility page was removed; a public accessibility statement and formal accessibility testing are recorded as lower-priority future work.
-- The Community page was removed from the current Astro implementation, including navigation, footer, homepage actions and expected routes. The notice board remains a possible future feature rather than an active MVP route.
-- Reps Hub messages now include copy-to-clipboard actions with visible success/failure feedback. The cards use date circles but no longer show draft labels, expiry labels, workflow warnings or secondary fact pills.
-- Reps Hub source links are labelled "Learn more" and the page uses class-representative wording rather than prototype/workflow wording.
-- The Fireworks quiet display is scheduled for 17:00 across the current production pages, Reps Hub copy and project record.
-- Homepage quick-action numbers were removed, and the "See what's coming up" CTA uses a right arrow because it navigates to What's On rather than scrolling.
-- The About page's Contribution, Collaboration and Community pillars use compact inline numbers beside their headings, avoiding unnecessary vertical whitespace on mobile while retaining the three-column desktop layout.
-
-### Test strategy: 28 September 2026
-
-- The risk-based automated test strategy is documented in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
-- Existing Astro/TypeScript, build and generated-site link checks remain the fast foundation.
-- The first implementation milestone is Playwright coverage for shared mobile navigation plus representative `axe-core` accessibility scans.
-- Newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage follow in that order.
-- Broad screenshot regression is deferred until the generated-site visual design is approved; CMS, ticket-provider, analytics and locale tests remain conditional on those features being introduced.
-
-### Initial browser coverage: 30 September 2026
-
-- Playwright and `@axe-core/playwright` now run against the locally served production build as part of `npm test` and the deployment verification gate.
-- Browser coverage protects normal navigation to the main task routes and the mobile menu's accessible state, focus restoration, route list, close button, Escape-key and backdrop behaviour.
-- Representative routes and the open newsletter dialog are scanned for serious and critical axe findings. This automated baseline supplements rather than replaces manual accessibility testing.
-- The closed off-canvas mobile menu is now inert, preventing hidden links from receiving keyboard focus.
-- GitHub Actions installs Chromium before verification. Local Chromium execution was subsequently exercised successfully for the navigation suite; the deployment workflow remains the authoritative full-suite run.
-- The next coverage increment is newsletter-dialog and Reps Hub clipboard success/failure behaviour, followed by expanded generated metadata and ordering contracts. These are higher value than adding duplicate page tests because they cover the remaining bespoke client-side interactions and collection-driven deployment contracts.
-
-### Welcome Tea feature and date transition: 30 September 2026
-
-- The homepage hero uses mutually exclusive current-event cards: the intact linked Welcome Tea poster through Saturday 3 October, then the Fireworks editorial card from Sunday 4 October.
-- Welcome Tea is upcoming through Saturday 3 October 2026 and moves to Past events from Sunday 4 October using the UK calendar date. Its homepage poster card hides and Fireworks reveals at the same cutoff.
-- Generated-site coverage verifies the poster asset and both date boundary attributes. Date-placement browser coverage remains required in CI.
-- `astro check`, the production build, generated-site tests and fresh-development HTTP smoke tests passed during this session. Local Playwright execution remains blocked by the sandbox's unavailable bundled Chromium and blocked system Chrome; CI remains the browser verification path.
-- The homepage introduction appears before the current-event card at every viewport, so visitors understand The FOA before seeing an immediate event prompt. The compact poster card has an `Upcoming event` label, a `Welcome Tea` heading and additional spacing before the poster.
-- A global `[hidden] { display: none !important; }` rule protects date-driven visibility. Component `display: grid` and `display: flex` declarations had overridden the browser's default hidden styling, leaving the Welcome Tea visible in Upcoming events even after the Sunday date logic ran successfully; generated-site coverage now verifies the hidden rule is present in built CSS.
-- The confirmed Friday 2 October pre-loved uniform sale is now structured event content, listed at 15:25 in the school playground with its card-only and weather qualification.
-
-### Session closure: 30 September 2026
-
-- The initial browser coverage, CI Chromium installation, Helen portrait replacement, Ashley School footer link, mobile-menu inert state and related documentation/configuration changes are included in the current worktree and are being committed together at the project owner's request.
-- The footer external links were refined after visual review: independent columns prevent the wrapped two-line donation and school links from imposing row gaps on one another.
-- The footer links were rebalanced after a mobile visual review: Ashley School Website now sits in the left column, Donate via JustGiving sits in the right column, and both external-link arrows stay attached to the final words.
-- Nick Caplan's committee portrait reference was updated from `nick.jpeg` to the replacement `assets/nick.jpg`; the previous asset was removed from the tracked asset set.
-
-### JustGiving donations: 28 September 2026
-
-- The confirmed JustGiving charity page is `https://www.justgiving.com/charity/Friends-of-Ashley`.
-- A persistent "Donate via JustGiving" external link is available in the site footer.
-- The About The FOA page repeats the donation action alongside the fundraising-impact content, where visitors have context for how support is used.
-- The task-focused primary navigation and homepage remain unchanged so the donation action does not compete with current events and practical parent tasks.
-
-### Fundraising-progress design review: 29 September 2026
-
-- `fundraising-progress-options.html` is an unlinked, no-index standalone review artifact for a potential fundraising-progress feature.
-- It compares three possible placements: a campaign feature, a compact homepage update and an About The FOA impact-card extension.
-- The comparison uses a provisional £25,000 target and illustrative states at £0, £1,000, £5,000, £12,500, £20,000 and £25,000. No campaign purpose, target, total or update cadence is confirmed for public publication.
-- Before implementation, confirm the fundraising purpose, approved target, data owner and update process, donation action, homepage placement and end-of-campaign treatment.
-
-### Step 2: Confirm brand inputs
-
-**Status:** Partially confirmed
-
-- The approved logo for The FOA is available in `assets/FOA Logo.jpg`.
-- Do not use Ashley School branding at this stage.
-- `assets/logo-big.png` is better treated as a brand-purpose/three-pillars graphic than as the primary logo. Its strongest potential placement is beside the About The FOA or homepage purpose section.
-- Do not add `logo-big.png` to the public prototype until use of its embedded Ashley School mark is approved or a school-mark-free version is supplied.
-- If approved, keep its contribution, collaboration and community messages as accessible HTML text rather than relying on small text embedded in the image.
-- Obtain any official colour values and brand-use restrictions.
-- The prototype leaf mark is replaced by the approved logo for The FOA.
-- System fonts remain the default. Future self-hosted typography directions can be reviewed when a final brand refinement is needed.
-
-### Content confirmations: 28 September 2026
-
-- The Christmas Fayre is confirmed for Saturday 5 December 2026; the earlier 28 November calendar entry is superseded.
-- Rachel and Sophie are leading the 2026 Christmas Fayre.
-- The existing charity wording and registered charity number are confirmed as correct.
-- The Fireworks facts in the 28 September newsletter are confirmed: Thursday 5 November, 16:30-18:30, quiet display at 17:00, main display at 18:00, tickets £8.50 per person, under-2s free, and Helen Platt as event lead.
-- Confirmed Fireworks attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
-- The newsletter confirms Pre-loved Uniform prices as £3 for coats and new-logo items, £1 for all other items, with card-only payment.
-- The archived prototype intentionally shows the Welcome Tea as completed. The production Astro site now reflects its live event state: it is featured on the homepage and listed under Upcoming events through 3 October 2026, then moves automatically to Past events on 4 October in UK time.
-- Sold-out and cancelled event treatments are private prototype patterns only and must not be presented as real event statuses from The FOA.
-- Reps Hub messages are available as shareable copy with copy-to-clipboard actions, subject to final content approval from The FOA.
-
-### Step 3: Confirm content and public-data policy
-
-**Status:** Substantially confirmed; final portrait replacement and biography decisions remain required before launch
-
-- Committee names and roles are confirmed and may be published.
-- Confirm final publication consent for the supplied portraits before production launch.
-- Concise committee biographies are likely wanted; copy and presentation remain to be confirmed.
-- Confirm that child year groups will not be published, or document a different consented decision.
-- Define notice-board attribution rules.
-- The Committee owns notice review, expiry and takedowns.
-- Meeting locations and schedules may be public.
-- Confirm the wording of the inclusive membership statement for The FOA against the constitution of The FOA.
-
-### Step 4: Verify remaining operational content
-
-**Status:** Pending and required before launch
-
-- Charity number and current organisation wording are confirmed.
-- Core Fireworks date, time, price, under-two policy, attractions and event lead are confirmed; verify remaining capacity, refund, weather and accessibility details.
-- Verify Uniform sale dates, prices and the review-provided donation instruction against the latest operational guidance from The FOA before launch.
-- Committee membership and roles for 2026/27 are confirmed.
-- The supplied Co-Secretary role description confirms a manageable, termly role that can be done solo or shared: agree agendas with the Co-Chairs, send reminders and agendas, take and share meeting minutes roughly once a term, maintain licences and compliance documents, and help organise the shared Google Drive. The shared email for The FOA remains the public contact route; the outgoing secretaries can provide an informal chat before commitment.
-- Confirm who is authorised to approve website content.
-
-### Step 5: Select ticketing approach
-
-**Status:** Pending and required before event implementation
-
-- Select the external ticketing provider.
-- Confirm provider fees and ownership by The FOA.
-- Confirm capacity and whether the confirmed £8.50 standard ticket and free under-two entry require advance reservation by ticket type.
-- Confirm refunds, cancellations and bad-weather handling.
-- Confirm checkout accessibility and data-processing responsibilities.
-- Add the provider's real URL as a normal external link.
-
-### Step 6: Extend the design prototype
-
-**Status:** In progress; first extended content and mobile refinement passes completed
-
-Design and implement higher-fidelity versions of:
-
-Implemented in the current hash-routed review prototype:
-
-1. What's On index with separated upcoming and past events
-2. Uniform hub using the latest confirmed newsletter details
-3. Get Involved landing page
-4. Committee page with all seven confirmed members
-5. Reps Hub with shareable class-representative messages and copy-to-clipboard actions
-6. Community Notice Board deferred from the current public implementation
-7. About The FOA and funding-impact view
-8. Contact view
-9. Newsletter page with latest and previous newsletter sections
-10. Welcome Tea completed-event example
-11. Private prototype sold-out, cancelled and completed state patterns
-
-Still to refine after stakeholder review:
-
-- Final Reps Hub copy approval and native-share feedback
-- Decide whether to restore a public Community Notice Board route and define approved content and stale-content behavior
-- Decide when and how to publish the final privacy notice
-- Final biographies and replacement committee portraits
-- Final external ticket link and remaining event policies
-- Consider a low-priority archive of all previous event posters, billed as **Inspiration**. Decide later whether it belongs on a standalone page, with room to experiment with different arrangements, or within What's On.
-
-### Step 7: Test the information architecture
-
-**Status:** Pending extended prototype
-
-Run lightweight user testing of the information architecture with approximately 5–7 parents or carers, including at least one person who uses English as an additional language. This is short task-based usability testing, not a formal research programme: ask participants to find specific information without coaching and record where they hesitate, misinterpret labels or miss content.
-
-Suggested tasks:
-
-1. Find the Fireworks start time and whether tickets are available.
-2. Find where to donate uniform.
-3. Find the next uniform sale.
-4. Copy the Fireworks information for a class WhatsApp group.
-5. Understand what the Co-Secretary role involves.
-6. Review whether a future Community Notice Board should return.
-
-Record where people hesitate, misinterpret labels or miss information.
-
-### Step 8: Approve production architecture
-
-**Status:** Partially complete; frontend and hosting shape confirmed, CMS and operations pending
-
-- Astro 7 static output is confirmed and implemented.
-- GitHub Pages repository ownership is confirmed under `nicholascaplan/foa-website`; the review deployment uses the repository path while the final hostname and DNS remain pending.
-- Typed local content collections are confirmed as the interim source.
-- Confirm Sanity or select another content-management approach.
-- Confirm CMS ownership, editor list and annual handover process.
-- Confirm preview and publishing workflow.
-- Confirm secure CMS-to-GitHub build triggering.
-- Confirm urgent-update and failed-build procedures.
-- Confirm the Google Analytics property, measurement ID and reporting requirements.
-
-### Step 9: Build the production site
-
-**Status:** Substantially complete; production static implementation and deployment are in place, with operational launch cleanup remaining
-
-- Astro 7 is initialised.
-- Approved prototype components and tokens are migrated.
-- All expected routes and initial typed content collections are implemented.
-- Integrate the selected CMS.
-- Optimise production images and provide final image dimensions once replacement portraits are supplied.
-- Canonical and social metadata, Event structured data, sitemap and robots rules are implemented.
-- Add privacy and safeguarding content.
-- No Privacy route is currently published; approved final wording and publication timing remain pending. A public Accessibility page is deferred.
-- Type/build checks, generated-site contracts, Chromium navigation journeys, representative automated accessibility scans and a gated GitHub Pages deployment workflow are implemented.
-
-### Step 10: Verify and launch
-
-**Status:** In progress; production deployment is complete and final operational/content verification remains
-
-- Content review by The FOA.
-- School/brand approval where required.
-- Low-priority accessibility statement and formal accessibility testing.
-- Mobile performance testing on a constrained connection.
-- RTL testing if a translated locale is included at launch.
-- Link and metadata validation.
-- Ticket-provider end-to-end testing.
-- CMS editor training and handover documentation.
-- DNS and GitHub Pages launch.
-
-## 5. Further Clarifications and Design Decisions Needed
-
-### Brand and tone
-
-- Is there an approved logo for The FOA?
-- Can the Ashley School logo, name or visual identity be used, and under what restrictions?
-- Can the embedded Ashley School mark in `assets/logo-big.png` be published, or can The FOA provide a version without it?
-- Should the final tone lean slightly more playful, more formal or remain as currently prototyped?
-- Is a serif display typeface acceptable for The FOA?
-- Is occasional illustration desired, or should typography and simple graphics remain the main visual language?
-
-### Homepage and navigation
-
-- Should Fireworks remain the dominant homepage event while tickets are on sale?
-- What replaces it when the event is completed?
-- Is "What's On" preferred to "Events"?
-- Is "Get Involved" understood to include Committee and Reps, or should Committee be directly visible?
-- Does Uniform deserve a permanent top-level navigation item year-round?
-- Should the language control appear in the main header at launch?
-
-### Committee and privacy
-
-- Which names may be published?
-- Has each committee member completed the final pre-publication check for their name, role and portrait?
-- Are individual biographies useful, and who approves them?
-- Should the committee page show elected dates or terms?
-- Is the shared Gmail address the permanent public contact route?
-- Confirm ownership, retention and access handling for the Google contact form.
-
-### Events and ticketing
-
-- Which ticketing provider will be used?
-- Is Fireworks recurring content with a stable URL or a year-specific event URL?
-- Are attractions included in the entry price?
-- What exactly makes the quiet display quieter?
-- Is there a quieter viewing area?
-- What step-free, toilet, first-aid and parking information is confirmed?
-- What are the event cancellation and refund policies?
-- Who is the event-day contact?
-
-### Uniform
-
-- Confirmed prices are £3 for coats and new-logo items and £1 for all other items.
-- What items are accepted or rejected as donations?
-- Must donations be washed, labelled or bagged?
-- How often is the donation bin emptied?
-- Are sale dates regular or ad hoc?
-- The newsletter confirms card-only payment.
-- Can families request particular sizes between sales?
+- Deferred; no public route. If introduced, it is editorial and committee-managed: no unmoderated publishing, notices need publication and expiry dates, and the Committee owns review, expiry and takedowns.
+- Show an honest empty state rather than invented notices.
 
 ### Reps Hub
 
-- Is the page public or intentionally unlisted?
-- Who writes and approves messages?
-- Should messages support both clipboard copy and native device sharing?
-- Should messages be available in translated versions?
-- How should expired messages disappear?
-- What canonical production domain will messages use?
+- Messages are shareable copy with copy-to-clipboard actions, visible success/failure feedback (success clears after three seconds), class-representative wording and "Learn more" links to canonical pages. No draft or workflow labels in public copy.
+- The Fireworks quiet display is scheduled for 17:00 across all pages and messages.
 
-### Community Notice Board
+### Contact, donations and analytics
 
-- Can parents submit notices, or only contact The FOA by email?
-- Which notice categories are permitted?
-- Are commercial services allowed?
-- Who moderates and approves notices?
-- What is the standard expiry period?
-- Will author names ever be displayed?
-- What is the safeguarding and takedown procedure?
+- Contact Us offers the shared email address and the approved Google Form. The form is unlinked/no-indexed at `/playground.html` as an experiment only.
+- A persistent **Donate via JustGiving** link (`https://www.justgiving.com/charity/Friends-of-Ashley`) is in the footer, repeated on About The FOA beside the fundraising-impact content. Navigation and homepage remain free of it so it does not compete with events and tasks.
+- Google Analytics (`G-V2X8ZMQ5XZ`) is consent-controlled: the tag is absent until a visitor selects **Allow analytics cookies**. Rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. The banner is non-blocking, remembers the choice locally and is reopenable from the footer.
+- Required Google Analytics property settings: 2-month event/user retention with reset-on-activity disabled; Google Signals and user-provided data disabled; email redaction active; no advertising, cross-domain or connected-site integrations.
+- Do not add other optional technologies without extending the Privacy Notice and consent control.
+- The Privacy Notice at `/privacy/` covers website enquiries, the external Google Form and consented analytics. Shared-inbox and Google Form retention are recorded as pending.
 
-### Languages
+### Technical direction
 
-- Which languages are genuinely needed at launch?
-- Who will translate and review them?
-- Which pages require full translation?
-- Is English plus browser translation acceptable for MVP?
-- Should locale-specific URLs be public and indexed?
-- Who owns updates when English source content changes?
+- Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
+- Typed local content collections are the interim source for events, newsletters and committee members until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
+- CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
+- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter dialog, Reps Hub clipboard actions and the cookie banner.
+- GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
+- Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page.
+- The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
+- Asset URLs must go through the shared `withBase()` helper so the site works at both root and the temporary `/foa-website/` base path.
+- Development-only controls (Mobile preview, Reset cookie consent) are omitted from production builds.
 
-### Content management and operations
+## 3. Scope
 
-- The current repository owner is `nicholascaplan`; confirm whether production ownership should later move to an account or organisation managed by The FOA.
-- Who owns the Sanity project if selected?
-- Which committee members need editing access?
-- How are editors added and removed each school year?
-- Who responds when a build fails?
-- What is the acceptable delay between publishing and the public site updating?
-- How are urgent cancellations published if automation fails?
+### MVP (delivered or in progress)
 
-### Analytics and measurement
+Responsive homepage; What's On with earlier-this-year section; reusable event pages and the Fireworks 2026 page; external ticket link; Pre-loved Uniform hub; Get Involved, Committee and the Co-Secretary vacancy; Reps Hub; Meeting Minutes archive; Newsletter; About The FOA and three pillars; shared contact route; Privacy Notice; SEO metadata, sitemap and canonical URLs; GitHub Pages deployment.
 
-- Is analytics needed at all for MVP?
-- What decisions would analytics support?
-- Is counting ticket clicks and popular utility pages sufficient?
-- Is a privacy-preserving analytics provider acceptable if it creates a cost?
+### Later scope
 
-## 6. Scope
+See [`ACTIONS.md`](ACTIONS.md) → Later.
 
-### MVP scope
-
-The MVP is a static, committee-managed public website containing:
-
-- Responsive homepage
-- What's On list
-- Clearly separated earlier-this-year/past-events section within What's On
-- Reusable event detail pages
-- Fireworks on the Field 2026 page
-- External ticket-provider links
-- Pre-loved uniform hub
-- Get Involved page
-- Committee page
-- Co-Secretary vacancy
-- Reps Hub with approved share templates
-- About The FOA and three pillars
-- Shared contact information
-- Privacy notice
-- Safeguarding/contact guidance where appropriate
-- SEO metadata, sitemap and canonical URLs
-- GitHub Pages deployment
-- CMS-managed time-sensitive content, if Sanity is approved
-
-### Potential later scope
-
-- Accessibility statement and formal accessibility testing
-- Dark mode option (low priority; not implemented)
-- Additional fully translated locales
-- Native device sharing improvements
-- Add-to-calendar downloads
-- Form-based notice submissions with moderation
-- Funding-impact stories
-- Meeting minutes or governance document archive
-- Additional event types and recurring events
-- Privacy-preserving analytics
-- Newsletter signup if an approved platform and consent process exist
-- FAQs page (low priority)
-
-### Explicitly out of scope for MVP
+### Out of scope for MVP
 
 - Auctions or bidding
-- Processing payments directly on the site for The FOA
-- Issuing tickets directly from the site for The FOA
-- User accounts for parents
-- An open, unmoderated community feed
-- Public self-service notice publishing
+- Processing payments or issuing tickets on the site
+- Parent accounts or custom authentication on GitHub Pages
+- An open, unmoderated community feed or public self-service notice publishing
 - Internal committee task management
-- Storing child information
-- Publishing child year groups alongside named adults by default
-- Custom authentication on GitHub Pages
-- A guarantee of six complete languages at launch
+- Storing child information, or publishing child year groups alongside named adults
+- A guarantee of six complete languages
 - Real-time dynamic content without a static rebuild
 - Dependence on a large professional photography library
 
-## 7. Requirements
+## 4. Requirements
 
-### 7.1 Functional requirements
+### 4.1 Functional
 
-#### Global navigation
+**Global navigation**
+- Home, What's On, Uniform and Get Involved are reachable from every public page.
+- Mobile navigation is a real menu. Back, forward, refresh, bookmarks and shared links work through real URLs. The current page is identifiable.
 
-- Users must be able to reach Home, What's On, Uniform and Get Involved from every public page.
-- Mobile navigation must be an actual menu, not a page-cycling control.
-- Browser back, forward, refresh, bookmarks and shared links must work through real URLs.
-- The current page must be identifiable in navigation.
+**Homepage**
+- Show the most important current event prominently; direct routes to current events, uniform and Reps Hub; an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
 
-#### Homepage
+**What's On**
+- Upcoming events in chronological order, each with date, name, time, location and status where available.
+- Past events separated under **Earlier this year**, with completed-event styling and no ticket calls to action.
+- Event data model supports upcoming, on-sale, sold-out, cancelled and completed states.
 
-- Show the most important current event or announcement prominently.
-- Show direct routes to current events, uniform and Reps Hub.
-- Show an upcoming-event preview.
-- Show current volunteer needs.
-- Explain The FOA's purpose and three pillars without displacing practical information.
-- Show public contact and charity information in the footer.
+**Event pages**
+- Title, date, time, location, schedule and concise summary; ticket price and external link where relevant, clearly identified as external.
+- Accessibility and practical-attendance information, cancellation/refund information (or a link), attractions and FAQs where relevant, and a last-reviewed date for operational information.
+- No unverified provider or accessibility claims.
 
-#### What's On
+**Uniform**
+- How and where to donate; next confirmed sale date, time and location; price list; accepted/rejected items; payment methods; a contact route for questions or size requests if supported.
 
-- Show upcoming events in chronological order.
-- Each item must include date, name, time, location and status where available.
-- Past events must not remain mixed into the upcoming list.
-- Show a clearly labelled **Earlier this year** section below upcoming events for selected completed events from the current year.
-- Use completed-event styling and wording so past events are clearly distinguished from current opportunities or ticket calls to action.
-- Include Welcome Tea in the first past-events content pass, using `assets/welcome tea.png` to verify the poster details.
-- Events must support upcoming, on-sale, sold-out, cancelled and completed states.
+**Get Involved and Committee**
+- Explain that meetings are informal and open to all; show current approved committee names and roles and active vacancies; explain time commitment and support; provide the shared contact action; expose no unnecessary information about children.
 
-#### Event pages
+**Reps Hub**
+- Approved, current messages, each linking to the canonical source page, with visible copy success/failure feedback. Native sharing optional. Messages need review and expiry dates; stale messages must not appear as current.
 
-- Show event title, date, time, location, schedule and concise summary.
-- Show ticket price and external ticket link where relevant.
-- Clearly identify external checkout behavior.
-- Show accessibility and practical-attendance information.
-- Show cancellation/refund information or a link to it.
-- Support attractions and FAQs where relevant.
-- Display a last-reviewed or last-updated date for operational information.
-- Avoid publishing unverified provider or accessibility claims.
+**Community Notice Board (if restored)**
+- Only committee-approved notices, each with a category, publication state and expiry date; expired notices excluded automatically; no unmoderated publishing; a takedown/contact route.
 
-#### Uniform
+**Language support**
+- Correct document language; RTL set at document level; shareable locale routes if several locales launch; predictable and honest fallback; human review for safety-critical and transactional translations.
 
-- Explain how and where to donate.
-- Show the next confirmed sale date, time and location.
-- Show the current price list.
-- Explain accepted and rejected items.
-- Explain available payment methods.
-- Include a contact route for questions or size requests if The FOA supports them.
+**Content management (once a CMS exists)**
+- Non-technical editors can update time-sensitive content without code, preview before release, with validated required fields and dates, publication/expiry support, static rebuild on publish, and failed builds visible to an identified owner.
 
-#### Get Involved and Committee
+### 4.2 Non-functional
 
-- Explain that meetings are informal and open to all.
-- Show current approved committee names and roles.
-- Show active volunteer vacancies.
-- Explain expected time commitment and available support.
-- Provide a shared contact action for The FOA.
-- Do not expose unnecessary information about children.
+**Mobile and responsive**
+- Mobile-first from approximately 320px upward, with deliberate tablet and desktop layouts. Touch targets around 44×44 CSS pixels. Nothing important depends on hover.
+- At the narrowest widths, secondary brand text and multi-column layouts may simplify to protect readability.
+- On mobile, show useful task or event information early with a restrained heading scale.
 
-#### Reps Hub
+**Accessibility**
+- Target WCAG 2.2 AA. Semantic landmarks, headings, lists, links, buttons and forms; skip link and visible keyboard focus; do not rely on colour, icons or emoji alone; announce asynchronous feedback; respect `prefers-reduced-motion`; support 200% zoom and text enlargement.
+- Keep important body copy comfortably readable; avoid tiny text.
 
-- Show approved, current share messages.
-- Each message must link to the canonical source page.
-- Copy actions must show visible success or failure feedback.
-- Native sharing may be offered where supported.
-- Messages must have review and expiry dates.
-- Stale or superseded messages must not remain presented as current.
+**Performance**
+- Static rendering; no client JavaScript for non-interactive content; local CSS; system fonts or a minimal self-hosted set; optimised images with declared dimensions; test under representative mobile network conditions.
 
-#### Community Notice Board
+**Privacy and safeguarding**
+- Collect no personal information unless necessary for an approved feature. No CMS write credentials or private data in client code. Complete the publication-consent check for portraits and any biographies. Avoid child associations. Publish a privacy notice describing processors and retention. Define moderation, expiry and takedown for notices.
 
-- Show only committee-approved notices.
-- Each notice must have a category, publication state and expiry date.
-- Expired notices must be automatically excluded from public pages.
-- The public site must not allow direct unmoderated publishing.
-- A takedown/contact route must be available.
+**Security**
+- HTTPS via GitHub Pages. Secrets only in approved deployment secret stores; never GitHub tokens in webhook URLs or client code. Least-privilege CMS roles. A practical Content Security Policy compatible with required providers. Render external CMS content safely.
 
-#### Language support
+**SEO and sharing**
+- Unique titles and descriptions; canonical URLs; sitemap and robots; Open Graph; accurate Organisation and Event structured data; `hreflang` only for complete shareable locale routes; a useful 404.
 
-- The document language must be set correctly.
-- RTL locales must set direction at the document level.
-- Locale routes must be shareable if multiple locales launch.
-- Missing translations must fall back predictably and honestly.
-- Safety-critical and transactional translations require human review.
+**Maintainability**
+- Reusable layouts and components; central design tokens; **event facts in one structured source** rather than duplicated strings; documented content ownership and annual committee handover; build and deployment instructions in the repository.
 
-#### Content management
+## 5. Technical Specification
 
-- Non-technical editors must be able to update events and time-sensitive content without editing code.
-- Editors must be able to preview content before public release.
-- Content models must validate required fields and dates.
-- Time-sensitive content must support publication and expiry.
-- Publishing must trigger or schedule a static rebuild.
-- Failed publishes/builds must be visible to an identified owner.
-
-### 7.2 Non-functional requirements
-
-#### Mobile and responsive behavior
-
-- Design mobile-first for common phone widths from approximately 320px upward.
-- Provide deliberate tablet and desktop layouts rather than stretching mobile cards.
-- Essential touch targets should be at least approximately 44 by 44 CSS pixels.
-- Important information must not depend on hover.
-
-#### Accessibility
-
-- Target WCAG 2.2 AA.
-- Use semantic HTML landmarks, headings, lists, links, buttons and forms.
-- Provide a skip link and visible keyboard focus.
-- Do not rely on colour, icons or emoji alone to convey meaning.
-- Announce asynchronous interaction feedback to assistive technology.
-- Respect `prefers-reduced-motion`.
-- Support 200% browser zoom and mobile text enlargement.
-- Test keyboard navigation and representative screen readers before launch.
-
-#### Performance
-
-- Use static rendering for public content.
-- Avoid client-side JavaScript for content that does not require interaction.
-- Build CSS locally.
-- Do not use runtime Tailwind CDN compilation.
-- Prefer system fonts or self-host a minimal font set.
-- Optimise any images and declare their dimensions.
-- Test the deployed site under representative mobile network conditions.
-
-#### Privacy and safeguarding
-
-- Collect no personal information unless necessary for an approved feature.
-- Do not expose CMS write credentials or private data in client-side code.
-- Complete the final publication-consent check for portraits and any future personal biographies.
-- Avoid publishing child associations or identifying details without a documented requirement and consent.
-- Publish a privacy notice describing processors and retention.
-- Define moderation, expiry and takedown processes for notices.
-
-#### Security
-
-- Use HTTPS through GitHub Pages/custom-domain configuration.
-- Keep secrets only in approved deployment secret stores.
-- Do not expose GitHub tokens in Sanity webhook URLs or client code.
-- Apply least-privilege CMS roles.
-- Add a practical Content Security Policy compatible with required providers.
-- Treat external CMS content as untrusted and render it safely.
-
-#### SEO and sharing
-
-- Provide unique page titles and descriptions.
-- Define canonical URLs.
-- Generate a sitemap and robots rules.
-- Add Open Graph metadata.
-- Add accurate Organisation and Event structured data where applicable.
-- Add `hreflang` only for complete, shareable locale routes.
-- Provide a useful 404 page.
-
-#### Maintainability
-
-- Use reusable page layouts and components.
-- Keep design values in central tokens.
-- Keep event facts in one structured source rather than duplicating strings.
-- Document content ownership and annual committee handover.
-- Keep build and deployment instructions in the repository.
-
-## 8. Technical Specification
-
-### 8.1 Proposed production architecture
+### 5.1 Current architecture
 
 ```text
-Sanity Studio or approved CMS
-        |
-        | publish event / notice / committee content
-        v
-Authenticated build trigger
+Typed Astro content collections (src/content/)
         |
         v
-GitHub Actions
-        |
-        | Astro static build
+GitHub Actions: check -> build -> site tests -> Playwright/axe
+        |  (all must pass)
         v
-GitHub Pages + custom domain
+GitHub Pages at www.thefriendsofashley.org
         |
-        +--> External ticket provider for payment and ticket issuance
+        +--> External ticket provider (payment and ticket issuance)
 ```
 
-### 8.2 Frontend
+Source layout:
 
-- Framework: Astro, static output mode.
-- Language: TypeScript where JavaScript is required.
-- Styling: project CSS tokens and component styles; Tailwind may be considered only if it improves maintainability and is built locally.
-- Client JavaScript:
-  - Mobile menu
-  - Clipboard and native sharing
-  - Small accessible disclosures/dialogs
-  - Optional consent controls if analytics or embeds require them
-- Avoid a client-side single-page application router.
-- Produce real static routes for every public page.
-- Navigation must use normal links between those routes, not fragment identifiers that swap views within one document.
+- `src/pages/`: one `.astro` file per route
+- `src/layouts/`, `src/components/`: shared shell, navigation, event and content components
+- `src/content/`: typed collections for events, newsletters and committee members
+- `src/styles/global.css`: design tokens and responsive component styles
+- `assets/`: brand assets, event images, committee portraits and source documents
+- `tests/site.test.mjs`, `tests/e2e/`: generated-site and browser tests
+- `prototype/`, `fundraising-progress-options.html`: archived/unlinked design references
+- `.github/workflows/deploy.yml`: build, verify and deploy
 
-### 8.3 Expected routes
+### 5.2 Hosting, domain and deployment
 
-```text
-/
-/whats-on/
-/events/fireworks-2026/
-/uniform/
-/get-involved/
-/committee/
-/reps/
-/about/
-/contact/
-/newsletter/
-/404.html
-```
+- Pushes to `main` run `npm run verify`; `dist/` is uploaded and deployed only if it passes, with concurrency so older builds cannot overwrite newer ones. The workflow installs Chromium for Playwright.
+- The workflow builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`. The canonical domain is `www.thefriendsofashley.org`, with HTTPS enforced by GitHub Pages; the apex domain redirects to `www`. `SITE_URL` is not needed for ordinary local development.
+- DNS is at 123 Reg: apex A records point to GitHub Pages (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` is a CNAME to `nicholascaplan.github.io`. Existing email, SPF, DKIM, DMARC and nameserver records must not be changed.
+- The custom domain is assigned to this repository (`nicholascaplan/foa-website`). The earlier pre-launch holding page lives in `nicholascaplan/foa-holding-page` and no longer holds the domain.
+- The temporary repository-path review deployment at `https://nicholascaplan.github.io/foa-website/` uses a `/foa-website/` base path; it is not the canonical configuration. Navigation, metadata and assets must keep working at both root and base paths.
+- Define a failed-production-build notification route and preview builds before CMS publication (see [`ACTIONS.md`](ACTIONS.md)).
 
-Final event URL conventions remain an open decision. Stable recurring URLs can be supported with redirects if year-specific event records are used.
+### 5.3 CMS (not selected)
 
-### 8.4 Hosting and deployment
+Sanity is the candidate, not a dependency. Do not select or integrate a CMS until content ownership, editor access, preview and publishing workflows are confirmed. Required capabilities: friendly authentication for non-technical volunteers, structured schemas, draft preview, role-based access, validation, publication and expiry dates, image handling, API access during static builds, secure build triggering, and clear ownership with yearly access handover. Sanity pricing, editor limits, authentication and webhook behaviour must be revalidated before adoption.
 
-- Host generated static assets on GitHub Pages.
-- Configure Astro `site` and `base` for the final custom domain/repository arrangement.
-- Deploy using GitHub Actions.
-- Use deployment concurrency to prevent older builds overwriting newer ones.
-- Configure a custom domain and HTTPS.
-- Add build validation before deployment.
-- Define a notification route for failed production builds.
-- Provide preview builds or a separate preview environment before CMS publication.
+If adopted, the build would be triggered by an authenticated CMS publish event.
 
-### 8.5 CMS
+### 5.4 Minimum content models
 
-Sanity is the current candidate, not a final dependency.
+Models for a future CMS (current Astro collections cover events, newsletters and committee members). Do not include child information by default.
 
-Required CMS capabilities:
+- **Site settings:** site name, school relationship wording, charity number, shared contact address, social links, default locale, footer/legal links.
+- **Event:** title, slug, summary, start/end date-time and timezone, location, status, schedule items, ticket products/prices, external ticket URL, ticket availability, past-event display state and current-year archive inclusion, attractions, accessibility information, weather/cancellation and refund information, FAQs, publish/expiry dates, last reviewed date, SEO metadata, locale and translation review state.
+- **Committee member:** display name, role, optional approved biography, optional consented portrait, display order, start/end dates, visibility status, consent/review date.
+- **Role vacancy:** title, summary, responsibilities, estimated time commitment, support/handover details, contact action, status, opening/closing dates.
+- **Uniform information:** donation location and instructions, accepted/rejected items, sale dates, price rows, payment methods, contact/help text, last reviewed date.
+- **Rep message:** title, body, canonical page, locale, approval status, publish/expiry dates, last reviewed date.
+- **Notice (if restored):** title, summary/body, category, activity date-time, location, approved attribution, moderation status, publish/expiry dates, takedown state, internal moderation notes.
 
-- Friendly editor authentication for non-technical volunteers
-- Structured schemas
-- Draft preview
-- Role-based access
-- Validation
-- Publication and expiry dates
-- Image handling
-- API access during static builds
-- Secure build-trigger integration
-- Clear ownership and yearly access handover
+### 5.5 Internationalisation
 
-Sanity pricing, editor limits, authentication behavior and webhook/build integration must be revalidated against the current product before adoption.
+- Locale-prefixed routes if several languages launch (for example `/ar/`, `/pl/`); correct `<html lang>` and `<html dir>`; locale-aware formatting; stored translation status and source revision; no silent mixing of incomplete English and translated content; defined fallback; `hreflang` for complete equivalents; test with genuine Arabic and Urdu content.
 
-### 8.6 Minimum content models
+### 5.6 Ticket integration
 
-#### Site settings
+- Payments and ticket issuance stay with the external provider. A normal external link is preferred; use an embed only if the provider officially supports it and it passes accessibility, privacy, cookie and CSP review. Show ticket availability only from a reliable data source. Never expose provider secret keys in browser code.
 
-- Site name
-- School relationship wording
-- Charity number
-- Shared contact address
-- Social links
-- Default locale
-- Footer and legal links
+### 5.7 Quality gates
 
-#### Event
+Required before launch and enforced in CI where noted:
 
-- Title
-- Slug
-- Summary
-- Start and end date/time
-- Timezone
-- Location
-- Event status
-- Schedule items
-- Ticket products and prices
-- External ticket URL
-- Ticket availability
-- Past-event display state and whether the event is included in the current-year archive
-- Attraction list
-- Accessibility information
-- Weather/cancellation information
-- Refund information
-- FAQs
-- Publish and expiry dates
-- Last reviewed date
-- SEO metadata
-- Locale and translation review state
-
-#### Committee member
-
-- Public display name
-- Role
-- Optional approved biography
-- Optional consented portrait
-- Display order
-- Start/end dates
-- Visibility status
-- Consent/review date
-
-Do not include child information by default.
-
-#### Role vacancy
-
-- Role title
-- Summary
-- Responsibilities
-- Estimated time commitment
-- Support/handover details
-- Contact action
-- Status
-- Opening/closing dates
-
-#### Uniform information
-
-- Donation location and instructions
-- Accepted/rejected items
-- Sale dates
-- Price rows
-- Payment methods
-- Contact/help text
-- Last reviewed date
-
-#### Rep message
-
-- Title
-- Body
-- Related canonical page
-- Locale
-- Approval status
-- Publish and expiry dates
-- Last reviewed date
-
-#### Notice
-
-- Title
-- Summary/body
-- Category
-- Activity date/time
-- Location
-- Approved attribution, if any
-- Moderation status
-- Publish date
-- Expiry date
-- Takedown state
-- Internal moderation notes
-
-### 8.7 Internationalisation
-
-- Use locale-prefixed routes if multiple languages launch, for example `/ar/` and `/pl/`.
-- Set `<html lang>` and `<html dir>` correctly per route.
-- Use locale-aware date, time, number and currency formatting.
-- Store translation status and source revision.
-- Do not silently mix incomplete English and translated content.
-- Define fallback behavior for untranslated pages.
-- Use `hreflang` for complete equivalents.
-- Test layouts with genuine Arabic and Urdu content.
-
-### 8.8 Ticket integration
-
-- Payments and ticket issuance remain with the external provider.
-- Prefer a normal external link for MVP.
-- Use an embed only if the selected provider officially supports it and it passes accessibility, privacy, cookie and CSP review.
-- The FOA site may display ticket availability only if the data source is reliable.
-- Never expose ticket-provider secret keys in browser code.
-
-### 8.9 Analytics
-
-- Google Analytics is a confirmed implementation requirement and must remain on the production-site backlog.
-- Add Google Analytics only after defining the concrete questions it must answer and confirming the correct property and measurement ID.
-- Prefer privacy-preserving aggregate measurement.
-- Do not send names, email addresses, ticket identifiers or notice content.
-- Implement consent before non-essential cookies or tracking where legally required.
-- Document the final consent, retention and event-measurement approach before launch.
-
-### 8.10 Quality gates
-
-Before launch, the implementation should pass:
-
-- Formatting and linting
-- Type checking
-- Production build
-- Broken-link checking (implemented for generated internal links and assets)
-- Automated accessibility checks
-- Keyboard testing
-- Representative screen-reader testing
-- Responsive visual checks
-- Mobile performance checks
+- Type checking and content validation (`npm run check`; CI)
+- Production build (CI)
+- Generated-site contracts, including internal links and assets (CI)
+- Playwright navigation journeys and representative axe scans (CI)
+- Dependency audit (`npm audit`)
+- Keyboard testing and representative screen-reader testing (manual)
+- Responsive visual checks and mobile performance checks (manual/scheduled)
 - Metadata and structured-data validation
-- CMS draft/publish/expiry testing
-- Ticket-provider end-to-end link testing
-- GitHub Pages deployment verification (implemented for the review deployment)
+- CMS draft/publish/expiry testing and ticket-provider end-to-end testing (when those features exist)
 
-The scope, layering, CI cadence and implementation order for these gates are defined in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
-
-## 9. Known Provisional Content
-
-The following content appears in the current prototype but is not yet considered complete production information:
-
-- Fireworks capacity
-- The meaning and accessibility characteristics of the quiet display
-- Event access and facilities
-- Fireworks refund, cancellation and bad-weather policy
-- Final verification of the Uniform donation instruction and accepted/rejected items
-- Final wording and publication review for the Co-Secretary recruitment copy
-- Production domain
-- Arabic translation quality
-- Final ticket provider
-- Final Privacy wording and Google Form data-handling details
-- Reps Hub copy, which remains subject to final content approval from The FOA
-
-These items must not lose their prototype/draft qualification until confirmed by an authorised owner from The FOA.
-
-## 10. How to Resume This Project
-
-When returning in a future session:
-
-1. Read this document.
-2. Check **Next Steps** for the first pending item.
-3. Check **Further Clarifications and Design Decisions Needed** for blockers.
-4. Review recent Git changes and prototype files.
-5. Record new confirmed decisions in **Decisions Made**.
-6. Update the status and next-step ordering before ending the session.
-
-If asked, "What are the next steps?", answer from Section 4 and identify any decisions in Section 5 that block the next item.
-
-When the user asks to close or end a session, follow the documentation and Git workflow in `AGENTS.md`: record all material session outcomes here before asking whether GitHub-connected changes should be committed.
+Scope, layers, cadence and implementation order are in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).

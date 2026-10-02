@@ -1,37 +1,141 @@
-# The Friends of Ashley Website Actions
+# Actions
 
-## Content
+The single backlog for the project: outstanding tasks, open questions and provisional content. When an item is resolved, move the outcome into [`PROJECT-BRIEF.md`](PROJECT-BRIEF.md) as a decision or specification and delete it here. See [`README.md`](README.md) for the documentation rules.
 
-- Complete a focused mobile and desktop review of all generated Astro routes, checking page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology.
+**Owners:** **FOA** = The FOA committee (decision or approval needed); **Owner** = project owner (Nick Caplan); **Dev** = implementation work.
 
-- Obtain higher-resolution committee portraits before the production site is launched. The current supplied photos may remain in the design prototype but should not be treated as final production assets.
-- Confirm whether concise approved committee biographies will be published. If so, design them as visible, readable content rather than desktop-only tooltips.
-- Confirm ownership, retention and access handling for the Google contact form.
-- Confirm and record the approved access and retention arrangements for the shared FOA inbox and Google contact form. The Privacy Notice now identifies these as pending operational details.
-- Google Analytics is consent-controlled with measurement ID `G-V2X8ZMQ5XZ`: the tag is absent until a visitor allows analytics cookies, and rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. Keep the existing 2-month event/user retention, disabled reset-on-activity, disabled Google Signals and user-provided-data capabilities, active email redaction, and no advertising, cross-domain or connected-site integrations.
+## How to Use This File
 
-## Brand assets
+- "What are the next steps?" Start with **Launch-blocking**, then **Soon**. Separate unblocked **Dev** work from items needing a decision from **FOA** or **Owner**.
+- Before starting an item, check its **Blocked by** column and the *Open questions* section.
 
-- Confirm whether the Ashley School mark embedded in `assets/logo-big.png` is approved for public use, or obtain a school-mark-free version.
-- Once approved, test `logo-big.png` as a supporting purpose graphic beside the About The FOA or homepage three-pillars section. Keep the three pillar labels and explanations as HTML text so they remain readable and accessible on mobile.
+## Launch-Blocking
 
-## Pending operational decisions
+The site is live at `https://www.thefriendsofashley.org`. These items must be resolved before the site is treated as fully launched.
 
-- Select the external Fireworks ticketing provider and confirm capacity, refunds/cancellations, bad-weather handling, accessibility, data processing and the final checkout URL. The final integration will be a normal link to the provider.
-- Reconfirm Pre-loved Uniform donation instructions before launch. Prices and payment are confirmed by the newsletter: £3 for coats and new-logo items, £1 for all other items, card only.
-- Confirm final approval from The FOA for the Reps Hub messages before launch.
+| Item | Owner | Blocked by |
+|---|---|---|
+| Select the external Fireworks ticketing provider and supply the final checkout URL. Until then the event page shows "Ticket link to follow." Add it as a normal external link. | FOA | Provider decision |
+| Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities. | FOA | Provider decision |
+| Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
+| Reconfirm Pre-loved Uniform donation instructions and accepted/rejected items. Prices (£3 coats and new-logo items, £1 other items, card only) are confirmed. | FOA | FOA confirmation |
+| Approve the Reps Hub messages. | FOA | FOA approval |
+| Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
+| Confirm the Ashley School mark in `assets/logo-big.png` is approved for public use, or obtain a school-mark-free version. | FOA | School/FOA approval |
+| Confirm the apex domain `thefriendsofashley.org` redirects to `www`. | Owner | None |
+| Cancel the 123 Reg Standard SSL product (£59.99/year) or disable renewal; it is not needed for GitHub Pages. Do not change the existing DNS records. | Owner | Confirm live site and redirect first |
+| Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
+| Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
 
-## Production planning
+## Soon
 
-- Continue the Astro implementation with typed local content collections until the CMS is selected. Keep the models compatible with a later CMS adapter.
-- GitHub Pages now serves the production site at `https://www.thefriendsofashley.org` with Enforce HTTPS enabled. Confirm the apex domain redirects to `www` as a final public-site check.
-- The separate 123 Reg Standard SSL product is not needed for GitHub Pages. Cancel it or disable renewal after confirming the live site and redirect continue to work; do not change the existing DNS records.
-- Select the CMS, then confirm editor ownership, preview workflow and annual access handover before integrating it.
-- Test coverage: Reps Hub clipboard success and failure (mocked clipboard). See `docs/TEST-STRATEGY.md`.
-- Test coverage: newsletter dialog open, close by button and backdrop, scroll-lock release and focus.
-- Test coverage: fixed-clock browser tests for the Welcome Tea → Fireworks switch (UK midnight and BST) and Today/Tomorrow labels, run in CI.
-- Test coverage: generated-site contracts for expected routes, canonical/social metadata, sitemap/robots, Fireworks JSON-LD, absence of the dev mobile preview, and a `/foa-website/` base-path build.
-- Test coverage: content invariants (event end after start, exactly one latest newsletter, unique committee order, required image alt text).
-- Test coverage: consent-controlled Google Analytics journey in the browser suite; add a pull-request trigger to CI.
-- Add selective screenshot-based visual regression only after the generated-site design has been approved.
-- Consider adding a dark mode option as low-priority follow-up work; do not implement it as part of the current launch scope.
+| Item | Owner | Blocked by |
+|---|---|---|
+| Test coverage: Reps Hub clipboard success and failure (mocked clipboard). See [`TEST-STRATEGY.md`](TEST-STRATEGY.md). | Dev | None |
+| Test coverage: newsletter dialog open, close by button and backdrop, scroll-lock release and focus. | Dev | None |
+| Test coverage: fixed-clock browser tests for the Welcome Tea → Fireworks switch (UK midnight and BST) and Today/Tomorrow labels, run in CI. | Dev | None |
+| Test coverage: generated-site contracts for expected routes, canonical/social metadata, sitemap/robots, Fireworks JSON-LD, absence of the dev mobile preview, and a `/foa-website/` base-path build. | Dev | None |
+| Test coverage: content invariants (event end after start, exactly one latest newsletter, unique committee order, required image alt text). | Dev | None |
+| Test coverage: consent-controlled Google Analytics journey in the browser suite; add a pull-request trigger to CI. | Dev | None |
+| Committee page: decide whether the routes to Reps Hub and About The FOA are clear enough; if not, use more explicit task-focused labels. | Owner | None |
+| Decide whether About The FOA should carry a concise committee summary. The Committee page remains the canonical source; avoid duplicating member details. | Owner | None |
+| Decide whether to publish short committee biographies. If so, present them as visible readable content, not desktop-only tooltips. | FOA | FOA decision |
+| Run the 5–7 parent/carer task-based information-architecture test (see *Suggested IA test tasks* below). | Owner | Participants |
+| Set up uptime monitoring for the `www` domain with an agreed alert recipient and response owner. | Owner | Tool choice |
+| Decide whether to add fundraising progress (see `fundraising-progress-options.html`): confirm fundraising purpose, approved target, data owner, update process, donation action, homepage placement and end-of-campaign treatment before implementing anything. | FOA | FOA decisions |
+
+## Later
+
+- Select and integrate a CMS, only after editor ownership, preview/publish workflow, annual access handover, urgent-update and failed-build procedures are confirmed (see *Open questions → Content management*).
+- Formal manual accessibility testing (keyboard, zoom, screen reader), then publish a public accessibility statement.
+- Moderated Community Notice Board (deferred; no public route). Needs the decisions listed under *Open questions → Notice Board*.
+- Additional reviewed translations and RTL testing; FAQs page; native share; add-to-calendar downloads.
+- Low-priority "Inspiration" archive of past event posters (standalone page or within What's On).
+- Selective screenshot visual regression, after the visual design is approved.
+- Dark mode (low priority; do not implement as part of launch work).
+- AI support bot for common parent/carer questions. Needs approved knowledge sources, committee ownership, privacy/safeguarding boundaries, human escalation, accessibility, cost and failure handling. Must not answer safety-critical, transactional or sensitive queries without reviewed safeguards.
+- Confirm the wording of the inclusive membership statement against the FOA constitution.
+- Confirm who is authorised to approve website content.
+
+## Provisional Content
+
+These facts appear on the site or in drafts but are not confirmed by an authorised FOA owner. Keep them labelled as provisional or absent from public pages until confirmed.
+
+- Fireworks: capacity; what the quiet display involves and its accessibility characteristics; access and facilities (step-free, toilets, first aid, parking); refund, cancellation and bad-weather policy; event-day contact.
+- Uniform: accepted and rejected items; donation conditions (washed, labelled, bagged); bin-emptying frequency; whether sale dates are regular or ad hoc; size requests between sales.
+- Final ticket provider and URL.
+- Privacy Notice details about shared-inbox and Google Form access/retention.
+- Reps Hub copy (pending FOA approval).
+- Co-Secretary recruitment copy (final wording and publication review).
+- Arabic translation quality (demonstration only; human review required).
+- Fundraising-progress target (the £25,000 in `fundraising-progress-options.html` is illustrative only).
+- Christmas Fayre date: Saturday 5 December 2026 is confirmed by the project owner; the supplied calendar's 28 November is superseded. Verify the final public date.
+
+## Open Questions
+
+Resolve these as part of the related items above, then record outcomes in the brief.
+
+### Brand and tone
+
+- Are there official colour values and brand-use restrictions?
+- Is occasional illustration wanted, or should typography and simple graphics remain the visual language?
+- Once the logo-big.png question is settled, where should the purpose graphic go? (Keep the three pillars as HTML text.)
+
+### Homepage and navigation
+
+- Should Fireworks remain the dominant homepage event while tickets are on sale, and what replaces it afterwards?
+- Does Uniform deserve a permanent top-level navigation item year-round?
+- Is "Get Involved" understood to include Committee and Reps?
+- Should a language control appear in the header at launch?
+
+### Committee
+
+- Should the Committee page show elected dates or terms?
+- Is the shared Gmail address the permanent public contact route?
+- Who approves any biographies?
+
+### Events
+
+- Is Fireworks recurring content with a stable URL, or year-specific?
+- Are attractions included in the entry price?
+- Does the £8.50 ticket and free under-2 entry need advance reservation by ticket type?
+
+### Reps Hub
+
+- Is the page intentionally unlisted or public?
+- Who writes and approves messages? How do expired messages disappear?
+- Should native device sharing and translated versions be offered?
+
+### Notice Board
+
+- Can parents submit notices, or only email The FOA?
+- Which categories are allowed; are commercial services allowed?
+- Who moderates; what is the standard expiry; will author names ever be shown; what is the takedown procedure?
+- (Already decided: if restored, the Committee owns review, expiry and takedowns.)
+
+### Languages
+
+- Which languages are genuinely needed at launch, who translates and reviews, and which pages need full translation?
+- Is English plus browser translation acceptable for MVP?
+- Should locale-specific URLs be public and indexed? Who updates translations when English changes?
+
+### Content management and operations
+
+- Should repository ownership move from `nicholascaplan` to an account or organisation managed by The FOA?
+- If Sanity is selected, who owns the project? Which committee members need editing access; how are editors added and removed each year?
+- Who responds when a build fails? What delay between publishing and the site updating is acceptable? How are urgent cancellations published if automation fails?
+
+### Analytics
+
+- Is current analytics coverage enough, or are further decisions it should support needed? Do not add other optional technologies without extending the Privacy Notice and consent control.
+
+## Suggested IA Test Tasks
+
+For the parent/carer testing session (include at least one participant who uses English as an additional language). Do not coach; record hesitation, misread labels and missed content.
+
+1. Find the Fireworks start time and whether tickets are available.
+2. Find where to donate uniform.
+3. Find the next uniform sale.
+4. Copy the Fireworks information for a class WhatsApp group.
+5. Understand what the Co-Secretary role involves.
+6. Say whether a Community Notice Board would be useful.

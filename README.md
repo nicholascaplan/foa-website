@@ -1,103 +1,59 @@
 # The Friends of Ashley Website
 
-Design and implementation workspace for The Friends of Ashley (FOA), the parent teacher association for Ashley C of E Primary School in Walton-on-Thames.
+Website for The Friends of Ashley (FOA), the parent teacher association for Ashley C of E Primary School in Walton-on-Thames. Live at <https://www.thefriendsofashley.org/>.
 
-## Current State
+Built with Astro 7 (static output), typed local content collections and locally built CSS; deployed to GitHub Pages.
 
-The repository now contains the first static Astro implementation of the currently approved public routes. The Meeting Minutes route currently publishes the 16 September 2026 AGM minutes from `assets/`:
+## Documentation
 
-- `src/pages/`: separate generated pages with normal path-based links
-- `src/layouts/` and `src/components/`: shared page shell, navigation, event and content components
-- `src/content/`: typed local collections for events, newsletters and committee members
-- `src/pages/meeting-minutes.astro`: public archive landing page for approved FOA meeting minutes
-- `src/styles/global.css`: central design tokens and responsive component styles
-- `assets/`: public brand assets for The FOA, event images, committee portraits and source documents
-- `prototype/`: archived single-file, hash-routed design review prototype
-- `fundraising-progress-options.html`: unlinked, standalone design review page for provisional fundraising-progress placements and states
-- `.github/workflows/deploy.yml`: GitHub Pages build and deployment workflow
-- `tests/site.test.mjs`: generated-site smoke and internal-link tests
-- `tests/e2e/`: Playwright navigation and representative axe accessibility tests
+| File | Purpose |
+|---|---|
+| [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) | What we are building, confirmed decisions, requirements, architecture and deployment |
+| [`docs/ACTIONS.md`](docs/ACTIONS.md) | Outstanding tasks, open questions and provisional content: **start here for next steps** |
+| [`docs/TEST-STRATEGY.md`](docs/TEST-STRATEGY.md) | Testing layers, cadence and priorities |
+| [`docs/README.md`](docs/README.md) | How the docs are organised and why; rules for maintaining them |
+| [`AGENTS.md`](AGENTS.md) | Rules for AI agents, including content safety and the naming convention |
 
-The site includes canonical and social metadata, a compact FOA favicon, Event structured data, a sitemap, robots rules, a Privacy Notice and a useful 404 page. The homepage features the intact Welcome Tea poster until it moves from Upcoming to Past events automatically on Sunday 4 October 2026 in UK time; Fireworks then becomes the primary event card. Contact Us includes the approved Google Form, and Reps Hub includes copy-to-clipboard actions. Google Analytics loads only after a visitor allows analytics cookies; the footer lets visitors change that choice. Production routes avoid internal draft/readiness warnings; unresolved operational decisions remain tracked in `docs/ACTIONS.md`. The Community Notice Board and public accessibility statement are deferred to later scope.
+## Repository Layout
+
+- `src/pages/`: one file per route
+- `src/layouts/`, `src/components/`: shared shell and components
+- `src/content/`: typed collections for events, newsletters and committee members
+- `src/styles/global.css`: design tokens and component styles
+- `assets/`: brand assets, event images, committee portraits and source documents
+- `tests/`: generated-site tests (`site.test.mjs`) and Playwright/axe tests (`e2e/`)
+- `prototype/`: archived hash-routed design prototype
+- `fundraising-progress-options.html`: unlinked design review page
+- `.github/workflows/deploy.yml`: verify and deploy
 
 ## Local Development
 
-Install dependencies once:
-
 ```sh
-npm install
+npm install      # once
+npm run dev      # opens http://localhost:4321/
 ```
 
-Start the Astro development server:
+The dev server watches for changes; stop it with `Ctrl+C`. On desktop, two dev-only controls appear on the left of the page: **Mobile preview** (opens the current route in a 390px window; allow pop-ups if blocked) and **Reset cookie consent**. Neither is in production builds.
 
-```sh
-npm run dev
-```
-
-The command opens the local site in your default browser, normally at `http://localhost:4321/`. The development server watches the source files and refreshes the site after changes. Stop it with `Ctrl+C`.
-
-On desktop, use the stacked **Mobile preview** and **Reset cookie consent** controls on the left side of the page. Mobile preview opens the current route in a 390px-wide browser window; Reset cookie consent clears the locally stored analytics-cookie preference and reopens the banner. Both controls are available only under `npm run dev` and are omitted from production builds. If the browser blocks the preview window, allow pop-ups for the local Astro address.
-
-To review the production build locally:
+To review the production build:
 
 ```sh
 npm run build
 npm run preview
 ```
 
-The canonical production origin is configured through `SITE_URL`. It is not required for ordinary local development.
+`SITE_URL` sets the canonical origin and is not needed for ordinary local development.
 
-The GitHub Pages workflow builds this repository for the production `www` domain, `https://www.thefriendsofashley.org/`. The temporary review deployment remains available at <https://nicholascaplan.github.io/foa-website/>, but its repository-path build is not the canonical production configuration.
-
-## Automated Verification
-
-Run the current automated checks with:
+## Verification
 
 ```sh
-npm run check
-npm run build
-npm run test:site
+npm run verify                  # full gate used by CI: check, build, site tests, browser tests
 npx playwright install chromium # first browser-test run only
-npm run test:e2e
-npm audit
+npm audit                       # dependency advisories
 ```
 
-- `npm run check` performs Astro and TypeScript diagnostics, including content-collection schema validation.
-- `npm run build` verifies that every static route and production asset can be generated.
-- `npm run test:site` checks key rendered content and verifies that every generated internal link and asset resolves, including repository-base-path asset URLs.
-- `npm run test:e2e` checks main navigation, mobile-menu state and focus behaviour, and serious or critical axe accessibility findings across representative routes.
-- `npm test` creates a fresh production build, then runs both generated-site and browser suites against it.
-- `npm run verify` runs the type, build and test gates in the same order used by GitHub Actions.
-- `npm audit` checks installed dependencies against published security advisories.
-
-These are risk-based deployment gates rather than exhaustive coverage. Newsletter-dialog and clipboard interaction tests, fixed-clock date-label tests, expanded generated metadata contracts and visual regression tests remain to be added.
+Individual steps: `npm run check` (Astro/TypeScript and content schema), `npm run build`, `npm run test:site` (rendered content and every internal link/asset), `npm run test:e2e` (navigation journeys and axe accessibility scans), `npm test` (fresh build, then both test suites). See [`docs/TEST-STRATEGY.md`](docs/TEST-STRATEGY.md) for what the tests protect and what is not covered.
 
 ## Deployment
 
-Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow installs locked dependencies, runs `npm run verify`, uploads `dist/` only after those checks pass, and then deploys the artifact through GitHub Pages. Failed checks prevent the deployment job from starting.
-
-The canonical public domain is `www.thefriendsofashley.org`. At launch, remove its custom-domain assignment from the `nicholascaplan/foa-holding-page` GitHub Pages settings, then add `www.thefriendsofashley.org` to this repository's GitHub Pages settings. The DNS records remain unchanged. Push this configuration change to `main`, or manually run the **Deploy Astro site to GitHub Pages** workflow, after completing the GitHub Pages setting move. Confirm that the apex domain, `thefriendsofashley.org`, redirects to `www`.
-
-## Project Record
-
-[`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) is the canonical project record. It contains:
-
-- Current progress
-- Decisions made
-- Ordered next steps
-- Open clarifications and design decisions
-- Technical specification
-- Scope and exclusions
-- Functional and non-functional requirements
-
-When resuming work, read that document first and begin with **Next Steps** and **Further Clarifications and Design Decisions Needed**.
-
-[`AGENTS.md`](AGENTS.md) contains durable instructions for AI agents, including the required session-closure and documentation workflow.
-
-[`docs/STYLE-GUIDE.md`](docs/STYLE-GUIDE.md) contains the public copy convention for the organisation name and related usage.
-
-[`docs/TEST-STRATEGY.md`](docs/TEST-STRATEGY.md) defines the risk-based automated and manual test layers, CI cadence and phased implementation order.
-
-## Immediate Next Step
-
-Confirm the consent-controlled Google Analytics journey and the date-transition browser coverage in CI, then add newsletter-dialog and Reps Hub clipboard success/failure coverage. Resolve the remaining operational follow-ups in `docs/ACTIONS.md`, particularly the shared-inbox and Google Form retention arrangements; formal manual accessibility testing and a public accessibility statement remain later work.
+Pushes to `main` run `.github/workflows/deploy.yml`: it runs `npm run verify` and deploys to GitHub Pages only if all checks pass. Domain, DNS and build configuration are described in [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) → Technical Specification → Hosting, domain and deployment.

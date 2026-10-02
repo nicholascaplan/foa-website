@@ -1,94 +1,96 @@
 # Agent Instructions
 
-This file contains durable working instructions for AI agents contributing to The Friends of Ashley website. Read it before making changes.
+Durable working rules for AI agents contributing to The Friends of Ashley website. Read this first, then follow the pointers below. This file is about **how to behave**; product detail lives in the brief.
+
+## Start Here
+
+| You need | Read |
+|---|---|
+| Product, decisions, requirements, architecture | [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) |
+| What is outstanding, who owns it, what blocks it | [`docs/ACTIONS.md`](docs/ACTIONS.md) |
+| Testing approach | [`docs/TEST-STRATEGY.md`](docs/TEST-STRATEGY.md) |
+| Where documentation belongs, and why it is structured this way | [`docs/README.md`](docs/README.md) |
+| Commands to run, build and verify | [`README.md`](README.md) |
+
+Read the brief before substantial design, content or architecture work.
 
 ## Project Context
 
-- This is the website for The Friends of Ashley (FOA), the PTA for Ashley C of E Primary School in Walton-on-Thames.
-- The canonical product and engineering record is [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md).
-- Read the project brief before substantial design, content or architecture work.
-- Use [`README.md`](README.md) for a short repository orientation.
-- Treat repository documentation as part of the deliverable, not as optional supporting material.
-
-## Current Phase
-
-- The project is now in first-pass production frontend implementation and generated-site review.
-- The active implementation is Astro 7 with static output, typed local content collections and locally built CSS.
-- The earlier dependency-free HTML, CSS and JavaScript review prototype is archived in `prototype/`.
+- Website for The Friends of Ashley (FOA), the PTA for Ashley C of E Primary School, Walton-on-Thames.
+- Astro 7, static output, typed local content collections, locally built CSS, deployed to GitHub Pages at `www.thefriendsofashley.org`. The site is live; work is operational follow-up, quality and later scope.
+- The earlier hash-routed prototype in `prototype/` is archived for reference only.
 - Do not select or integrate a CMS until content ownership, editor access, preview and publishing workflows are confirmed.
 
 ## Confirmed Direction
 
-- Design character: warm modern editorial community noticeboard.
-- Mobile-first, but with deliberate desktop layouts.
-- Prioritise current events and practical parent tasks.
-- Avoid making the public site feel like a SaaS dashboard.
-- Primary navigation: Home, What's On, Uniform, Get Involved and Community.
-- Heritage green is the primary brand colour; amber is mainly for events and celebration.
-- Use restrained cards, large legible typography and minimal dependence on photography.
-- English is the current primary language; one Arabic RTL example demonstrates layout support.
-- Ticket purchases will use an external provider rather than a checkout built by The FOA.
-- The Community Notice Board is editorial and committee-managed for MVP.
-- Auctions, parent accounts and unmoderated publishing are out of scope for MVP.
+- Warm modern editorial community noticeboard; mobile-first with deliberate desktop layouts.
+- Prioritise current events and practical parent tasks. Do not make the public site feel like a SaaS dashboard.
+- Primary navigation: Home, What's On, Get Involved, Uniform.
+- Heritage green is primary; amber is mainly for events and celebration.
+- Ticket purchases use an external provider. Auctions, parent accounts and unmoderated publishing are out of scope.
+
+The full decision list is in the brief.
 
 ## Content and Safety Rules
 
-- Do not invent event, accessibility, ticketing, uniform, committee or legal facts.
-- Clearly label unknown or provisional operational information.
-- The supplied Fireworks image may be used on the site.
-- The supplied committee portraits may be used in the prototype.
-- Committee presentation should use names and roles only unless additional approved content is provided.
+- Do not invent event, accessibility, ticketing, uniform, committee or legal facts. Label unknown or provisional information clearly; the provisional list is in `docs/ACTIONS.md`.
+- Committee presentation uses names and roles (plus approved portraits) only.
 - Do not publish child year groups or other unnecessary child-related information.
-- Do not add personal contact details; use the shared contact route for The FOA.
-- A final pre-publication check is still required for committee names, roles and portrait consent.
+- Do not add personal contact details; use the shared FOA contact route.
 - Safety-critical and transactional translations require human review.
+- A final pre-publication check is still required for committee names, roles and portrait consent.
+
+### Naming convention for public copy
+
+Applies to site copy, metadata, navigation labels, structured data, prototypes and documentation. It does not apply to filenames, URLs, email addresses or code identifiers.
+
+- Full name: **The Friends of Ashley**. Shortened form after introduction: **The FOA**.
+- On first mention in longer copy, use **The Friends of Ashley (FOA)** if the abbreviation is used later.
+- Never write "Friends of Ashley" without **The**, and never use bare "FOA" as the organisation name in copy or titles.
+- Keep `thefriendsofashley@gmail.com` and other technical identifiers unchanged.
+- Correct: "Contact The FOA about volunteering." Incorrect: "Contact FOA about volunteering."
 
 ## Implementation Expectations
 
 - Preserve semantic HTML, keyboard access, visible focus and reduced-motion support.
-- Keep important body copy comfortably readable; do not reproduce the tiny text from the original sandbox prototype.
-- Use real links and buttons rather than clickable generic elements.
-- Keep design values centralised in CSS tokens.
-- Keep event facts in one future structured source rather than duplicating them once production implementation begins.
-- Avoid external runtime dependencies during the current prototype phase unless explicitly approved.
-- Verify local links, referenced assets, JavaScript syntax and whitespace after edits.
-- After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a fresh development server and make an HTTP request to every affected route. Confirm a successful response and the expected content; do not rely only on `astro check`, a static production build or an already-running development server, because Astro's development content store can temporarily retain stale collection state after schema changes.
+- Keep important body copy comfortably readable.
+- Use real links and buttons, not clickable generic elements.
+- Keep design values in central CSS tokens.
+- Keep event facts in one structured source (the content collections); do not duplicate them in page copy.
+- Use `withBase()` for asset and internal URLs so the site works at the root and at `/foa-website/`.
+- Avoid new external runtime dependencies or optional tracking unless explicitly approved. Analytics is consent-controlled; extend the Privacy Notice and consent control before adding anything optional.
+- Verify with the commands in [`README.md`](README.md) (`npm run verify` is the full gate), and check whitespace after edits.
+- After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a **fresh** development server and make an HTTP request to every affected route. Confirm a successful response and the expected content. Do not rely only on `astro check`, a production build or an already-running dev server: Astro's dev content store can retain stale collection state after schema changes.
 
-## Documentation Workflow
+## Documentation Rules
 
-Update [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) whenever work changes any of the following:
+Full rules and rationale are in [`docs/README.md`](docs/README.md). The essentials:
 
-- Current implementation status
-- Confirmed product or design decisions
-- Requirements or scope
-- Open questions or blockers
-- Ordered next steps
-- Technical architecture
-- Known provisional content
+- **One home per fact; link, don't copy.**
+- Open tasks, questions and provisional content go in `docs/ACTIONS.md` only. Do not create other backlogs or put status or "next step" text in the README or brief.
+- Confirmed decisions, scope, requirements and architecture go in `docs/PROJECT-BRIEF.md`. Edit entries in place; do not append dated session logs. Git history is the changelog.
+- When an action is resolved, move its outcome into the brief and delete it from `ACTIONS.md`.
+- Do not add new documentation files without a clear question that no existing file answers.
+- Update `README.md` only if commands, entry points or the file layout change.
 
-Keep [`README.md`](README.md) accurate when files, entry points or the immediate next step change.
+## Session Closure
 
-Avoid duplicating the complete project brief in this file. This file should contain agent behavior and high-value constraints; the project brief should contain detailed product state and specifications.
+When the user says "close session", "end session" or clearly wraps up:
 
-## Session Closure Protocol
+1. Update `docs/ACTIONS.md` (new, resolved or re-prioritised items).
+2. Update `docs/PROJECT-BRIEF.md` only if a decision, scope, requirement or architecture changed (and its `Last updated` date).
+3. Update `README.md` or this file only if commands, structure or agent rules changed.
+4. Run verification appropriate to the files changed.
+5. Inspect Git status. Summarise what was completed, what remains and the first recommended next action.
+6. If the repository is connected to GitHub, commit and push the completed session changes after documentation and verification. Do not commit or push unrelated changes, or if the user asks you not to.
 
-When the user says **"close session"**, **"end session"**, or clearly asks to wrap up the current work:
-
-1. Review the work completed during the session.
-2. Update `docs/PROJECT-BRIEF.md` with all confirmed decisions, implementation progress, changed requirements, unresolved questions and reordered next steps.
-3. Update `README.md` and `AGENTS.md` if their guidance or current-state summary has changed.
-4. Run appropriate verification for the files changed during the session.
-5. Summarise what was completed, what remains unresolved and the first recommended next action.
-6. Inspect Git status so the summary accurately identifies outstanding changes.
-7. If the repository has been connected to GitHub, commit and push the completed session changes after documentation and verification. Do not commit or push unrelated changes, and do not commit or push if the user explicitly asks not to.
-
-Documentation updates happen before asking about a commit. A session should not be considered closed while material decisions exist only in the conversation.
+Material decisions must not exist only in the conversation.
 
 ## Resuming Work
 
-When asked **"What are the next steps?"**:
+When asked "What are the next steps?":
 
-1. Read Section 4 of `docs/PROJECT-BRIEF.md`.
-2. Check Section 5 for decisions that block the first pending step.
-3. Check the current worktree before assuming the documented implementation state is exact.
-4. Answer with the first actionable steps in priority order, distinguishing unblocked work from decisions needed from the user.
+1. Read `docs/ACTIONS.md`: Launch-blocking first, then Soon.
+2. Check each item's **Blocked by** column and the Open Questions section.
+3. Check the current worktree (`git status`) rather than assuming the docs match exactly.
+4. Answer with the first actionable steps in priority order, separating unblocked **Dev** work from decisions needed from the user.
