@@ -163,13 +163,15 @@ Tests should fail with a message that identifies the broken route, reference or 
 
 ## Implementation Order
 
-1. Add Playwright and `@axe-core/playwright`, production-preview test configuration, and scripts without changing public behaviour. **Complete.**
-2. Add mobile-menu browser tests and representative accessibility scans. This gives the broadest immediate protection for shared UI and is the first implementation milestone. **Implemented; local Chromium suite exercised successfully.**
-3. Add newsletter-dialog, Reps Hub clipboard success/failure and fixed-clock event-transition coverage. **Next.**
-4. Expand generated-site tests for expected routes, metadata, structured data, sitemap/robots and collection ordering. **Next after interaction coverage.**
-5. Add fixed-clock date-label tests and key parent journeys.
-6. Add cross-browser CI coverage after the Chromium suite is stable and fast.
-7. Add selective visual regression and performance baselines after design approval.
-8. Extend the suite when CMS, ticketing, analytics or translated locales are introduced.
+Build in this order, so the broadest protection and the riskiest bespoke behaviour come first:
 
-The first implementation milestone is now in place. The next coverage increment is newsletter-dialog, Reps Hub clipboard success/failure and fixed-clock event-transition testing, followed by expanded generated-site contracts. Prioritise these because they protect the site's remaining bespoke client-side interactions and can fail without breaking static route generation. Keep visual regression, cross-browser expansion and conditional CMS/ticketing/analytics tests deferred until the current Chromium baseline and operational content are stable.
+1. Playwright and `@axe-core/playwright` with production-preview configuration.
+2. Mobile-menu browser tests and representative accessibility scans.
+3. Newsletter dialog, Reps Hub clipboard success/failure and fixed-clock event-transition coverage.
+4. Generated-site contracts for expected routes, metadata, structured data, sitemap/robots and collection ordering.
+5. Fixed-clock date-label tests and key parent journeys.
+6. Cross-browser CI coverage once the Chromium suite is stable and fast.
+7. Selective visual regression and performance baselines after design approval.
+8. Extensions when CMS, ticketing, analytics or translated locales are introduced.
+
+Steps 3–4 take priority because they protect interactions and output that can fail without breaking static route generation. Defer visual regression, cross-browser expansion and conditional CMS/ticketing/analytics tests until the Chromium baseline and operational content are stable. Which steps are complete, and what remains, is tracked in [`ACTIONS.md`](ACTIONS.md).

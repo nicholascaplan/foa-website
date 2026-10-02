@@ -27,7 +27,11 @@
 - GitHub Pages now serves the production site at `https://www.thefriendsofashley.org` with Enforce HTTPS enabled. Confirm the apex domain redirects to `www` as a final public-site check.
 - The separate 123 Reg Standard SSL product is not needed for GitHub Pages. Cancel it or disable renewal after confirming the live site and redirect continue to work; do not change the existing DNS records.
 - Select the CMS, then confirm editor ownership, preview workflow and annual access handover before integrating it.
-- Implement the first milestone in `docs/TEST-STRATEGY.md`: add Playwright infrastructure, mobile-navigation browser coverage and representative automated accessibility scans. Generated internal-link and asset validation already runs in the deployment gate.
-- Follow with newsletter-dialog, Reps Hub clipboard, metadata, structured-data, content-ordering and fixed-clock date-label coverage.
+- Test coverage: Reps Hub clipboard success and failure (mocked clipboard). See `docs/TEST-STRATEGY.md`.
+- Test coverage: newsletter dialog open, close by button and backdrop, scroll-lock release and focus.
+- Test coverage: fixed-clock browser tests for the Welcome Tea → Fireworks switch (UK midnight and BST) and Today/Tomorrow labels, run in CI.
+- Test coverage: generated-site contracts for expected routes, canonical/social metadata, sitemap/robots, Fireworks JSON-LD, absence of the dev mobile preview, and a `/foa-website/` base-path build.
+- Test coverage: content invariants (event end after start, exactly one latest newsletter, unique committee order, required image alt text).
+- Test coverage: consent-controlled Google Analytics journey in the browser suite; add a pull-request trigger to CI.
 - Add selective screenshot-based visual regression only after the generated-site design has been approved.
 - Consider adding a dark mode option as low-priority follow-up work; do not implement it as part of the current launch scope.
