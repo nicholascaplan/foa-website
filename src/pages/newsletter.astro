@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
+import { withBase } from "../lib/urls";
+import NewsletterSection from "../components/NewsletterSection.astro";
 import autumnTerm from "../content/newsletters/autumn-term-2026.json";
 import backToSchool from "../content/newsletters/back-to-school-2026.json";
 const latest = autumnTerm;
@@ -16,32 +18,50 @@ const formatDateWithOrdinal = (value: Date | string) => {
   }).join("");
 };
 ---
-<BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletter summaries.">
+<BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
   <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
-     <section class="newsletter-section"><div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest?.title}</h2>{latest?.published && <p>{formatDateWithOrdinal(latest.published)}</p>}</div><article class="newsletter-issue"><p class="newsletter-intro">Ashley families raised £25,730 last year, and the new KS1 playground equipment is scheduled for installation over the October half term.</p><h3>Committee 2026/27</h3><p>This year's committee is Helen Platt and Sarah Parish, Co-Chairs; Clare Birks and Darren Malone, Co-Treasurers; Nick Caplan and Cristy Amponsah, Co-Comms; and Lizzie Grillo, Fundraising Initiatives Lead. Co-Secretary is vacant.</p><h3>Ways to help</h3><p>The Co-Secretary role is a flexible way to help with agendas and meeting minutes. Rachel and Sophie are leading the Christmas Fayre. Anyone interested in running Fireworks 2027 can contact The FOA to shadow Helen at this year's event with no pressure.</p><h3>Autumn dates</h3><ul class="newsletter-dates"><li><strong>Reception Welcome Tea</strong><span>Saturday 3rd October · 13:00-14:30</span></li><li><strong>Fireworks on the Field</strong><span>Thursday 5th November · 16:30-18:30</span></li><li><strong>Pre-loved uniform</strong><span>Friday 6th November and Friday 4th December · 15:25</span></li><li><strong>Christmas Fayre</strong><span>Saturday 5th December</span></li></ul><h3>Useful contacts</h3><ul class="newsletter-contacts"><li><a class="text-link" href="mailto:thefriendsofashley@gmail.com">The FOA general enquiries</a></li><li><a class="text-link" href="https://www.tinyurl.com/foa-feedback" target="_blank" rel="noopener noreferrer">The FOA feedback <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></li><li><a class="text-link" href="mailto:foapreloveduniform@gmail.com">Pre-loved uniform</a></li></ul></article></section>
-    <section class="newsletter-section"><div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA, kept concise and readable.</p></div>{previous.map(({ id, data }) => { const dialogId = `newsletter-${id}`; return <article class="newsletter-summary"><p class="newsletter-summary-label">{data.title}</p>{data.published && <p class="newsletter-summary-date">{formatDateWithOrdinal(data.published)}</p>}<p>{data.summary}</p><button class="button button--secondary newsletter-read-more" type="button" aria-controls={dialogId}>Read more <span aria-hidden="true">&rarr;</span></button><dialog class="newsletter-dialog" id={dialogId} aria-labelledby={`${dialogId}-title`}><div class="dialog-content"><button class="newsletter-dialog-close" type="button" aria-label={`Close ${data.title}`}>×</button><p class="eyebrow">Previous newsletter</p><h2 id={`${dialogId}-title`}>{data.title}</h2>{data.published && <p class="newsletter-summary-date">{formatDateWithOrdinal(data.published)}</p>}{data.sections?.length ? <div class="newsletter-dialog-sections">{data.sections.map((section) => <section class="newsletter-summary-section"><h3>{section.title}</h3>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</section>)}</div> : <p>{data.summary}</p>}</div></dialog></article>; })}</section>
+    <section class="newsletter-section">
+      <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2>{latest.published && <p>{formatDateWithOrdinal(latest.published)}</p>}</div>
+      <article class="newsletter-issue newsletter-sheet">
+        <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span></div>
+        {latest.sections?.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
+      </article>
+    </section>
+    <section class="newsletter-section">
+      <div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA. Read more to see the full newsletter.</p></div>
+      {previous.map(({ id, data }) => {
+        const [first, ...rest] = data.sections ?? [];
+        const bodyId = `newsletter-${id}-more`;
+        return <article class="newsletter-summary newsletter-sheet">
+          <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span></div>
+          <p class="newsletter-summary-label">{data.title}</p>
+          {data.published && <p class="newsletter-summary-date">{formatDateWithOrdinal(data.published)}</p>}
+          {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
+          {rest.length > 0 && <>
+            <div class="newsletter-more" id={bodyId} hidden>
+              {rest.map((section) => <NewsletterSection section={section} />)}
+            </div>
+            <button class="button button--secondary newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
+              <span data-label>Read more</span> <span aria-hidden="true" data-icon>&darr;</span>
+            </button>
+          </>}
+        </article>;
+      })}
+    </section>
   </div></section>
 </BaseLayout>
 
 <script>
   document.querySelectorAll<HTMLButtonElement>(".newsletter-read-more").forEach((button) => {
-    const dialog = document.getElementById(button.getAttribute("aria-controls") || "") as HTMLDialogElement | null;
-    const closeButton = dialog?.querySelector<HTMLButtonElement>(".newsletter-dialog-close");
-    if (!dialog || !closeButton) return;
-
+    const more = document.getElementById(button.getAttribute("aria-controls") || "");
+    if (!more) return;
     button.addEventListener("click", () => {
-      dialog.showModal();
-      dialog.querySelector<HTMLElement>(".dialog-content")?.scrollTo(0, 0);
-      document.body.classList.add("dialog-open");
-    });
-    closeButton.addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-    dialog.addEventListener("close", () => {
-      document.body.classList.remove("dialog-open");
-      button.focus();
+      const expand = button.getAttribute("aria-expanded") !== "true";
+      more.hidden = !expand;
+      button.setAttribute("aria-expanded", String(expand));
+      button.querySelector("[data-label]")!.textContent = expand ? "Show less" : "Read more";
+      button.querySelector("[data-icon]")!.innerHTML = expand ? "&uarr;" : "&darr;";
     });
   });
 </script>

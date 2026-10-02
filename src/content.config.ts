@@ -31,7 +31,7 @@ const newsletters = defineCollection({
     title: z.string(),
     published: z.coerce.date().optional(),
     summary: z.string(),
-    sections: z.array(z.object({ title: z.string(), paragraphs: z.array(z.string()) })).optional(),
+    sections: z.array(z.object({ title: z.string().optional(), paragraphs: z.array(z.string()).default([]), list: z.array(z.string()).optional(), closing: z.array(z.string()).optional() })).optional(),
     latest: z.boolean().default(false),
   }),
 });

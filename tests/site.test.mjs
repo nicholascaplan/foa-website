@@ -67,14 +67,18 @@ test("newsletter shows the latest issue and previous issue in order", async () =
   assert.match(newsletter, /28th September 2026/);
   assert.match(newsletter, /Welcome Back from The FOA/);
   assert.match(newsletter, /16th September 2026/);
-  assert.match(newsletter, /A start-of-year introduction to The FOA, fundraising and key dates\./);
+  assert.match(newsletter, /aria-expanded="false"[^>]*aria-controls="newsletter-back-to-school-2026-more"|aria-controls="newsletter-back-to-school-2026-more"[^>]*aria-expanded="false"/);
+  assert.match(newsletter, /id="newsletter-back-to-school-2026-more" hidden/);
+  assert.match(newsletter, /Pre-loved Uniform Sales: 3:25pm, School Playground/);
+  assert.match(newsletter, /Design Tips:<\/strong> Draw on the blank side only/);
   assert.match(newsletter, /Dear Parents and Carers,/);
-  assert.match(newsletter, /Welcome back! We hope you have all had a wonderful summer/);
-  assert.match(newsletter, /Just coming along and showing your support really makes a difference\./);
-  assert.match(newsletter, /Ways to get involved/);
+  assert.match(newsletter, /Welcome back! We hope you’ve all had a wonderful summer/);
+  assert.match(newsletter, /just coming along and showing your support really makes a difference\./);
+  assert.match(newsletter, /Call for Event Leads:/);
+  assert.match(newsletter, /Mrs Ratcliff/);
+  assert.match(newsletter, /The FOA Team/);
   assert.match(newsletter, /Read more/);
-  assert.match(newsletter, /class="newsletter-dialog"/);
-  assert.match(newsletter, /class="newsletter-dialog-sections"/);
+  assert.match(newsletter, /class="newsletter-more"/);
 });
 
 test("meeting minutes publishes the AGM archive entry and document", async () => {

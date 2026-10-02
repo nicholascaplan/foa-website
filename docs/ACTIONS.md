@@ -19,6 +19,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities. | FOA | Provider decision |
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
 | Reconfirm Pre-loved Uniform donation instructions and accepted/rejected items. Prices (£3 coats and new-logo items, £1 other items, card only) are confirmed. | FOA | FOA confirmation |
+| Confirm the newsletter details to publish: "Sarah Parker" (thank-you) versus "Sarah Parish" (Co-Chair), the 2 October uniform sale date, and the "attached" committee list, calendar and poster referenced in the newsletters (link them or edit those lines). | Owner | None |
 | Approve the Reps Hub messages. | FOA | FOA approval |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Confirm the Ashley School mark in `assets/logo-big.png` is approved for public use, or obtain a school-mark-free version. | FOA | School/FOA approval |

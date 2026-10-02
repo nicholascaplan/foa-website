@@ -1127,63 +1127,74 @@ a {
   margin: 0.8rem 0 0;
 }
 
+.newsletter-sheet {
+  position: relative;
+  max-width: 48rem;
+  padding: clamp(1.75rem, 6vw, 3.5rem) clamp(1.5rem, 6vw, 3.75rem);
+  border: 1px solid var(--line);
+  border-top: 0.5rem solid var(--green);
+  border-radius: 0.35rem;
+  background:
+    linear-gradient(180deg, rgba(20, 83, 45, 0.04), transparent 7rem),
+    #fffefb;
+  box-shadow:
+    0 1px 2px rgba(34, 58, 44, 0.12),
+    0 10px 24px rgba(34, 58, 44, 0.08),
+    0.35rem 0.5rem 0 -0.05rem #f2ebdc,
+    0.35rem 0.5rem 0 0 var(--line);
+}
+
+.newsletter-sheet::before {
+  position: absolute;
+  inset: 0.6rem;
+  border: 1px solid var(--green-light);
+  border-radius: 0.2rem;
+  content: "";
+  pointer-events: none;
+}
+
+.newsletter-letterhead {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--green);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+
+.newsletter-letterhead img {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.newsletter-letterhead + .newsletter-summary-section h3,
+.newsletter-summary-date + .newsletter-summary-section h3 {
+  margin-top: 0;
+}
+
+.newsletter-sheet .newsletter-summary-section + .newsletter-summary-section {
+  margin-top: 0.5rem;
+}
+
 .newsletter-read-more {
   margin-top: 1.25rem;
 }
 
-.newsletter-dialog {
-  width: min(calc(100% - 2rem), 46rem);
-  max-height: min(86dvh, 52rem);
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  color: var(--ink);
-  background: var(--surface);
-  box-shadow: var(--shadow);
+.newsletter-more[hidden] {
+  display: none;
 }
 
-.newsletter-dialog::backdrop {
-  background: rgba(11, 32, 21, 0.58);
-  backdrop-filter: blur(4px);
-}
-
-.newsletter-dialog .dialog-content {
-  position: relative;
-  max-height: min(86dvh, 52rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: clamp(1.5rem, 5vw, 3rem);
-  -webkit-overflow-scrolling: touch;
-}
-
-.newsletter-dialog .dialog-content h2 {
-  max-width: 18ch;
-  padding-right: 2rem;
-  font-size: clamp(2rem, 6vw, 3.2rem);
-}
-
-.newsletter-dialog-sections {
-  margin-top: 1.5rem;
-}
-
-.newsletter-dialog-close {
-  position: absolute;
-  z-index: 1;
-  top: 1rem;
-  right: 1rem;
+.newsletter-list {
   display: grid;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--ink);
-  background: var(--surface);
-  cursor: pointer;
-  font-size: 1.6rem;
-  line-height: 1;
-  place-items: center;
+  gap: 0.6rem;
+  margin: 0.8rem 0 0;
+  padding-left: 1.25rem;
 }
 
 .impact-callout {

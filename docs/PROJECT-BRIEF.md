@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 2 October 2026 (structure reorganised; see [`README.md`](README.md))
+**Last updated:** 2 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -51,7 +51,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - It is a public information and community site, not an internal committee administration system.
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
-- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. The newsletter archive opens the 16 September issue in a native dialog.
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on a paper-sheet frame with an FOA letterhead. Previous issues show their opening section as a preview, and Read more expands the full issue in place (no dialog).
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16 September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 
@@ -79,7 +79,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 ### Information architecture
 
 - Primary navigation, in order: **Home, What's On, Get Involved, Uniform**.
-- Committee, Reps Hub and Meeting Minutes belong under Get Involved. Newsletter, About, Contact and policy pages are reached through the footer and relevant page content. Contact Us is also in the mobile menu.
+- Committee, Reps Hub and Meeting Minutes belong under Get Involved. Newsletter, About, Contact and policy pages are reached through the footer and relevant page content. Contact Us and Reps Hub are also at the bottom of the mobile menu.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
 - The 2026 Pre-loved Uniform sales are Fridays 2 October, 6 November and 4 December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
@@ -134,7 +134,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
 - Typed local content collections are the interim source for events, newsletters and committee members until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
 - CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
-- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter dialog, Reps Hub clipboard actions and the cookie banner.
+- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter archive expand/collapse, Reps Hub clipboard actions and the cookie banner.
 - GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
 - Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page.
 - The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
