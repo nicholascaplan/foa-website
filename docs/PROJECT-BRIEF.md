@@ -187,7 +187,7 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 - No unverified provider or accessibility claims.
 
 **Uniform**
-- How and where to donate; next confirmed sale date, time and location; price list; accepted/rejected items; payment methods; a contact route for questions or size requests if supported.
+- How and where to donate; next confirmed sale date, time and location; price list; accepted/rejected items; payment methods; a contact route for questions or size requests if supported. The page hero leads with two actions: "Email the Preloved team" (prefilled subject and body asking for sizes and quantities) and "Fill in the Google Form" (external request form).
 
 **Get Involved and Committee**
 - Explain that meetings are informal and open to all; show current approved committee names and roles and active vacancies; explain time commitment and support; provide the shared contact action; expose no unnecessary information about children.

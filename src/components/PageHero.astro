@@ -1,7 +1,15 @@
 ---
 interface Props { eyebrow: string; title: string; intro: string; }
 const { eyebrow, title, intro } = Astro.props;
+const hasAction = Astro.slots.has("action");
 ---
 <section class="view-hero">
-  <div class="site-width"><p class="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{intro}</p></div>
+  <div class:list={["site-width", { "view-hero-inner": hasAction }]}>
+    {hasAction
+      ? <>
+          <div class="view-hero-copy"><p class="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{intro}</p></div>
+          <div class="view-hero-action"><slot name="action" /></div>
+        </>
+      : <><p class="eyebrow">{eyebrow}</p><h1>{title}</h1><p>{intro}</p></>}
+  </div>
 </section>

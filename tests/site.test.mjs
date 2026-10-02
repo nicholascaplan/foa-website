@@ -61,6 +61,15 @@ test("What's On includes the date-driven Welcome Tea transition", async () => {
   assert.doesNotMatch(stylesheet, /\.event-carousel-slides/);
 });
 
+test("Uniform email button has the requested subject and prefilled body", async () => {
+  const uniform = await readFile(path.join(dist, "uniform", "index.html"), "utf8");
+  assert.match(uniform, /href="mailto:foapreloveduniform@gmail\.com\?subject=I%20would%20like%20to%20buy%20some\.\.\.&amp;body=Please%20include%20sizes%20and%20quantities%20of%20each%20item%21"[^>]*>(?:<svg[\s\S]*?<\/svg>)?Email the Preloved team/);
+  assert.doesNotMatch(uniform, /<em>Please include sizes and quantities/);
+  assert.match(uniform, /class="view-hero-action"[\s\S]*href="https:\/\/tinyurl\.com\/foapreloved"[^>]*target="_blank"[^>]*>Fill in the Google Form/);
+  assert.equal(uniform.match(/tinyurl\.com\/foapreloved/g).length, 1);
+  assert.match(uniform, /class="view-hero-action"[^>]*>\s*<a class="button button--primary button--large" href="mailto:foapreloveduniform/);
+});
+
 test("newsletter shows the latest issue and previous issue in order", async () => {
   const newsletter = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
   assert.match(newsletter, /Autumn Term News &amp; Fireworks Tickets/);
