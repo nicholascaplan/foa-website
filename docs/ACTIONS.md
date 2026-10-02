@@ -32,7 +32,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Item | Owner | Blocked by |
 |---|---|---|
 | Test coverage: Reps Hub clipboard success and failure (mocked clipboard). See [`TEST-STRATEGY.md`](TEST-STRATEGY.md). | Dev | None |
-| Test coverage: newsletter dialog open, close by button and backdrop, scroll-lock release and focus. | Dev | None |
 | Test coverage: fixed-clock browser tests for the Welcome Tea → Fireworks switch (UK midnight and BST) and Today/Tomorrow labels, run in CI. | Dev | None |
 | Test coverage: generated-site contracts for expected routes, canonical/social metadata, sitemap/robots, Fireworks JSON-LD, absence of the dev mobile preview, and a `/foa-website/` base-path build. | Dev | None |
 | Test coverage: content invariants (event end after start, exactly one latest newsletter, unique committee order, required image alt text). | Dev | None |
