@@ -28,13 +28,16 @@ for (const route of routes) {
   });
 }
 
-test("expanded newsletter archive has no serious or critical accessibility violations", async ({ page }) => {
+test("expanded newsletters have no serious or critical accessibility violations", async ({ page }) => {
   await page.goto("/newsletter/");
-  await page.getByRole("button", { name: /Read more/ }).click();
-  await expect(page.getByRole("button", { name: /Show less/ })).toBeVisible();
+  for (const id of ["newsletter-latest-more", "newsletter-back-to-school-2026-more"]) {
+    await page.locator(`[aria-controls="${id}"]`).click();
+  }
+  await expect(page.getByRole("button", { name: /Show less/ })).toHaveCount(2);
+  await page.waitForFunction(() => document.getAnimations().length === 0);
 
   const results = await new AxeBuilder({ page })
-    .include(".newsletter-summary")
+    .include(".newsletter-board")
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
     .analyze();
   const violations = results.violations.filter(({ impact }) =>

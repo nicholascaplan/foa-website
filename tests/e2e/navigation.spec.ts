@@ -4,6 +4,7 @@ test("main task routes are reachable through normal navigation", async ({ page }
   await page.goto("/");
 
   for (const destination of [
+    { name: "Newsletter", path: "/newsletter/" },
     { name: "What's On", path: "/whats-on/" },
     { name: "Uniform", path: "/uniform/" },
     { name: "Get Involved", path: "/get-involved/" },

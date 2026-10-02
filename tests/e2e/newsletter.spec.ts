@@ -1,26 +1,36 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Newsletter archive expansion", () => {
+test.describe("Newsletter expansion", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/newsletter/");
   });
 
-  test("shows a preview and hides the rest until Read more is used", async ({ page }) => {
-    await expect(page.getByText("Welcome back! We hope you’ve all had a wonderful summer")).toBeVisible();
-    await expect(page.getByText("Call for Event Leads")).toBeHidden();
-    await expect(page.getByRole("button", { name: /Read more/ })).toHaveAttribute("aria-expanded", "false");
+  test("the latest newsletter preview shows the opening sections", async ({ page }) => {
+    await expect(page.getByText("A Heartfelt Thank You to Sarah and Katy")).toBeVisible();
   });
 
-  test("expands and collapses the full newsletter in place", async ({ page }) => {
-    const trigger = page.getByRole("button", { name: /Read more/ });
-    await trigger.click();
+  for (const [name, bodyId, hiddenText] of [
+    ["latest", "newsletter-latest-more", "Fireworks on the Field"],
+    ["archive", "newsletter-back-to-school-2026-more", "Call for Event Leads"],
+  ]) {
+    test(`${name} newsletter hides the rest until Read more is used`, async ({ page }) => {
+      await expect(page.locator(`#${bodyId}`)).toBeHidden();
+      await expect(page.locator(`[aria-controls="${bodyId}"]`)).toHaveAttribute("aria-expanded", "false");
+    });
 
-    await expect(page.getByText("Call for Event Leads")).toBeVisible();
-    const expanded = page.getByRole("button", { name: /Show less/ });
-    await expect(expanded).toHaveAttribute("aria-expanded", "true");
+    test(`${name} newsletter expands and collapses in place`, async ({ page }) => {
+      const more = page.locator(`#${bodyId}`);
+      const trigger = page.locator(`[aria-controls="${bodyId}"]`);
+      await trigger.click();
 
-    await expanded.click();
-    await expect(page.getByText("Call for Event Leads")).toBeHidden();
-    await expect(page.getByRole("button", { name: /Read more/ })).toHaveAttribute("aria-expanded", "false");
-  });
+      await expect(more.getByText(hiddenText).first()).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(trigger).toContainText("Show less");
+
+      await trigger.click();
+      await expect(more).toBeHidden();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await expect(trigger).toContainText("Read more");
+    });
+  }
 });

@@ -33,7 +33,7 @@ npm install      # once
 npm run dev      # opens http://localhost:4321/
 ```
 
-The dev server watches for changes; stop it with `Ctrl+C`. On desktop, two dev-only controls appear on the left of the page: **Mobile preview** (opens the current route in a 390px window; allow pop-ups if blocked) and **Reset cookie consent**. Neither is in production builds.
+The dev server watches for changes; stop it with `Ctrl+C`. On desktop, two small dev-only icon buttons stay centred at the top of the screen: mobile preview (opens the current route in a 390px window; allow pop-ups if blocked) and reset cookie consent. Neither is in production builds.
 
 To review the production build:
 

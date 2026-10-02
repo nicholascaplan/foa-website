@@ -6,6 +6,11 @@ import NewsletterSection from "../components/NewsletterSection.astro";
 import autumnTerm from "../content/newsletters/autumn-term-2026.json";
 import backToSchool from "../content/newsletters/back-to-school-2026.json";
 const latest = autumnTerm;
+const latestPreviewCount = 3;
+const latestSections = latest.sections ?? [];
+const latestPreview = latestSections.slice(0, latestPreviewCount);
+const latestRest = latestSections.slice(latestPreviewCount);
+const latestBodyId = "newsletter-latest-more";
 const previous = [{ id: "back-to-school-2026", data: backToSchool }];
 const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" });
 const formatDateWithOrdinal = (value: Date | string) => {
@@ -21,14 +26,22 @@ const formatDateWithOrdinal = (value: Date | string) => {
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
   <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
-    <section class="newsletter-section">
+    <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2>{latest.published && <p>{formatDateWithOrdinal(latest.published)}</p>}</div>
       <article class="newsletter-issue newsletter-sheet">
         <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span></div>
-        {latest.sections?.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
+        {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
+        {latestRest.length > 0 && <>
+          <div class="newsletter-more" id={latestBodyId} hidden>
+            {latestRest.map((section) => <NewsletterSection section={section} />)}
+          </div>
+          <button class="newsletter-read-more" type="button" aria-expanded="false" aria-controls={latestBodyId}>
+            <span data-label>Read more</span> <span aria-hidden="true" data-icon>&darr;</span>
+          </button>
+        </>}
       </article>
     </section>
-    <section class="newsletter-section">
+    <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA. Read more to see the full newsletter.</p></div>
       {previous.map(({ id, data }) => {
         const [first, ...rest] = data.sections ?? [];
@@ -42,7 +55,7 @@ const formatDateWithOrdinal = (value: Date | string) => {
             <div class="newsletter-more" id={bodyId} hidden>
               {rest.map((section) => <NewsletterSection section={section} />)}
             </div>
-            <button class="button button--secondary newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
+            <button class="newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
               <span data-label>Read more</span> <span aria-hidden="true" data-icon>&darr;</span>
             </button>
           </>}
@@ -53,15 +66,54 @@ const formatDateWithOrdinal = (value: Date | string) => {
 </BaseLayout>
 
 <script>
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const timing: KeyframeAnimationOptions = { duration: 350, easing: "ease-in-out", fill: "forwards" };
+
   document.querySelectorAll<HTMLButtonElement>(".newsletter-read-more").forEach((button) => {
     const more = document.getElementById(button.getAttribute("aria-controls") || "");
     if (!more) return;
+    let animation: Animation | undefined;
+
     button.addEventListener("click", () => {
       const expand = button.getAttribute("aria-expanded") !== "true";
-      more.hidden = !expand;
       button.setAttribute("aria-expanded", String(expand));
       button.querySelector("[data-label]")!.textContent = expand ? "Show less" : "Read more";
       button.querySelector("[data-icon]")!.innerHTML = expand ? "&uarr;" : "&darr;";
+
+      animation?.cancel();
+      if (expand) more.hidden = false;
+      if (reducedMotion.matches) {
+        more.hidden = !expand;
+        return;
+      }
+
+      more.style.overflow = "hidden";
+      const full = `${more.scrollHeight}px`;
+      animation = more.animate(
+        expand
+          ? { height: ["0px", full], opacity: [0, 1] }
+          : { height: [full, "0px"], opacity: [1, 0] },
+        timing,
+      );
+      if (!expand) {
+        const anchorTop = button.getBoundingClientRect().top;
+        const current = animation;
+        const keepButtonInPlace = () => {
+          if (animation !== current) return;
+          const drift = button.getBoundingClientRect().top - anchorTop;
+          if (drift) window.scrollTo({ top: window.scrollY + drift, behavior: "instant" });
+          requestAnimationFrame(keepButtonInPlace);
+        };
+        requestAnimationFrame(keepButtonInPlace);
+      }
+      animation.onfinish = () => {
+        more.hidden = !expand;
+        animation?.cancel();
+        animation = undefined;
+      };
+      animation.oncancel = () => {
+        more.style.overflow = "";
+      };
     });
   });
 </script>

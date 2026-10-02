@@ -37,6 +37,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Decide whether to publish short committee biographies. If so, present them as visible readable content, not desktop-only tooltips. | FOA | FOA decision |
 | Run the 5–7 parent/carer task-based information-architecture test (see *Suggested IA test tasks* below). | Owner | Participants |
 | Set up uptime monitoring for the `www` domain with an agreed alert recipient and response owner. | Owner | Tool choice |
+| Upload more past FOA newsletters to the site. Obtain the source newsletters, confirm they are approved for public release (check for personal details, child-related information and committee names before publishing), and add them to the newsletter content collection. | Owner | Supplied newsletters, FOA approval to publish |
+| Once more newsletters are published, consider a year filter on the newsletters listing. It must work as a real, keyboard-accessible control and degrade gracefully without JavaScript (for example, year links or anchors). | Dev | More newsletters uploaded |
 | Decide whether to add fundraising progress (see `fundraising-progress-options.html`): confirm fundraising purpose, approved target, data owner, update process, donation action, homepage placement and end-of-campaign treatment before implementing anything. | FOA | FOA decisions |
 
 ## Later

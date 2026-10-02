@@ -4,9 +4,14 @@
       <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
       <path d="M10.5 18.5h3"></path>
     </svg>
-    Mobile preview
+    <span class="visually-hidden">Mobile preview</span>
   </button>
-  <button class="dev-tool-button" type="button" data-reset-cookie-preferences>Reset cookie consent</button>
+  <button class="dev-tool-button" type="button" data-reset-cookie-preferences aria-label="Reset cookie consent" title="Reset cookie consent">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.5 12.5A8.5 8.5 0 1 1 11.5 3a4 4 0 0 0 5 5 4 4 0 0 0 4 4.5Z"></path>
+      <path d="M8 12h.01M12 16h.01M14 11h.01"></path>
+    </svg>
+  </button>
 </div>
 
 <script>
@@ -26,26 +31,26 @@
   .dev-tools {
     position: fixed;
     z-index: 80;
-    top: 6rem;
-    left: 1rem;
-    display: grid;
-    justify-items: start;
-    gap: 0.5rem;
+    top: 0.75rem;
+    left: 50%;
+    display: flex;
+    gap: 0.4rem;
+    transform: translateX(-50%);
   }
 
   .dev-tool-button {
-    min-height: 2.75rem;
-    padding: 0.65rem 0.9rem;
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 999px;
-    align-items: center;
-    gap: 0.45rem;
+    place-items: center;
     color: var(--white);
     background: var(--green-dark);
     box-shadow: var(--shadow);
     font: inherit;
-    font-size: 0.8rem;
-    font-weight: 800;
+    font-size: 0;
     cursor: pointer;
   }
 
@@ -54,8 +59,8 @@
   }
 
   .dev-tool-button svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   @media (max-width: 47.99rem) {

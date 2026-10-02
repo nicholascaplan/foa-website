@@ -51,7 +51,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - It is a public information and community site, not an internal committee administration system.
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
-- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on a paper-sheet frame with an FOA letterhead. Previous issues show their opening section as a preview, and Read more expands the full issue in place (no dialog).
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog).
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16 September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 
@@ -79,7 +79,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### Information architecture
 
-- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**.
+- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu does not.
 - Committee, Reps Hub and Meeting Minutes belong under Get Involved. Newsletter, About, Contact and policy pages are reached through the footer and relevant page content. Contact Us and Reps Hub are also at the bottom of the mobile menu.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
@@ -135,12 +135,12 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
 - Typed local content collections are the interim source for events, newsletters and committee members until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
 - CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
-- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter archive expand/collapse, Reps Hub clipboard actions and the cookie banner.
+- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions and the cookie banner.
 - GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
 - Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page.
 - The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
 - Asset URLs must go through the shared `withBase()` helper so the site works at both root and the temporary `/foa-website/` base path.
-- Development-only controls (Mobile preview, Reset cookie consent) are omitted from production builds.
+- Development-only controls (Mobile preview, Reset cookie consent) are omitted from production builds. In local desktop development, they are compact, accessible icon buttons fixed together at the top centre of the viewport, clear of the page text.
 
 ## 3. Scope
 
