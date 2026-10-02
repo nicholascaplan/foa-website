@@ -64,9 +64,9 @@ test("What's On includes the date-driven Welcome Tea transition", async () => {
 test("newsletter shows the latest issue and previous issue in order", async () => {
   const newsletter = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
   assert.match(newsletter, /Autumn Term News &amp; Fireworks Tickets/);
-  assert.match(newsletter, /28th September 2026/);
+  assert.match(newsletter, /Sent on Friday 2nd October/);
   assert.match(newsletter, /Welcome Back from The FOA/);
-  assert.match(newsletter, /16th September 2026/);
+  assert.match(newsletter, /Wednesday 16th September/);
   assert.match(newsletter, /aria-expanded="false"[^>]*aria-controls="newsletter-back-to-school-2026-more"|aria-controls="newsletter-back-to-school-2026-more"[^>]*aria-expanded="false"/);
   assert.match(newsletter, /id="newsletter-back-to-school-2026-more" hidden/);
   assert.match(newsletter, /Pre-loved Uniform Sales: 3:25pm, School Playground/);

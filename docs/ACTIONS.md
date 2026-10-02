@@ -15,16 +15,9 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 | Item | Owner | Blocked by |
 |---|---|---|
-| Select the external Fireworks ticketing provider and supply the final checkout URL. Until then the event page shows "Ticket link to follow." Add it as a normal external link. | FOA | Provider decision |
 | Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities. | FOA | Provider decision |
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
-| Reconfirm Pre-loved Uniform donation instructions and accepted/rejected items. Prices (£3 coats and new-logo items, £1 other items, card only) are confirmed. | FOA | FOA confirmation |
-| Confirm the newsletter details to publish: "Sarah Parker" (thank-you) versus "Sarah Parish" (Co-Chair), the 2 October uniform sale date, and the "attached" committee list, calendar and poster referenced in the newsletters (link them or edit those lines). | Owner | None |
-| Approve the Reps Hub messages. | FOA | FOA approval |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
-| Confirm the Ashley School mark in `assets/logo-big.png` is approved for public use, or obtain a school-mark-free version. | FOA | School/FOA approval |
-| Confirm the apex domain `thefriendsofashley.org` redirects to `www`. | Owner | None |
-| Cancel the 123 Reg Standard SSL product (£59.99/year) or disable renewal; it is not needed for GitHub Pages. Do not change the existing DNS records. | Owner | Confirm live site and redirect first |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
 

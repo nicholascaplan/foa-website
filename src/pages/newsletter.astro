@@ -12,7 +12,7 @@ const latestPreview = latestSections.slice(0, latestPreviewCount);
 const latestRest = latestSections.slice(latestPreviewCount);
 const latestBodyId = "newsletter-latest-more";
 const previous = [{ id: "back-to-school-2026", data: backToSchool }];
-const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" });
+const dateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
 const formatDateWithOrdinal = (value: Date | string) => {
   const date = value instanceof Date ? value : new Date(value);
   return dateFormat.formatToParts(date).map((part) => {
@@ -27,9 +27,9 @@ const formatDateWithOrdinal = (value: Date | string) => {
   <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
     <section class="newsletter-section newsletter-board">
-      <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2>{latest.published && <p>{formatDateWithOrdinal(latest.published)}</p>}</div>
+      <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
       <article class="newsletter-issue newsletter-sheet">
-        <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span></div>
+        <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
           <div class="newsletter-more" id={latestBodyId} hidden>
@@ -47,9 +47,8 @@ const formatDateWithOrdinal = (value: Date | string) => {
         const [first, ...rest] = data.sections ?? [];
         const bodyId = `newsletter-${id}-more`;
         return <article class="newsletter-summary newsletter-sheet">
-          <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span></div>
+          <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
           <p class="newsletter-summary-label">{data.title}</p>
-          {data.published && <p class="newsletter-summary-date">{formatDateWithOrdinal(data.published)}</p>}
           {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
           {rest.length > 0 && <>
             <div class="newsletter-more" id={bodyId} hidden>

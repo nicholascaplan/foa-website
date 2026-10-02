@@ -59,6 +59,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 - Warm modern editorial; community-led rather than corporate or software-like.
 - Restrained cards and badges; confident editorial typography; generous spacing. Do not depend on photography.
+- Interior page heroes use a centered, inset heritage-green panel rather than a full-bleed banner.
 - Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
 - Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
 - Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
