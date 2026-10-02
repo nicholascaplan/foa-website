@@ -3,6 +3,8 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
   cancel-in-progress: true
 
 jobs:
@@ -25,11 +27,17 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Verify generated site under the GitHub Pages project base path
+        run: npm run build && npm run test:site
+        env:
+          SITE_URL: https://www.thefriendsofashley.org
+          BASE_PATH: /foa-website/
       - run: npm run verify
         env:
           SITE_URL: https://www.thefriendsofashley.org
           BASE_PATH: /
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
   deploy:
@@ -38,6 +46,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: github.event_name != 'pull_request'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
