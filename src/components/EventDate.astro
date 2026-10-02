@@ -10,11 +10,13 @@ const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-di
 </span>
 
 <script>
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const dayNumber = (dateKey: string) => {
+    const [year, month, day] = dateKey.split("-").map(Number);
+    return Date.UTC(year, month - 1, day) / 86400000;
+  };
+  const today = dayNumber(new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London" }).format(new Date()));
   document.querySelectorAll<HTMLElement>("[data-event-date]").forEach((label) => {
-    const eventDate = new Date(`${label.dataset.eventDate}T00:00:00`);
-    const daysAway = Math.round((eventDate.getTime() - today.getTime()) / 86400000);
+    const daysAway = dayNumber(label.dataset.eventDate!) - today;
     const text = daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : "";
     label.textContent = text;
     label.hidden = !text;
