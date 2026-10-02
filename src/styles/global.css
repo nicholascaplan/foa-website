@@ -1869,7 +1869,7 @@ a {
 }
 
 .view-hero {
-  width: min(calc(100% - 2rem), 1040px);
+  width: min(calc(100% - 2rem), var(--max-width));
   margin-inline: auto;
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   border-radius: var(--radius-md);
@@ -2318,7 +2318,8 @@ a {
 }
 
 @media (min-width: 48rem) {
-  .site-width {
+  .site-width,
+  .view-hero {
     width: min(calc(100% - 3rem), var(--max-width));
   }
 
