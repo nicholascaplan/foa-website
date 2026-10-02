@@ -66,8 +66,9 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Committee portraits are shown compactly because source files are low resolution.
 - The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
 - The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.
-- Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows through Saturday 3 October 2026. From Sunday 4 October (UK calendar date) the Fireworks editorial card replaces it. Welcome Tea moves from Upcoming to Past events at the same cutoff.
+- Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows until it starts at 13:00 on Saturday 3 October 2026 (`archiveFrom` is a date-time). From then the Fireworks editorial card replaces it, and Welcome Tea moves from Upcoming to Past events at the same moment.
 - Event and sale dates matching the visitor's local date are labelled **Today** or **Tomorrow** automatically. Do not apply to newsletter dates or document metadata.
+- What's On drops timed events from Upcoming at their start time. Events with `allDay` show no time and drop off at the end of their UK day. Events with `archiveFrom` use that date-time instead.
 - Public date copy uses ordinal days (`5th November`).
 - No event status pills in event lists or past-event cards.
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.
@@ -108,7 +109,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Remove unverified promises (payment methods, accounts, instant e-tickets).
 - Confirmed Fireworks facts: Thursday 5 November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead; attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
 - Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
-- Christmas Fayre is Saturday 5 December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3 October.
+- Christmas Fayre is Saturday 5 December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3 October. Santa's Grotto is Wednesday 16 December 2026, run by parents and carers during the school day.
 
 ### Notice Board
 

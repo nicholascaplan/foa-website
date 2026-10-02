@@ -17,13 +17,6 @@ const loadCollection = async (name) => {
 };
 const exists = (file) => stat(file).then(() => true, () => false);
 
-const ukDate = (value) => new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Europe/London",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(new Date(value));
-
 test("every event ends after it starts and has a valid UK start", async () => {
   const problems = [];
   for (const { id, data } of await loadCollection("events")) {
@@ -37,8 +30,8 @@ test("every event ends after it starts and has a valid UK start", async () => {
 test("events that switch to past content do so after they take place", async () => {
   const problems = [];
   for (const { id, data } of await loadCollection("events")) {
-    if (data.archiveFrom && data.archiveFrom <= ukDate(data.start)) {
-      problems.push(`${id}: archiveFrom ${data.archiveFrom} is not after the event date ${ukDate(data.start)}`);
+    if (data.archiveFrom && new Date(data.archiveFrom) < new Date(data.start)) {
+      problems.push(`${id}: archiveFrom ${data.archiveFrom} is before the event start ${data.start}`);
     }
     if (data.archive && data.archiveFrom) {
       problems.push(`${id}: archive and archiveFrom are both set, so it would be listed as both past and upcoming`);

@@ -1,9 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// Welcome Tea archives from 2026-10-04 (UK time); Fireworks is on 2026-11-05.
-// BST ends on 2026-10-25, so UK midnight on 4 October is 23:00 UTC on 3 October.
-const lastMomentOfWelcomeTea = "2026-10-03T22:59:30Z";
-const firstMomentAfterWelcomeTea = "2026-10-03T23:00:00Z";
+// Welcome Tea starts at 13:00 BST (12:00 UTC) on 2026-10-03 and archives from then; Fireworks is on 2026-11-05.
+const lastMomentOfWelcomeTea = "2026-10-03T11:59:30Z";
+const firstMomentAfterWelcomeTea = "2026-10-03T12:00:00Z";
 
 const openAt = async (page: Page, isoTime: string, path: string) => {
   await page.clock.install({ time: new Date(isoTime) });
@@ -25,21 +24,21 @@ test.describe("Homepage event switch (UK time)", () => {
     await expect(homepageFireworks(page)).toBeHidden();
   });
 
-  test("still shows Welcome Tea in the last minute of 3 October", async ({ page }) => {
+  test("still shows Welcome Tea until it starts at 1pm", async ({ page }) => {
     await openAt(page, lastMomentOfWelcomeTea, "/");
 
     await expect(homepageWelcomeTea(page)).toBeVisible();
     await expect(homepageFireworks(page)).toBeHidden();
   });
 
-  test("switches to Fireworks at UK midnight on 4 October", async ({ page }) => {
+  test("switches to Fireworks when Welcome Tea starts at 1pm", async ({ page }) => {
     await openAt(page, firstMomentAfterWelcomeTea, "/");
 
     await expect(homepageFireworks(page)).toBeVisible();
     await expect(homepageWelcomeTea(page)).toBeHidden();
   });
 
-  test("switches without a reload when midnight passes while the page is open", async ({ page }) => {
+  test("switches without a reload when Welcome Tea starts while the page is open", async ({ page }) => {
     await openAt(page, lastMomentOfWelcomeTea, "/");
     await expect(homepageWelcomeTea(page)).toBeVisible();
 
@@ -53,7 +52,7 @@ test.describe("Homepage event switch (UK time)", () => {
 test.describe("Homepage event switch uses UK time, not the visitor's timezone", () => {
   test.use({ timezoneId: "America/Los_Angeles" });
 
-  test("a visitor still on 3 October locally sees Fireworks once it is 4 October in the UK", async ({ page }) => {
+  test("a visitor in another timezone sees Fireworks once Welcome Tea has started", async ({ page }) => {
     await openAt(page, firstMomentAfterWelcomeTea, "/");
 
     await expect(homepageFireworks(page)).toBeVisible();
@@ -75,7 +74,7 @@ test.describe("What's On event sections (UK time)", () => {
     await expect(pastEvents(page)).toBeHidden();
   });
 
-  test("moves Welcome Tea to past events at UK midnight on 4 October", async ({ page }) => {
+  test("moves Welcome Tea to past events when it starts at 1pm", async ({ page }) => {
     await openAt(page, firstMomentAfterWelcomeTea, "/whats-on/");
 
     await expect(welcomeTeaListItem(page)).toBeHidden();
@@ -87,6 +86,27 @@ test.describe("What's On event sections (UK time)", () => {
     await openAt(page, firstMomentAfterWelcomeTea, "/whats-on/");
 
     await expect(page.locator(".event-list-item").filter({ hasText: "Fireworks on the Field" })).toBeVisible();
+  });
+
+  test("hides a timed event once its start time has passed", async ({ page }) => {
+    const octoberSale = page.locator(".event-list-item").filter({ hasText: "Pre-loved uniform sale" }).first();
+
+    await openAt(page, "2026-10-02T14:24:30Z", "/whats-on/");
+    await expect(octoberSale).toBeVisible();
+
+    await openAt(page, "2026-10-02T14:25:00Z", "/whats-on/");
+    await expect(page.locator(".event-list-item").filter({ hasText: "2 October" })).toBeHidden();
+  });
+
+  test("lists Santa's Grotto without a time and hides it after 16 December", async ({ page }) => {
+    const grotto = page.locator(".event-list-item").filter({ hasText: "Santa's Grotto" });
+
+    await openAt(page, "2026-12-16T23:59:00Z", "/whats-on/");
+    await expect(grotto).toBeVisible();
+    await expect(grotto).toContainText("Wednesday 16 December · Ashley School");
+
+    await openAt(page, "2026-12-17T00:00:00Z", "/whats-on/");
+    await expect(grotto).toBeHidden();
   });
 });
 

@@ -32,9 +32,9 @@ test("homepage contains the primary mobile-review content", async () => {
   assert.match(homepage, /Upcoming event/);
   assert.match(homepage, /Welcome Tea/);
   assert.match(homepage, /Fireworks on the Field/);
-  assert.match(homepage, /class="event-feature event-feature--poster" data-show-before="2026-10-04"/);
+  assert.match(homepage, /class="event-feature event-feature--poster" data-show-before="2026-10-03T12:00:00.000Z"/);
   assert.match(homepage, new RegExp(`class="event-poster-link" href="${basePath}/whats-on/"`));
-  assert.match(homepage, /class="event-feature" data-show-from="2026-10-04" hidden/);
+  assert.match(homepage, /class="event-feature" data-show-from="2026-10-03T12:00:00.000Z" hidden/);
   assert.match(homepage, new RegExp(`<img src="${basePath}/welcome%20tea\\.png" alt="Welcome Tea poster:`));
   assert.doesNotMatch(homepage, /data-event-carousel|data-carousel-progress|data-carousel-slide/);
   assert.match(homepage, /<meta name="viewport"/);
@@ -49,8 +49,8 @@ test("What's On includes the date-driven Welcome Tea transition", async () => {
   const stylesheetPath = whatsOn.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
   assert.ok(stylesheetPath, "What's On should include a stylesheet");
   const stylesheet = await readFile(outputPath(stylesheetPath), "utf8");
-  assert.match(whatsOn, /data-show-before="2026-10-04"/);
-  assert.match(whatsOn, /data-show-from="2026-10-04"/);
+  assert.match(whatsOn, /data-show-before="2026-10-03T12:00:00.000Z"/);
+  assert.match(whatsOn, /data-show-from="2026-10-03T12:00:00.000Z"/);
   assert.match(whatsOn, /Pre-loved uniform sale/);
   assert.match(whatsOn, /Friday 2 October, 15:25 · School playground/);
   assert.match(whatsOn, /A chance for new Ashley families to meet one another and enjoy tea and cake/);

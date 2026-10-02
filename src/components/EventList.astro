@@ -5,14 +5,18 @@ import { withBase } from "../lib/urls";
 interface Props { events: CollectionEntry<"events">[]; showBeforeArchive?: boolean; }
 const { events, showBeforeArchive = false } = Astro.props;
 const formatter = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
+const dateKeyFormatter = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London" });
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 ---
 <div class="event-list">
   {events.map(({ data }) => {
     const Wrapper = data.path ? "a" : "article";
-    return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom : undefined}>
+    const expires = showBeforeArchive && !data.archiveFrom;
+    const expiresAt = expires && !data.allDay ? data.start.toISOString() : undefined;
+    const expiresOn = expires && data.allDay ? new Date(Date.parse(`${dateKeyFormatter.format(data.start)}T00:00:00Z`) + 86400000).toISOString().slice(0, 10) : undefined;
+    return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom?.toISOString() : undefined} data-expires-at={expiresAt} data-expires-on={expiresOn}>
       <EventDate date={data.start} compact />
-      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : data.start.getHours() === 12 && data.start.getMinutes() === 0 ? "" : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}</span>
+      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.allDay ? "" : data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}</span>
     </Wrapper>;
   })}
 </div>

@@ -64,6 +64,7 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 - Co-Secretary recruitment copy (final wording and publication review).
 - Arabic translation quality (demonstration only; human review required).
 - Fundraising-progress target (the £25,000 in `fundraising-progress-options.html` is illustrative only).
+- Santa's Grotto (16 December 2026): the start time, location wording and whether to list it publicly (it is usually a secret from the children) are unconfirmed. It is listed as an all-day event at Ashley School.
 - Christmas Fayre date: Saturday 5 December 2026 is confirmed by the project owner; the supplied calendar's 28 November is superseded. Verify the final public date.
 
 ## Open Questions
