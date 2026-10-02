@@ -33,9 +33,9 @@ test("homepage contains the primary mobile-review content", async () => {
   assert.match(homepage, /Welcome Tea/);
   assert.match(homepage, /Fireworks on the Field/);
   assert.match(homepage, /class="event-feature event-feature--poster" data-show-before="2026-10-04"/);
-  assert.match(homepage, /class="event-poster-link" href="\/whats-on\/"/);
+  assert.match(homepage, new RegExp(`class="event-poster-link" href="${basePath}/whats-on/"`));
   assert.match(homepage, /class="event-feature" data-show-from="2026-10-04" hidden/);
-  assert.match(homepage, /<img src="\/welcome%20tea\.png" alt="Welcome Tea poster:/);
+  assert.match(homepage, new RegExp(`<img src="${basePath}/welcome%20tea\\.png" alt="Welcome Tea poster:`));
   assert.doesNotMatch(homepage, /data-event-carousel|data-carousel-progress|data-carousel-slide/);
   assert.match(homepage, /<meta name="viewport"/);
   assert.match(homepage, new RegExp(`<link rel="icon" href="${basePath}/favicon\\.svg" type="image/svg\\+xml">`));
