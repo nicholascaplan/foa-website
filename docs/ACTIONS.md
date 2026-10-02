@@ -31,7 +31,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 | Item | Owner | Blocked by |
 |---|---|---|
-| Test coverage: confirm the new analytics consent browser tests (`tests/e2e/analytics.spec.ts`) pass locally and in CI, then delete this item. | Dev | None |
 | Committee page: decide whether the routes to Reps Hub and About The FOA are clear enough; if not, use more explicit task-focused labels. | Owner | None |
 | Decide whether About The FOA should carry a concise committee summary. The Committee page remains the canonical source; avoid duplicating member details. | Owner | None |
 | Decide whether to publish short committee biographies. If so, present them as visible readable content, not desktop-only tooltips. | FOA | FOA decision |
