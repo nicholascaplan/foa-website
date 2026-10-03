@@ -1896,7 +1896,7 @@ a {
   .poster-figure--centered {
     align-self: start;
     width: 100%;
-    max-width: 30rem;
+    max-width: 28rem;
     margin: 0;
     padding: 0;
     background: none;
@@ -1904,11 +1904,6 @@ a {
 
   .poster-frame {
     max-width: none;
-    padding: 1rem;
-    border: 1px solid rgba(20, 83, 45, 0.18);
-    border-radius: var(--radius-lg);
-    background: var(--green-light);
-    box-shadow: var(--shadow);
   }
 }
 
@@ -1918,6 +1913,12 @@ a {
   height: auto;
   border-radius: var(--radius-md);
   box-shadow: 0 6px 18px rgba(11, 57, 32, 0.22);
+}
+
+@media (min-width: 48rem) {
+  .poster-frame img {
+    box-shadow: none;
+  }
 }
 
 .schedule {
