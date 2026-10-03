@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const routes = [
   "/",
@@ -45,4 +45,35 @@ test("expanded newsletters have no serious or critical accessibility violations"
   );
 
   expect(violations).toEqual([]);
+});
+
+test.describe("mobile viewport", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  const scan = (page: Page) =>
+    new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      .analyze();
+  const seriousOrCritical = (results: Awaited<ReturnType<typeof scan>>) =>
+    results.violations.filter(({ impact }) => impact === "serious" || impact === "critical");
+
+  for (const route of routes) {
+    test(`${route} has no serious or critical violations and does not scroll sideways`, async ({ page }) => {
+      await page.goto(route);
+
+      expect(seriousOrCritical(await scan(page))).toEqual([]);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test("the open mobile menu has no serious or critical violations", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
+
+    expect(seriousOrCritical(await scan(page))).toEqual([]);
+  });
 });

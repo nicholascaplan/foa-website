@@ -71,6 +71,10 @@ Continue using Node's built-in test runner against `dist/`. These tests are fast
 - Event structured data is valid JSON and contains the confirmed source fields.
 - Important collection-driven ordering and separation rules hold, such as upcoming versus archived events and latest versus previous newsletters.
 
+Pure logic lives in `src/lib` (event visibility and UK-day labels in `event-visibility.ts`, content rendering in `inline.ts`) and is unit-tested directly with the same runner, including clock-change and escaping edge cases. Browser tests then only need to prove the wiring.
+
+Do not assert on minified CSS, editable prose or facts the link crawler already covers. Where a test needs an event date, derive it from the content file rather than hard-coding it.
+
 Prefer structural parsing over increasingly broad regular expressions when these tests expand. Keep content assertions focused on critical facts and ordering; do not freeze every sentence of editable copy.
 
 ### 3. Browser end-to-end tests
@@ -88,6 +92,8 @@ Initial browser scenarios:
 7. Confirm the development-only mobile-preview control is absent from the production build.
 
 Generated-site contracts in `tests/site.test.mjs` cover the homepage Welcome Tea poster and Fireworks hero-switch boundary attributes. Browser coverage for the UK-time date transition remains required in CI.
+
+Further browser scenarios now covered: the Fireworks "Back to What's On" link only appears when arriving from What's On; key event information stays reachable with JavaScript disabled (the footer is the mobile navigation fallback); and axe plus a no-horizontal-scroll check run at a 390px viewport, including the open mobile menu.
 
 Keep browser coverage concentrated on shared navigation and unique interactions. Static pages with no distinct behaviour should be covered by generated-site and accessibility checks rather than repetitive end-to-end tests.
 

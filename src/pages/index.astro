@@ -25,16 +25,8 @@ if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missin
 </BaseLayout>
 
 <script>
-  const updateHomepageEvents = () => {
-    const now = Date.now();
-    document.querySelectorAll<HTMLElement>("[data-show-before]").forEach((event) => {
-      event.hidden = now >= Date.parse(event.dataset.showBefore!);
-    });
-    document.querySelectorAll<HTMLElement>("[data-show-from]").forEach((event) => {
-      event.hidden = now < Date.parse(event.dataset.showFrom!);
-    });
-  };
+  import { syncEventVisibility } from "../lib/event-visibility";
 
-  updateHomepageEvents();
-  window.setInterval(updateHomepageEvents, 60000);
+  syncEventVisibility();
+  window.setInterval(syncEventVisibility, 60000);
 </script>

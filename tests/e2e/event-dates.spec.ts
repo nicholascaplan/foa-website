@@ -134,30 +134,3 @@ test.describe("Today and Tomorrow labels use UK time, not the visitor's timezone
     });
   });
 });
-
-test.describe("Today and Tomorrow date labels", () => {
-  test.use({ timezoneId: "Europe/London" });
-
-  const fireworksLabel = (page: Page) =>
-    page.locator(".event-list-item").filter({ hasText: "Fireworks on the Field" }).locator(".relative-date");
-
-  for (const { name, time, label } of [
-    { name: "two days before shows no label", time: "2026-11-03T12:00:00Z", label: "" },
-    { name: "the day before shows Tomorrow", time: "2026-11-04T12:00:00Z", label: "Tomorrow" },
-    { name: "late the evening before shows Tomorrow", time: "2026-11-04T23:59:00Z", label: "Tomorrow" },
-    { name: "the day itself shows Today", time: "2026-11-05T09:00:00Z", label: "Today" },
-    { name: "the day after shows no label", time: "2026-11-06T09:00:00Z", label: "" },
-  ]) {
-    test(name, async ({ page }) => {
-      await openAt(page, time, "/whats-on/");
-
-      if (label) {
-        await expect(fireworksLabel(page)).toHaveText(label);
-        await expect(fireworksLabel(page)).toBeVisible();
-      } else {
-        await expect(fireworksLabel(page)).toBeHidden();
-        await expect(fireworksLabel(page)).toHaveText("");
-      }
-    });
-  }
-});

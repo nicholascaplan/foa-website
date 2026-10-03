@@ -21,7 +21,7 @@ Built with Astro 7 (static output), typed local content collections and locally 
 - `src/content/`: typed collections for events, newsletters and committee members
 - `src/styles/global.css`: design tokens and component styles
 - `assets/`: brand assets, event images, committee portraits and source documents
-- `tests/`: generated-site tests (`site.test.mjs`) and Playwright/axe tests (`e2e/`)
+- `tests/`: generated-site and unit tests (`*.test.mjs`) and Playwright/axe tests (`e2e/`)
 - `prototype/`: archived hash-routed design prototype
 - `fundraising-progress-options.html`: unlinked design review page
 - `.github/workflows/deploy.yml`: verify and deploy

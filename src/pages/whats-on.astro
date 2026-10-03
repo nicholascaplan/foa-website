@@ -16,29 +16,10 @@ const hasPermanentPastEvents = past.some(({ data }) => data.archive && !data.arc
 </BaseLayout>
 
 <script>
-  const updateEventSections = () => {
-    const now = Date.now();
-    const parts = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Europe/London",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(new Date(now));
-    const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
-    const dateKey = `${part("year")}-${part("month")}-${part("day")}`;
+  import { syncEventVisibility } from "../lib/event-visibility";
 
-    document.querySelectorAll<HTMLElement>("[data-show-before]").forEach((event) => {
-      event.hidden = now >= Date.parse(event.dataset.showBefore!);
-    });
-    document.querySelectorAll<HTMLElement>("[data-show-from]").forEach((event) => {
-      event.hidden = now < Date.parse(event.dataset.showFrom!);
-    });
-    document.querySelectorAll<HTMLElement>("[data-expires-at]").forEach((event) => {
-      event.hidden = now >= Date.parse(event.dataset.expiresAt!);
-    });
-    document.querySelectorAll<HTMLElement>("[data-expires-on]").forEach((event) => {
-      event.hidden = dateKey >= event.dataset.expiresOn!;
-    });
+  const updateEventSections = () => {
+    syncEventVisibility();
     const pastSection = document.querySelector<HTMLElement>("[data-past-events-section]");
     if (pastSection) pastSection.hidden = !pastSection.querySelector(".past-event:not([hidden])");
   };

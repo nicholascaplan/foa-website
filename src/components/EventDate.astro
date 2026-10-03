@@ -10,15 +10,7 @@ const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-di
 </span>
 
 <script>
-  const dayNumber = (dateKey: string) => {
-    const [year, month, day] = dateKey.split("-").map(Number);
-    return Date.UTC(year, month - 1, day) / 86400000;
-  };
-  const today = dayNumber(new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London" }).format(new Date()));
-  document.querySelectorAll<HTMLElement>("[data-event-date]").forEach((label) => {
-    const daysAway = dayNumber(label.dataset.eventDate!) - today;
-    const text = daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : "";
-    label.textContent = text;
-    label.hidden = !text;
-  });
+  import { syncRelativeDates } from "../lib/event-visibility";
+
+  syncRelativeDates();
 </script>

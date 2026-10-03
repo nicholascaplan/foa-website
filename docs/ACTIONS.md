@@ -20,6 +20,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
+| Run `npm run test:e2e` locally or in CI: the new `fireworks`, `no-javascript` and mobile axe/overflow specs, and the refactored event-date scripts, were written without a browser available and have not yet passed. | Dev | None |
 
 ## Soon
 
@@ -33,6 +34,9 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Upload more past FOA newsletters to the site. Obtain the source newsletters, confirm they are approved for public release (check for personal details, child-related information and committee names before publishing), and add them to the newsletter content collection. | Owner | Supplied newsletters, FOA approval to publish |
 | Once more newsletters are published, consider a year filter on the newsletters listing. It must work as a real, keyboard-accessible control and degrade gracefully without JavaScript (for example, year links or anchors). | Dev | More newsletters uploaded |
 | Decide whether to add fundraising progress (see `fundraising-progress-options.html`): confirm fundraising purpose, approved target, data owner, update process, donation action, homepage placement and end-of-campaign treatment before implementing anything. | FOA | FOA decisions |
+| Pin Node to 22.18+ (or later) in CI: the unit tests import `src/lib/*.ts` directly and rely on default type stripping. | Dev | None |
+| Make the homepage and event-date e2e tests independent of live content: the homepage throws if `welcome-tea-2026` is removed, and `event-dates.spec.ts` hard-codes Welcome Tea and Fireworks dates. Decide how to retire past events first. | Dev | Decision on retiring past events |
+| Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
 
 ## Later
 
