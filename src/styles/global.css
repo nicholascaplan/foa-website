@@ -555,6 +555,10 @@ a {
   overflow: hidden;
 }
 
+.event-poster-link--wide {
+  width: min(100%, 26rem);
+}
+
 .event-poster-link img {
   display: block;
   width: 100%;
@@ -570,6 +574,15 @@ a {
   max-width: none;
   margin: 0 0 1.5rem;
   color: var(--green-dark);
+  text-align: center;
+}
+
+.event-feature.event-feature--poster > .event-feature-when {
+  max-width: none;
+  margin: 1.1rem 0 1.1rem;
+  color: var(--green-dark);
+  font-size: 1.1rem;
+  font-weight: 750;
   text-align: center;
 }
 
@@ -2414,7 +2427,15 @@ a {
   }
 
   .past-event {
-    grid-template-columns: minmax(14rem, 0.6fr) minmax(0, 1fr);
+    grid-template-columns: 16rem minmax(0, 1fr);
+    align-items: center;
+    max-width: 40rem;
+  }
+
+  .past-event img {
+    height: auto;
+    max-height: none;
+    object-fit: contain;
   }
 
   .status-patterns,
@@ -2544,10 +2565,15 @@ a {
     font-size: 2.25rem;
   }
 
+  .past-event {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    align-items: center;
+  }
+
   .past-event img {
-    aspect-ratio: 16 / 10;
-    max-height: 14rem;
-    object-position: center 24%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
   }
 
   .past-event > div {

@@ -20,7 +20,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
-| Run `npm run test:e2e` locally or in CI: the new `fireworks`, `no-javascript` and mobile axe/overflow specs, the refactored event-date scripts, and the updated `navigation` (mobile menu order) and `no-javascript` (Buy or donate uniform) assertions were written without a browser available and have not yet passed. | Dev | None |
+| Run `npm run test:e2e` locally or in CI: the new `fireworks`, `no-javascript` and mobile axe/overflow specs, the refactored event-date scripts, and the updated `navigation` (mobile menu order) and `no-javascript` (Buy or donate uniform) assertions, plus the restyled homepage Fireworks card and What's On past-event dates, were written without a browser available and have not yet passed. | Dev | None |
 
 ## Soon
 
