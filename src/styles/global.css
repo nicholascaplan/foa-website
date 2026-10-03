@@ -1845,29 +1845,33 @@ a {
   margin: 0;
 }
 
-.poster-link {
-  display: block;
-  overflow: hidden;
+.poster-figure--centered {
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  .poster-figure--centered {
+    align-self: start;
+    margin-inline: 0;
+  }
+}
+
+.poster-frame {
+  padding: clamp(0.65rem, 2.5vw, 1rem);
+  border: 1px solid rgba(20, 83, 45, 0.18);
   border-radius: var(--radius-lg);
-  background: var(--green-dark);
+  background: var(--green-light);
   box-shadow: var(--shadow);
 }
 
-.poster-link img {
+.poster-frame img {
   display: block;
   width: 100%;
   height: auto;
-  transition: transform 240ms ease;
-}
-
-.poster-link:hover img {
-  transform: scale(1.015);
-}
-
-.poster-figure figcaption {
-  margin-top: 0.75rem;
-  color: var(--ink-soft);
-  font-size: 0.84rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 18px rgba(11, 57, 32, 0.22);
 }
 
 .schedule {

@@ -64,6 +64,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
 - Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
 - The supplied Fireworks image is the focal event image, but all event facts must also be available as structured text.
+- The Fireworks event page shows the full poster (`fireworks-poster.jpg`) as a plain, non-interactive image: no enlarge link and no caption, with descriptive alt text. It sits full width in a light-green framed mat (`.poster-frame`) directly below the schedule, with the spacing between the two sections deliberately tightened.
 - Committee portraits are shown compactly because source files are low resolution.
 - The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
 - The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.

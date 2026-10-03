@@ -19,6 +19,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
+| Review the Fireworks event page poster in a browser at mobile and desktop widths. The full-width light-green frame and tightened spacing above it (`:has()` rules in `global.css`) were changed without a browser view; also check the poster is not oversized on wide desktop. | Dev | None |
+| Commit `assets/fireworks-poster.jpg`: the Fireworks event page references it but it is still untracked in Git, so a deploy without it would show a broken image. | Dev | None |
 | Check the redesigned homepage Fireworks card at the narrowest phone widths: the 16:30 and 17:00 timeline labels are close together and the price chip may wrap. The card was styled without a browser view. | Dev | None |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
 | Run `npm run test:e2e` locally or in CI: the new `fireworks`, `no-javascript` and mobile axe/overflow specs, the refactored event-date scripts, and the updated `navigation` (mobile menu order) and `no-javascript` (Buy or donate uniform) assertions, plus the redesigned homepage Fireworks card (date badge, proportional timeline, chips) and What's On past-event dates, were written without a browser available and have not yet passed. | Dev | None |
@@ -100,7 +102,8 @@ Resolve these as part of the related items above, then record outcomes in the br
 
 - Is the page intentionally unlisted or public?
 - Who writes and approves messages? How do expired messages disappear?
-- Should native device sharing and translated versions be offered?
+- Should native device sharing and translated versions be offered? (Dev view: keep Copy as the primary action. If sharing is added, make it a feature-detected `navigator.share` enhancement alongside Copy, not a replacement.)
+- Should copied messages include the absolute "Learn more" URL so recipients can follow it to the canonical page?
 
 ### Notice Board
 
