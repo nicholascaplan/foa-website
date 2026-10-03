@@ -59,6 +59,13 @@ Applies to site copy, metadata, navigation labels, structured data, prototypes a
 - Keep event facts in one structured source (the content collections); do not duplicate them in page copy.
 - Use `withBase()` for asset and internal URLs so the site works at the root and at `/foa-website/`.
 - Avoid new external runtime dependencies or optional tracking unless explicitly approved. Analytics is consent-controlled; extend the Privacy Notice and consent control before adding anything optional.
+- Check layout at both mobile and desktop widths whenever you add or move visible content, not just that the build passes. Specifically look for:
+  - **Excess whitespace.** Section padding and inner container padding stack (for example `.content-section` plus `.event-body`), as do trailing borders and bottom padding on the last block before a section edge or the footer. Add spacing in one place only.
+  - **Oversized media.** Images, posters and frames must have a sensible maximum width on desktop; do not let them fill the full container.
+  - **Unbalanced columns.** A tall item beside a short one leaves a gap; adjust widths or placement rather than accepting it.
+  - **Existing layout hooks.** Reuse an existing grid or column structure before adding a new section with custom spacing.
+  - **Mobile order.** Check that content moved into a side column still reads sensibly when it stacks.
+  Do this in a rendered page (DOM and computed-size checks are preferred over screenshots, see Context Size Guard), and do not assume a clean build means the spacing is right.
 - Verify with the commands in [`README.md`](README.md) (`npm run verify` is the full gate), and check whitespace after edits.
 - After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a **fresh** development server and make an HTTP request to every affected route. Confirm a successful response and the expected content. Do not rely only on `astro check`, a production build or an already-running dev server: Astro's dev content store can retain stale collection state after schema changes.
 

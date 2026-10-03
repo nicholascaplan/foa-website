@@ -1815,7 +1815,6 @@ a {
 
 .event-body {
   display: grid;
-  padding-block: clamp(2.5rem, 6vw, 5rem);
   gap: 3rem;
 }
 
@@ -1832,6 +1831,11 @@ a {
   padding-top: 0;
 }
 
+.event-block:last-of-type {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .event-block h2 {
   margin: 0 0 1.3rem;
   font-family: var(--font-display);
@@ -1846,24 +1850,34 @@ a {
 }
 
 .poster-figure--centered {
-  width: 100%;
-  max-width: 30rem;
+  margin: 0 -1rem calc(-1 * clamp(2.5rem, 6vw, 4.5rem));
+  padding: 2rem 1rem;
+  background: var(--green-light);
+}
+
+.poster-frame {
+  max-width: 28rem;
   margin-inline: auto;
 }
 
 @media (min-width: 48rem) {
   .poster-figure--centered {
     align-self: start;
-    margin-inline: 0;
+    width: 100%;
+    max-width: 30rem;
+    margin: 0;
+    padding: 0;
+    background: none;
   }
-}
 
-.poster-frame {
-  padding: clamp(0.65rem, 2.5vw, 1rem);
-  border: 1px solid rgba(20, 83, 45, 0.18);
-  border-radius: var(--radius-lg);
-  background: var(--green-light);
-  box-shadow: var(--shadow);
+  .poster-frame {
+    max-width: none;
+    padding: 1rem;
+    border: 1px solid rgba(20, 83, 45, 0.18);
+    border-radius: var(--radius-lg);
+    background: var(--green-light);
+    box-shadow: var(--shadow);
+  }
 }
 
 .poster-frame img {
@@ -2682,10 +2696,6 @@ a {
 
   .quick-actions {
     padding-top: 0;
-  }
-
-  .event-body {
-    padding-block: 2.25rem;
   }
 
   .newsletter-page {
