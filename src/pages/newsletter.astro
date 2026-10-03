@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { withBase } from "../lib/urls";
+import { ordinalDateFormatter } from "../lib/dates";
 import NewsletterSection from "../components/NewsletterSection.astro";
 import autumnTerm from "../content/newsletters/autumn-term-2026.json";
 import backToSchool from "../content/newsletters/back-to-school-2026.json";
@@ -12,16 +13,7 @@ const latestPreview = latestSections.slice(0, latestPreviewCount);
 const latestRest = latestSections.slice(latestPreviewCount);
 const latestBodyId = "newsletter-latest-more";
 const previous = [{ id: "back-to-school-2026", data: backToSchool }];
-const dateFormat = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
-const formatDateWithOrdinal = (value: Date | string) => {
-  const date = value instanceof Date ? value : new Date(value);
-  return dateFormat.formatToParts(date).map((part) => {
-  if (part.type !== "day") return part.value;
-  const day = Number(part.value);
-  const suffix = day % 100 >= 11 && day % 100 <= 13 ? "th" : (["th", "st", "nd", "rd"][day % 10] ?? "th");
-  return `${part.value}${suffix}`;
-  }).join("");
-};
+const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
   <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." />

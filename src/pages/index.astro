@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import EventDate from "../components/EventDate.astro";
 import { withBase } from "../lib/urls";
+import { ordinalDateFormatter } from "../lib/dates";
 const events = await getCollection("events");
 const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
 const welcomeTea = events.find(({ id }) => id === "welcome-tea-2026")?.data;
@@ -10,7 +11,7 @@ if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missin
 const latestNewsletter = (await getCollection("newsletters"))
   .filter(({ data }) => data.published)
   .sort((a, b) => b.data.published!.getTime() - a.data.published!.getTime())[0]?.data;
-const newsletterSent = latestNewsletter?.published?.toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "UTC" });
+const newsletterSent = latestNewsletter?.published ? ordinalDateFormatter({ timeZone: "UTC" })(latestNewsletter.published) : undefined;
 ---
   <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/welcome%20tea.png">
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>

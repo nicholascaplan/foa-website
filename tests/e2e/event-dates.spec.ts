@@ -95,15 +95,15 @@ test.describe("What's On event sections (UK time)", () => {
     await expect(octoberSale).toBeVisible();
 
     await openAt(page, "2026-10-02T14:25:00Z", "/whats-on/");
-    await expect(page.locator(".event-list-item").filter({ hasText: "2 October" })).toBeHidden();
+    await expect(page.locator(".event-list-item").filter({ hasText: "2nd October" })).toBeHidden();
   });
 
-  test("lists Santa's Grotto without a time and hides it after 16 December", async ({ page }) => {
+  test("lists Santa's Grotto without a time and hides it after 16th December", async ({ page }) => {
     const grotto = page.locator(".event-list-item").filter({ hasText: "Santa's Grotto" });
 
     await openAt(page, "2026-12-16T23:59:00Z", "/whats-on/");
     await expect(grotto).toBeVisible();
-    await expect(grotto).toContainText("Wednesday 16 December · Ashley School");
+    await expect(grotto).toContainText("Wednesday 16th December · Ashley School");
 
     await openAt(page, "2026-12-17T00:00:00Z", "/whats-on/");
     await expect(grotto).toBeHidden();

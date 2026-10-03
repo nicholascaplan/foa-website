@@ -2,9 +2,10 @@
 import type { CollectionEntry } from "astro:content";
 import EventDate from "./EventDate.astro";
 import { withBase } from "../lib/urls";
+import { ordinalDateFormatter } from "../lib/dates";
 interface Props { events: CollectionEntry<"events">[]; showBeforeArchive?: boolean; }
 const { events, showBeforeArchive = false } = Astro.props;
-const formatter = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
+const formatter = { format: ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" }) };
 const dateKeyFormatter = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London" });
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 ---

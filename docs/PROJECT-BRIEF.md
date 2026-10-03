@@ -52,7 +52,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
 - The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog).
-- The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16 September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
+- The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 
 ### Design
@@ -67,10 +67,10 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Committee portraits are shown compactly because source files are low resolution.
 - The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
 - The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.
-- Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows until it starts at 13:00 on Saturday 3 October 2026 (`archiveFrom` is a date-time). From then the Fireworks editorial card replaces it, and Welcome Tea moves from Upcoming to Past events at the same moment.
+- Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows until it starts at 13:00 on Saturday 3rd October 2026 (`archiveFrom` is a date-time). From then the Fireworks editorial card replaces it, and Welcome Tea moves from Upcoming to Past events at the same moment.
 - Event and sale dates matching the visitor's local date are labelled **Today** or **Tomorrow** automatically. Do not apply to newsletter dates or document metadata.
 - What's On drops timed events from Upcoming at their start time. Events with `allDay` show no time and drop off at the end of their UK day. Events with `archiveFrom` use that date-time instead.
-- Public date copy uses ordinal days (`5th November`).
+- Public date copy uses ordinal days (`5th November`, never `5 November` or `5 Nov`), including weekday forms (`Wednesday 16th December`). Use `ordinalDateFormatter` in `src/lib/dates.ts` for generated dates; the compact calendar tile (`OCT` / `02`) is the only exception.
 - No event status pills in event lists or past-event cards.
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.
 - Quick-action rows must not animate padding on hover (it shifts text wrapping on touch devices).
@@ -84,7 +84,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Committee, Reps Hub and Meeting Minutes belong under Get Involved. About, Contact and policy pages are reached through the footer and relevant page content. Reps Hub is for class reps only, so it is linked from Get Involved (including the homepage Get involved row) and the footer, not the primary or mobile navigation.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
-- The 2026 Pre-loved Uniform sales are Fridays 2 October, 6 November and 4 December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
+- The 2026 Pre-loved Uniform sales are Fridays 2nd October, 6th November and 4th December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
 - Homepage order: current important event or status; immediate parent tasks; What's On preview; volunteer prompt; purpose and three pillars; contact, governance and legal information.
 
 ### Personal information and safeguarding
@@ -108,9 +108,9 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The site never processes payments or issues tickets. The Fireworks ticket journey is a normal link to an external provider, clearly described as leaving the site; no embedded checkout.
 - Until a provider and URL are confirmed, the event page shows the non-interactive status "Ticket link to follow."
 - Remove unverified promises (payment methods, accounts, instant e-tickets).
-- Confirmed Fireworks facts: Thursday 5 November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead; attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
+- Confirmed Fireworks facts: Thursday 5th November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead; attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
 - Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
-- Christmas Fayre is Saturday 5 December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3 October. Santa's Grotto is Wednesday 16 December 2026, run by parents and carers during the school day.
+- Christmas Fayre is Saturday 5th December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3rd October. Santa's Grotto is Wednesday 16th December 2026, run by parents and carers during the school day.
 
 ### Notice Board
 
