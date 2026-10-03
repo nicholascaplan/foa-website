@@ -41,6 +41,14 @@ test("What's On switches Welcome Tea from upcoming to past at the content archiv
   assert.match(whatsOn, new RegExp(`data-show-from="${archiveFrom}"`));
 });
 
+test("the homepage and Fireworks event page credit the sponsor with an accessible local logo", async () => {
+  for (const page of ["index.html", "events/fireworks-2026/index.html"]) {
+    const html = await readFile(path.join(dist, page), "utf8");
+    assert.match(html, /class="sponsor-ribbon"/);
+    assert.match(html, new RegExp(`src="${basePath}/martin-flashman.jpeg" alt="Martin Flashman and Co" width="225" height="33"`));
+  }
+});
+
 test("external links communicate their destination and open safely in a new tab", async () => {
   const htmlFiles = (await filesUnder(dist)).filter((file) => file.endsWith(".html"));
   const externalLinkTags = [];

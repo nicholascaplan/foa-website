@@ -7,6 +7,7 @@
   --green: #14532d;
   --green-dark: #0b3920;
   --green-light: #dfeadd;
+  --sponsor-green: #0e2b26;
   --amber: #d97706;
   --amber-light: #f8e4b7;
   --line: #d9d0c1;
@@ -563,6 +564,37 @@ a {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.event-poster-link--sponsored {
+  background: var(--sponsor-green);
+}
+
+.sponsor-ribbon {
+  display: flex;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  flex-direction: column;
+  align-items: center;
+  color: var(--white);
+  background: var(--sponsor-green);
+}
+
+.sponsor-ribbon > span {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.sponsor-ribbon img {
+  width: min(75%, 225px);
+}
+
+.event-hero-sponsor {
+  width: min(100%, 26rem);
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--sponsor-green);
 }
 
 .event-feature.event-feature--poster > .eyebrow {
