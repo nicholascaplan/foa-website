@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 2 October 2026
+**Last updated:** 3 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -80,8 +80,8 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### Information architecture
 
-- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu does not.
-- Committee, Reps Hub and Meeting Minutes belong under Get Involved. Newsletter, About, Contact and policy pages are reached through the footer and relevant page content. Contact Us and Reps Hub are also at the bottom of the mobile menu.
+- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us.
+- Committee, Reps Hub and Meeting Minutes belong under Get Involved. About, Contact and policy pages are reached through the footer and relevant page content. Reps Hub is for class reps only, so it is linked from Get Involved (including the homepage Get involved row) and the footer, not the primary or mobile navigation.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
 - The 2026 Pre-loved Uniform sales are Fridays 2 October, 6 November and 4 December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
@@ -174,7 +174,7 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 - Mobile navigation is a real menu. Back, forward, refresh, bookmarks and shared links work through real URLs. The current page is identifiable.
 
 **Homepage**
-- Show the most important current event prominently; direct routes to current events, uniform and Reps Hub; an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
+- Show the most important current event prominently; direct routes to current events, uniform, Get Involved (which covers class reps) and the latest newsletter (title and date generated from the newsletters collection); an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
 
 **What's On**
 - Upcoming events in chronological order, each with date, name, time, location and status where available.

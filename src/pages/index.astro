@@ -7,6 +7,10 @@ const events = await getCollection("events");
 const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
 const welcomeTea = events.find(({ id }) => id === "welcome-tea-2026")?.data;
 if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missing");
+const latestNewsletter = (await getCollection("newsletters"))
+  .filter(({ data }) => data.published)
+  .sort((a, b) => b.data.published!.getTime() - a.data.published!.getTime())[0]?.data;
+const newsletterSent = latestNewsletter?.published?.toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "UTC" });
 ---
   <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/welcome%20tea.png">
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
@@ -18,9 +22,10 @@ if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missin
     </div>
   </section>
   <section class="quick-actions"><div class="site-width"><div class="quick-list">
+     {latestNewsletter && <a class="quick-row" href={withBase("/newsletter/")}><span><h3>Read the latest newsletter</h3><p>{latestNewsletter.title}, sent {newsletterSent}.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>}
      <a class="quick-row" href={withBase("/events/fireworks-2026/")}><span><h3>Plan for Fireworks</h3><p>Times, tickets and what to expect on the night.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
-     <a class="quick-row" href={withBase("/uniform/")}><span><h3>Find or donate uniform</h3><p>Sale dates, donation point and price list.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
-     <a class="quick-row" href={withBase("/get-involved/")}><span><h3>Get involved</h3><p>Roles, meetings and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+     <a class="quick-row" href={withBase("/uniform/")}><span><h3>Buy or donate uniform</h3><p>Sale dates, donation point and price list.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+     <a class="quick-row" href={withBase("/get-involved/")}><span><h3>Get involved</h3><p>Roles, meetings, class reps and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
   </div></div></section>
 </BaseLayout>
 
