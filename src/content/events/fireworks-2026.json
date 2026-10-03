@@ -10,5 +10,22 @@
   "ctaLabel": "View event details",
   "lead": "Helen Platt",
   "ticketPrice": "£8.50 per person; under-2s free",
-  "reviewed": "2026-09-28"
+  "reviewed": "2026-09-28",
+  "schedule": [
+    {
+      "time": "2026-11-05T16:30:00+00:00",
+      "label": "Gates open",
+      "detail": "Food, games and family activities begin."
+    },
+    {
+      "time": "2026-11-05T17:00:00+00:00",
+      "label": "Quiet display",
+      "detail": "The earlier display is scheduled before the main event."
+    },
+    {
+      "time": "2026-11-05T18:00:00+00:00",
+      "label": "Main display",
+      "detail": "The evening's main fireworks display."
+    }
+  ]
 }

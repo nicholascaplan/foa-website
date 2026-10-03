@@ -5,6 +5,7 @@ import { withBase } from "../../lib/urls";
 const entry = await getEntry("events", "fireworks-2026");
 if (!entry) throw new Error("Fireworks event content is missing");
 const event = entry.data;
+const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const eventJsonLd = {
   "@context": "https://schema.org",
   "@type": "Event",
@@ -22,7 +23,7 @@ const eventJsonLd = {
 <BaseLayout title={event.title} description={event.summary} image="/fireworks-1600.jpg" preloadImage="/fireworks-1600.jpg">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
   <section class="event-hero"><div class="site-width"><a class="breadcrumb" href={withBase("/whats-on/")} data-whats-on-return-path={withBase("/whats-on/")} hidden><span aria-hidden="true">&larr;</span> Back to What's On</a><div class="event-hero-grid"><div><p class="eyebrow eyebrow--light">Thursday 5th November 2026</p><h1>{event.title}</h1><p class="event-hero-intro">A family evening at Ashley with two displays, a Ferris wheel, fairground games, food stalls and mulled wine.</p></div><aside class="event-summary"><dl><div><dt>When</dt><dd>16:30-18:30</dd></div><div><dt>Where</dt><dd>{event.location}</dd></div><div><dt>Tickets</dt><dd>{event.ticketPrice}</dd></div><div><dt>Lead</dt><dd>{event.lead}</dd></div></dl><p class="ticket-link-pending">Ticket link to follow.</p></aside></div></div></section>
-  <section class="content-section content-section--compact"><div class="site-width event-body"><section class="event-block"><p class="eyebrow">Plan your evening</p><h2>Two displays, one family night out.</h2><ol class="schedule"><li><time datetime="2026-11-05T16:30">16:30</time><span><strong>Gates open</strong><small>Food, games and family activities begin.</small></span></li><li><time datetime="2026-11-05T17:00">17:00</time><span><strong>Quiet display</strong><small>The earlier display is scheduled before the main event.</small></span></li><li><time datetime="2026-11-05T18:00">18:00</time><span><strong>Main display</strong><small>The evening's main fireworks display.</small></span></li></ol></section></div></section>
+  <section class="content-section content-section--compact"><div class="site-width event-body"><section class="event-block"><p class="eyebrow">Plan your evening</p><h2>Two displays, one family night out.</h2><ol class="schedule">{event.schedule?.map((item) => <li><time datetime={item.time.toISOString()}>{timeFormatter.format(item.time)}</time><span><strong>{item.label}</strong>{item.detail && <small>{item.detail}</small>}</span></li>)}</ol></section></div></section>
   <script>
     const returnLink = document.querySelector<HTMLAnchorElement>("[data-whats-on-return-path]");
     if (returnLink && document.referrer) {
