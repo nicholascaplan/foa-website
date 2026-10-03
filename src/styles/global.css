@@ -1489,17 +1489,23 @@ a {
 .vacancy-card {
   position: relative;
   overflow: hidden;
-  padding: clamp(1.6rem, 5vw, 3rem);
+  padding: clamp(1.25rem, 4vw, 2rem);
   border: 1px solid #e2ad58;
   border-radius: var(--radius-lg);
   background: #fff4d7;
 }
 
+.vacancy-card {
+  display: grid;
+  align-items: center;
+  gap: 1.25rem 2rem;
+}
+
 .vacancy-card h2 {
-  max-width: 15ch;
+  max-width: 22ch;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 7vw, 4.3rem);
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
   font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -1509,24 +1515,13 @@ a {
   white-space: nowrap;
 }
 
-.vacancy-details {
-  display: grid;
+.vacancy-copy > p:not(.eyebrow) {
   max-width: 40rem;
-  margin: 1.5rem 0 2rem;
-  padding: 0;
-  list-style: none;
-  gap: 0.55rem;
+  margin: 0.8rem 0 0;
 }
 
-.vacancy-details li {
-  display: flex;
-  gap: 0.6rem;
-}
-
-.vacancy-details li::before {
-  color: var(--green);
-  content: "✓";
-  font-weight: 900;
+.section-copy + .vacancy-actions {
+  margin-top: 1.5rem;
 }
 
 .vacancy-actions {
@@ -2622,7 +2617,15 @@ a {
   }
 
   .link-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .vacancy-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .vacancy-card .vacancy-actions {
+    flex-direction: column;
   }
 
   .newsletter-layout {
