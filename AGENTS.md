@@ -62,6 +62,20 @@ Applies to site copy, metadata, navigation labels, structured data, prototypes a
 - Verify with the commands in [`README.md`](README.md) (`npm run verify` is the full gate), and check whitespace after edits.
 - After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a **fresh** development server and make an HTTP request to every affected route. Confirm a successful response and the expected content. Do not rely only on `astro check`, a production build or an already-running dev server: Astro's dev content store can retain stale collection state after schema changes.
 
+## Context Size Guard
+
+Provider requests fail with `HTTP 413` when a session's history is too large, almost always because of accumulated base64 images (pasted screenshots and browser tool screenshots). The full history is resent on every turn, so a session that crosses the limit keeps failing.
+
+- Avoid browser screenshots unless needed; prefer DOM or text checks. Do not retake full-page screenshots repeatedly.
+- After any turn that adds images, and every ~10 tool calls in a long session, check the current session's stored size:
+
+  ```sh
+  sqlite3 -readonly ~/.local/share/opencode/opencode.db "select round(sum(length(m.data))/1048576.0,1) total_mb, round(sum(case when m.data like '%image/png%' or m.data like '%data:image%' or m.data like '%screenshot.png%' then length(m.data) else 0 end)/1048576.0,1) image_mb from session_message m where m.session_id=(select id from session_v2 where directory='$PWD' order by time_updated desc limit 1)"
+  ```
+
+- Warn the user when `image_mb` reaches **2.5** or `total_mb` reaches **4**. Past failures all had at least 4.6 MB of images; sessions without failures had at most 1.2 MB. Suggest starting a fresh session with a short summary, cropping or compressing pasted images, or switching model.
+- This is an estimate of stored size, not the exact request size, and the limit may vary by model.
+
 ## Documentation Rules
 
 Full rules and rationale are in [`docs/README.md`](docs/README.md). The essentials:
