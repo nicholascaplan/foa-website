@@ -1,0 +1,10 @@
+{
+  "title": "Fundraising 2026/27",
+  "target": 25000,
+  "sources": [
+    { "label": "Uniform Sales", "amount": 210 },
+    { "label": "Happy Bags", "amount": 220 },
+    { "label": "Art Projects for Schools", "amount": 1027 }
+  ],
+  "donateUrl": "https://www.justgiving.com/charity/Friends-of-Ashley"
+}

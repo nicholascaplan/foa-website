@@ -57,4 +57,14 @@ const committee = defineCollection({
   }),
 });
 
-export const collections = { events, newsletters, committee };
+const fundraising = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/fundraising" }),
+  schema: z.object({
+    title: z.string(),
+    target: z.number().positive(),
+    sources: z.array(z.object({ label: z.string(), amount: z.number().nonnegative() })),
+    donateUrl: z.url(),
+  }),
+});
+
+export const collections = { events, newsletters, committee, fundraising };

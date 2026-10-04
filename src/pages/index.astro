@@ -11,6 +11,11 @@ if (!fireworks || !welcomeTea) throw new Error("Homepage event content is missin
 const latestNewsletter = (await getCollection("newsletters"))
   .filter(({ data }) => data.published)
   .sort((a, b) => b.data.published!.getTime() - a.data.published!.getTime())[0]?.data;
+const appeal = (await getCollection("fundraising")).find(({ id }) => id === "current-appeal")?.data;
+if (!appeal) throw new Error("Homepage fundraising content is missing");
+const raised = appeal.sources.reduce((sum, { amount }) => sum + amount, 0);
+const raisedPercent = Math.min(100, (raised / appeal.target) * 100);
+const money = (value: number) => `£${value.toLocaleString("en-GB")}`;
 const fireworksDate = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" })(fireworks.start);
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const fireworksSchedule = fireworks.schedule ?? [];
@@ -42,6 +47,19 @@ const fireworksMonth = datePart({ month: "short" });
      <a class="quick-row" href={withBase("/uniform/")}><span><h3>Buy or donate uniform</h3><p>Sale dates, donation point and price list.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
      <a class="quick-row" href={withBase("/get-involved/")}><span><h3>Get involved</h3><p>Roles, meetings, class reps and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
      </div>
+    </div>
+  </section>
+  <section class="fundraising-update" aria-labelledby="fundraising-update-title">
+    <div class="site-width">
+      <div class="fundraising-card">
+        <h2 id="fundraising-update-title" class="fundraising-card__title">{appeal.title}</h2>
+        <div class="fundraising-figures">
+          <p class="fundraising-figure"><strong>{money(raised)}</strong><span>raised</span></p>
+          <p class="fundraising-figure fundraising-figure--goal"><strong>{money(appeal.target)}</strong><span>goal</span></p>
+        </div>
+        <div class="fundraising-progress__track" role="progressbar" aria-label="Fundraising progress" aria-valuemin="0" aria-valuemax={appeal.target} aria-valuenow={raised} aria-valuetext={`${money(raised)} raised of ${money(appeal.target)}`}><div class="fundraising-progress__fill" style={`--progress: ${raisedPercent}%`}></div></div>
+        <p class="fundraising-card__cta"><a class="text-link" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></p>
+      </div>
     </div>
   </section>
 </BaseLayout>

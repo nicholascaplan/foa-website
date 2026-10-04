@@ -37,7 +37,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Set up uptime monitoring for the `www` domain with an agreed alert recipient and response owner. | Owner | Tool choice |
 | Upload more past FOA newsletters to the site. Obtain the source newsletters, confirm they are approved for public release (check for personal details, child-related information and committee names before publishing), and add them to the newsletter content collection. | Owner | Supplied newsletters, FOA approval to publish |
 | Once more newsletters are published, consider a year filter on the newsletters listing. It must work as a real, keyboard-accessible control and degrade gracefully without JavaScript (for example, year links or anchors). | Dev | More newsletters uploaded |
-| Decide whether to add fundraising progress (see `fundraising-progress-options.html`): confirm fundraising purpose, approved target, data owner, update process, donation action, homepage placement and end-of-campaign treatment before implementing anything. | FOA | FOA decisions |
+| Agree who updates the homepage fundraising totals and how often (`src/content/fundraising/current-appeal.json`), and what the band shows once the 2026/27 goal is reached or the campaign ends. Decide whether a fuller "where it has come from" breakdown belongs on About The FOA. | FOA | FOA decisions |
 | Add future open house meetings to the website. Confirm the dates, times, location and audience with The FOA, then add them as events in the content collection (single structured source; do not duplicate in page copy). | Dev | FOA confirming meeting details |
 | Pin Node to 22.18+ (or later) in CI: the unit tests import `src/lib/*.ts` directly and rely on default type stripping. | Dev | None |
 | Make the homepage and event-date e2e tests independent of live content: the homepage throws if `welcome-tea-2026` is removed, and `event-dates.spec.ts` hard-codes Welcome Tea and Fireworks dates. Decide how to retire past events first. | Dev | Decision on retiring past events |
@@ -68,7 +68,6 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 - Reps Hub copy (pending FOA approval).
 - Co-Secretary recruitment copy (final wording and publication review).
 - Arabic translation quality (demonstration only; human review required).
-- Fundraising-progress target (the £25,000 in `fundraising-progress-options.html` is illustrative only).
 - Santa's Grotto (16 December 2026): the start time, location wording and whether to list it publicly (it is usually a secret from the children) are unconfirmed. It is listed as an all-day event at Ashley School.
 - Christmas Fayre date: Saturday 5 December 2026 is confirmed by the project owner; the supplied calendar's 28 November is superseded. Verify the final public date.
 
