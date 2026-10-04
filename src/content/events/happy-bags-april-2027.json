@@ -1,0 +1,13 @@
+{
+  "title": "Happy Bags",
+  "summary": "Donate clothes and raise funds for our school. Bags will be given to the children in their classrooms.",
+  "start": "2027-04-26T00:00:00+01:00",
+  "allDay": true,
+  "location": "Ashley School",
+  "status": "confirmed",
+  "statusLabel": "Confirmed",
+  "info": {
+    "label": "What are Happy Bags?",
+    "text": "Donate clothes and raise funds for our school. Bags will be given to the children in their classrooms. Clothes, shoes, accessories, bags, jewellery, hats, scarves and perfume are all welcome."
+  }
+}

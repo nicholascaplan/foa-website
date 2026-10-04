@@ -22,6 +22,7 @@ const events = defineCollection({
     pastSummary: z.string().optional(),
     lead: z.string().optional(),
     ticketPrice: z.string().optional(),
+    info: z.object({ label: z.string(), text: z.string() }).optional(),
     schedule: z.array(z.object({
       time: z.coerce.date(),
       label: z.string(),
@@ -37,7 +38,7 @@ const newsletters = defineCollection({
     title: z.string(),
     published: z.coerce.date().optional(),
     summary: z.string(),
-    sections: z.array(z.object({ title: z.string().optional(), paragraphs: z.array(z.string()).default([]), list: z.array(z.string()).optional(), closing: z.array(z.string()).optional() })).optional(),
+    sections: z.array(z.object({ title: z.string().optional(), heading: z.boolean().optional(), paragraphs: z.array(z.string()).default([]), list: z.array(z.string()).optional(), closing: z.array(z.string()).optional() })).optional(),
     latest: z.boolean().default(false),
   }),
 });

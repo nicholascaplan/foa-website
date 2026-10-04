@@ -17,7 +17,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute
     const expiresOn = expires && data.allDay ? new Date(Date.parse(`${dateKeyFormatter.format(data.start)}T00:00:00Z`) + 86400000).toISOString().slice(0, 10) : undefined;
     return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom?.toISOString() : undefined} data-expires-at={expiresAt} data-expires-on={expiresOn}>
       <EventDate date={data.start} compact />
-      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.allDay ? "" : data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}</span>
+      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.allDay ? "" : data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}{data.info && <details class="event-list-info"><summary>{data.info.label}</summary><p>{data.info.text}</p></details>}</span>
     </Wrapper>;
   })}
 </div>

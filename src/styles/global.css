@@ -1003,6 +1003,25 @@ a {
   font-size: 0.9rem;
 }
 
+.event-list-info {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.event-list-info summary {
+  width: max-content;
+  max-width: 100%;
+  color: var(--green);
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.event-list-info p {
+  margin-top: 0.4rem;
+}
+
 .category-label {
   width: max-content;
   padding: 0.3rem 0.6rem;
@@ -1218,7 +1237,6 @@ a {
 .newsletter-intro {
   color: var(--green-dark);
   font-size: 1.2rem;
-  font-weight: 650;
 }
 
 .newsletter-dates {
@@ -1284,6 +1302,23 @@ a {
 
 .newsletter-summary-section p {
   margin: 0.8rem 0 0;
+}
+
+.newsletter-sheet .newsletter-summary-section--heading {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--green);
+}
+
+.newsletter-summary-section--heading h3 {
+  margin: 0;
+  color: var(--green);
+  font-size: clamp(1.9rem, 5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.newsletter-summary-section--heading ~ .newsletter-summary-section h3 {
+  font-size: 1.25rem;
 }
 
 :has(> .newsletter-sheet) {

@@ -2,12 +2,12 @@
 import { renderInline } from "../lib/inline";
 
 interface Props {
-  section: { title?: string; paragraphs?: string[]; list?: string[]; closing?: string[] };
+  section: { title?: string; heading?: boolean; paragraphs?: string[]; list?: string[]; closing?: string[] };
   lead?: boolean;
 }
 const { section, lead = false } = Astro.props;
 ---
-<section class="newsletter-summary-section">
+<section class:list={["newsletter-summary-section", { "newsletter-summary-section--heading": section.heading }]}>
   {section.title && <h3>{section.title}</h3>}
   {(section.paragraphs ?? []).map((paragraph, index) => <p class:list={{ "newsletter-intro": lead && index === 0 }} set:html={renderInline(paragraph)} />)}
   {section.list && <ul class="newsletter-list">{section.list.map((item) => <li set:html={renderInline(item)} />)}</ul>}
