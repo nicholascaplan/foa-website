@@ -433,6 +433,16 @@ a {
   margin-top: 2rem;
 }
 
+.hero-copy .hero-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 30rem;
+}
+
+.hero-copy .hero-actions .button--amber {
+  grid-column: 1 / -1;
+}
+
 .button {
   display: inline-flex;
   min-height: 3.15rem;
@@ -1859,7 +1869,7 @@ a {
   gap: 1rem;
 }
 
-.event-summary div {
+.event-summary dl > div {
   display: grid;
   grid-template-columns: 5.5rem 1fr;
   gap: 0.75rem;
@@ -1876,6 +1886,31 @@ a {
 .event-summary dd {
   margin: 0;
   font-weight: 700;
+}
+
+.ticket-cta {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.19);
+}
+
+.ticket-cta .button {
+  width: 100%;
+}
+
+.ticket-cta p {
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+}
+
+.event-feature-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.event-feature-actions .button {
+  flex: 1 1 12rem;
 }
 
 .ticket-link-pending {
@@ -1990,6 +2025,33 @@ a {
 .schedule p {
   margin: 0.15rem 0 0;
   color: var(--ink-soft);
+}
+
+.good-to-know {
+  margin: 0;
+}
+
+.good-to-know div {
+  display: grid;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+  gap: 0.2rem 1.2rem;
+}
+
+.good-to-know dt {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.good-to-know dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 40rem) {
+  .good-to-know div {
+    grid-template-columns: 9rem minmax(0, 1fr);
+  }
 }
 
 .attraction-grid,

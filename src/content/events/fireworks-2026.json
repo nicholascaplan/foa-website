@@ -4,12 +4,32 @@
   "start": "2026-11-05T16:30:00+00:00",
   "end": "2026-11-05T18:30:00+00:00",
   "location": "Ashley School field",
-  "status": "tickets-planned",
-  "statusLabel": "Tickets planned",
+  "status": "confirmed",
+  "statusLabel": "Tickets on sale",
   "path": "/events/fireworks-2026/",
   "ctaLabel": "View event details",
   "lead": "Helen Platt",
   "ticketPrice": "£8.50 per person; under-2s free",
+  "ticketUrl": "https://buytickets.at/thefriendsofashley/2337508",
+  "ticketNote": "Book early: last year sold out and no tickets were sold on the door.",
+  "goodToKnow": [
+    {
+      "label": "On the night",
+      "text": "Food vendors, a parent-run bar, a fairground ride and games, a braid bar and face painting."
+    },
+    {
+      "label": "Tokens",
+      "text": "Rides and games cost £2 a go and take tokens only. £1 = 1 green or 2 yellow. Tokens can be bought in advance or on the night, and old Ashley tokens still work."
+    },
+    {
+      "label": "Entry",
+      "text": "You need a ticket or organiser pass to get in. Please keep children with you at all times."
+    },
+    {
+      "label": "Please note",
+      "text": "This is a pet, smoke and sparkler-free zone."
+    }
+  ],
   "reviewed": "2026-09-28",
   "schedule": [
     {

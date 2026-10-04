@@ -22,6 +22,9 @@ const events = defineCollection({
     pastSummary: z.string().optional(),
     lead: z.string().optional(),
     ticketPrice: z.string().optional(),
+    ticketUrl: z.url().optional(),
+    ticketNote: z.string().optional(),
+    goodToKnow: z.array(z.object({ label: z.string(), text: z.string() })).optional(),
     info: z.object({ label: z.string(), text: z.string() }).optional(),
     schedule: z.array(z.object({
       time: z.coerce.date(),

@@ -109,7 +109,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 ### Ticketing
 
 - The site never processes payments or issues tickets. The Fireworks ticket journey is a normal link to an external provider, clearly described as leaving the site; no embedded checkout.
-- Until a provider and URL are confirmed, the event page shows the non-interactive status "Ticket link to follow."
+- Provider: Buy Tickets (`https://buytickets.at/thefriendsofashley/2337508`), stored as `ticketUrl` in the Fireworks event content. It opens in a new tab and appears as the primary action in the homepage hero, the homepage Fireworks feature and the Fireworks event page summary.
 - Remove unverified promises (payment methods, accounts, instant e-tickets).
 - Confirmed Fireworks facts: Thursday 5th November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead; attractions are a Ferris wheel, fairground games, food stalls and mulled wine.
 - Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"

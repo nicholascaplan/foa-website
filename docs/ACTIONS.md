@@ -15,11 +15,14 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 | Item | Owner | Blocked by |
 |---|---|---|
-| Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities. | FOA | Provider decision |
+| Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities (provider is Buy Tickets). | FOA | FOA decision |
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
 | Check the redesigned homepage Fireworks card at the narrowest phone widths: the 16:30 and 17:00 timeline labels are close together and the price chip may wrap. The card was styled without a browser view. | Dev | None |
+| Browser-check the Fireworks ticket CTAs and "Good to know" block at mobile and desktop widths: homepage hero and Fireworks card buttons, event-page summary panel, and spacing between event-page sections. Added without a browser view; the Playwright suite could not run in the agent sandbox. | Dev | None |
+| Update the autumn newsletter line "Online ticket link will be shared shortly" now that tickets are on sale. | FOA | FOA decision |
+| Confirm how school families buy tokens in advance (the ticket page says "for school community" without a route), and whether the Ferris wheel and mulled wine in the event intro still match the ticket page ("fairground ride"). | FOA | FOA decision |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
 
 ## Soon
@@ -61,7 +64,6 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 
 - Fireworks: capacity; what the quiet display involves and its accessibility characteristics; access and facilities (step-free, toilets, first aid, parking); refund, cancellation and bad-weather policy; event-day contact.
 - Uniform: accepted and rejected items; donation conditions (washed, labelled, bagged); bin-emptying frequency; whether sale dates are regular or ad hoc; size requests between sales.
-- Final ticket provider and URL.
 - Privacy Notice details about shared-inbox and Google Form access/retention.
 - Reps Hub copy (pending FOA approval).
 - Co-Secretary recruitment copy (final wording and publication review).
