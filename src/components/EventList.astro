@@ -11,13 +11,14 @@ const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute
 ---
 <div class="event-list">
   {events.map(({ data }) => {
-    const Wrapper = data.path ? "a" : "article";
+    const ticketed = Boolean(data.path && data.ticketUrl);
+    const Wrapper = data.path && !ticketed ? "a" : "article";
     const expires = showBeforeArchive && !data.archiveFrom;
     const expiresAt = expires && !data.allDay ? data.start.toISOString() : undefined;
     const expiresOn = expires && data.allDay ? new Date(Date.parse(`${dateKeyFormatter.format(data.start)}T00:00:00Z`) + 86400000).toISOString().slice(0, 10) : undefined;
-    return <Wrapper class="event-list-item" href={data.path ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom?.toISOString() : undefined} data-expires-at={expiresAt} data-expires-on={expiresOn}>
+    return <Wrapper class="event-list-item" href={data.path && !ticketed ? withBase(data.path) : undefined} data-show-before={showBeforeArchive ? data.archiveFrom?.toISOString() : undefined} data-expires-at={expiresAt} data-expires-on={expiresOn}>
       <EventDate date={data.start} compact />
-      <span><h3>{data.title}</h3><p>{formatter.format(data.start)}{data.allDay ? "" : data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}{data.info && <details class="event-list-info"><summary>{data.info.label}</summary><p>{data.info.text}</p></details>}</span>
+      <span><h3>{ticketed ? <a href={withBase(data.path!)}>{data.title}</a> : data.title}</h3><p>{formatter.format(data.start)}{data.allDay ? "" : data.end ? `, ${timeFormatter.format(data.start)}-${timeFormatter.format(data.end)}` : `, ${timeFormatter.format(data.start)}`} · {data.location}</p>{ticketed ? <span class="event-list-actions"><a class="button button--amber" href={data.ticketUrl} target="_blank" rel="noopener noreferrer">Buy tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a><a class="text-link" href={withBase(data.path!)}>{data.ctaLabel ?? "View event details"} <span aria-hidden="true">&rarr;</span></a></span> : data.ctaLabel && <span class="event-list-cta">{data.ctaLabel} <span aria-hidden="true">&rarr;</span></span>}{data.info && <details class="event-list-info"><summary>{data.info.label}</summary><p>{data.info.text}</p></details>}</span>
     </Wrapper>;
   })}
 </div>

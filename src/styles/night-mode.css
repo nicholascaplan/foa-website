@@ -39,7 +39,7 @@
   border-bottom-color: var(--line);
 }
 
-:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-feature--poster, .event-poster-link, .event-chips li) {
+:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-feature--poster, .event-poster-link) {
   border-color: var(--line);
 }
 

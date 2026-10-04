@@ -504,13 +504,15 @@ a {
 }
 
 .text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   color: var(--green);
   font-weight: 800;
   overflow-wrap: anywhere;
   text-underline-offset: 0.25rem;
+}
+
+:where(a > span[aria-hidden="true"]) {
+  display: inline-block;
+  text-decoration: none;
 }
 
 .external-link-icon {
@@ -641,9 +643,10 @@ a {
   display: flex;
   width: min(100%, 26rem);
   margin: 1.25rem 0;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.7rem;
 }
 
 .event-feature.event-feature--poster > .button {
@@ -686,6 +689,7 @@ a {
   min-height: 5.8rem;
   margin: 0 0 1rem;
   padding: 0;
+  container-type: inline-size;
   list-style: none;
 }
 
@@ -730,45 +734,32 @@ a {
 .event-timeline time {
   color: var(--heading);
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: clamp(1.1rem, calc((100cqw - 2 * var(--timeline-inset)) / 8.5), 1.6rem);
   line-height: 1.1;
 }
 
 .event-timeline span {
   color: var(--ink-soft);
-  font-size: 0.7rem;
+  font-size: clamp(0.58rem, calc((100cqw - 2 * var(--timeline-inset)) / 24), 0.7rem);
   line-height: 1.3;
+  width: min-content;
   text-wrap: balance;
   font-weight: 850;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.event-chips {
-  display: grid;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 0 1.5rem;
-  padding: 0;
-  gap: 0.5rem;
-  list-style: none;
-}
-
-.event-chips li {
+.event-feature-where {
   display: flex;
-  padding: 0.4rem 1rem 0.4rem 0.8rem;
+  margin: 0;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.45rem;
-  border: 1px solid rgba(20, 83, 45, 0.25);
-  border-radius: 999px;
+  gap: 0.4rem;
   color: var(--heading);
-  background: var(--paper);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 750;
 }
 
-.event-chips svg {
+.event-feature-where svg {
   flex: none;
   color: var(--amber);
 }
@@ -1915,14 +1906,43 @@ a {
   font-size: 0.9rem;
 }
 
+.ticket-cta .ticket-tip {
+  display: flex;
+  margin: 0.8rem 0 0;
+  padding: 0.65rem 0.85rem;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border: 1px solid rgba(255, 209, 130, 0.35);
+  border-radius: 0.9rem;
+  background: rgba(255, 209, 130, 0.12);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ticket-tip svg {
+  flex: none;
+  margin-top: 0.1rem;
+  color: #ffd28b;
+}
+
 .event-feature-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
-.event-feature-actions .button {
-  flex: 1 1 12rem;
+.button--stacked {
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-block: 0.75rem;
+  line-height: 1.2;
+}
+
+.button--stacked .button__sub {
+  text-wrap: balance;
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.8;
 }
 
 .ticket-link-pending {
@@ -2509,6 +2529,24 @@ a {
   font-size: clamp(1.35rem, 4vw, 1.8rem);
   font-weight: 500;
   line-height: 1.05;
+}
+
+.event-list-item h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.event-list-item h3 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.event-list-actions {
+  display: flex;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
 }
 
 .event-list-cta {
