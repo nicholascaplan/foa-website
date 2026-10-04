@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 3 October 2026
+**Last updated:** 4 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -51,7 +51,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - It is a public information and community site, not an internal committee administration system.
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
-- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog).
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body weight, with key facts bolded.
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 
@@ -61,6 +61,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Restrained cards and badges; confident editorial typography; generous spacing. Do not depend on photography.
 - Interior page heroes use a centered, inset heritage-green panel rather than a full-bleed banner.
 - Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
+- Night Mode starts as a local-development-only preview. It must not change the live site's appearance or expose a production theme control; public rollout requires a separate decision. The proposed implementation and unresolved design choices live in [`ACTIONS.md`](ACTIONS.md#night-mode-local-preview).
 - Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
 - Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
 - The supplied Fireworks image is the focal event image, but all event facts must also be available as structured text.
@@ -71,7 +72,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.
 - Homepage hero shows one of two mutually exclusive cards. The intact Welcome Tea poster (with `Upcoming event` label and `Welcome Tea` heading) shows until it starts at 13:00 on Saturday 3rd October 2026 (`archiveFrom` is a date-time). From then the Fireworks editorial card replaces it, and Welcome Tea moves from Upcoming to Past events at the same moment. The Fireworks card is centred: eyebrow, title, image, an amber date badge (weekday, day, month), a proportional timeline of the event schedule (gates open, quiet display, main display), equal-width ticket-price and location chips with aligned icons, and a full-width CTA matching the image width. Schedule times come from the event's `schedule` list in the content collection, which the Fireworks event page also renders.
 - Event and sale dates matching the visitor's local date are labelled **Today** or **Tomorrow** automatically. Do not apply to newsletter dates or document metadata.
-- What's On drops timed events from Upcoming at their start time. Events with `allDay` show no time and drop off at the end of their UK day. Events with `archiveFrom` use that date-time instead.
+- What's On drops timed events from Upcoming at their start time. Events with `allDay` show no time and drop off at the end of their UK day. Events with `archiveFrom` use that date-time instead. An event with an `info` entry shows an expandable explanatory note under its details (used for Happy Bags, which run on Wednesday 13th January and Monday 26th April 2027; the 30th September 2026 date has passed).
 - Public date copy uses ordinal days (`5th November`, never `5 November` or `5 Nov`), including weekday forms (`Wednesday 16th December`). Use `ordinalDateFormatter` in `src/lib/dates.ts` for generated dates; the compact calendar tile (`OCT` / `02`) is the only exception.
 - No event status pills in event lists or past-event cards.
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.

@@ -21,7 +21,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
 | Check the redesigned homepage Fireworks card at the narrowest phone widths: the 16:30 and 17:00 timeline labels are close together and the price chip may wrap. The card was styled without a browser view. | Dev | None |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. | Owner | None |
-| Run `npm run test:e2e` in CI or outside the local sandbox: the `fireworks`, `no-javascript` and mobile axe/overflow specs, refactored event-date scripts, updated navigation assertions, redesigned homepage Fireworks card and What's On past-event dates have not yet passed. `npm run verify` passes checking, build and all 39 site tests, but the sandbox prevents Chrome from launching for the browser suite. The new sponsor strips on Home and the Fireworks event page were checked separately in the desktop browser at 320px, 390px and 1440px, with no clipping or horizontal overflow. | Dev | Browser-capable CI or local sandbox override |
 
 ## Soon
 
@@ -36,9 +35,34 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Upload more past FOA newsletters to the site. Obtain the source newsletters, confirm they are approved for public release (check for personal details, child-related information and committee names before publishing), and add them to the newsletter content collection. | Owner | Supplied newsletters, FOA approval to publish |
 | Once more newsletters are published, consider a year filter on the newsletters listing. It must work as a real, keyboard-accessible control and degrade gracefully without JavaScript (for example, year links or anchors). | Dev | More newsletters uploaded |
 | Decide whether to add fundraising progress (see `fundraising-progress-options.html`): confirm fundraising purpose, approved target, data owner, update process, donation action, homepage placement and end-of-campaign treatment before implementing anything. | FOA | FOA decisions |
+| Add future open house meetings to the website. Confirm the dates, times, location and audience with The FOA, then add them as events in the content collection (single structured source; do not duplicate in page copy). | Dev | FOA confirming meeting details |
 | Pin Node to 22.18+ (or later) in CI: the unit tests import `src/lib/*.ts` directly and rely on default type stripping. | Dev | None |
 | Make the homepage and event-date e2e tests independent of live content: the homepage throws if `welcome-tea-2026` is removed, and `event-dates.spec.ts` hard-codes Welcome Tea and Fireworks dates. Decide how to retire past events first. | Dev | Decision on retiring past events |
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
+| Plan and review a local-only Night Mode preview (see *Night Mode → Local preview* below); implementation follows agreement on the proposed defaults. | Dev / Owner | Theme behaviour and visual choices |
+
+### Night Mode: Local preview
+
+Local-only scope is confirmed in the [brief](PROJECT-BRIEF.md#design). The following is a proposal, not an approved palette or implemented feature.
+
+**Proposed defaults for review**
+
+- Keep the warm community-noticeboard identity: forest-charcoal backgrounds, slightly lighter green-tinted surfaces, warm off-white text, muted sage secondary text and restrained amber highlights. Avoid pure black, stark white and neon accents. Typography, layout and content stay unchanged.
+- Start in Day Mode regardless of the operating-system preference. Provide an explicit Night Mode toggle for local review; defer automatic/system mode and any public control.
+- Remember the explicit choice across local navigation and reloads using a namespaced local-storage key, with safe fallback if storage is unavailable. Apply it before first paint to avoid a bright flash; do not tie it to analytics consent or send theme telemetry.
+- Leave photographs, approved logos, sponsor artwork and event posters unchanged: no inversion or blanket dimming. Review their surrounding surfaces for abrupt brightness changes.
+- For newsletters, recommend a muted warm-paper sheet and darker cork surround, while retaining the letterhead and pin treatment. Decide whether the sheets should remain light or become dark before implementing this exception.
+
+**Implementation sequence (after agreement)**
+
+1. Audit colour roles in `src/styles/global.css`. Split shared brand values into semantic text/link, action background/foreground, surface, border, focus, header and on-dark tokens where needed. In particular, `--green` currently serves as both foreground and background; keep literal white and brand artwork colours distinct from theme-dependent text. Preserve the existing Day Mode appearance.
+2. Add a dev-only theme stylesheet scoped to an explicit root attribute, plus a dev-only pre-paint initializer in `src/layouts/BaseLayout.astro`, gated with `import.meta.env.DEV`. Production must omit the preview styles, initializer and control; a saved local preference must have no effect on a production build.
+3. Integrate an accessible toggle with the existing controls in `src/components/DevMobilePreview.astro`: a real button with an accessible name, visible focus and `aria-pressed`. Make theme switching available at mobile widths without exposing the desktop popup tool or obstructing navigation. Avoid animated colour transitions.
+4. Review shared shell and ordinary content surfaces first; then Fireworks cards/schedule, amber notices, committee vacancy, Reps Hub feedback, newsletter sheets/cork, and cookie controls. Audit hard-coded colours, translucent backgrounds, gradients, hover and focus states rather than only changing the root palette.
+5. Validate the dev preview separately from the production-preview suite: toggle, navigation/reload persistence, unavailable storage, keyboard state and mobile access. Check every public route at 320px, 390px and 1440px using rendered DOM/computed-size checks; inspect open mobile navigation, expanded newsletters and the cookie banner. Check text contrast (4.5:1 normal, 3:1 large), relevant controls/focus indicators (3:1), 200% zoom and reduced motion; run representative axe scans in both modes.
+6. Add generated-output/browser assertions that Night Mode controls and initializer are absent from production and that production remains Day Mode even with a saved local choice or a dark OS preference. Run `npm run verify` and base-path checks before considering the preview complete.
+
+**Decisions needed:** approve manual opt-in and local persistence; choose light versus dark newsletter paper; agree a mobile dev-control placement. Public launch, system-preference behaviour and a visitor-facing selector remain later scope.
 
 ## Later
 
@@ -48,7 +72,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 - Additional reviewed translations and RTL testing; FAQs page; native share; add-to-calendar downloads.
 - Low-priority "Inspiration" archive of past event posters (standalone page or within What's On).
 - Selective screenshot visual regression, after the visual design is approved.
-- Dark mode (low priority; do not implement as part of launch work).
+- Public Night Mode rollout (low priority; separate approval after the local preview is reviewed).
 - AI support bot for common parent/carer questions. Needs approved knowledge sources, committee ownership, privacy/safeguarding boundaries, human escalation, accessibility, cost and failure handling. Must not answer safety-critical, transactional or sensitive queries without reviewed safeguards.
 - Confirm the wording of the inclusive membership statement against the FOA constitution.
 - Confirm who is authorised to approve website content.
