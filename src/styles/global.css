@@ -436,11 +436,23 @@ a {
 .hero-copy .hero-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: stretch;
   max-width: 30rem;
 }
 
 .hero-copy .hero-actions .button--amber {
   grid-column: 1 / -1;
+}
+
+.hero-copy .hero-actions .button--secondary {
+  padding-inline: 0.75rem;
+}
+
+@media (max-width: 23rem) {
+  .hero-copy .hero-actions .button--secondary {
+    font-size: 0.92rem;
+    padding-inline: 0.5rem;
+  }
 }
 
 .button {
