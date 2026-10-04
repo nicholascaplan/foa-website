@@ -21,7 +21,7 @@ Built with Astro 7 (static output), typed local content collections and locally 
 - `src/content/`: typed collections for events, newsletters and committee members
 - `src/styles/global.css`: design tokens and component styles
 - `assets/`: brand assets, event images, committee portraits and source documents
-- `tests/`: generated-site and unit tests (`*.test.mjs`) and Playwright/axe tests (`e2e/`)
+- `tests/`: generated-site and unit tests (`*.test.mjs`), production Playwright/axe tests (`e2e/`) and local preview tests (`dev/`)
 - `prototype/`: archived hash-routed design prototype
 - `fundraising-progress-options.html`: unlinked design review page
 - `.github/workflows/deploy.yml`: verify and deploy
@@ -33,7 +33,7 @@ npm install      # once
 npm run dev      # opens http://localhost:4321/
 ```
 
-The dev server watches for changes; stop it with `Ctrl+C`. On desktop, two small dev-only icon buttons stay centred at the top of the screen: mobile preview (opens the current route in a 390px window; allow pop-ups if blocked) and reset cookie consent. Neither is in production builds.
+The dev server watches for changes; stop it with `Ctrl+C`. On desktop, three dev-only icon buttons sit in the header between the logo/name home link and navigation: Night Mode, mobile preview (opens the current route in a 390px window; allow pop-ups if blocked) and reset cookie consent. The header wraps when needed rather than covering text. On mobile, Night Mode sits beside the menu button. Its manual choice is remembered locally; it defaults to Day Mode regardless of the system preference. These controls and the Night Mode preview are absent from production builds (including `npm run preview`).
 
 To review the production build:
 
@@ -48,6 +48,7 @@ npm run preview
 
 ```sh
 npm run verify                  # full gate used by CI: check, build, site tests, browser tests
+npm run test:dev                 # local-only Night Mode tests; starts a fresh dev server on port 4348
 npx playwright install chromium # first browser-test run only
 npm audit                       # dependency advisories
 ```

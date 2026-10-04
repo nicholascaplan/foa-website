@@ -28,6 +28,14 @@ const outputPath = (urlPath) => {
 const welcomeTea = JSON.parse(await readFile(path.resolve("src/content/events/welcome-tea-2026.json"), "utf8"));
 const archiveFrom = new Date(welcomeTea.archiveFrom).toISOString();
 
+test("production omits all Night Mode preview code and styles", async () => {
+  const outputFiles = (await filesUnder(dist)).filter((file) => /\.(html|css|js)$/.test(file));
+  for (const file of outputFiles) {
+    const content = await readFile(file, "utf8");
+    assert.doesNotMatch(content, /data-dev-night|data-dev-theme|foa-dev-night-mode|--night-sheet/, path.relative(dist, file));
+  }
+});
+
 test("the homepage swaps the Welcome Tea poster for Fireworks at the content archive time", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   assert.match(homepage, new RegExp(`class="event-feature event-feature--poster" data-show-before="${archiveFrom}"`));

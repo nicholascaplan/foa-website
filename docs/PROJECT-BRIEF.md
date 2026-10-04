@@ -61,7 +61,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Restrained cards and badges; confident editorial typography; generous spacing. Do not depend on photography.
 - Interior page heroes use a centered, inset heritage-green panel rather than a full-bleed banner.
 - Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
-- Night Mode starts as a local-development-only preview. It must not change the live site's appearance or expose a production theme control; public rollout requires a separate decision. The proposed implementation and unresolved design choices live in [`ACTIONS.md`](ACTIONS.md#night-mode-local-preview).
+- Night Mode is a local-development-only preview, manually enabled and off by default regardless of the operating-system preference. It uses forest-charcoal backgrounds, green-tinted surfaces, warm off-white text, sage accents and restrained amber. Newsletter sheets retain muted light paper and their letterhead/pin treatment on darker cork; photographs, logos, sponsor artwork and posters are unchanged. Public rollout requires a separate decision; production remains in Day Mode with no theme control.
 - Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
 - Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
 - The supplied Fireworks image is the focal event image, but all event facts must also be available as structured text.
@@ -144,7 +144,8 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page.
 - The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
 - Asset URLs must go through the shared `withBase()` helper so the site works at both root and the temporary `/foa-website/` base path.
-- Development-only controls (Mobile preview, Reset cookie consent) are omitted from production builds. In local desktop development, they are compact, accessible icon buttons fixed together at the top centre of the viewport, clear of the page text.
+- Development-only controls (Night Mode, Mobile preview, Reset cookie consent) are omitted from production builds. In local desktop development, they are compact, accessible icon buttons in the header between the logo/name home link and the navigation links. They participate in normal layout, with wrapping when needed, and never overlay text. On mobile, only the Night Mode control appears, beside the menu button.
+- The Night Mode preview stylesheet and pre-paint initializer are emitted only under `import.meta.env.DEV`. An explicit root attribute scopes the palette; semantic heading and action colour pairs prevent shared brand colours from breaking contrast. The manual choice is stored under `foa-dev-night-mode` independently of analytics consent, with no telemetry and safe fallback when storage is unavailable. Production omits all theme code/styles and ignores any saved local choice.
 
 ## 3. Scope
 

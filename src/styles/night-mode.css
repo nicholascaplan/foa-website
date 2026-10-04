@@ -1,0 +1,175 @@
+/* Included inline by DevNightMode only in local development, never in a build. */
+:root[data-dev-theme="night"] {
+  color-scheme: dark;
+  --ink: #eee8dc;
+  --ink-soft: #bbc7b7;
+  --paper: #17241d;
+  --paper-deep: #1d2e23;
+  --surface: #22362b;
+  /* Green is the foreground/border accent; actions have their own colour pair. */
+  --green: #afd3aa;
+  --green-light: #293d2e;
+  --heading: #d0e3c7;
+  --action-background: #afd3aa;
+  --action-hover: #c5e3bd;
+  --action-foreground: #193127;
+  --dark-action: #0b3920;
+  --amber: #efb45d;
+  --amber-light: #49381e;
+  --line: #65786b;
+  --shadow: 0 18px 45px rgb(0 0 0 / 22%);
+  --night-header: rgb(23 36 29 / 96%);
+  --night-amber-ink: #f4d39d;
+  --night-focus: #ffc571;
+  --night-cork: #725539;
+  --night-cork-frame: #49351f;
+  --night-sheet: #e7decc;
+}
+
+:root[data-dev-theme="night"] body::before {
+  background-image: radial-gradient(rgb(175 211 170 / 5%) 0.7px, transparent 0.7px);
+}
+
+:root[data-dev-theme="night"] :focus-visible {
+  outline-color: var(--night-focus);
+}
+
+:root[data-dev-theme="night"] .site-header {
+  background: var(--night-header);
+  border-bottom-color: var(--line);
+}
+
+:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-feature--poster, .event-poster-link, .event-chips li) {
+  border-color: var(--line);
+}
+
+:root[data-dev-theme="night"] :is(.button--secondary, .category-label, .attraction, .access-item) {
+  background: var(--surface);
+}
+
+:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout, .prototype-note) {
+  color: var(--night-amber-ink);
+  background: var(--amber-light);
+  border-color: var(--amber);
+}
+
+:root[data-dev-theme="night"] .vacancy-card {
+  background: var(--amber-light);
+  border-color: var(--amber);
+}
+
+:root[data-dev-theme="night"] :is(.member-vacancy-name strong, .member-vacancy-copy) {
+  color: var(--night-amber-ink);
+}
+
+:root[data-dev-theme="night"] .pattern-library {
+  background: var(--amber-light);
+}
+
+/* Paper and printed artwork stay light, with a complete local foreground palette. */
+:root[data-dev-theme="night"] :is(.newsletter-sheet, .newsletter-board > .section-heading) {
+  color-scheme: light;
+  color: #193127;
+  --ink: #193127;
+  --ink-soft: #4f6358;
+  --green: #14532d;
+  --green-dark: #0b3920;
+  --heading: #0b3920;
+  --green-light: #cddac5;
+  --line: #b4ab99;
+  --amber: #a75600;
+  --night-focus: #8a4a05;
+  background-color: var(--night-sheet);
+}
+
+:root[data-dev-theme="night"] .newsletter-sheet {
+  /* Retain the existing paper texture and subtle gradient. */
+  border-color: var(--line);
+}
+
+:root[data-dev-theme="night"] .newsletter-board {
+  background-color: var(--night-cork);
+  border-color: var(--night-cork-frame);
+}
+
+:root[data-dev-theme="night"] .newsletter-section.newsletter-board + .newsletter-section.newsletter-board {
+  border-top-color: var(--night-cork-frame);
+}
+
+/* Keep preview tools usable in both themes and clear of the mobile page content. */
+.site-header .header-actions {
+  display: flex;
+}
+
+.dev-tools .dev-tool-button,
+.header-actions .dev-night-toggle {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+}
+
+.dev-night-toggle {
+  display: grid;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  place-items: center;
+  color: var(--white);
+  background: var(--green-dark);
+  cursor: pointer;
+}
+
+.dev-night-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.dev-night-toggle[aria-pressed="true"] {
+  color: var(--action-foreground);
+  background: var(--action-background);
+  border-color: var(--action-background);
+}
+
+:root[data-dev-theme="night"] .dev-tools .dev-tool-button:hover {
+  color: var(--action-foreground);
+  background: var(--action-hover);
+}
+
+@media (min-width: 48rem) {
+  .header-inner:has(> .dev-tools) {
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    padding-block: 0.5rem;
+  }
+
+  .header-inner:has(> .dev-tools) .desktop-nav {
+    margin-inline-start: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .header-inner:has(> .dev-tools) .header-actions:has(> .menu-toggle) {
+    margin-inline-start: auto;
+  }
+
+  @media (min-width: 64rem) {
+    .header-inner:has(> .dev-tools) .header-actions {
+      display: none;
+    }
+  }
+
+  .header-actions .dev-night-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .header-inner .brand {
+    min-width: 0;
+  }
+
+  .header-inner .brand-logo,
+  .header-actions {
+    flex: none;
+  }
+}

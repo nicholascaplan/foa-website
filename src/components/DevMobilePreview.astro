@@ -1,4 +1,9 @@
+---
+import DevNightModeToggle from "./DevNightModeToggle.astro";
+---
+
 <div class="dev-tools">
+  <DevNightModeToggle />
   <button class="dev-tool-button" type="button" data-mobile-preview>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
       <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
@@ -29,13 +34,9 @@
 
 <style>
   .dev-tools {
-    position: fixed;
-    z-index: 80;
-    top: 0.75rem;
-    left: 50%;
     display: flex;
+    flex: none;
     gap: 0.4rem;
-    transform: translateX(-50%);
   }
 
   .dev-tool-button {

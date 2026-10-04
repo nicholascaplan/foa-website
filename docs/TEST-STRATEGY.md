@@ -97,6 +97,8 @@ Further browser scenarios now covered: the Fireworks "Back to What's On" link on
 
 Keep browser coverage concentrated on shared navigation and unique interactions. Static pages with no distinct behaviour should be covered by generated-site and accessibility checks rather than repetitive end-to-end tests.
 
+Development-only Night Mode is covered separately by `tests/dev/night-mode.spec.ts` and `playwright.dev.config.ts` (`npm run test:dev`). This starts its own fresh development server without replacing an existing one. It checks keyboard state, preference persistence, blocked storage, responsive sizing, unchanged images, expanded newsletters, mobile navigation, enlarged text and representative axe scans. The production suite and generated-output tests independently assert that preview code/styles are absent and saved local preferences have no effect. Keep dev-server tests out of the production-preview suite so the normal deployment gate still exercises the deployed output.
+
 ### 4. Automated accessibility checks
 
 Integrate `@axe-core/playwright` into the browser suite and scan a representative set of page types:

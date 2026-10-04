@@ -39,30 +39,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Pin Node to 22.18+ (or later) in CI: the unit tests import `src/lib/*.ts` directly and rely on default type stripping. | Dev | None |
 | Make the homepage and event-date e2e tests independent of live content: the homepage throws if `welcome-tea-2026` is removed, and `event-dates.spec.ts` hard-codes Welcome Tea and Fireworks dates. Decide how to retire past events first. | Dev | Decision on retiring past events |
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
-| Plan and review a local-only Night Mode preview (see *Night Mode → Local preview* below); implementation follows agreement on the proposed defaults. | Dev / Owner | Theme behaviour and visual choices |
-
-### Night Mode: Local preview
-
-Local-only scope is confirmed in the [brief](PROJECT-BRIEF.md#design). The following is a proposal, not an approved palette or implemented feature.
-
-**Proposed defaults for review**
-
-- Keep the warm community-noticeboard identity: forest-charcoal backgrounds, slightly lighter green-tinted surfaces, warm off-white text, muted sage secondary text and restrained amber highlights. Avoid pure black, stark white and neon accents. Typography, layout and content stay unchanged.
-- Start in Day Mode regardless of the operating-system preference. Provide an explicit Night Mode toggle for local review; defer automatic/system mode and any public control.
-- Remember the explicit choice across local navigation and reloads using a namespaced local-storage key, with safe fallback if storage is unavailable. Apply it before first paint to avoid a bright flash; do not tie it to analytics consent or send theme telemetry.
-- Leave photographs, approved logos, sponsor artwork and event posters unchanged: no inversion or blanket dimming. Review their surrounding surfaces for abrupt brightness changes.
-- For newsletters, recommend a muted warm-paper sheet and darker cork surround, while retaining the letterhead and pin treatment. Decide whether the sheets should remain light or become dark before implementing this exception.
-
-**Implementation sequence (after agreement)**
-
-1. Audit colour roles in `src/styles/global.css`. Split shared brand values into semantic text/link, action background/foreground, surface, border, focus, header and on-dark tokens where needed. In particular, `--green` currently serves as both foreground and background; keep literal white and brand artwork colours distinct from theme-dependent text. Preserve the existing Day Mode appearance.
-2. Add a dev-only theme stylesheet scoped to an explicit root attribute, plus a dev-only pre-paint initializer in `src/layouts/BaseLayout.astro`, gated with `import.meta.env.DEV`. Production must omit the preview styles, initializer and control; a saved local preference must have no effect on a production build.
-3. Integrate an accessible toggle with the existing controls in `src/components/DevMobilePreview.astro`: a real button with an accessible name, visible focus and `aria-pressed`. Make theme switching available at mobile widths without exposing the desktop popup tool or obstructing navigation. Avoid animated colour transitions.
-4. Review shared shell and ordinary content surfaces first; then Fireworks cards/schedule, amber notices, committee vacancy, Reps Hub feedback, newsletter sheets/cork, and cookie controls. Audit hard-coded colours, translucent backgrounds, gradients, hover and focus states rather than only changing the root palette.
-5. Validate the dev preview separately from the production-preview suite: toggle, navigation/reload persistence, unavailable storage, keyboard state and mobile access. Check every public route at 320px, 390px and 1440px using rendered DOM/computed-size checks; inspect open mobile navigation, expanded newsletters and the cookie banner. Check text contrast (4.5:1 normal, 3:1 large), relevant controls/focus indicators (3:1), 200% zoom and reduced motion; run representative axe scans in both modes.
-6. Add generated-output/browser assertions that Night Mode controls and initializer are absent from production and that production remains Day Mode even with a saved local choice or a dark OS preference. Run `npm run verify` and base-path checks before considering the preview complete.
-
-**Decisions needed:** approve manual opt-in and local persistence; choose light versus dark newsletter paper; agree a mobile dev-control placement. Public launch, system-preference behaviour and a visitor-facing selector remain later scope.
+| Review the local Night Mode preview visually: forest-charcoal palette, muted light newsletter sheets, darker cork and desktop/mobile toggle placement. Check real-device zoom and keyboard focus before considering public rollout. | Owner | None |
+| Run `npm run test:dev` and the browser stage of `npm run verify` outside the sandbox or with an approved Chrome-launch override. The sandbox blocks Chrome; the new dev suite and production Night Mode isolation browser test have not passed as Playwright suites. Connected desktop-browser checks cover all public routes at 320px, 390px and 1440px, non-overlapping header controls at 768px–1440px, and representative Night Mode axe scans. | Dev | Browser-capable environment |
 
 ## Later
 
