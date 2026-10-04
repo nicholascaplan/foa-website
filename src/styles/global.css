@@ -882,13 +882,8 @@ a {
   color: #ffd28b;
 }
 
-.quick-actions,
 .content-section {
   padding-block: clamp(3.5rem, 8vw, 7rem);
-}
-
-.quick-actions {
-  padding-top: 1rem;
 }
 
 .quick-list {
@@ -2532,21 +2527,24 @@ a {
 
   .hero-grid {
     grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.75fr);
-    align-items: center;
+    grid-template-areas:
+      "copy card"
+      "links card";
+    grid-template-rows: auto 1fr;
+    align-items: start;
   }
 
-  .quick-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .hero-copy {
+    grid-area: copy;
   }
 
-  .quick-row:nth-child(odd) {
-    padding-right: 1.5rem;
-    border-right: 1px solid var(--line);
+  .hero-grid > .event-feature {
+    grid-area: card;
   }
 
-  .quick-row:nth-child(even) {
-    padding-left: 1.5rem;
+  .hero-links {
+    grid-area: links;
+    align-self: end;
   }
 
   .split-layout {
@@ -2640,7 +2638,7 @@ a {
   }
 
   .hero {
-    padding-bottom: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .brand-logo {
@@ -2725,13 +2723,8 @@ a {
     font-size: 0.98rem;
   }
 
-  .content-section,
-  .quick-actions {
+  .content-section {
     padding-block: 2.25rem;
-  }
-
-  .quick-actions {
-    padding-top: 0;
   }
 
   .newsletter-page {
