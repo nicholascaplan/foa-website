@@ -30,6 +30,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Item | Owner | Blocked by |
 |---|---|---|
 | Get Involved page was restructured (compact Co-Secretary banner, event-lead section, three task tiles) without a browser view. Check it at 320px, 390px and 1440px for spacing and balance, and confirm the About tile's "where the money goes" matches the About page. | Dev | None |
+| Complete fundraising animation review and add focused browser regression coverage: phone and desktop widths, stable figure/track sizing during count-up, one-time scroll trigger, final totals, no-JavaScript and reduced-motion fallbacks. DOM sampling at a 594px viewport showed stable 520px track / 128px figure widths through the animation; the side-by-side desktop layout and real-device smoothness remain unchecked. | Dev | Browser-capable environment for automated tests; connected browser for manual review |
 | Committee page: decide whether the routes to Reps Hub and About The FOA are clear enough; if not, use more explicit task-focused labels. | Owner | None |
 | Decide whether About The FOA should carry a concise committee summary. The Committee page remains the canonical source; avoid duplicating member details. | Owner | None |
 | Decide whether to publish short committee biographies. If so, present them as visible readable content, not desktop-only tooltips. | FOA | FOA decision |
@@ -51,6 +52,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 - Formal manual accessibility testing (keyboard, zoom, screen reader), then publish a public accessibility statement.
 - Moderated Community Notice Board (deferred; no public route). Needs the decisions listed under *Open questions → Notice Board*.
 - Additional reviewed translations and RTL testing; FAQs page; native share; add-to-calendar downloads.
+- Optional homepage fundraising enhancement: milestone ticks (25%, 50%, 75%, 100%) that light up amber as the bar passes them, with short labels such as "Halfway!". Needs FOA-approved wording. Other ideas considered: moving end-marker, progress-based message under the bar.
 - Low-priority "Inspiration" archive of past event posters (standalone page or within What's On).
 - Selective screenshot visual regression, after the visual design is approved.
 - Public Night Mode rollout (low priority; separate approval after the local preview is reviewed).
@@ -69,7 +71,6 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 - Co-Secretary recruitment copy (final wording and publication review).
 - Arabic translation quality (demonstration only; human review required).
 - Santa's Grotto (16 December 2026): the start time, location wording and whether to list it publicly (it is usually a secret from the children) are unconfirmed. It is listed as an all-day event at Ashley School.
-- Christmas Fayre date: Saturday 5 December 2026 is confirmed by the project owner; the supplied calendar's 28 November is superseded. Verify the final public date.
 
 ## Open Questions
 
@@ -79,7 +80,7 @@ Resolve these as part of the related items above, then record outcomes in the br
 
 - Are there official colour values and brand-use restrictions?
 - Is occasional illustration wanted, or should typography and simple graphics remain the visual language?
-- Once the logo-big.png question is settled, where should the purpose graphic go? (Keep the three pillars as HTML text.)
+- Should the retained school logo (`assets/brand/school-logo-big.png`) be displayed anywhere? Retention is approved, but public use and placement need separate approval. Keep the purpose's three pillars as HTML text.
 
 ### Homepage and navigation
 

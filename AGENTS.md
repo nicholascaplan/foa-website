@@ -18,7 +18,6 @@ Read the brief before substantial design, content or architecture work.
 
 - Website for The Friends of Ashley (FOA), the PTA for Ashley C of E Primary School, Walton-on-Thames.
 - Astro 7, static output, typed local content collections, locally built CSS, deployed to GitHub Pages at `www.thefriendsofashley.org`. The site is live; work is operational follow-up, quality and later scope.
-- The earlier hash-routed prototype in `prototype/` is archived for reference only.
 - Do not select or integrate a CMS until content ownership, editor access, preview and publishing workflows are confirmed.
 
 ## Confirmed Direction
@@ -42,7 +41,7 @@ The full decision list is in the brief.
 
 ### Naming convention for public copy
 
-Applies to site copy, metadata, navigation labels, structured data, prototypes and documentation. It does not apply to filenames, URLs, email addresses or code identifiers.
+Applies to site copy, metadata, navigation labels, structured data and documentation. It does not apply to filenames, URLs, email addresses or code identifiers.
 
 - Full name: **The Friends of Ashley**. Shortened form after introduction: **The FOA**.
 - On first mention in longer copy, use **The Friends of Ashley (FOA)** if the abbreviation is used later.
@@ -67,6 +66,7 @@ Applies to site copy, metadata, navigation labels, structured data, prototypes a
   - **Mobile order.** Check that content moved into a side column still reads sensibly when it stacks.
   Do this in a rendered page (DOM and computed-size checks are preferred over screenshots, see Context Size Guard), and do not assume a clean build means the spacing is right.
 - Verify with the commands in [`README.md`](README.md) (`npm run verify` is the full gate), and check whitespace after edits.
+- **Always finish a response that made changes by opening the affected page inside OpenCode**, not in an external browser: confirm the dev server is running (`npm run dev`, `http://localhost:4321/`; start it if not), then open the specific affected page (not just the site root) in the Review pane with `tools.browser.tabs.open({ url })` via `execute`. Also state the URL in the reply. If the browser tools are unavailable, say so and give the URL instead.
 - After changing Astro content schemas, collection loaders, content-driven route filters or Astro configuration, start a **fresh** development server and make an HTTP request to every affected route. Confirm a successful response and the expected content. Do not rely only on `astro check`, a production build or an already-running dev server: Astro's dev content store can retain stale collection state after schema changes.
 
 ## Context Size Guard

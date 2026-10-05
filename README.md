@@ -20,10 +20,10 @@ Built with Astro 7 (static output), typed local content collections and locally 
 - `src/layouts/`, `src/components/`: shared shell and components
 - `src/content/`: typed collections for events, newsletters and committee members
 - `src/styles/global.css`: design tokens and component styles
-- `assets/`: brand assets, event images, committee portraits and source documents
+- `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
 - `tests/`: generated-site and unit tests (`*.test.mjs`), production Playwright/axe tests (`e2e/`) and local preview tests (`dev/`)
-- `prototype/`: archived hash-routed design prototype
 - `fundraising-progress-options.html`: unlinked design review page
+- [`assets/documents/key-events-2026-27.md`](assets/documents/key-events-2026-27.md): editable calendar summary that follows the published website; public event listings use the structured event collection
 - `.github/workflows/deploy.yml`: verify and deploy
 
 ## Local Development

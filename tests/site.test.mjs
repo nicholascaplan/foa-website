@@ -53,7 +53,7 @@ test("the homepage and Fireworks event page credit the sponsor with an accessibl
   for (const page of ["index.html", "events/fireworks-2026/index.html"]) {
     const html = await readFile(path.join(dist, page), "utf8");
     assert.match(html, /class="sponsor-ribbon"/);
-    assert.match(html, new RegExp(`src="${basePath}/martin-flashman.jpeg" alt="Martin Flashman and Co" width="225" height="33"`));
+    assert.match(html, new RegExp(`src="${basePath}/sponsors/martin-flashman.jpeg" alt="Martin Flashman and Co" width="225" height="33"`));
   }
 });
 

@@ -33,6 +33,7 @@ How the project documentation is organised, why, and how to keep it that way. Re
 | Anything not yet done or not yet confirmed (tasks, open questions, unverified facts) | `ACTIONS.md` |
 | Rules for agent behaviour, content safety and copy conventions | `AGENTS.md` |
 | Commands to install, run, build and verify | `README.md` |
+| Editable annual event summary for reference, following the published website | `../assets/documents/key-events-2026-27.md` (not a backlog or a publishing source) |
 | Test philosophy, layers, cadence | `TEST-STRATEGY.md` |
 
 Lifecycle of an item: it starts in `ACTIONS.md` (a task, question or provisional fact); when it is resolved, move the outcome into `PROJECT-BRIEF.md` as a decision or spec and delete it from `ACTIONS.md`.
@@ -59,4 +60,4 @@ The current structure fixes this by:
 - relying on Git history instead of in-file changelogs;
 - making session closure a small, bounded task (see `AGENTS.md`).
 
-If this structure stops serving the project, change it deliberately and update this file; do not let it erode by accumulation. The superseded long-form brief, including its dated session logs and prototype-era step plan, remains available in Git history (commit `c2caebd` and earlier).
+If this structure stops serving the project, change it deliberately and update this file; do not let it erode by accumulation. The superseded long-form brief, including its dated session logs and step plan, remains available in Git history (commit `c2caebd` and earlier).

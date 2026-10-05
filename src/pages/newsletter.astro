@@ -21,7 +21,7 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
     <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
       <article class="newsletter-issue newsletter-sheet">
-        <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
+        <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
           <div class="newsletter-more" id={latestBodyId} hidden>
@@ -39,7 +39,7 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
         const [first, ...rest] = data.sections ?? [];
         const bodyId = `newsletter-${id}-more`;
         return <article class="newsletter-summary newsletter-sheet">
-          <div class="newsletter-letterhead"><img src={withBase("/FOA%20Logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
+          <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
           <p class="newsletter-summary-label">{data.title}</p>
           {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
           {rest.length > 0 && <>

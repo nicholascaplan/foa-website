@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 4 October 2026
+**Last updated:** 5 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -19,7 +19,7 @@ The FOA needs a fast, welcoming and maintainable public website for parents, car
 
 Design character: a **warm, modern editorial community noticeboard**: the quick access of a bento layout with calmer hierarchy, larger typography, fewer cards and less app-like visual language.
 
-Implementation: Astro 7 static site with typed local content collections, built locally with project CSS and deployed through GitHub Pages. The earlier hash-routed prototype is archived in `prototype/` as a design reference only.
+Implementation: Astro 7 static site with typed local content collections, built locally with project CSS and deployed through GitHub Pages.
 
 ### Routes
 
@@ -51,7 +51,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - It is a public information and community site, not an internal committee administration system.
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
-- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full from the source issues in `assets/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body weight, with key facts bolded.
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full in `src/content/newsletters/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body weight, with key facts bolded. The redundant Markdown source drafts are not retained in the publicly served asset directory.
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 
@@ -63,9 +63,10 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
 - Night Mode is a local-development-only preview, manually enabled and off by default regardless of the operating-system preference. It uses forest-charcoal backgrounds, green-tinted surfaces, warm off-white text, sage accents and restrained amber. Newsletter sheets retain muted light paper and their letterhead/pin treatment on darker cork; photographs, logos, sponsor artwork and posters are unchanged. Public rollout requires a separate decision; production remains in Day Mode with no theme control.
 - Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
-- Use the approved FOA logo (`assets/FOA Logo.jpg`). Do not use Ashley School branding at this stage; `assets/logo-big.png` contains the school mark and must not be used until approved.
+- Use the approved FOA logo (`assets/brand/foa-logo.jpg`). Retain `assets/brand/school-logo-big.png` for possible future display; renaming and retaining it is not approval to display Ashley School branding, which still requires approval.
 - The supplied Fireworks image is the focal event image, but all event facts must also be available as structured text.
-- The homepage Fireworks artwork includes a straight, full-width dark-green sponsor strip flush beneath the photo, with “With thanks to” and the supplied Martin Flashman and Co logo (`assets/martin-flashman.jpeg`). The event-page hero repeats the strip beneath its introduction. The strip does not cover the people or fireworks; the original photograph and the full event poster (which already includes the sponsor) remain unchanged.
+- The annual calendar is retained as an editable Markdown summary at `assets/documents/key-events-2026-27.md`, replacing the PDF. The published website is the source of truth: update this reference after site changes are published, and do not preserve superseded PDF details. Public event listings continue to use structured event records.
+- The homepage Fireworks artwork includes a straight, full-width dark-green sponsor strip flush beneath the photo, with “With thanks to” and the supplied Martin Flashman and Co logo (`assets/sponsors/martin-flashman.jpeg`). The event-page hero repeats the strip beneath its introduction. The strip does not cover the people or fireworks; the original photograph and the full event poster (which already includes the sponsor) remain unchanged.
 - The Fireworks event page shows the full poster (`fireworks-poster.jpg`) as a plain, non-interactive image with descriptive alt text: no enlarge link and no caption. On desktop (48rem and up) it sits directly in the right-hand column beside the schedule, capped at 28rem wide with no green mat, outer border or shadow. On mobile it follows the schedule as a full-width light-green band, flush with the footer, with the poster up to 28rem wide. It is deliberately not placed above the schedule, because it repeats the schedule and summary card facts.
 - Committee portraits are shown compactly because source files are low resolution.
 - The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
@@ -130,6 +131,8 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Contact Us offers the shared email address and the approved Google Form. The form is unlinked/no-indexed at `/playground.html` as an experiment only.
 - A persistent **Donate via JustGiving** link (`https://www.justgiving.com/charity/Friends-of-Ashley`) is in the footer, repeated on About The FOA beside the fundraising-impact content. Navigation and the homepage hero remain free of it so it does not compete with events and tasks.
 - A calm **Fundraising update** band sits below the homepage hero: heading "Fundraising 2026/27" (target of £25,000 approved), the total raised on the left and the goal on the right (lighter) above a progress bar. Copy and height are deliberately fixed: line items are not listed on the homepage, so the band does not grow as sources are added. The line items (Uniform Sales, Happy Bags, Art Projects for Schools) stay in the collection, which calculates the total. It carries a subtle text **Donate via JustGiving** link. Figures live in the `fundraising` content collection (`src/content/fundraising/current-appeal.json`); the total and percentage are calculated from the sources. `fundraising-progress-options.html` (option 02) is the archived design reference.
+- Fundraising presentation uses one continuous heritage-green-to-amber gradient, not source-coloured segments or a new palette. When 60% of the card enters the viewport, the bar fills to the actual percentage over 1.4 seconds and the raised figure counts up with an ease-out; this runs once per page load, not continuously with scroll position. A single light shimmer follows. No milestone ticks, milestone labels or moving end-marker are included. Milestones remain optional later scope in `ACTIONS.md`, not approved current copy.
+- The fundraising count reserves a measured minimum width using an all-8s amount of the same digit length (re-measured after fonts load), with tabular/lining numerals requested where supported, so changing digits do not resize the adjacent progress track. Without JavaScript, with reduced motion enabled at initialization, or without IntersectionObserver, the final amount and progress remain visible. The progressbar's accessible value always represents the real raised amount, not an intermediate animation value. Animation logic is in `src/lib/fundraising-progress.ts`.
 - Google Analytics (`G-V2X8ZMQ5XZ`) is consent-controlled: the tag is absent until a visitor selects **Allow analytics cookies**. Rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. The banner is non-blocking, remembers the choice locally and is reopenable from the footer.
 - Required Google Analytics property settings: 2-month event/user retention with reset-on-activity disabled; Google Signals and user-provided data disabled; email redaction active; no advertising, cross-domain or connected-site integrations.
 - Do not add other optional technologies without extending the Privacy Notice and consent control.
@@ -140,7 +143,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
 - Typed local content collections are the interim source for events, newsletters and committee members until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
 - CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
-- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions and the cookie banner.
+- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions, the cookie banner and the progressive-enhancement fundraising animation.
 - GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
 - Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page.
 - The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
@@ -257,9 +260,11 @@ Source layout:
 - `src/layouts/`, `src/components/`: shared shell, navigation, event and content components
 - `src/content/`: typed collections for events, newsletters and committee members
 - `src/styles/global.css`: design tokens and responsive component styles
-- `assets/`: brand assets, event images, committee portraits and source documents
+- `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
+- Public asset names use URL-safe filenames where renamed: the approved logo is `brand/foa-logo.jpg`, Welcome Tea poster is `events/welcome-tea.png`, and AGM minutes are `documents/agm-minutes-2026-09-16.pdf`. The minutes have a `.pdf` extension so they are served as PDF. References, preloads, favicons, social metadata and content image paths use the new locations through `withBase()`; whole image paths are not passed through `encodeURIComponent`, which would escape folder separators. Old root-level asset URLs are not retained as aliases.
+- The unused full-size Fireworks image and redundant newsletter Markdown drafts are removed; the calendar PDF is replaced by the maintained Markdown summary. The hash-routed prototype and its unused styling are removed, while `fundraising-progress-options.html` is deliberately retained as the unlinked design reference. Git history retains removed source material.
 - `tests/site.test.mjs`, `tests/e2e/`: generated-site and browser tests
-- `prototype/`, `fundraising-progress-options.html`: archived/unlinked design references
+- `fundraising-progress-options.html`: unlinked design reference
 - `.github/workflows/deploy.yml`: build, verify and deploy
 
 ### 5.2 Hosting, domain and deployment

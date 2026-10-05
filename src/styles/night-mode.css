@@ -47,7 +47,7 @@
   background: var(--surface);
 }
 
-:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout, .prototype-note) {
+:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout) {
   color: var(--night-amber-ink);
   background: var(--amber-light);
   border-color: var(--amber);

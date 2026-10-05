@@ -41,7 +41,7 @@ export const GET: APIRoute = () => new Response(`<!doctype html>
     <header class="site-header">
       <div class="site-width header-inner">
         <a class="brand" href="${withBase("/")}" aria-label="The Friends of Ashley home">
-          <img class="brand-logo" src="${withBase("/FOA%20Logo.jpg")}" alt="" width="68" height="68">
+          <img class="brand-logo" src="${withBase("/brand/foa-logo.jpg")}" alt="" width="68" height="68">
           <span class="brand-copy"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
         </a>
         <nav class="desktop-nav" aria-label="Primary navigation">${links(navigation)}</nav>

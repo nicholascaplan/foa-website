@@ -1774,16 +1774,6 @@ a {
   font-size: 0.82rem;
 }
 
-.prototype-note {
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid #e6c98f;
-  color: #5f3b09;
-  background: #fff1cf;
-  text-align: center;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
 /* Event page */
 .event-hero {
   position: relative;
@@ -3076,6 +3066,7 @@ a {
   font-weight: 500;
   letter-spacing: -0.035em;
   line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .fundraising-figure span {
@@ -3106,7 +3097,40 @@ a {
   width: var(--progress);
   height: 100%;
   border-radius: inherit;
-  background: var(--green);
+  background: linear-gradient(90deg, var(--green), var(--amber));
+}
+
+.fundraising-progress__fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.fundraising-progress__fill::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-100%);
+}
+
+.fundraising-card.is-armed .fundraising-progress__fill {
+  width: 0;
+}
+
+.fundraising-card.is-filled .fundraising-progress__fill {
+  width: var(--progress);
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundraising-card.is-filled .fundraising-progress__fill::after {
+  content: "";
+  animation: fundraising-shimmer 1.1s ease-out 1.3s 1 both;
+}
+
+@keyframes fundraising-shimmer {
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .fundraising-card__cta {
