@@ -17,7 +17,7 @@ const storedPreference = (page: Page) =>
   page.evaluate((key) => window.localStorage.getItem(key), storageKey);
 
 const dataLayer = (page: Page) =>
-  page.evaluate(() => ((window as any).dataLayer ?? []) as unknown[][]);
+  page.evaluate(() => (((window as any).dataLayer ?? []) as ArrayLike<unknown>[]).map((entry) => Array.from(entry)));
 
 test.describe("Analytics consent", () => {
   test("loads nothing from Google before a choice is made", async ({ page }) => {
