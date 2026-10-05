@@ -90,7 +90,10 @@ test("fundraising uses shared totals, approved estimates and annual support", as
   assert.ok(html.includes(money(planned)));
   // Astro escapes apostrophes in text nodes; compare visible copy, not its encoding.
   const visibleCopy = html.replace(/&#(?:39|x27);/gi, "'");
-  for (const support of appeal.annualSupport) assert.ok(visibleCopy.includes(support));
+  for (const { title, items } of appeal.annualSupport) {
+    assert.ok(visibleCopy.includes(title));
+    for (const { label } of items) assert.ok(visibleCopy.includes(label));
+  }
   assert.ok(html.includes(`datetime="${appeal.updated}"`));
   assert.doesNotMatch(html, /gross income/i);
 });

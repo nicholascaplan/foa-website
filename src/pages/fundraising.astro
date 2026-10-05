@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import FundraisingSummary from "../components/FundraisingSummary.astro";
+import SupportIcon from "../components/SupportIcon.astro";
 import { ordinalDateFormatter } from "../lib/dates";
 import { withBase } from "../lib/urls";
 
@@ -52,7 +53,7 @@ const updated = ordinalDateFormatter({ year: "numeric", timeZone: "Europe/London
   <section class="content-section content-section--compact tinted-section" aria-labelledby="annual-support-title">
     <div class="site-width">
       <div class="section-heading"><p class="eyebrow">Beyond the big projects</p><h2 id="annual-support-title">The support that continues every year.</h2><p>Across all year groups, The FOA helps fund the resources, experiences and traditions that enrich life at Ashley.</p></div>
-      <ul class="fundraising-support-shapes" role="list">{appeal.annualSupport.map((support) => <li>{support}</li>)}</ul>
+      <div class="fundraising-support-groups">{appeal.annualSupport.map(({ title, tone, items }) => <section class={`support-group support-group--${tone}`}><h3>{title}</h3><ul class="fundraising-support-shapes" role="list">{items.map(({ label, icon }) => <li><span class="support-icon"><SupportIcon name={icon} /></span><span>{label}</span></li>)}</ul></section>)}</div>
     </div>
   </section>
 
@@ -60,11 +61,10 @@ const updated = ordinalDateFormatter({ year: "numeric", timeZone: "Europe/London
     <div class="site-width">
       <div class="section-heading"><p class="eyebrow">You can make a difference</p><h2 id="help-title">Help us reach the next goal.</h2><p>You don't have to make a donation to contribute. Time, ideas and useful connections all matter.</p></div>
       <div class="link-grid fundraising-help">
-        <a class="info-card info-card--link" href={withBase("/whats-on/")}><h3>Come along</h3><p>Enjoy an event and help support the school community.</p></a>
-        <a class="info-card info-card--link" href={withBase("/get-involved/")}><h3>Give some time</h3><p>Find a way to help that works for you.</p></a>
-        <a class="info-card info-card--link" href={withBase("/contact/")}><h3>Share a connection</h3><p>Could your business help with sponsorship, grants, employer giving or refurbished iPads? Get in touch.</p></a>
+        <a class="info-card info-card--link" href={withBase("/whats-on/")}><h3>Come along</h3><p>Enjoy an event and help support the school community.</p><span class="button button--primary">See what's on <span aria-hidden="true">→</span></span></a>
+        <a class="info-card info-card--link" href={withBase("/get-involved/")}><h3>Give some time</h3><p>Find a way to help that works for you.</p><span class="button button--primary">See ways to help <span aria-hidden="true">→</span></span></a>
+        <a class="info-card info-card--link" href={withBase("/contact/")}><h3>Share a connection</h3><p>Could your business help with sponsorship, grants, employer giving or refurbished iPads? Get in touch.</p><span class="button button--primary">Get in touch <span aria-hidden="true">→</span></span></a>
       </div>
-      <div class="fundraising-more"><a class="button button--primary" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></div>
     </div>
   </section>
   </div>

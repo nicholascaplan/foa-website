@@ -33,6 +33,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 | Item | Owner | Blocked by |
 |---|---|---|
+| Browser-check the Fundraising annual-support groups (icons, three-column layout from 64rem, single column below) and the ways-to-help cards with buttons at mobile and mid widths (only one desktop width was measured), then run the Fundraising Playwright spec outside the sandbox. Also confirm the `.info-card h2` weight change on Contact and Uniform. | Dev | Browser-capable environment |
 | Review fundraising animation smoothness on real devices. Focused regression coverage is in `tests/e2e/fundraising.spec.ts` (one-time trigger, final amounts, visual fill, reduced motion, no JavaScript, responsive sizing and enlarged text); execution is covered by the browser-suite task below. Connected-browser sampling on Home and Fundraising at 390px showed stable figure/track widths through count-up to the correct final amount; desktop layouts have also been DOM-checked. | Owner | Real-device review |
 | Committee page: decide whether the routes to Reps Hub and About The FOA are clear enough; if not, use more explicit task-focused labels. | Owner | None |
 | Decide whether About The FOA should carry a concise committee summary. The Committee page remains the canonical source; avoid duplicating member details. | Owner | None |

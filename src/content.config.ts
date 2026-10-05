@@ -76,7 +76,14 @@ const fundraising = defineCollection({
       estimate: z.number().positive(),
       description: z.string(),
     })),
-    annualSupport: z.array(z.string()),
+    annualSupport: z.array(z.object({
+      title: z.string(),
+      tone: z.enum(["green", "amber", "neutral"]),
+      items: z.array(z.object({
+        label: z.string(),
+        icon: z.enum(["laptop", "bag", "tie", "cap", "star", "bee", "sparkle"]),
+      })),
+    })),
   }),
 });
 

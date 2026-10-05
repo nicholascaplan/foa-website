@@ -39,7 +39,7 @@ for (const width of [320, 390, 768, 820, 1024, 1440]) {
   test(`Fundraising content stays within its columns at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/fundraising/");
-    await expect(page.locator(".fundraising-support-shapes li")).toHaveCount(appeal.annualSupport.length);
+    await expect(page.locator(".fundraising-support-shapes li")).toHaveCount(appeal.annualSupport.flatMap(({ items }: { items: unknown[] }) => items).length);
     await expect(page.locator(".fundraising-updated")).toHaveCSS("font-style", "italic");
     await expect(page.getByText("For more background", { exact: false })).toHaveCount(0);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

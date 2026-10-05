@@ -37,12 +37,30 @@
     }
   ],
   "annualSupport": [
-    "Technology for learning",
-    "Beekeeping at Ashley",
-    "Reception bookbags",
-    "Year 3 ties",
-    "Year 6 leavers' events",
-    "Santa's Grotto",
-    "Enrichment experiences, including workshops and activities"
+    {
+      "title": "In the classroom",
+      "tone": "green",
+      "items": [
+        { "label": "Technology for learning", "icon": "laptop" },
+        { "label": "Reception bookbags", "icon": "bag" }
+      ]
+    },
+    {
+      "title": "Ashley traditions",
+      "tone": "amber",
+      "items": [
+        { "label": "Year 3 ties", "icon": "tie" },
+        { "label": "Year 6 leavers' events", "icon": "cap" },
+        { "label": "Santa's Grotto", "icon": "star" }
+      ]
+    },
+    {
+      "title": "Beyond the curriculum",
+      "tone": "neutral",
+      "items": [
+        { "label": "Beekeeping at Ashley", "icon": "bee" },
+        { "label": "Enrichment experiences, including workshops and activities", "icon": "sparkle" }
+      ]
+    }
   ]
 }
