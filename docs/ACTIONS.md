@@ -27,7 +27,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Dev:** Re-run `npm run verify` in a browser-capable environment to confirm the mobile accessibility and enlarged-text fixes. Production tests now use an isolated preview server (see [`TEST-STRATEGY.md`](TEST-STRATEGY.md)). Astro check, build, all 46 site/unit tests and whitespace checks passed. Review-pane measurements found no overflow on Home or Fundraising at 200% text size at 320px, 390px and 1440px; 390px axe scans found no serious or critical violations. **Blocked by:** Chrome-launch sandbox permissions. Keep the unrelated in-progress Fundraising and volunteering work separate from this fix when committing.
+- **Dev:** Confirm the next GitHub Actions run passes. The CI-only enlarged-text overflow at 320px (footer column and Home date tile) was fixed and passes locally with a wide fallback font (see [`TEST-STRATEGY.md`](TEST-STRATEGY.md)).
 
 - **Dev / Owner:** Verify and publish the Get Involved volunteering update. **Blocked by:** browser-capable verification. The closing paragraph linking to Fundraising has been removed, so the update no longer depends on publishing that route. Astro check, build and site/unit tests passed; responsive DOM checks found no horizontal overflow. Full Playwright verification remains blocked by the known Chrome-launch sandbox permissions.
 

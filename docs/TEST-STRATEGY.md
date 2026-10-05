@@ -150,6 +150,8 @@ npm run test:e2e       # Playwright journeys and accessibility checks
 npm run verify         # Required pull-request and deployment gate
 ```
 
+Local runs use installed Chrome on macOS, while CI uses bundled Chromium on Linux with different fallback fonts. Narrow-width and enlarged-text layout tests can therefore pass locally and fail in CI. To reproduce, temporarily set `--font-body` to a wide font such as `Verdana, sans-serif` in `src/styles/global.css`, then run the affected specs with `--retries=0`.
+
 During the first implementation phase, keep `npm test` as the convenient aggregate command. It creates a fresh production build before running tests that consume `dist/`. `npm run verify` remains the authoritative CI gate and adds Astro and TypeScript diagnostics before `npm test`.
 
 Recommended cadence:

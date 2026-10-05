@@ -672,9 +672,10 @@ a {
 .date-tile {
   display: inline-flex;
   flex: none;
-  padding: 0.45rem 1.6rem;
+  max-width: 100%;
+  padding: 0.45rem min(1.6rem, 6vw);
   align-items: center;
-  gap: 0.7rem;
+  gap: min(0.7rem, 2vw);
   border: 2px solid var(--amber);
   border-radius: 999px;
   color: var(--green-dark);
@@ -1685,6 +1686,7 @@ a {
 
 .footer-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2.5rem;
 }
 
@@ -1730,10 +1732,6 @@ a {
 
 .footer-donation-link > span:not(.visually-hidden) {
   display: block;
-}
-
-.footer-donation-link > span:last-child {
-  white-space: nowrap;
 }
 
 .footer-bottom {
