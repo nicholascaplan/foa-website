@@ -71,7 +71,7 @@ Continue using Node's built-in test runner against `dist/`. These tests are fast
 - Event structured data is valid JSON and contains the confirmed source fields.
 - Important collection-driven ordering and separation rules hold, such as upcoming versus archived events and latest versus previous newsletters.
 
-Pure logic lives in `src/lib` (event visibility and UK-day labels in `event-visibility.ts`, content rendering in `inline.ts`) and is unit-tested directly with the same runner, including clock-change and escaping edge cases. Browser tests then only need to prove the wiring.
+Pure logic lives in `src/lib` (event visibility and UK-day labels in `event-visibility.ts`, content rendering in `inline.ts`, and the visual fundraising percentage in `fundraising-progress.ts`) and is unit-tested directly with the same runner, including clock-change, escaping and empty/reached/exceeded-goal edge cases. Browser tests then only need to prove the wiring.
 
 Do not assert on minified CSS, editable prose or facts the link crawler already covers. Where a test needs an event date, derive it from the content file rather than hard-coding it.
 
@@ -83,7 +83,7 @@ Use Playwright for interactions and complete parent journeys. Run against a prod
 
 Initial browser scenarios:
 
-1. Navigate from Home to What's On, Uniform and Get Involved using normal links; verify the destination and current-page indication.
+1. Navigate from Home to What's On, Fundraising, Uniform and Get Involved using normal links; verify the destination and current-page indication.
 2. At a mobile viewport, open the menu, verify `aria-expanded` and visibility, close it with the close button, backdrop and Escape key, and verify sensible focus behaviour.
 3. Open a previous newsletter, verify its title and content, close it by button and backdrop, and verify page-scroll locking is removed.
 4. Copy a Reps Hub message with a mocked clipboard, verify success feedback, and verify the feedback clears. Simulate an unavailable or rejected clipboard and verify failure feedback.
@@ -96,6 +96,8 @@ Generated-site contracts in `tests/site.test.mjs` cover the homepage Welcome Tea
 Further browser scenarios now covered: the Fireworks "Back to What's On" link only appears when arriving from What's On; key event information stays reachable with JavaScript disabled (the footer is the mobile navigation fallback); and axe plus a no-horizontal-scroll check run at a 390px viewport, including the open mobile menu.
 
 Keep browser coverage concentrated on shared navigation and unique interactions. Static pages with no distinct behaviour should be covered by generated-site and accessibility checks rather than repetitive end-to-end tests.
+
+Fundraising coverage is defined in `tests/e2e/fundraising.spec.ts`: the shared Home/Fundraising animation runs once and reaches the real amount; the modest visual fill does not alter accessible progress values; reduced-motion and no-JavaScript modes retain final figures; responsive columns, previous-year alignment and enlarged text do not overflow. Generated-site tests cover shared financial content, both menu orders/current-page indication and the absence of a donation CTA in the homepage band. Browser execution blockers and manual-review follow-ups belong in `ACTIONS.md`.
 
 Development-only Night Mode is covered separately by `tests/dev/night-mode.spec.ts` and `playwright.dev.config.ts` (`npm run test:dev`). This starts its own fresh development server without replacing an existing one. It checks keyboard state, preference persistence, blocked storage, responsive sizing, unchanged images, expanded newsletters, mobile navigation, enlarged text and representative axe scans. The production suite and generated-output tests independently assert that preview code/styles are absent and saved local preferences have no effect. Keep dev-server tests out of the production-preview suite so the normal deployment gate still exercises the deployed output.
 

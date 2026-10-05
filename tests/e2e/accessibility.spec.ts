@@ -6,6 +6,7 @@ const routes = [
   "/whats-on/",
   "/events/fireworks-2026/",
   "/uniform/",
+  "/fundraising/",
   "/committee/",
   "/newsletter/",
   "/reps/",

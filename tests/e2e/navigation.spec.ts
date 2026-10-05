@@ -6,6 +6,7 @@ test("main task routes are reachable through normal navigation", async ({ page }
   for (const destination of [
     { name: "Newsletter", path: "/newsletter/" },
     { name: "What's On", path: "/whats-on/" },
+    { name: "Fundraising", path: "/fundraising/" },
     { name: "Uniform", path: "/uniform/" },
     { name: "Get Involved", path: "/get-involved/" },
   ]) {
@@ -76,7 +77,7 @@ test.describe("mobile navigation", () => {
 
     const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
     await expect(navigation.getByRole("link"))
-      .toHaveText(["Home", "Newsletter", "What's On", "Get Involved", "Uniform", "Contact Us"]);
+      .toHaveText(["Home", "Newsletter", "What's On", "Fundraising", "Get Involved", "Uniform", "Contact Us"]);
 
     await navigation.getByRole("link", { name: "Uniform" }).click();
     await expect(page).toHaveURL(/\/uniform\/$/);
@@ -85,6 +86,15 @@ test.describe("mobile navigation", () => {
     await page.getByRole("button", { name: "Open menu" }).click();
     await expect(page.getByRole("navigation", { name: "Mobile navigation" })
       .getByRole("link", { name: "Uniform" }))
+      .toHaveAttribute("aria-current", "page");
+
+    await page.getByRole("navigation", { name: "Mobile navigation" })
+      .getByRole("link", { name: "Fundraising" }).click();
+    await expect(page).toHaveURL(/\/fundraising\/$/);
+    await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "true");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await expect(page.getByRole("navigation", { name: "Mobile navigation" })
+      .getByRole("link", { name: "Fundraising" }))
       .toHaveAttribute("aria-current", "page");
   });
 });

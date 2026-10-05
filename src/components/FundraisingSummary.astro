@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { withBase } from "../lib/urls";
+import { fundraisingDisplayPercent } from "../lib/fundraising-progress";
+
+interface Props {
+  appeal: CollectionEntry<"fundraising">["data"];
+  detailed?: boolean;
+}
+const { appeal, detailed = false } = Astro.props;
+const raised = appeal.sources.reduce((sum, { amount }) => sum + amount, 0);
+const displayPercent = fundraisingDisplayPercent(raised, appeal.target);
+const money = (value: number) => `£${value.toLocaleString("en-GB")}`;
+---
+<div class:list={["fundraising-card", { "fundraising-card--detail": detailed }]} data-fundraising-card>
+  {detailed
+    ? <h3 class="fundraising-card__title">{appeal.title}</h3>
+    : <h2 id="fundraising-update-title" class="fundraising-card__title">{appeal.title}</h2>}
+  <div class="fundraising-figures">
+    <p class="fundraising-figure"><strong data-count-to={raised}>{money(raised)}</strong><span>raised</span></p>
+    <p class="fundraising-figure fundraising-figure--goal"><strong>{money(appeal.target)}</strong><span>goal</span></p>
+  </div>
+  <div class="fundraising-progress__track" role="progressbar" aria-label="Fundraising progress" aria-valuemin="0" aria-valuemax={appeal.target} aria-valuenow={Math.min(raised, appeal.target)} aria-valuetext={`${money(raised)} raised of ${money(appeal.target)}`}><div class="fundraising-progress__fill" style={`--progress: ${displayPercent}%`}></div></div>
+  <div class="fundraising-card__cta">
+    {!detailed && <a class="text-link" href={withBase("/fundraising/")}>See our fundraising and spending plans <span aria-hidden="true">&rarr;</span></a>}
+    {detailed && <a class="text-link" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}
+  </div>
+</div>
+
+<script>
+  import { initFundraisingProgress } from "../lib/fundraising-progress";
+
+  initFundraisingProgress();
+</script>

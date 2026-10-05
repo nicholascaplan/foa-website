@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SponsorRibbon from "../components/SponsorRibbon.astro";
+import FundraisingSummary from "../components/FundraisingSummary.astro";
 import { withBase } from "../lib/urls";
 import { ordinalDateFormatter } from "../lib/dates";
 const events = await getCollection("events");
@@ -12,9 +13,6 @@ const latestNewsletter = (await getCollection("newsletters"))
   .sort((a, b) => b.data.published!.getTime() - a.data.published!.getTime())[0]?.data;
 const appeal = (await getCollection("fundraising")).find(({ id }) => id === "current-appeal")?.data;
 if (!appeal) throw new Error("Homepage fundraising content is missing");
-const raised = appeal.sources.reduce((sum, { amount }) => sum + amount, 0);
-const raisedPercent = Math.min(100, (raised / appeal.target) * 100);
-const money = (value: number) => `£${value.toLocaleString("en-GB")}`;
 const fireworksDate = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" })(fireworks.start);
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const fireworksSchedule = fireworks.schedule ?? [];
@@ -49,21 +47,7 @@ const fireworksMonth = datePart({ month: "short" });
   </section>
   <section class="fundraising-update" aria-labelledby="fundraising-update-title">
     <div class="site-width">
-      <div class="fundraising-card" data-fundraising-card>
-        <h2 id="fundraising-update-title" class="fundraising-card__title">{appeal.title}</h2>
-        <div class="fundraising-figures">
-          <p class="fundraising-figure"><strong data-count-to={raised}>{money(raised)}</strong><span>raised</span></p>
-          <p class="fundraising-figure fundraising-figure--goal"><strong>{money(appeal.target)}</strong><span>goal</span></p>
-        </div>
-        <div class="fundraising-progress__track" role="progressbar" aria-label="Fundraising progress" aria-valuemin="0" aria-valuemax={appeal.target} aria-valuenow={raised} aria-valuetext={`${money(raised)} raised of ${money(appeal.target)}`}><div class="fundraising-progress__fill" style={`--progress: ${raisedPercent}%`}></div></div>
-        <p class="fundraising-card__cta"><a class="text-link" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></p>
-      </div>
+      <FundraisingSummary appeal={appeal} />
     </div>
   </section>
 </BaseLayout>
-
-<script>
-  import { initFundraisingProgress } from "../lib/fundraising-progress";
-
-  initFundraisingProgress();
-</script>

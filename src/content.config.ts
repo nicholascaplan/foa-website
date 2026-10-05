@@ -64,6 +64,19 @@ const fundraising = defineCollection({
     target: z.number().positive(),
     sources: z.array(z.object({ label: z.string(), amount: z.number().nonnegative() })),
     donateUrl: z.url(),
+    updated: z.coerce.date(),
+    previousYear: z.object({
+      year: z.string(),
+      raised: z.number().nonnegative(),
+      impact: z.string(),
+      sources: z.array(z.string()),
+    }),
+    priorities: z.array(z.object({
+      title: z.string(),
+      estimate: z.number().positive(),
+      description: z.string(),
+    })),
+    annualSupport: z.array(z.string()),
   }),
 });
 

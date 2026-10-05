@@ -1,9 +1,9 @@
 ---
-interface Props { eyebrow: string; title: string; intro: string; }
-const { eyebrow, title, intro } = Astro.props;
+interface Props { eyebrow: string; title: string; intro: string; wideTitle?: boolean; }
+const { eyebrow, title, intro, wideTitle = false } = Astro.props;
 const hasAction = Astro.slots.has("action");
 ---
-<section class="view-hero">
+<section class:list={["view-hero", { "view-hero--wide-title": wideTitle }]}>
   <div class:list={["site-width", { "view-hero-inner": hasAction }]}>
     {hasAction
       ? <>

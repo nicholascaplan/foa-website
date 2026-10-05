@@ -13,6 +13,7 @@ const publicRoutes = [
   "/get-involved/",
   "/uniform/",
   "/about/",
+  "/fundraising/",
   "/committee/",
   "/reps/",
   "/newsletter/",

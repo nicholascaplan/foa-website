@@ -1,0 +1,71 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import FundraisingSummary from "../components/FundraisingSummary.astro";
+import { ordinalDateFormatter } from "../lib/dates";
+import { withBase } from "../lib/urls";
+
+const appeal = (await getCollection("fundraising")).find(({ id }) => id === "current-appeal")?.data;
+if (!appeal) throw new Error("Fundraising content is missing");
+const raised = appeal.sources.reduce((sum, { amount }) => sum + amount, 0);
+const planned = appeal.priorities.reduce((sum, { estimate }) => sum + estimate, 0);
+const money = (value: number) => `£${value.toLocaleString("en-GB")}`;
+const updated = ordinalDateFormatter({ year: "numeric", timeZone: "Europe/London" })(appeal.updated);
+---
+<BaseLayout title="Fundraising" description="See what The Friends of Ashley has raised, the difference it makes and this year's spending priorities.">
+  <div class="fundraising-page">
+  <PageHero eyebrow="The Friends of Ashley" title="Fundraising" intro="Every event, donation and helping hand adds up to more opportunities for Ashley children. Here's what we've raised and what we're working towards." />
+
+  <section class="content-section content-section--compact" aria-labelledby="this-year-title">
+    <div class="site-width">
+      <div class="section-heading"><p class="eyebrow">This year · 2026/27</p><h2 id="this-year-title">Every contribution adds up.</h2><p>Thank you to everyone who has supported The FOA so far this academic year.</p></div>
+      <div class="split-layout split-layout--snug fundraising-current">
+        <div><FundraisingSummary appeal={appeal} detailed /><p class="fundraising-updated">Figures updated on <time datetime={appeal.updated.toISOString().slice(0, 10)}>{updated}</time>.</p></div>
+        <div class="fundraising-sources-frame"><table class="fundraising-sources">
+          <caption>Where this year's fundraising has come from</caption>
+          <thead><tr><th scope="col">Fundraising source</th><th scope="col">Raised</th></tr></thead>
+          <tbody>{appeal.sources.map(({ label, amount }) => <tr><th scope="row">{label}</th><td>{money(amount)}</td></tr>)}</tbody>
+          <tfoot><tr><th scope="row">Total raised</th><td>{money(raised)}</td></tr></tfoot>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section content-section--compact tinted-section" aria-labelledby="priorities-title">
+    <div class="site-width">
+      <div class="section-heading"><p class="eyebrow">This year's priorities</p><h2 id="priorities-title">What we're raising money for.</h2><p>These priorities were approved at the September 2026 AGM, with estimated costs totalling {money(planned)}. Approval doesn't mean they have already been funded or bought.</p></div>
+      <div class="fundraising-priorities">{appeal.priorities.map(({ title, estimate, description }) => <article class="fundraising-priority"><h3>{title}</h3><p class="fundraising-estimate">{money(estimate)} <span>estimated</span></p><p>{description}</p></article>)}</div>
+    </div>
+  </section>
+
+  <section class="content-section content-section--compact" aria-labelledby="last-year-title">
+    <div class="site-width">
+      <div class="section-heading"><p class="eyebrow">Last year · {appeal.previousYear.year}</p><h2 id="last-year-title">A lasting difference.</h2></div>
+      <div class="split-layout fundraising-last-year">
+        <div class="fundraising-last-impact"><p class="fundraising-last-total"><strong>{money(appeal.previousYear.raised)}</strong><span>raised together in {appeal.previousYear.year}</span></p><p>{appeal.previousYear.impact}</p></div>
+        <div class="fundraising-last-sources"><h3>Made possible together</h3><ul class="fundraising-support-list">{appeal.previousYear.sources.map((source) => <li>{source}</li>)}</ul><p>Thank you to everyone who organised, attended, donated prizes or gave their time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section content-section--compact tinted-section" aria-labelledby="annual-support-title">
+    <div class="site-width">
+      <div class="section-heading"><p class="eyebrow">Beyond the big projects</p><h2 id="annual-support-title">The support that continues every year.</h2><p>Across all year groups, The FOA helps fund the resources, experiences and traditions that enrich life at Ashley.</p></div>
+      <ul class="fundraising-support-shapes" role="list">{appeal.annualSupport.map((support) => <li>{support}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="content-section content-section--compact" aria-labelledby="help-title">
+    <div class="site-width">
+      <div class="section-heading"><p class="eyebrow">You can make a difference</p><h2 id="help-title">Help us reach the next goal.</h2><p>You don't have to make a donation to contribute. Time, ideas and useful connections all matter.</p></div>
+      <div class="link-grid fundraising-help">
+        <a class="info-card info-card--link" href={withBase("/whats-on/")}><h3>Come along</h3><p>Enjoy an event and help support the school community.</p></a>
+        <a class="info-card info-card--link" href={withBase("/get-involved/")}><h3>Give some time</h3><p>Find a way to help that works for you.</p></a>
+        <a class="info-card info-card--link" href={withBase("/contact/")}><h3>Share a connection</h3><p>Could your business help with sponsorship, grants, employer giving or refurbished iPads? Get in touch.</p></a>
+      </div>
+      <div class="fundraising-more"><a class="button button--primary" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></div>
+    </div>
+  </section>
+  </div>
+</BaseLayout>

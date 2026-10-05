@@ -3,6 +3,12 @@ const DURATION_MS = 1400;
 const formatMoney = (value: number) => `£${Math.round(value).toLocaleString("en-GB")}`;
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
+// A small visual lift makes early progress easier to see; amounts and ARIA stay exact.
+export function fundraisingDisplayPercent(raised: number, goal: number) {
+  const actual = Math.min(100, Math.max(0, (raised / goal) * 100));
+  return actual === 0 ? 0 : actual + 4 * (1 - actual / 100);
+}
+
 export function initFundraisingProgress() {
   const card = document.querySelector<HTMLElement>("[data-fundraising-card]");
   const figure = card?.querySelector<HTMLElement>("[data-count-to]");

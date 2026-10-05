@@ -27,6 +27,73 @@ const outputPath = (urlPath) => {
 
 const welcomeTea = JSON.parse(await readFile(path.resolve("src/content/events/welcome-tea-2026.json"), "utf8"));
 const archiveFrom = new Date(welcomeTea.archiveFrom).toISOString();
+const appeal = JSON.parse(await readFile(path.resolve("src/content/fundraising/current-appeal.json"), "utf8"));
+const money = (value) => `£${value.toLocaleString("en-GB")}`;
+
+test("Get Involved exposes the AGM volunteer teams and shared enquiry route", async () => {
+  const html = await readFile(path.join(dist, "get-involved/index.html"), "utf8");
+  for (const role of ["Pre-loved uniform sales", "Quartermasters", "Event comperes", "Eco Stall lead", "Fireworks shadowing", "Lead a community event"]) {
+    assert.ok(html.includes(`<h3>${role}</h3>`), `Missing volunteer team: ${role}`);
+  }
+  assert.match(html, /Summer Fete and Big Picnic/);
+  assert.match(html, /Plans and dates are still to be confirmed/);
+  assert.doesNotMatch(html, /Could you help lead an event\?|Not ready to lead\?/);
+  assert.ok(html.includes('href="mailto:thefriendsofashley@gmail.com?subject=Volunteering%20with%20The%20FOA"'));
+  for (const route of ["uniform", "reps"]) {
+    assert.ok(html.includes(`href="${basePath}/${route}/"`));
+  }
+});
+
+test("Fundraising appears after What's On in both navigation menus", async () => {
+  for (const route of ["index.html", "fundraising/index.html"]) {
+    const html = await readFile(path.join(dist, route), "utf8");
+    for (const label of ["Primary navigation", "Mobile navigation"]) {
+      const nav = html.match(new RegExp(`<nav[^>]*aria-label="${label}"[^>]*>([\\s\\S]*?)<\\/nav>`))?.[1];
+      assert.ok(nav);
+      const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+      const expected = ["/", "/newsletter/", "/whats-on/", "/fundraising/", "/get-involved/", "/uniform/"];
+      if (label === "Mobile navigation") expected.push("/contact/");
+      assert.deepEqual(destinations, expected.map((destination) => `${basePath}${destination}`));
+      if (route.startsWith("fundraising/")) {
+        assert.match(nav, /href="[^"]*\/fundraising\/" aria-current="page"/);
+      }
+    }
+  }
+});
+
+test("fundraising uses shared totals, approved estimates and annual support", async () => {
+  const html = await readFile(path.join(dist, "fundraising/index.html"), "utf8");
+  const homepage = await readFile(path.join(dist, "index.html"), "utf8");
+  const about = await readFile(path.join(dist, "about/index.html"), "utf8");
+  const raised = appeal.sources.reduce((sum, { amount }) => sum + amount, 0);
+  const planned = appeal.priorities.reduce((sum, { estimate }) => sum + estimate, 0);
+  for (const page of [html, homepage]) {
+    assert.ok(page.includes(money(raised)));
+    assert.ok(page.includes(money(appeal.target)));
+    assert.ok(page.includes(`aria-valuenow="${Math.min(raised, appeal.target)}"`));
+  }
+  for (const page of [homepage, about]) {
+    assert.ok(page.includes(`href="${basePath}/fundraising/"`));
+  }
+  const homepageBand = homepage.match(/<section class="fundraising-update"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(homepageBand);
+  assert.doesNotMatch(homepageBand, /Donate via JustGiving/);
+  for (const page of [html, about]) assert.ok(page.includes(money(appeal.previousYear.raised)));
+  for (const { label, amount } of appeal.sources) {
+    assert.ok(html.includes(label));
+    assert.ok(html.includes(money(amount)));
+  }
+  for (const { title, estimate } of appeal.priorities) {
+    assert.ok(html.includes(title));
+    assert.ok(html.includes(money(estimate)));
+  }
+  assert.ok(html.includes(money(planned)));
+  // Astro escapes apostrophes in text nodes; compare visible copy, not its encoding.
+  const visibleCopy = html.replace(/&#(?:39|x27);/gi, "'");
+  for (const support of appeal.annualSupport) assert.ok(visibleCopy.includes(support));
+  assert.ok(html.includes(`datetime="${appeal.updated}"`));
+  assert.doesNotMatch(html, /gross income/i);
+});
 
 test("production omits all Night Mode preview code and styles", async () => {
   const outputFiles = (await filesUnder(dist)).filter((file) => /\.(html|css|js)$/.test(file));

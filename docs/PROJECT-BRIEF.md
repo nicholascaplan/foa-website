@@ -33,6 +33,7 @@ Implementation: Astro 7 static site with typed local content collections, built 
 /reps/                  Reps Hub
 /meeting-minutes/       Meeting Minutes archive
 /about/                 About The FOA
+/fundraising/           Fundraising
 /contact/               Contact Us
 /newsletter/            Newsletter
 /privacy/               Privacy Notice
@@ -69,6 +70,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The homepage Fireworks artwork includes a straight, full-width dark-green sponsor strip flush beneath the photo, with “With thanks to” and the supplied Martin Flashman and Co logo (`assets/sponsors/martin-flashman.jpeg`). The event-page hero repeats the strip beneath its introduction. The strip does not cover the people or fireworks; the original photograph and the full event poster (which already includes the sponsor) remain unchanged.
 - The Fireworks event page shows the full poster (`fireworks-poster.jpg`) as a plain, non-interactive image with descriptive alt text: no enlarge link and no caption. On desktop (48rem and up) it sits directly in the right-hand column beside the schedule, capped at 28rem wide with no green mat, outer border or shadow. On mobile it follows the schedule as a full-width light-green band, flush with the footer, with the poster up to 28rem wide. It is deliberately not placed above the schedule, because it repeats the schedule and summary card facts.
 - Committee portraits are shown compactly because source files are low resolution.
+- Get Involved keeps the Co-Secretary vacancy and volunteering introduction in one section, with a compact responsive gap rather than stacked section padding.
 - The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
 - The homepage hero introduction precedes the current-event card at every viewport, so visitors understand The FOA before seeing an event prompt.
 - Homepage hero shows the Fireworks editorial card directly in the initial HTML, with its photograph preloaded and no date-driven card switching. Welcome Tea is no longer featured on the homepage and must not return there; its past-event listing remains on What's On. The Fireworks card is centred: eyebrow, title, image, an amber date badge (weekday, day, month), a proportional timeline of the event schedule (gates open, quiet display, main display), a plain location line with pin icon under the date badge (no chips), and two stacked full-width buttons: an amber two-line Buy tickets button (price and under-2s note from `ticketPrice`) and Event details. The timeline scales with the card width and wraps its labels one word per line. Schedule times come from the event's `schedule` list in the content collection, which the Fireworks event page also renders.
@@ -84,7 +86,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### Information architecture
 
-- Primary navigation, in order: **Home, What's On, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us.
+- Primary navigation, in order: **Home, What's On, Fundraising, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us.
 - Committee, Reps Hub and Meeting Minutes belong under Get Involved. About, Contact and policy pages are reached through the footer and relevant page content. Reps Hub is for class reps only, so it is linked from Get Involved (including the homepage Get involved row) and the footer, not the primary or mobile navigation.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages. A contextual **Back to What's On** link on the event page shows only when the visitor arrived from that route.
@@ -130,8 +132,11 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 - Contact Us offers the shared email address and the approved Google Form. The form is unlinked/no-indexed at `/playground.html` as an experiment only.
 - A persistent **Donate via JustGiving** link (`https://www.justgiving.com/charity/Friends-of-Ashley`) is in the footer, repeated on About The FOA beside the fundraising-impact content. Navigation and the homepage hero remain free of it so it does not compete with events and tasks.
-- A calm **Fundraising update** band sits below the homepage hero: heading "Fundraising 2026/27" (target of £25,000 approved), the total raised on the left and the goal on the right (lighter) above a progress bar. Copy and height are deliberately fixed: line items are not listed on the homepage, so the band does not grow as sources are added. The line items (Uniform Sales, Happy Bags, Art Projects for Schools) stay in the collection, which calculates the total. It carries a subtle text **Donate via JustGiving** link. Figures live in the `fundraising` content collection (`src/content/fundraising/current-appeal.json`); the total and percentage are calculated from the sources. `fundraising-progress-options.html` (option 02) is the archived design reference.
-- Fundraising presentation uses one continuous heritage-green-to-amber gradient, not source-coloured segments or a new palette. When 60% of the card enters the viewport, the bar fills to the actual percentage over 1.4 seconds and the raised figure counts up with an ease-out; this runs once per page load, not continuously with scroll position. A single light shimmer follows. No milestone ticks, milestone labels or moving end-marker are included. Milestones remain optional later scope in `ACTIONS.md`, not approved current copy.
+- A calm **Fundraising update** band sits below the homepage hero: heading "Fundraising 2026/27" (target of £25,000 approved), the total raised on the left and the goal on the right (lighter) above a progress bar. Copy and height are deliberately fixed: line items are not listed on the homepage, so the band does not grow as sources are added. The line items (Uniform Sales, Happy Bags, Art Projects for Schools) stay in the collection, which calculates the total. Its only action is **See our fundraising and spending plans**; the donation link remains on Fundraising and in the footer, not in the homepage band. Figures live in the `fundraising` content collection (`src/content/fundraising/current-appeal.json`); the total and percentage are calculated from the sources. `fundraising-progress-options.html` (option 02) is the archived design reference.
+- **Fundraising** at `/fundraising/` is the canonical home for current-year source totals, previous-year impact, approved spending priorities, recurring annual support and ways to help. It appears after What's On in the desktop header and mobile menu. The homepage band links to it explicitly; About The FOA links to it and reads its impact summary from the same collection. Both pages share `FundraisingSummary.astro` and its progressively enhanced animation. Its figures carry an italic content-update date, not the build date. The page uses compact spacing and headings, a lightly bordered paper table, an amber-backed previous-year total and a full-width group of rounded/soft-corner shapes for recurring support, rather than floating bullets alongside a tall heading. The previous-year heading spans both columns; the total/impact and contributing activities align at their top edges below it and stack in that order on mobile. The project-estimates footnote and closing AGM/accounts paragraph are omitted.
+- The project owner confirmed the 2025/26 total as **£25,730**, superseding the AGM's approximate "just under £25,000". Current fundraising amounts represent gross receipts, not profit or money available to spend; public wording is simply **raised**, never "gross income". AGM-approved spending priorities are classroom visualisers, additional playground equipment, additional iPads and beekeeping suits. The iPad estimate is **£10,000**, confirmed by the project owner. Estimates live in the fundraising collection and their sum is calculated; they are not the full annual budget, and approval must not be presented as funding secured or purchases completed.
+- The Fundraising page includes all recurring support listed at the AGM: learning technology, beekeeping, Reception bookbags, Year 3 ties, Year 6 leavers' events, Santa's Grotto and enrichment experiences. It also offers routes to events, volunteering, business connections and JustGiving. It does not duplicate event dates or publish a separate financial-account balance.
+- Fundraising presentation uses one continuous heritage-green-to-amber gradient, not source-coloured segments or a new palette. The owner approved a modestly wider visual fill on both Home and Fundraising: four percentage points of lift, tapering to zero at the goal; zero raised still shows an empty bar and the fill never exceeds 100%. This is a presentation choice only: amounts and accessible progress values remain exact. When 60% of the card enters the viewport, the bar fills over 1.4 seconds and the raised figure counts up with an ease-out; this runs once per page load, not continuously with scroll position. A single light shimmer follows. No milestone ticks, milestone labels or moving end-marker are included. Milestones remain optional later scope in `ACTIONS.md`, not approved current copy.
 - The fundraising count reserves a measured minimum width using an all-8s amount of the same digit length (re-measured after fonts load), with tabular/lining numerals requested where supported, so changing digits do not resize the adjacent progress track. Without JavaScript, with reduced motion enabled at initialization, or without IntersectionObserver, the final amount and progress remain visible. The progressbar's accessible value always represents the real raised amount, not an intermediate animation value. Animation logic is in `src/lib/fundraising-progress.ts`.
 - Google Analytics (`G-V2X8ZMQ5XZ`) is consent-controlled: the tag is absent until a visitor selects **Allow analytics cookies**. Rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. The banner is non-blocking, remembers the choice locally and is reopenable from the footer.
 - Required Google Analytics property settings: 2-month event/user retention with reset-on-activity disabled; Google Signals and user-provided data disabled; email redaction active; no advertising, cross-domain or connected-site integrations.
@@ -141,7 +146,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 ### Technical direction
 
 - Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
-- Typed local content collections are the interim source for events, newsletters and committee members until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
+- Typed local content collections are the interim source for events, newsletters, committee members and fundraising until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
 - CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
 - Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions, the cookie banner and the progressive-enhancement fundraising animation.
 - GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
@@ -155,7 +160,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### MVP (delivered or in progress)
 
-Responsive homepage; What's On with earlier-this-year section; reusable event pages and the Fireworks 2026 page; external ticket link; Pre-loved Uniform hub; Get Involved, Committee and the Co-Secretary vacancy; Reps Hub; Meeting Minutes archive; Newsletter; About The FOA and three pillars; shared contact route; Privacy Notice; SEO metadata, sitemap and canonical URLs; GitHub Pages deployment.
+Responsive homepage; What's On with earlier-this-year section; reusable event pages and the Fireworks 2026 page; external ticket link; Pre-loved Uniform hub; Get Involved, Committee and the Co-Secretary vacancy; Reps Hub; Meeting Minutes archive; Newsletter; About The FOA and three pillars; Fundraising with shared totals, impact, spending priorities and annual support; shared contact route; Privacy Notice; SEO metadata, sitemap and canonical URLs; GitHub Pages deployment.
 
 ### Later scope
 
@@ -189,6 +194,12 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 - Past events separated under **Earlier this year**, with completed-event styling and no ticket calls to action.
 - Event data model supports upcoming, on-sale, sold-out, cancelled and completed states.
 
+**Fundraising**
+- Current academic-year goal, calculated total and source breakdown; previous-year amount and impact; approved spending priorities with estimated costs; recurring annual support; ways to contribute.
+- Financial content has one structured source shared with the homepage and About page. Its update date is explicitly maintained, not inferred from the build.
+- Keep amounts and accessible progress exact even though the visual fill has an approved presentation lift. Distinguish approved spending priorities from funded or completed purchases; do not describe receipts as profit or funds available to spend.
+- Desktop navigation and the mobile menu expose the page after What's On, with current-page indication; the homepage band retains its explicit link.
+
 **Event pages**
 - Title, date, time, location, schedule and concise summary; ticket price and external link where relevant, clearly identified as external.
 - Accessibility and practical-attendance information, cancellation/refund information (or a link), attractions and FAQs where relevant, and a last-reviewed date for operational information.
@@ -199,6 +210,8 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 
 **Get Involved and Committee**
 - Explain that meetings are informal and open to all; show current approved committee names and roles and active vacancies; explain time commitment and support; provide the shared contact action; expose no unnecessary information about children.
+- Get Involved uses one "Find your way to help" opportunities grid, including event leadership and class reps, rather than separate overlapping event-lead and beginner sections. Card CTAs use standard secondary buttons; the shared volunteering enquiry is centred on desktop and full-width on mobile and closes the page content, without a further paragraph of links. Its hero heading uses the available desktop width while the introduction retains the shared readable line-length limit; mobile and other page heroes are unchanged.
+- Get Involved brings the AGM volunteering routes together: pre-loved uniform sale helpers, Quartermasters (equipment maintenance and event set-up), event comperes, the Eco Stall lead enquiry, event helpers and smaller fundraisers, alongside Co-Secretary, Fireworks shadowing, class reps, meetings and business connections. Summer Fete and Big Picnic organiser enquiries are labelled as plans/dates still to be confirmed, not confirmed event listings. Enquiries use the shared inbox; Uniform, Fundraising and Meeting Minutes remain the canonical sources for their practical details, impact and meeting records.
 
 **Reps Hub**
 - Approved, current messages, each linking to the canonical source page, with visible copy success/failure feedback. Native sharing optional. Messages need review and expiry dates; stale messages must not appear as current.
@@ -258,7 +271,7 @@ Source layout:
 
 - `src/pages/`: one `.astro` file per route
 - `src/layouts/`, `src/components/`: shared shell, navigation, event and content components
-- `src/content/`: typed collections for events, newsletters and committee members
+- `src/content/`: typed collections for events, newsletters, committee members and fundraising
 - `src/styles/global.css`: design tokens and responsive component styles
 - `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
 - Public asset names use URL-safe filenames where renamed: the approved logo is `brand/foa-logo.jpg`, Welcome Tea poster is `events/welcome-tea.png`, and AGM minutes are `documents/agm-minutes-2026-09-16.pdf`. The minutes have a `.pdf` extension so they are served as PDF. References, preloads, favicons, social metadata and content image paths use the new locations through `withBase()`; whole image paths are not passed through `encodeURIComponent`, which would escape folder separators. Old root-level asset URLs are not retained as aliases.
@@ -284,7 +297,7 @@ If adopted, the build would be triggered by an authenticated CMS publish event.
 
 ### 5.4 Minimum content models
 
-Models for a future CMS (current Astro collections cover events, newsletters and committee members). Do not include child information by default.
+Models for a future CMS (current Astro collections cover events, newsletters, committee members and fundraising). Do not include child information by default.
 
 - **Site settings:** site name, school relationship wording, charity number, shared contact address, social links, default locale, footer/legal links.
 - **Event:** title, slug, summary, start/end date-time and timezone, location, status, schedule items, ticket products/prices, external ticket URL, ticket availability, past-event display state and current-year archive inclusion, attractions, accessibility information, weather/cancellation and refund information, FAQs, publish/expiry dates, last reviewed date, SEO metadata, locale and translation review state.
@@ -292,6 +305,7 @@ Models for a future CMS (current Astro collections cover events, newsletters and
 - **Role vacancy:** title, summary, responsibilities, estimated time commitment, support/handover details, contact action, status, opening/closing dates.
 - **Uniform information:** donation location and instructions, accepted/rejected items, sale dates, price rows, payment methods, contact/help text, last reviewed date.
 - **Rep message:** title, body, canonical page, locale, approval status, publish/expiry dates, last reviewed date.
+- **Fundraising appeal:** academic-year title, goal, source amounts, content-update date, donation URL, previous-year total/impact/sources, approved spending priorities with estimated costs and descriptions, and recurring annual support. Current-year totals and the sum of spending estimates are calculated, not separately editable.
 - **Notice (if restored):** title, summary/body, category, activity date-time, location, approved attribution, moderation status, publish/expiry dates, takedown state, internal moderation notes.
 
 ### 5.5 Internationalisation

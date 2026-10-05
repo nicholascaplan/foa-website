@@ -6,5 +6,43 @@
     { "label": "Happy Bags", "amount": 220 },
     { "label": "Art Projects for Schools", "amount": 1027 }
   ],
-  "donateUrl": "https://www.justgiving.com/charity/Friends-of-Ashley"
+  "donateUrl": "https://www.justgiving.com/charity/Friends-of-Ashley",
+  "updated": "2026-10-05",
+  "previousYear": {
+    "year": "2025/26",
+    "raised": 25730,
+    "impact": "Last year's fundraising is helping to fund new KS1 playground equipment, scheduled for installation over the October half term in 2026.",
+    "sources": ["Fireworks", "Christmas Fayre", "Quiz Night", "Summer Fete", "Happy Bags", "Pre-loved sales", "Christmas cards", "Class fundraisers"]
+  },
+  "priorities": [
+    {
+      "title": "Classroom visualisers",
+      "estimate": 8000,
+      "description": "A visualiser for each classroom will help teachers demonstrate handwriting, share physical objects and show examples clearly to the whole class."
+    },
+    {
+      "title": "Additional playground equipment",
+      "estimate": 1000,
+      "description": "Refreshing the equipment children use at playtime, replacing items that wear out through everyday use."
+    },
+    {
+      "title": "Additional iPads",
+      "estimate": 10000,
+      "description": "Supporting the computing curriculum with more devices that work with the school's existing iPads and IT support."
+    },
+    {
+      "title": "Beekeeping suits",
+      "estimate": 5000,
+      "description": "Additional suits in sizes for adults and older children will help extend beekeeping activities to KS2 pupils."
+    }
+  ],
+  "annualSupport": [
+    "Technology for learning",
+    "Beekeeping at Ashley",
+    "Reception bookbags",
+    "Year 3 ties",
+    "Year 6 leavers' events",
+    "Santa's Grotto",
+    "Enrichment experiences, including workshops and activities"
+  ]
 }
