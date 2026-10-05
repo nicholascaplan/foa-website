@@ -11,7 +11,7 @@ test.describe("without JavaScript", () => {
     await fireworks.click();
 
     await expect(page.getByRole("heading", { level: 1, name: "Fireworks on the Field" })).toBeVisible();
-    await expect(page.getByText("16:30-18:30")).toBeVisible();
+    await expect(page.locator(".event-summary").getByText("16:30–18:30", { exact: true })).toBeVisible();
   });
 
   test("the homepage still shows a featured event and links to the task routes", async ({ page }) => {

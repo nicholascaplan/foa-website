@@ -19,13 +19,15 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
 | Run a constrained-connection mobile performance test, including the Fireworks image load. | Dev | None |
-| Browser-check the homepage Fireworks card at narrow phone and mid desktop widths: the container-query timeline scaling, one-word-per-line labels, stacked two-line Buy tickets button and location line. Restyled without a browser view. | Dev | None |
-| Browser-check the Fireworks ticket CTAs and "Good to know" block at mobile and desktop widths: homepage hero and Fireworks card buttons, the What's On Fireworks row (Buy tickets beside View event details; the row is no longer fully clickable), the event-page summary panel and Tip note, and spacing between event-page sections. Added without a browser view; the Playwright suite could not run in the agent sandbox. | Dev | None |
+| Complete the final visual review of the homepage Fireworks card at narrow phone and mid desktop widths: timeline labels, stacked two-line Buy tickets button and location line. DOM checks of the updated four-entry timeline passed at 320px, 390px and 1440px with no overflow. | Owner | None |
+| Complete the final mobile/desktop visual review of the Fireworks ticket CTAs: homepage hero/card and the What's On row. The event-page summary, Tip, "Good to know", scroll edges, mobile sponsor placement and switch were DOM-checked in both modes, including enlarged text; real-device review is still needed. | Owner | None |
 | Update the autumn newsletter line "Online ticket link will be shared shortly" now that tickets are on sale. | FOA | FOA decision |
-| Confirm how school families buy tokens in advance (the ticket page says "for school community" without a route), and whether the Ferris wheel and mulled wine in the event intro still match the ticket page ("fairground ride"). | FOA | FOA decision |
+| Confirm how school families buy tokens in advance (the guide says the week before, but gives no route). Reconcile the guide's fairground cash/card label with its token FAQ and the existing token-only ticket-page advice; confirm current token prices, bag sizes and non-refundable/reusable conditions before changing that copy. | FOA | FOA decision |
 | Complete a focused mobile and desktop review of all routes: page order, spacing, heading scale, event/date labels, newsletter formatting and navigation terminology. The Get Involved vacancy-to-volunteering gap has been reduced and DOM-checked at 390px and 1440px with no horizontal overflow. | Owner | None |
 
 ## Soon
+
+- **Owner:** Share the Fireworks immersive alternative for review before deciding whether it should become the default. Check the canvas flames and opening fireworks on real phones, including reduced motion, battery/performance and keyboard/zoom access. The approved design and default-off behaviour are recorded in the brief; production browser regressions are covered by the deployment gate.
 
 - **Owner:** Complete a final visual/content review of the redesigned Get Involved and Reps Hub pages, including volunteer vacancy status and the charter-based role summary. Reps Hub messages come first, actions align across desktop cards, and mobile cards are compact. Responsive DOM checks passed; local automated browser tests remain blocked by Chrome-launch sandbox permissions (see the browser-suite task below).
 
@@ -47,7 +49,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Make event-date e2e tests independent of live content: `event-dates.spec.ts` still hard-codes Welcome Tea and Fireworks dates for What's On. Decide how to retire past events first. | Dev | Decision on retiring past events |
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
 | Review the local Night Mode preview visually: forest-charcoal palette, muted light newsletter sheets, darker cork and desktop/mobile toggle placement. Check real-device zoom and keyboard focus before considering public rollout. | Owner | None |
-| Run `npm run test:dev` and the browser stage of `npm run verify` outside the sandbox or with an approved Chrome-launch override before publishing the current changes. The sandbox blocks Chrome; the new dev suite, production Night Mode isolation browser test, revised homepage Fireworks-only/no-JavaScript regressions and Fundraising accessibility/animation/layout/navigation tests have not passed as Playwright suites. Connected desktop-browser checks cover all public routes at 320px, 390px and 1440px, non-overlapping header controls at 768px–1440px, and representative Night Mode axe scans. Home and Fundraising have been DOM-checked at 320px, 390px, 768px, 820px, 1024px and 1440px, including doubled text size, with no horizontal overflow; Fundraising axe scans at 390px and 1440px were clean in both Day and local Night Mode. The final shared-heading alignment was checked at 320px, 390px, 1024px and 1440px. The six-link desktop header was checked from 1024px to 1440px, and the mobile menu includes Fundraising in the agreed order. | Dev | Browser-capable environment |
+| Run `npm run test:dev` outside the sandbox or with an approved Chrome-launch override. Local Chrome launch remains blocked, so the development-only Night Mode suite is still unverified. Production browser tests run in the GitHub Actions deployment gate (`npm run verify`). Connected-browser checks cover public routes, responsive headers, representative Night Mode axe scans and enlarged-text layouts; they do not replace the dev suite. | Dev | Browser-capable environment |
 
 ## Later
 
@@ -67,7 +69,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 These facts appear on the site or in drafts but are not confirmed by an authorised FOA owner. Keep them labelled as provisional or absent from public pages until confirmed.
 
-- Fireworks: capacity; what the quiet display involves and its accessibility characteristics; access and facilities (step-free, toilets, first aid, parking); refund, cancellation and bad-weather policy; event-day contact.
+- Fireworks: capacity; what the quiet display involves and its accessibility characteristics; step-free access and toilets; refund, cancellation and bad-weather policy; event-day contact. Parking, first aid and lost-child help are now sourced from the supplied 2026 Event Guide.
 - Uniform: accepted and rejected items; donation conditions (washed, labelled, bagged); bin-emptying frequency; whether sale dates are regular or ad hoc; size requests between sales.
 - Privacy Notice details about shared-inbox and Google Form access/retention.
 - Reps Hub copy (pending FOA approval).

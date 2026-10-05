@@ -1846,28 +1846,6 @@ a {
     var(--fireworks-image) center 38% / cover;
 }
 
-.event-hero::before,
-.event-hero::after {
-  position: absolute;
-  border: 1px solid rgba(251, 192, 92, 0.25);
-  border-radius: 50%;
-  content: "";
-}
-
-.event-hero::before {
-  top: -12rem;
-  right: -8rem;
-  width: 35rem;
-  height: 35rem;
-}
-
-.event-hero::after {
-  top: -4rem;
-  right: 2rem;
-  width: 15rem;
-  height: 15rem;
-}
-
 .breadcrumb {
   position: relative;
   z-index: 1;

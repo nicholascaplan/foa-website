@@ -30,6 +30,16 @@ const archiveFrom = new Date(welcomeTea.archiveFrom).toISOString();
 const appeal = JSON.parse(await readFile(path.resolve("src/content/fundraising/current-appeal.json"), "utf8"));
 const money = (value) => `£${value.toLocaleString("en-GB")}`;
 
+test("Fireworks defaults to standard mode with shared guide facts and no poster", async () => {
+  const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
+  assert.match(html, /role="switch" aria-checked="false"/);
+  assert.match(html, /fw-mode-switch__track/);
+  assert.doesNotMatch(html, /<body[^>]*fw-theme|fireworks-poster\.jpg|ferris wheel/i);
+  for (const fact of ["no on-site parking", "Harmony Centre", "St John Ambulance", "Event closes", "cash or card", "subject to availability"]) {
+    assert.ok(html.includes(fact), `Missing guide fact: ${fact}`);
+  }
+});
+
 test("Get Involved exposes the AGM volunteer teams and shared enquiry route", async () => {
   const html = await readFile(path.join(dist, "get-involved/index.html"), "utf8");
   for (const role of ["Pre-loved uniform sales", "Quartermasters", "Event comperes", "Eco Stall lead", "Fireworks shadowing", "Lead a community event"]) {

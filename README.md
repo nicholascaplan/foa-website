@@ -20,6 +20,8 @@ Built with Astro 7 (static output), typed local content collections and locally 
 - `src/layouts/`, `src/components/`: shared shell and components
 - `src/content/`: typed collections for events, newsletters and committee members
 - `src/styles/global.css`: design tokens and component styles
+- `src/scripts/`: opt-in Fireworks canvas effects and mode control
+- `src/fonts/`: self-hosted Fireworks display font and its licence
 - `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
 - `tests/`: generated-site and unit tests (`*.test.mjs`), production Playwright/axe tests (`e2e/`) and local preview tests (`dev/`)
 - `fundraising-progress-options.html`: unlinked design review page

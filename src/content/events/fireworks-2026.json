@@ -11,11 +11,11 @@
   "lead": "Helen Platt",
   "ticketPrice": "£8.50 per person; under-2s free",
   "ticketUrl": "https://buytickets.at/thefriendsofashley/2337508",
-  "ticketNote": "Book early. Last year sold out and no tickets were sold on the door.",
+  "ticketNote": "Book early. Tickets on the gate are subject to availability, and the event usually sells out in advance.",
   "goodToKnow": [
     {
       "label": "On the night",
-      "text": "Food vendors, a parent-run bar, a fairground ride and games, a braid bar and face painting."
+      "text": "Fairground games and rides, a parent-run BBQ and bar, a pizza van with gluten-free options, a coffee cart, a braid bar and face painting."
     },
     {
       "label": "Tokens",
@@ -26,11 +26,27 @@
       "text": "You need a ticket or organiser pass to get in. Please keep children with you at all times."
     },
     {
+      "label": "Food and payments",
+      "text": "The BBQ, bar, pizza van and coffee cart accept cash or card. Bring cash for the braid bar and face painting."
+    },
+    {
+      "label": "Parking",
+      "text": "There is no on-site parking. Limited parking is available around town near the school."
+    },
+    {
+      "label": "Children",
+      "text": "Please keep children with you. Wristbands are provided at the entrance for parents to write their phone number on. Children who cannot find their parents can go to the Harmony Centre for help via the PA."
+    },
+    {
+      "label": "First aid",
+      "text": "St John Ambulance will be in the Hive throughout the event."
+    },
+    {
       "label": "Please note",
       "text": "This is a pet, smoke and sparkler-free zone."
     }
   ],
-  "reviewed": "2026-09-28",
+  "reviewed": "2026-10-05",
   "schedule": [
     {
       "time": "2026-11-05T16:30:00+00:00",
@@ -40,12 +56,18 @@
     {
       "time": "2026-11-05T17:00:00+00:00",
       "label": "Quiet display",
-      "detail": "The earlier display is scheduled before the main event."
+      "detail": "The earlier display is scheduled before the main event.",
+      "burst": "small"
     },
     {
       "time": "2026-11-05T18:00:00+00:00",
       "label": "Main display",
-      "detail": "The evening's main fireworks display."
+      "detail": "The evening's main fireworks display.",
+      "burst": "finale"
+    },
+    {
+      "time": "2026-11-05T18:30:00+00:00",
+      "label": "Event closes"
     }
   ]
 }

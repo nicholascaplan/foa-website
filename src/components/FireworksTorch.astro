@@ -1,0 +1,20 @@
+---
+const embers = [
+  { dx: "-14px", delay: "0.2s" },
+  { dx: "8px", delay: "0.9s" },
+  { dx: "-6px", delay: "1.5s" },
+  { dx: "12px", delay: "2.1s" },
+  { dx: "-10px", delay: "1.8s" },
+];
+---
+<div class="fw-torch" data-fw-torch aria-hidden="true">
+  <div class="fw-torch__head">
+    <div class="fw-torch__halo"></div>
+    <div class="fw-torch__flames">
+      <i class="fw-flame fw-flame--1"></i><i class="fw-flame fw-flame--2"></i><i class="fw-flame fw-flame--3"></i><i class="fw-flame fw-flame--4"></i>
+      {embers.map((ember) => <span class="fw-ember" style={`--dx:${ember.dx};--delay:${ember.delay}`}></span>)}
+    </div>
+    <div class="fw-torch__bowl"></div>
+  </div>
+  <div class="fw-torch__pole"></div>
+</div>

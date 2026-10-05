@@ -30,6 +30,7 @@ const events = defineCollection({
       time: z.coerce.date(),
       label: z.string(),
       detail: z.string().optional(),
+      burst: z.enum(["small", "finale"]).optional(),
     })).optional(),
     reviewed: z.coerce.date().optional(),
   }),
