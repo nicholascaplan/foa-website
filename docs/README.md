@@ -34,6 +34,7 @@ How the project documentation is organised, why, and how to keep it that way. Re
 | Rules for agent behaviour, content safety and copy conventions | `AGENTS.md` |
 | Commands to install, run, build and verify | `README.md` |
 | Editable annual event summary for reference, following the published website | `../assets/documents/key-events-2026-27.md` (not a backlog or a publishing source) |
+| Searchable local reference for the 16 September 2026 AGM minutes | [`agm-minutes-2026-09-16.md`](agm-minutes-2026-09-16.md); the original PDF remains the public download |
 | Test philosophy, layers, cadence | `TEST-STRATEGY.md` |
 
 Lifecycle of an item: it starts in `ACTIONS.md` (a task, question or provisional fact); when it is resolved, move the outcome into `PROJECT-BRIEF.md` as a decision or spec and delete it from `ACTIONS.md`.
