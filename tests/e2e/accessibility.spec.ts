@@ -61,6 +61,8 @@ test.describe("mobile viewport", () => {
     test(`${route} has no serious or critical violations and does not scroll sideways`, async ({ page }) => {
       await page.goto(route);
 
+      await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
+      await expect(page.getByRole("button", { name: "Open menu" })).toHaveCSS("min-height", "44px");
       expect(seriousOrCritical(await scan(page))).toEqual([]);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

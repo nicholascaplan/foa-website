@@ -27,6 +27,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
+- **Dev:** Re-run `npm run verify` in a browser-capable environment to confirm the mobile accessibility and enlarged-text fixes. Production tests now use an isolated preview server (see [`TEST-STRATEGY.md`](TEST-STRATEGY.md)). Astro check, build, all 46 site/unit tests and whitespace checks passed. Review-pane measurements found no overflow on Home or Fundraising at 200% text size at 320px, 390px and 1440px; 390px axe scans found no serious or critical violations. **Blocked by:** Chrome-launch sandbox permissions. Keep the unrelated in-progress Fundraising and volunteering work separate from this fix when committing.
+
 | Item | Owner | Blocked by |
 |---|---|---|
 | Get Involved page was restructured (compact Co-Secretary banner, event-lead section, three task tiles) without a browser view. Check it at 320px, 390px and 1440px for spacing and balance, and confirm the About tile's "where the money goes" matches the About page. | Dev | None |

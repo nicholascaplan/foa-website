@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:4321",
+    baseURL: "http://127.0.0.1:4347",
     trace: "on-first-retry",
   },
   projects: [
@@ -20,8 +20,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run preview -- --host 127.0.0.1",
-    url: "http://127.0.0.1:4321",
-    reuseExistingServer: !process.env.CI,
+    command: "npm run preview -- --ignore-lock --host 127.0.0.1 --port 4347",
+    url: "http://127.0.0.1:4347",
+    reuseExistingServer: false,
   },
 });
