@@ -3478,6 +3478,7 @@ a {
   background: var(--surface);
   font-weight: 600;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .support-icon {
@@ -3505,9 +3506,20 @@ a {
   margin-bottom: 1.25rem;
 }
 
+.fundraising-help .info-card {
+  min-width: 0;
+}
+
+.fundraising-help h3 {
+  overflow-wrap: anywhere;
+}
+
 .fundraising-help .button {
+  max-width: 100%;
   align-self: flex-start;
   margin-top: auto;
+  flex-wrap: wrap;
+  white-space: normal;
 }
 
 .fundraising-help .info-card:hover .button {
