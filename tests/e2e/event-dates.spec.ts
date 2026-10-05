@@ -14,50 +14,22 @@ const homepageWelcomeTea = (page: Page) =>
 const homepageFireworks = (page: Page) =>
   page.getByRole("main").getByRole("heading", { level: 2, name: "Fireworks on the Field" });
 
-test.describe("Homepage event switch (UK time)", () => {
-  test.use({ timezoneId: "Europe/London" });
+test.describe("Homepage always features Fireworks", () => {
+  for (const timezoneId of ["Europe/London", "America/Los_Angeles"]) {
+    test.describe(timezoneId, () => {
+      test.use({ timezoneId });
 
-  test("shows the Welcome Tea poster before the archive date", async ({ page }) => {
-    await openAt(page, "2026-09-30T09:00:00Z", "/");
+      for (const isoTime of [lastMomentOfWelcomeTea, firstMomentAfterWelcomeTea]) {
+        test(`shows Fireworks with no Welcome Tea at ${isoTime}`, async ({ page }) => {
+          await openAt(page, isoTime, "/");
 
-    await expect(homepageWelcomeTea(page)).toBeVisible();
-    await expect(homepageFireworks(page)).toBeHidden();
-  });
-
-  test("still shows Welcome Tea until it starts at 1pm", async ({ page }) => {
-    await openAt(page, lastMomentOfWelcomeTea, "/");
-
-    await expect(homepageWelcomeTea(page)).toBeVisible();
-    await expect(homepageFireworks(page)).toBeHidden();
-  });
-
-  test("switches to Fireworks when Welcome Tea starts at 1pm", async ({ page }) => {
-    await openAt(page, firstMomentAfterWelcomeTea, "/");
-
-    await expect(homepageFireworks(page)).toBeVisible();
-    await expect(homepageWelcomeTea(page)).toBeHidden();
-  });
-
-  test("switches without a reload when Welcome Tea starts while the page is open", async ({ page }) => {
-    await openAt(page, lastMomentOfWelcomeTea, "/");
-    await expect(homepageWelcomeTea(page)).toBeVisible();
-
-    await page.clock.fastForward(90_000);
-
-    await expect(homepageFireworks(page)).toBeVisible();
-    await expect(homepageWelcomeTea(page)).toBeHidden();
-  });
-});
-
-test.describe("Homepage event switch uses UK time, not the visitor's timezone", () => {
-  test.use({ timezoneId: "America/Los_Angeles" });
-
-  test("a visitor in another timezone sees Fireworks once Welcome Tea has started", async ({ page }) => {
-    await openAt(page, firstMomentAfterWelcomeTea, "/");
-
-    await expect(homepageFireworks(page)).toBeVisible();
-    await expect(homepageWelcomeTea(page)).toBeHidden();
-  });
+          await expect(homepageFireworks(page)).toBeVisible();
+          await expect(homepageWelcomeTea(page)).toHaveCount(0);
+          await expect(page.locator("[data-show-before], [data-show-from]")).toHaveCount(0);
+        });
+      }
+    });
+  }
 });
 
 test.describe("What's On event sections (UK time)", () => {

@@ -36,11 +36,12 @@ test("production omits all Night Mode preview code and styles", async () => {
   }
 });
 
-test("the homepage swaps the Welcome Tea poster for Fireworks at the content archive time", async () => {
+test("the homepage shows Fireworks in the initial HTML without Welcome Tea or date switching", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
-  assert.match(homepage, new RegExp(`class="event-feature event-feature--poster" data-show-before="${archiveFrom}"`));
-  assert.match(homepage, new RegExp(`class="event-feature event-feature--poster" data-show-from="${archiveFrom}" hidden`));
-  assert.match(homepage, new RegExp(`class="event-poster-link" href="${basePath}/whats-on/"`));
+  assert.match(homepage, /<article class="event-feature event-feature--poster">/);
+  assert.match(homepage, /<h2>Fireworks on the Field<\/h2>/);
+  assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-1600.jpg"`));
+  assert.doesNotMatch(homepage, /Welcome Tea|welcome-tea|data-show-before|data-show-from/);
 });
 
 test("What's On switches Welcome Tea from upcoming to past at the content archive time", async () => {

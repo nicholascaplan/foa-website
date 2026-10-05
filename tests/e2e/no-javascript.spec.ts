@@ -18,7 +18,8 @@ test.describe("without JavaScript", () => {
     await page.goto("/");
 
     const main = page.getByRole("main");
-    await expect(main.getByRole("heading", { level: 2 }).first()).toBeVisible();
+    await expect(main.getByRole("heading", { level: 2, name: "Fireworks on the Field" })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Welcome Tea" })).toHaveCount(0);
     await expect(main.getByRole("link", { name: "Buy or donate uniform" })).toBeVisible();
     await expect(main.getByRole("link", { name: "Get involved Roles, meetings" })).toBeVisible();
   });
