@@ -33,7 +33,7 @@ const money = (value) => `£${value.toLocaleString("en-GB")}`;
 test("Get Involved exposes the AGM volunteer teams and shared enquiry route", async () => {
   const html = await readFile(path.join(dist, "get-involved/index.html"), "utf8");
   for (const role of ["Pre-loved uniform sales", "Quartermasters", "Event comperes", "Eco Stall lead", "Fireworks shadowing", "Lead a community event"]) {
-    assert.ok(html.includes(`<h3>${role}</h3>`), `Missing volunteer team: ${role}`);
+    assert.ok(html.includes(`<h3>${role}`), `Missing volunteer team: ${role}`);
   }
   assert.match(html, /Summer Fete and Big Picnic/);
   assert.match(html, /Plans and dates are still to be confirmed/);
@@ -42,6 +42,25 @@ test("Get Involved exposes the AGM volunteer teams and shared enquiry route", as
   for (const route of ["uniform", "reps"]) {
     assert.ok(html.includes(`href="${basePath}/${route}/"`));
   }
+});
+
+test("Reps Hub puts shareable messages first and preserves ticket links and sale timings when copied", async () => {
+  const html = await readFile(path.join(dist, "reps/index.html"), "utf8");
+  assert.ok(html.indexOf('class="message-grid"') < html.indexOf('id="reps-role-title"'));
+  const cards = [...html.matchAll(/<article class="message-card">([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+  assert.equal(cards.length, 3);
+  const fireworks = JSON.parse(await readFile(path.resolve("src/content/events/fireworks-2026.json"), "utf8"));
+  const uniform = JSON.parse(await readFile(path.resolve("src/content/events/uniform-november-2026.json"), "utf8"));
+  assert.ok(cards[0].includes(`href="${fireworks.ticketUrl}"`));
+  assert.ok(cards[0].includes("Buy Fireworks tickets"));
+  assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Tickets: ${fireworks.ticketUrl}`));
+  const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" });
+  const range = `${time.format(new Date(uniform.start))}–${time.format(new Date(uniform.end))}`;
+  assert.ok(cards[1].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
+  for (const date of [uniform.start, uniform.end]) {
+    assert.ok(cards[1].includes(`datetime="${new Date(date).toISOString()}"`));
+  }
+  assert.ok(!cards[2].includes('class="message-time"'));
 });
 
 test("Fundraising appears after What's On in both navigation menus", async () => {

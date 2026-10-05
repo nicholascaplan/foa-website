@@ -1,5 +1,28 @@
 import { expect, test } from "@playwright/test";
 
+test("Reps Hub actions align across desktop cards", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/reps/");
+  const tops = await page.locator(".message-actions").evaluateAll((rows) =>
+    rows.map((row) => row.getBoundingClientRect().top),
+  );
+  expect(tops).toHaveLength(3);
+  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(1);
+});
+
+test("Fireworks uses a readable ticket link and keeps its URL in copied text", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/reps/");
+  const card = page.locator(".message-card").first();
+  const ticket = card.getByRole("link", { name: "Buy Fireworks tickets" });
+  await expect(ticket).toBeVisible();
+  const url = await ticket.getAttribute("href");
+  expect(url).toBeTruthy();
+  expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text"))
+    .toContain(`Tickets: ${url}`);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test.describe("Reps Hub copy actions", () => {
   test("copies the message, confirms it and clears the confirmation", async ({ page }) => {
     await page.addInitScript(() => {

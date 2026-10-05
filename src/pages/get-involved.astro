@@ -2,25 +2,87 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { withBase } from "../lib/urls";
+
+const enquiry = (subject: string) => `mailto:thefriendsofashley@gmail.com?subject=${encodeURIComponent(subject)}`;
+const icons = {
+  helpers: "M4 20V9l8-5 8 5v11M4 20h16M9 20v-6h6v6",
+  tools: "M14.5 6.5a4 4 0 0 0-5 5L4 17l3 3 5.500-5.500a4 4 0 0 0 5-5L15 12l-3-3z",
+  mic: "M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M9 21h6",
+  leaf: "M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8",
+  spark: "M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800zM19 16l.8 2.200L22 19l-2.200.8L19 22l-.8-2.200L16 19l2.200-.8z",
+  sun: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400",
+  shirt: "M8 4l-5 3 2 4 3-1v10h8V10l3 1 2-4-5-3a4 4 0 0 1-8 0z",
+  chat: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
+  bag: "M5 9h14l-1 12H6zM9 9V7a3 3 0 0 1 6 0v2",
+  heart: "M12 20s-8-4.800-8-10.500A4.500 4.500 0 0 1 12 7a4.500 4.500 0 0 1 8 2.500C20 15.200 12 20 12 20z",
+};
+const groups: {
+  title: string;
+  tone: string;
+  roles: {
+    name: string;
+    icon: keyof typeof icons;
+    text: string;
+    badge?: string;
+    actions: { label: string; href: string }[];
+  }[];
+}[] = [
+  {
+    title: "Help at an event",
+    tone: "green",
+    roles: [
+      { name: "Event helpers", icon: "helpers", text: "Stalls, games and crafts at community events. Rachel and Sophie are leading this year's Christmas Fayre.", actions: [{ label: "Find out more", href: withBase("/whats-on/") }] },
+      { name: "Quartermasters", icon: "tools", text: "Look after The FOA's event equipment and help with set-up, from BBQs and marquees to fencing and sheds. New joiners are welcome.", actions: [{ label: "Get in touch", href: enquiry("Joining the Quartermasters") }] },
+      { name: "Event comperes", icon: "mic", text: "Help with announcements and music at school events.", actions: [{ label: "Get in touch", href: enquiry("Becoming an event compere") }] },
+    ],
+  },
+  {
+    title: "Put your skills to use",
+    tone: "amber",
+    roles: [
+      { name: "Eco Stall lead", icon: "leaf", badge: "Vacancy", text: "Lead the stall selling the small amount of stock The FOA holds at events. The AGM identified this as a vacancy.", actions: [{ label: "Get in touch", href: enquiry("Eco Stall lead") }] },
+      { name: "Fireworks shadowing", icon: "spark", text: "Shadow Helen at Fireworks 2026 and learn how to lead the event in 2027, with no pressure.", actions: [{ label: "Get in touch", href: enquiry("Shadowing Helen at Fireworks 2026") }] },
+      { name: "Lead a community event", icon: "sun", text: "The Summer Fete and Big Picnic need leaders, as individuals or small groups. Plans and dates are still to be confirmed.", actions: [{ label: "Get in touch", href: enquiry("Leading an event with The FOA") }] },
+    ],
+  },
+  {
+    title: "Support throughout the year",
+    tone: "neutral",
+    roles: [
+      { name: "Pre-loved uniform sales", icon: "shirt", text: "Help the pre-loved team at sales, raising funds while passing good uniform on to another Ashley family.", actions: [{ label: "Get in touch", href: enquiry("Helping at pre-loved uniform sales") }] },
+      { name: "Donate or buy uniform", icon: "heart", text: "Drop uniform in the green bins by the School Office, or find the next sale, prices and how to reserve.", actions: [{ label: "Find out more", href: withBase("/uniform/") }] },
+      { name: "Be a class rep", icon: "chat", text: "Share messages from The FOA with your class group and help keep families informed.", actions: [{ label: "Find out more", href: withBase("/reps/") }] },
+      { name: "Smaller fundraisers", icon: "bag", text: "Happy Bags, Christmas cards or class fundraisers: help out, or share an idea of your own.", actions: [{ label: "Get in touch", href: enquiry("Supporting smaller fundraisers") }] },
+    ],
+  },
+];
 ---
 <BaseLayout title="Get Involved" description="Ways to volunteer, attend meetings and support The Friends of Ashley.">
-  <PageHero wideTitle eyebrow="Everyone is welcome" title="Small help makes a real difference." intro="From helping at a uniform sale to looking after event equipment, there are lots of ways to support The FOA. Meetings are informal and open to parents, carers and staff." />
+  <PageHero wideTitle eyebrow="Everyone is welcome" title="A little time. A big difference." intro="Help on the day, lend a skill or support us behind the scenes. Meetings are informal and open to parents, carers and staff." />
   <section class="content-section content-section--compact" aria-labelledby="volunteering-title">
     <div class="site-width">
-      <article class="vacancy-card"><div class="vacancy-copy"><p class="eyebrow">Role vacancy</p><h2>Could you be our next <span class="co-secretary">Co-Secretary?</span></h2><p>A light, termly role that one person can do or two can share: agendas, minutes and keeping our paperwork in order. Sarah Parish and Katy Furber, the outgoing Secretaries, are happy to have a quick chat first.</p></div><div class="vacancy-actions"><a class="button button--dark" href="mailto:thefriendsofashley@gmail.com?subject=The%20FOA%20Co-Secretary%20role&amp;body=Hello%20The%20FOA%20team%2C%0A%0AI%20would%20like%20to%20ask%20about%20the%20Co-Secretary%20role.%0A%0AThanks%2C">Ask about the role</a><a class="button button--secondary" href={withBase("/committee/")}>Meet the committee</a></div></article>
-      <div class="section-heading"><p class="eyebrow">Lend a hand</p><h2 id="volunteering-title">Find your way to help.</h2><p>You don't have to join the committee or lead an event to make a difference. Tell us what interests you and we'll put you in touch with the right team.</p></div>
-      <div class="link-grid volunteering-grid">
-        <article class="info-card"><h3>Pre-loved uniform sales</h3><p>Help the pre-loved team at sales, raising funds while passing good uniform on to another Ashley family.</p><p><a class="button button--secondary" href={withBase("/uniform/")}>See how uniform sales work</a></p></article>
-        <article class="info-card"><h3>Quartermasters</h3><p>Join the team that maintains The FOA's event equipment and helps with event set-up. From BBQs and marquees to fencing and sheds, this behind-the-scenes work keeps our events running. New joiners are welcome.</p></article>
-        <article class="info-card"><h3>Event comperes</h3><p>Comfortable on a microphone? The compere team is looking for more volunteers to help with announcements and music at school events.</p></article>
-        <article class="info-card"><h3>Eco Stall lead</h3><p>The AGM identified a vacancy for someone to lead the Eco Stall, selling the small amount of stock The FOA holds at events. Get in touch to ask about taking it on.</p></article>
-        <article class="info-card"><h3>Event helpers</h3><p>Offer a hand with stalls, games and crafts at community events, or ask how you can support the organisers. Rachel and Sophie are leading this year's Christmas Fayre.</p><p><a class="button button--secondary" href={withBase("/whats-on/")}>See what's on</a></p></article>
-        <article class="info-card"><h3>Smaller fundraisers</h3><p>Interested in Happy Bags, Christmas cards or class fundraisers? Ask the committee how you can support these activities or share an idea of your own.</p></article>
-        <article class="info-card"><h3>Fireworks shadowing</h3><p>Shadow Helen at Fireworks 2026 and learn how to lead the event in 2027, with no pressure.</p><p><a class="button button--secondary" href="mailto:thefriendsofashley@gmail.com?subject=Shadowing%20Helen%20at%20Fireworks%202026&amp;body=Hello%20The%20FOA%20team%2C%0A%0AI%20would%20like%20to%20ask%20about%20shadowing%20Helen%20at%20Fireworks%202026.%0A%0AThanks%2C">Offer to shadow Helen</a></p></article>
-        <article class="info-card"><h3>Lead a community event</h3><p>The AGM invited individuals or small groups to lead the Summer Fete and Big Picnic. Plans and dates are still to be confirmed; ask the committee about getting involved.</p><p><a class="button button--secondary" href="mailto:thefriendsofashley@gmail.com?subject=Leading%20an%20event%20with%20The%20FOA">Ask about leading an event</a></p></article>
-        <article class="info-card"><h3>Be a class rep</h3><p>Share messages from The FOA with your class group and help keep families informed.</p><p><a class="button button--secondary" href={withBase("/reps/")}>Visit the Reps Hub</a></p></article>
-      </div>
-      <div class="vacancy-actions volunteering-enquiry"><a class="button button--primary" href="mailto:thefriendsofashley@gmail.com?subject=Volunteering%20with%20The%20FOA">Tell us how you'd like to help</a></div>
+      <article class="involved-feature">
+        <div class="involved-feature__copy"><p class="eyebrow">Role vacancy</p><h2 id="volunteering-title">Could you be our next <span class="co-secretary">Co-Secretary?</span></h2><p>A light, termly role that one person can do or two can share: agendas, minutes and keeping our paperwork in order. Sarah Parish and Katy Furber, the outgoing Secretaries, are happy to have a quick chat first.</p></div>
+        <div class="involved-feature__actions"><a class="button button--amber involved-action" href={enquiry("The FOA Co-Secretary role")}>Get in touch</a><a class="button involved-action involved-action--light" href={withBase("/committee/")}>Meet the committee</a></div>
+      </article>
+      {groups.map((group) => (
+        <section class={`involved-group involved-group--${group.tone}`} aria-labelledby={`group-${group.tone}`}>
+          <h2 id={`group-${group.tone}`}>{group.title}</h2>
+          <ul class="involved-list">
+            {group.roles.map((role) => (
+              <li class="involved-row">
+                <span class="involved-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d={icons[role.icon]} /></svg></span>
+                <div class="involved-text"><h3>{role.name}{role.badge && <span class="involved-badge">{role.badge}</span>}</h3><p>{role.text}</p></div>
+                <div class="involved-actions">{role.actions.map((action) => <a class="button button--secondary involved-action" href={action.href}>{action.label}</a>)}</div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <section class="involved-closing" aria-labelledby="closing-title">
+        <div><h2 id="closing-title">Not sure where you fit?</h2><p>Tell us what interests you and we'll put you in touch with the right team.</p></div>
+        <a class="button button--primary involved-action" href={enquiry("Volunteering with The FOA")}>Tell us how you'd like to help</a>
+      </section>
     </div>
   </section>
 </BaseLayout>

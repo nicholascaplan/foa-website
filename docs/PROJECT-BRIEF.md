@@ -125,7 +125,10 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### Reps Hub
 
-- Messages are shareable copy with copy-to-clipboard actions, visible success/failure feedback (success clears after three seconds), class-representative wording and "Learn more" links to canonical pages. No draft or workflow labels in public copy.
+- Prioritise existing reps' tasks: copy-and-paste guidance and shareable messages come first; "What class reps do" follows as reference information.
+- Message cards show confirmed timings beside the date badge, sourced from the event collection and formatted in UK time. Copied messages retain their full timings; date-only messages do not invent a time.
+- The role introduction summarises the supplied [Class Rep Charter](../assets/documents/Class%20Rep%20Charter.md): volunteer liaison between teachers, parents and The FOA; messages, volunteer coordination, contact information, class gift collections and social events; boundaries around school communications, event leadership, complaints and disagreements. Sharing responsibilities is optional, not a mandated team structure. Messages are shareable copy with copy-to-clipboard actions, visible success/failure feedback (success clears after three seconds), class-representative wording and "Learn more" links to canonical pages. No draft or workflow labels in public copy.
+- The Fireworks message includes the ticket link (from the event content) in both the visible and the copied text.
 - The Fireworks quiet display is scheduled for 17:00 across all pages and messages.
 
 ### Contact, donations and analytics
@@ -210,7 +213,7 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 
 **Get Involved and Committee**
 - Explain that meetings are informal and open to all; show current approved committee names and roles and active vacancies; explain time commitment and support; provide the shared contact action; expose no unnecessary information about children.
-- Get Involved uses one "Find your way to help" opportunities grid, including event leadership and class reps, rather than separate overlapping event-lead and beginner sections. Card CTAs use standard secondary buttons; the shared volunteering enquiry is centred on desktop and full-width on mobile and closes the page content, without a further paragraph of links. Its hero heading uses the available desktop width while the introduction retains the shared readable line-length limit; mobile and other page heroes are unchanged.
+- Get Involved opens with a Co-Secretary vacancy panel, then groups roles by what visitors can offer (help at an event, put your skills to use, support throughout the year) as icon rows with one consistently sized action each, and closes with a "Not sure where you fit?" enquiry. Roles with no page of their own use the shared inbox. Pre-loved uniform is two rows: helping at sales (enquiry) and donating or buying (links to Uniform).
 - Get Involved brings the AGM volunteering routes together: pre-loved uniform sale helpers, Quartermasters (equipment maintenance and event set-up), event comperes, the Eco Stall lead enquiry, event helpers and smaller fundraisers, alongside Co-Secretary, Fireworks shadowing, class reps, meetings and business connections. Summer Fete and Big Picnic organiser enquiries are labelled as plans/dates still to be confirmed, not confirmed event listings. Enquiries use the shared inbox; Uniform, Fundraising and Meeting Minutes remain the canonical sources for their practical details, impact and meeting records.
 
 **Reps Hub**

@@ -27,9 +27,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Dev:** Confirm the next GitHub Actions run passes. The CI-only enlarged-text overflow at 320px (footer column and Home date tile) was fixed and passes locally with a wide fallback font (see [`TEST-STRATEGY.md`](TEST-STRATEGY.md)).
-
-- **Dev / Owner:** Verify and publish the Get Involved volunteering update. **Blocked by:** browser-capable verification. The closing paragraph linking to Fundraising has been removed, so the update no longer depends on publishing that route. Astro check, build and site/unit tests passed; responsive DOM checks found no horizontal overflow. Full Playwright verification remains blocked by the known Chrome-launch sandbox permissions.
+- **Owner:** Complete a final visual/content review of the redesigned Get Involved and Reps Hub pages, including volunteer vacancy status and the charter-based role summary. Reps Hub messages come first, actions align across desktop cards, and mobile cards are compact. Responsive DOM checks passed; local automated browser tests remain blocked by Chrome-launch sandbox permissions (see the browser-suite task below).
 
 | Item | Owner | Blocked by |
 |---|---|---|
@@ -73,6 +71,7 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 - Uniform: accepted and rejected items; donation conditions (washed, labelled, bagged); bin-emptying frequency; whether sale dates are regular or ad hoc; size requests between sales.
 - Privacy Notice details about shared-inbox and Google Form access/retention.
 - Reps Hub copy (pending FOA approval).
+- Confirm whether the November uniform sale's 15:45 finish also applies to December; December currently retains only its confirmed 15:25 start.
 - Co-Secretary recruitment copy (final wording and publication review).
 - AGM volunteer recruitment: reconfirm whether the Eco Stall lead and Summer Fete/Big Picnic organiser opportunities remain open, and confirm those events' plans and dates before listing them as confirmed events. Get Involved labels the event plans as unconfirmed and routes enquiries to the committee.
 - Arabic translation quality (demonstration only; human review required).

@@ -1,16 +1,65 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
+import { getCollection } from "astro:content";
 import { withBase } from "../lib/urls";
+const events = await getCollection("events");
+const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
+const uniform = events.find(({ id }) => id === "uniform-november-2026")?.data;
+const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/London",
+  hour: "2-digit",
+  minute: "2-digit",
+});
 const messages = [
-  { month: "NOV", day: "05", title: "Fireworks on the Field", body: "The FOA Fireworks is on Thursday 5th November, 16:30-18:30, with the quiet display at 17:00 and main display at 18:00. Tickets are £8.50 per person; under-2s are free.", href: "/events/fireworks-2026/" },
-  { month: "NOV", day: "06", title: "Pre-loved uniform", body: "The next sales are Friday 6th November and Friday 4th December at 15:25 in the school playground. New-logo items and coats are £3; all other items are £1. Card only.", href: "/uniform/" },
+  { month: "NOV", day: "05", title: "Fireworks on the Field", body: "The FOA Fireworks is on Thursday 5th November, 16:30-18:30, with the quiet display at 17:00 and main display at 18:00. Tickets are £8.50 per person; under-2s are free.", timing: fireworks, ticketUrl: fireworks?.ticketUrl, href: "/events/fireworks-2026/" },
+  { month: "NOV", day: "06", title: "Pre-loved uniform", body: `The next sale is Friday 6th November${uniform?.end ? `, ${timeFormatter.format(uniform.start)}–${timeFormatter.format(uniform.end)}` : " at 15:25"}, in the school playground. The final sale of term is Friday 4th December at 15:25. New-logo items and coats are £3; all other items are £1. Card only.`, timing: uniform, href: "/uniform/" },
   { month: "DEC", day: "05", title: "Christmas Fayre", body: "Save the date: Saturday 5th December. Rachel and Sophie are leading this year's Fayre.", href: "/whats-on/" },
 ];
 ---
 <BaseLayout title="Reps Hub" description="Messages from The Friends of Ashley for class representatives to share.">
-  <PageHero eyebrow="For class representatives" title="Reps Hub" intro="Useful updates from The FOA to share with class groups." />
-  <section class="content-section content-section--compact"><div class="site-width"><div class="message-grid">{messages.map((message) => <article class="message-card"><div class="message-date" aria-label={`${message.month} ${message.day}`}><span>{message.month}</span><strong>{message.day}</strong></div><h2>{message.title}</h2><p>{message.body}</p><div class="message-actions"><button class="button button--secondary" type="button" data-copy-button data-copy-text={message.body}>Copy message</button><a class="text-link" href={withBase(message.href)}>Learn more <span aria-hidden="true">&rarr;</span></a></div><p class="copy-feedback" data-copy-feedback role="status" aria-live="polite"></p></article>)}</div></div></section>
+  <PageHero eyebrow="For class representatives" title="Reps Hub" intro="Copy a message below, paste it into your class group, and share the latest updates from The FOA." />
+  <section class="content-section content-section--compact content-section--snug" aria-label="Messages to copy and share">
+    <div class="site-width">
+      <div class="message-grid">
+        {messages.map((message) => (
+          <article class="message-card">
+            <div class="message-when">
+              <div class="message-date" aria-label={`${message.month} ${message.day}`}><span>{message.month}</span><strong>{message.day}</strong></div>
+              {message.timing && !message.timing.allDay && <span class="message-time">
+                {!message.timing.end && "From "}<time datetime={message.timing.start.toISOString()}>{timeFormatter.format(message.timing.start)}</time>
+                {message.timing.end && <>–<time datetime={message.timing.end.toISOString()}>{timeFormatter.format(message.timing.end)}</time></>}
+              </span>}
+            </div>
+            <h2>{message.title}</h2>
+            <p>{message.body}{message.ticketUrl && <> <a href={message.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets<span class="visually-hidden"> (opens in a new tab)</span></a></>}</p>
+            <div class="message-actions">
+              <button class="button button--secondary" type="button" data-copy-button data-copy-text={message.ticketUrl ? `${message.body} Tickets: ${message.ticketUrl}` : message.body}>Copy message</button>
+              <a class="text-link" href={withBase(message.href)}>Learn more <span aria-hidden="true">&rarr;</span></a>
+            </div>
+            <p class="copy-feedback" data-copy-feedback role="status" aria-live="polite"></p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="content-section content-section--compact content-section--snug reps-role" aria-labelledby="reps-role-title">
+    <div class="site-width">
+      <div class="section-heading">
+        <p class="eyebrow">What class reps do</p>
+        <h2 id="reps-role-title">A link between school and families.</h2>
+        <p>Class reps are volunteers who connect class teachers with parents, and The Friends of Ashley (FOA) with each class group.</p>
+        <ul>
+          <li>Pass on teacher messages, updates from The FOA and event reminders.</li>
+          <li>Ask for volunteers for class trips and class leads for the Christmas Fayre and Summer Fete.</li>
+          <li>Gather parent contact information and manage class collections for teacher gifts.</li>
+          <li>Organise social events for classes or year groups.</li>
+        </ul>
+        <p>You don't need to summarise every school newsletter or email, and being a rep doesn't automatically mean leading a stall or event. School concerns should go directly to the school; reps aren't school staff or referees for disagreements in class groups.</p>
+        <p>Sharing responsibilities with other reps can make the role less time-intensive, but each class can choose how it works.</p>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <script>
