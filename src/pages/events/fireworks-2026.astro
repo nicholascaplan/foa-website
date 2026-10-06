@@ -9,7 +9,7 @@ import { ordinalDateFormatter } from "../../lib/dates";
 const entry = await getEntry("events", "fireworks-2026");
 if (!entry) throw new Error("Fireworks event content is missing");
 const event = entry.data;
-const dateFormatter = ordinalDateFormatter({ weekday: "long", year: "numeric", timeZone: "Europe/London" });
+const dateFormatter = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
 const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const eventJsonLd = {
   "@context": "https://schema.org",
@@ -25,9 +25,9 @@ const eventJsonLd = {
   image: new URL(withBase("/events/fireworks-1600.jpg"), Astro.site).href,
 };
 ---
-<BaseLayout title={event.title} description={event.summary} image="/events/fireworks-1600.jpg" preloadImage="/events/fireworks-1600.jpg">
+<BaseLayout title={event.title} description={event.summary} image="/events/fireworks-1600.jpg" preloadImage="/events/fireworks-1600.jpg" bodyClass="fw-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
-  <div class="fw-event" data-fw-stage>
+  <div class="fw-event fw-stage" data-fw-stage>
     <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
     <div class="fw-content">
       <section class="event-hero">
@@ -35,13 +35,12 @@ const eventJsonLd = {
           <div class="event-hero-grid">
             <div class="fw-title-copy">
               <p class="fw-kicker">Remember Remember the 5th of November</p>
-              <p class="eyebrow eyebrow--light fw-date">{dateFormatter(event.start)}</p>
               <h1>{event.title}</h1>
               <p class="event-hero-intro">{event.summary}</p>
             </div>
             <div class="fw-overview">
-              <div class="fw-mode-bar" hidden data-fw-mode-bar><button class="fw-mode-switch" type="button" role="switch" aria-checked="false" data-fw-mode>Immersive <span class="fw-mode-switch__track" aria-hidden="true"></span></button></div>
             <aside class="event-summary">
+              <p class="fw-date">{dateFormatter(event.start)}</p>
               <dl>
                 <div><dt>When</dt><dd>{timeFormatter.format(event.start)}{event.end && `–${timeFormatter.format(event.end)}`}</dd></div>
                 <div><dt>Where</dt><dd>{event.location}</dd></div>

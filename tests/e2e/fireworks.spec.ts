@@ -8,108 +8,65 @@ test("clicking through from What's On does not show a return breadcrumb", async 
 });
 
 for (const width of [320, 390, 768, 1024, 1440]) {
-  test(`the immersive switch stays clear of the summary at ${width}px`, async ({ page }) => {
+  test(`the Fireworks experience fits without overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/events/fireworks-2026/");
-    const toggle = page.getByRole("switch", { name: "Immersive", exact: true });
-    for (const immersive of [false, true]) {
-      if (immersive) await toggle.click();
-      const layout = await page.evaluate(async (immersive) => {
-        // Resolve the new theme first so its lazily loaded font is included in ready.
-        document.querySelector("h1")!.getBoundingClientRect();
-        await document.fonts.ready;
-        // Read all boxes together: separate RPCs can straddle a font-swap layout.
-        const box = (selector: string) => {
-          const rect = document.querySelector(selector)!.getBoundingClientRect();
-          return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
-        };
-        return {
-          button: box("[data-fw-mode]"),
-          summary: box(".event-summary"),
-          title: box("h1"),
-          sponsor: box(".event-hero-sponsor"),
-          rollTop: immersive ? parseFloat(getComputedStyle(document.querySelector(".event-summary")!, "::before").top) : 0,
-          noOverflow: document.documentElement.scrollWidth <= innerWidth,
-        };
-      }, immersive);
-      const { button, summary, title, sponsor, rollTop } = layout;
-      expect(button.y + button.height).toBeLessThanOrEqual(summary.y + rollTop);
-      if (width < 768) {
-        expect(title.x + title.width).toBeLessThanOrEqual(button.x);
-        expect(button.y).toBeLessThan(title.y + title.height);
-        expect(sponsor.y).toBeGreaterThanOrEqual(summary.y + summary.height + (immersive ? 10 : 0));
-        expect(Math.abs(sponsor.width - summary.width)).toBeLessThanOrEqual(1);
-      }
-      expect(layout.noOverflow).toBe(true);
+    await expect(page.locator("body")).toHaveClass(/fw-theme/);
+    const layout = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const summary = document.querySelector(".event-summary")!.getBoundingClientRect();
+      const sponsor = document.querySelector(".event-hero-sponsor")!.getBoundingClientRect();
+      const kicker = document.querySelector(".fw-kicker")!;
+      const poles = [...document.querySelectorAll(".fw-torch__pole")].map((pole) => {
+        const rect = pole.getBoundingClientRect();
+        return { left: rect.left, right: rect.right };
+      });
+      const introBottom = document.querySelector(".event-hero-intro")!.getBoundingClientRect().bottom;
+      const flameTop = document.querySelector(".fw-torch__flames")!.getBoundingClientRect().top;
+      return {
+        summary: { x: summary.x, y: summary.y, width: summary.width, height: summary.height },
+        sponsor: { x: sponsor.x, y: sponsor.y, width: sponsor.width },
+        kicker: { width: kicker.getBoundingClientRect().width, scrollWidth: kicker.scrollWidth, fontSize: getComputedStyle(kicker).fontSize },
+        poles,
+        introBottom,
+        flameTop,
+        noOverflow: document.documentElement.scrollWidth <= innerWidth,
+      };
+    });
+    if (width < 768) {
+      expect(layout.sponsor.y).toBeGreaterThanOrEqual(layout.summary.y + layout.summary.height + 10);
+      expect(Math.abs(layout.sponsor.width - layout.summary.width)).toBeLessThanOrEqual(1);
+      expect(layout.kicker.scrollWidth).toBeLessThanOrEqual(layout.kicker.width);
+      expect(layout.summary.x - 6).toBeGreaterThan(layout.poles[0].right);
+      expect(layout.summary.x + layout.summary.width + 6).toBeLessThan(layout.poles[1].left);
+      expect(layout.flameTop).toBeGreaterThan(layout.introBottom);
     }
+    expect(layout.noOverflow).toBe(true);
   });
 }
 
-test("immersive mode is opt-in, uses canvas flames and survives reload through its URL", async ({ page }) => {
+test("Fireworks uses the immersive design by default without a mode control", async ({ page }) => {
   await page.goto("/events/fireworks-2026/");
-  const toggle = page.getByRole("switch", { name: "Immersive", exact: true });
-  await expect(toggle).toHaveAttribute("aria-checked", "false");
-  await expect(page.locator("body")).not.toHaveClass(/fw-theme/);
-  await expect(page.locator(".fw-torches")).toBeHidden();
-  await expect(page.locator(".fw-ivy")).toHaveCount(0);
-  await expect(page.locator(".poster-figure")).toHaveCount(0);
-  const headerStyles = () => page.locator(".site-header, .brand, .brand-copy span, .desktop-nav a, .menu-toggle").evaluateAll((elements) => elements.map((element) => {
-    const style = getComputedStyle(element);
-    return { color: style.color, background: style.backgroundColor, border: style.borderBottomColor };
-  }));
-  const standardHeader = await headerStyles();
-  await toggle.click();
-  await expect(toggle).toHaveAttribute("aria-checked", "true");
-  expect(new URL(page.url()).searchParams.get("immersive")).toBe("1");
   await expect(page.locator("body")).toHaveClass(/fw-theme/);
+  await expect(page.locator("[data-fw-mode], [data-fw-mode-bar]")).toHaveCount(0);
   await expect(page.locator(".fw-torch__flames canvas")).toHaveCount(2);
   await expect(page.locator(".fw-torches")).toBeVisible();
   await expect(page.locator(".fw-ivy")).toHaveCount(0);
-  expect(await headerStyles()).toEqual(standardHeader);
-  expect(await page.locator(".event-summary").evaluate((element) => getComputedStyle(element, "::before").height)).toBe("24px");
-  expect(await page.locator(".fw-date").evaluate((element) => {
+  await expect(page.locator(".poster-figure")).toHaveCount(0);
+  const headerStyles = () => page.locator(".site-header, .brand, .brand-copy span, .menu-toggle").evaluateAll((elements) => elements.map((element) => {
     const style = getComputedStyle(element);
-    return [style.borderTopWidth, style.borderBottomWidth];
-  })).toEqual(["0px", "0px"]);
-  await toggle.click();
-  expect(new URL(page.url()).searchParams.has("immersive")).toBe(false);
-  await expect(page.locator(".fw-torches")).toBeHidden();
-  await expect(page.locator("[data-fw-stage]")).toHaveAttribute("data-fw-paused", "");
-  await toggle.click();
-  await expect(page.locator(".fw-torch__flames canvas")).toHaveCount(2);
-  await page.reload();
-  await expect(toggle).toHaveAttribute("aria-checked", "true");
-  await toggle.click();
-  await page.reload();
-  await expect(toggle).toHaveAttribute("aria-checked", "false");
+    return { color: style.color, background: style.backgroundColor, border: style.borderBottomColor };
+  }));
+  const header = await headerStyles();
+  expect(await page.locator(".event-summary").evaluate((element) => getComputedStyle(element, "::before").height)).toBe("24px");
+  await expect(page.locator(".event-summary .fw-date")).toHaveText("Thursday 5th November");
+  await page.goto("/whats-on/");
+  expect(await headerStyles()).toEqual(header);
 });
 
-test("shared immersive links activate the theme and preserve other URL details", async ({ page }) => {
-  await page.goto("/events/fireworks-2026/?source=share&immersive=1#evening");
-  const toggle = page.getByRole("switch", { name: "Immersive", exact: true });
-  await expect(toggle).toHaveAttribute("aria-checked", "true");
-  await expect(page.locator("body")).toHaveClass(/fw-theme/);
-  await toggle.click();
-  let url = new URL(page.url());
-  expect(url.searchParams.has("immersive")).toBe(false);
-  expect(url.searchParams.get("source")).toBe("share");
-  expect(url.hash).toBe("#evening");
-  await toggle.click();
-  url = new URL(page.url());
-  expect(url.searchParams.get("immersive")).toBe("1");
-  expect(url.searchParams.get("source")).toBe("share");
-  expect(url.hash).toBe("#evening");
-});
-
-test("other immersive parameter values leave the standard view enabled", async ({ page }) => {
-  await page.goto("/events/fireworks-2026/?immersive=0");
-  await expect(page.getByRole("switch", { name: "Immersive", exact: true })).toHaveAttribute("aria-checked", "false");
-  await expect(page.locator("body")).not.toHaveClass(/fw-theme/);
-});
-
-test("reduced motion keeps the immersive design but uses static flames", async ({ page }) => {
+test("reduced motion keeps the default design but uses static flames", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/events/fireworks-2026/?immersive=1");
+  await page.goto("/events/fireworks-2026/");
   await expect(page.locator("body")).toHaveClass(/fw-theme/);
   await expect(page.locator("[data-fw-stage]")).toHaveAttribute("data-fw-paused", "");
   await expect(page.locator(".fw-flame").first()).toBeVisible();
@@ -120,9 +77,10 @@ test("reduced motion keeps the immersive design but uses static flames", async (
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("the standard page and guide details remain usable", async ({ page }) => {
+  test("the page and guide details remain usable", async ({ page }) => {
     await page.goto("/events/fireworks-2026/");
-    await expect(page.locator("[data-fw-mode-bar]")).toBeHidden();
+    await expect(page.locator("body")).toHaveClass(/fw-theme/);
+    await expect(page.locator("[data-fw-mode]")).toHaveCount(0);
     await expect(page.getByRole("heading", { name: "Fireworks on the Field" })).toBeVisible();
     await expect(page.getByText("St John Ambulance will be in the Hive throughout the event.")).toBeVisible();
     await expect(page.getByRole("link", { name: /Buy tickets/ })).toBeVisible();

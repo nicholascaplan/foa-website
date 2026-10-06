@@ -1,12 +1,6 @@
 /* Fireworks on the Field: poster-inspired event experience.
    Scoped to body.fw-theme so it only affects the Fireworks event page. */
 
-.fw-mode-bar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 .fw-overview {
   display: grid;
   min-width: 0;
@@ -31,51 +25,6 @@
   .fw-overview { grid-area: overview; }
   .fw-event .event-hero-sponsor { grid-area: sponsor; }
   .fw-theme .fw-title-copy { container-type: inline-size; }
-}
-
-.fw-mode-switch {
-  display: inline-flex;
-  min-height: 44px;
-  padding: 0.25rem 0;
-  align-items: center;
-  gap: 0.6rem;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.fw-mode-switch__track {
-  position: relative;
-  width: 2.6rem;
-  height: 1.5rem;
-  border: 1px solid currentColor;
-  border-radius: 2rem;
-}
-
-.fw-mode-switch__track::before {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: calc(1.5rem - 8px);
-  height: calc(1.5rem - 8px);
-  border-radius: 50%;
-  background: currentColor;
-  content: "";
-}
-
-.fw-mode-switch[aria-checked="true"] .fw-mode-switch__track {
-  background: var(--fw-gold);
-  border-color: var(--fw-gold);
-}
-
-.fw-mode-switch[aria-checked="true"] .fw-mode-switch__track::before {
-  right: 3px;
-  left: auto;
-  background: var(--fw-night);
 }
 
 .fw-event .event-hero {
@@ -580,7 +529,7 @@ body.fw-theme::before {
 }
 
 .fw-kicker {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.4rem;
   color: var(--fw-gold-light);
   font-family: var(--fw-blackletter);
   font-size: clamp(1.9rem, 6vw, 3.4rem);
@@ -695,7 +644,7 @@ body.fw-theme::before {
 
 .fw-theme .event-block h2 {
   color: var(--fw-forest);
-  font-family: var(--fw-blackletter);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 2.9rem);
   font-weight: 700;
   letter-spacing: 0;
@@ -727,20 +676,15 @@ body.fw-theme::before {
   font-size: 0.9rem;
 }
 
-.fw-theme .fw-mode-bar {
-  color: var(--fw-cream);
-}
-
-.fw-theme .event-hero .fw-date {
+.fw-theme .event-summary .fw-date {
   display: inline-block;
-  margin: 1.25rem 0 0;
-  padding: 0.5rem 0 0.6rem;
-  color: var(--fw-gold-light);
-  font-size: clamp(1.15rem, 3.6vw, 1.75rem);
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  margin: 0 0 1rem;
+  color: var(--fw-forest);
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
   line-height: 1.2;
-  text-shadow: 0 0 18px rgba(255, 140, 30, 0.4);
 }
 
 @media (min-width: 48rem) {
@@ -749,14 +693,24 @@ body.fw-theme::before {
   }
 }
 
-/* Keep one sponsor and one switch; rearrange their existing grid slots on phones. */
+/* Rearrange the existing hero content on phones. */
 @media (max-width: 47.999rem) {
+  .fw-theme .fw-stage {
+    --fw-gutter: 0.75rem;
+    --fw-panel-inset: calc(90px * var(--fw-s) + 0.45rem - var(--fw-gutter));
+    --fw-head-top: 24rem;
+  }
+
+  .fw-theme .fw-kicker {
+    font-size: clamp(0.875rem, 4.5vw, 1.125rem);
+    white-space: nowrap;
+  }
+
   .fw-event .event-hero-grid {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "kicker kicker"
-      "date date"
-      "title mode"
+      "title title"
       "intro intro"
       "summary summary"
       "sponsor sponsor";
@@ -769,7 +723,6 @@ body.fw-theme::before {
   }
 
   .fw-event .fw-kicker { grid-area: kicker; }
-  .fw-event .fw-date { grid-area: date; }
   .fw-event .event-hero h1 {
     grid-area: title;
     max-width: none;
@@ -777,17 +730,6 @@ body.fw-theme::before {
     font-size: clamp(1.75rem, 8vw, 2.6rem);
     letter-spacing: -0.02em;
     overflow-wrap: anywhere;
-  }
-
-  .fw-event .fw-mode-bar {
-    grid-area: mode;
-    align-self: center;
-  }
-
-  .fw-event .fw-mode-switch {
-    flex-direction: column;
-    gap: 0.25rem;
-    font-size: 0.85rem;
   }
 
   .fw-event .event-hero-intro { grid-area: intro; }
@@ -800,5 +742,17 @@ body.fw-theme::before {
     grid-area: sponsor;
     width: 100%;
     margin-top: calc(1.25rem + var(--fw-roll-overhang, 0px));
+  }
+
+  /* Keep the wider title area, but reserve the torch gutters around paper. */
+  .fw-theme .event-summary,
+  .fw-theme .event-main {
+    margin-inline: var(--fw-panel-inset);
+    min-width: 0;
+  }
+
+  .fw-theme .event-hero-sponsor {
+    width: calc(100% - 2 * var(--fw-panel-inset));
+    margin-inline: var(--fw-panel-inset);
   }
 }

@@ -178,6 +178,23 @@ function createCanvasFlames(stage: HTMLElement) {
 }
 
 function init(stage: HTMLElement) {
+  const mobile = matchMedia("(max-width: 47.999rem)");
+  const summary = stage.querySelector<HTMLElement>(".event-summary");
+  const hero = stage.querySelector<HTMLElement>(".event-hero");
+  const positionTorches = () => {
+    if (!mobile.matches || !summary) {
+      stage.style.removeProperty("--fw-head-top");
+      return;
+    }
+    const scale = Number(getComputedStyle(stage).getPropertyValue("--fw-s"));
+    const summaryTop = summary.getBoundingClientRect().top - stage.getBoundingClientRect().top;
+    // The flame canvas extends 200 head-coordinate pixels above the torch head.
+    stage.style.setProperty("--fw-head-top", `${summaryTop + 200 * scale}px`);
+  };
+  if (hero) new ResizeObserver(positionTorches).observe(hero);
+  mobile.addEventListener("change", positionTorches);
+  positionTorches();
+
   const canvas = stage.querySelector<HTMLCanvasElement>("[data-fw-sky]");
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const timers: number[] = [];
@@ -185,11 +202,6 @@ function init(stage: HTMLElement) {
   let setFlames: ((value: boolean) => void) | undefined;
   let active = false;
   let paused = true;
-  const toggle = document.querySelector<HTMLButtonElement>("[data-fw-mode]");
-  const bar = document.querySelector<HTMLElement>("[data-fw-mode-bar]");
-  if (!toggle || !bar) return;
-  bar.hidden = false;
-
   const later = (delay: number, action: () => void) => {
     timers.push(window.setTimeout(() => { if (!paused) action(); }, delay));
   };
@@ -236,7 +248,6 @@ function init(stage: HTMLElement) {
     active = value;
     document.body.classList.toggle("fw-theme", active);
     stage.classList.toggle("fw-stage", active);
-    toggle.setAttribute("aria-checked", String(active));
     if (active) {
       if (!sky && canvas) sky = new Sky(canvas);
       setFlames ??= createCanvasFlames(stage);
@@ -249,17 +260,7 @@ function init(stage: HTMLElement) {
     }
   };
 
-  toggle.addEventListener("click", () => {
-    setActive(!active);
-    const url = new URL(window.location.href);
-    if (active) url.searchParams.set("immersive", "1");
-    else url.searchParams.delete("immersive");
-    window.history.replaceState(window.history.state, "", url);
-  });
-
-  const applyUrlMode = () => setActive(new URL(window.location.href).searchParams.get("immersive") === "1");
-  window.addEventListener("popstate", applyUrlMode);
-  applyUrlMode();
+  setActive(true);
 }
 
 const stage = document.querySelector<HTMLElement>("[data-fw-stage]");

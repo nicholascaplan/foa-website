@@ -30,11 +30,11 @@ const archiveFrom = new Date(welcomeTea.archiveFrom).toISOString();
 const appeal = JSON.parse(await readFile(path.resolve("src/content/fundraising/current-appeal.json"), "utf8"));
 const money = (value) => `£${value.toLocaleString("en-GB")}`;
 
-test("Fireworks defaults to standard mode with shared guide facts and no poster", async () => {
+test("Fireworks defaults to immersive experience with shared guide facts and no poster", async () => {
   const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
-  assert.match(html, /role="switch" aria-checked="false"/);
-  assert.match(html, /fw-mode-switch__track/);
-  assert.doesNotMatch(html, /<body[^>]*fw-theme|fireworks-poster\.jpg|ferris wheel/i);
+  assert.match(html, /<body[^>]*fw-theme/);
+  assert.doesNotMatch(html, /data-fw-mode|Immersive/);
+  assert.doesNotMatch(html, /fireworks-poster\.jpg|ferris wheel/i);
   for (const fact of ["no on-site parking", "Harmony Centre", "St John Ambulance", "Event closes", "cash or card", "subject to availability"]) {
     assert.ok(html.includes(fact), `Missing guide fact: ${fact}`);
   }
