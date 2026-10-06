@@ -259,21 +259,48 @@ body.fw-theme::before {
   position: absolute;
   top: var(--fw-head-top);
   left: 0;
+  z-index: 1;
   width: 90px;
-  height: 174px;
+  height: 200px;
   transform: scale(var(--fw-s));
   transform-origin: 0 0;
 }
 
 .fw-torch__pole {
   position: absolute;
-  top: calc(var(--fw-head-top) + 172px * var(--fw-s));
+  z-index: 0;
+  top: calc(var(--fw-head-top) + 192px * var(--fw-s));
   bottom: 0;
   left: calc(38px * var(--fw-s));
   width: calc(14px * var(--fw-s));
-  border-radius: 3px;
-  background: linear-gradient(90deg, #2b1a0b, #8a5f2c 45%, #2b1a0b);
+  border-radius: calc(3px * var(--fw-s));
+  background: linear-gradient(90deg, #170c04, #6e4a22 25%, #b3813c 40%, #3f2810 70%, #140a03);
 }
+
+/* Flame glow on the top of the pole only: same shape as the pole, fading downward */
+.fw-torch__pole::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: calc(130px * var(--fw-s));
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 150, 50, 0.5), rgba(255, 130, 40, 0.18) 55%, transparent);
+  content: "";
+  mix-blend-mode: screen;
+}
+
+.fw-torch__band {
+  position: absolute;
+  right: calc(-3px * var(--fw-s));
+  left: calc(-3px * var(--fw-s));
+  height: calc(5px * var(--fw-s));
+  border-radius: calc(2px * var(--fw-s));
+  background: linear-gradient(90deg, #2a1808, #8c6224 20%, #f0cb6a 40%, #b98a30 60%, #4a2f14 85%, #1e1006);
+}
+
+.fw-torch__band--1 { top: calc(36px * var(--fw-s)); }
+.fw-torch__band--2 { top: calc(118px * var(--fw-s)); }
 
 .fw-torch__halo {
   position: absolute;
@@ -285,12 +312,14 @@ body.fw-theme::before {
   animation: fw-halo 1.7s ease-in-out infinite;
 }
 
+/* Taller than the visible base so the particle flames can rise well above the cage. */
 .fw-torch__flames {
   position: absolute;
-  top: 0;
+  z-index: 2;
+  top: -200px;
   left: 0;
   width: 90px;
-  height: 140px;
+  height: 340px;
 }
 
 .fw-torch__flames canvas {
@@ -298,7 +327,7 @@ body.fw-theme::before {
   top: 0;
   left: 0;
   width: 90px;
-  height: 140px;
+  height: 340px;
 }
 
 .fw-flame {
@@ -364,7 +393,7 @@ body.fw-theme::before {
 
 .fw-ember {
   position: absolute;
-  top: 70px;
+  top: 120px;
   left: 44px;
   width: 3px;
   height: 3px;
@@ -375,25 +404,87 @@ body.fw-theme::before {
   animation: fw-rise 2.6s ease-out var(--delay) infinite;
 }
 
-.fw-torch__bowl {
+/* Metal cage, cup and collar, drawn in head coordinates (90 x 200) */
+.fw-torch__cage-back {
   position: absolute;
-  z-index: 2;
-  top: 128px;
-  left: 15px;
-  width: 60px;
-  height: 46px;
-  background: repeating-linear-gradient(90deg, #4a3015 0 5px, #cc9c3c 5px 7px, #4a3015 7px 12px);
-  clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+  z-index: 1;
+  top: 92px;
+  left: 17px;
+  width: 56px;
+  height: 52px;
+  border-radius: 50% 50% 46% 46% / 22% 22% 40% 40%;
+  background: radial-gradient(ellipse at 50% 80%, #5a2208, #1a0a03 75%);
 }
 
-.fw-torch__bowl::before {
+.fw-torch__cage {
   position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 6px;
-  background: #d6a840;
-  content: "";
+  z-index: 3;
+  top: 90px;
+  left: 14px;
+  width: 62px;
+  height: 56px;
+  border-radius: 50% 50% 46% 46% / 24% 24% 40% 40%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 7px, #c99a3a 7px 9px, #6b4a1c 9px 10px, transparent 10px 12px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.65), transparent 30%, transparent 62%, rgba(0, 0, 0, 0.6));
+  mask: radial-gradient(ellipse 50% 50% at 50% 50%, #000 98%, transparent 100%);
+}
+
+.fw-torch__hoop {
+  position: absolute;
+  z-index: 4;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #4a3015, #e6bb52 40%, #6b4a1c);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.fw-torch__hoop--1 { top: 89px; left: 18px; width: 54px; height: 7px; }
+.fw-torch__hoop--2 { top: 116px; left: 12px; width: 66px; height: 6px; }
+.fw-torch__hoop--3 { top: 142px; left: 16px; width: 58px; height: 6px; }
+
+.fw-torch__cup {
+  position: absolute;
+  z-index: 4;
+  top: 144px;
+  left: 21px;
+  width: 48px;
+  height: 32px;
+  background: linear-gradient(90deg, #2a1808, #8c6224 18%, #f0cb6a 38%, #b98a30 55%, #5a3b15 80%, #1e1006);
+  clip-path: polygon(0 0, 100% 0, 88% 40%, 70% 100%, 30% 100%, 12% 40%);
+}
+
+.fw-torch__collar {
+  position: absolute;
+  z-index: 5;
+  top: 175px;
+  left: 32px;
+  width: 26px;
+  height: 9px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #2a1808, #d6a840 40%, #5a3b15 75%, #1e1006);
+}
+
+.fw-torch__knob {
+  position: absolute;
+  z-index: 5;
+  top: 183px;
+  left: 35px;
+  width: 20px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0cb6a, #8c6224 55%, #2a1808);
+}
+
+/* Warm light from the flame falling on the cage; fades to nothing at its edges */
+.fw-torch__warm {
+  position: absolute;
+  z-index: 9;
+  top: 70px;
+  left: -10px;
+  width: 110px;
+  height: 140px;
+  background: radial-gradient(closest-side, rgba(255, 150, 40, 0.5), rgba(255, 100, 20, 0.14) 55%, transparent 100%);
+  mix-blend-mode: screen;
 }
 
 @keyframes fw-flicker {

@@ -10,11 +10,17 @@ const embers = [
 <div class="fw-torch" data-fw-torch aria-hidden="true">
   <div class="fw-torch__head">
     <div class="fw-torch__halo"></div>
+    <div class="fw-torch__cage-back"></div>
     <div class="fw-torch__flames">
       <i class="fw-flame fw-flame--1"></i><i class="fw-flame fw-flame--2"></i><i class="fw-flame fw-flame--3"></i><i class="fw-flame fw-flame--4"></i>
       {embers.map((ember) => <span class="fw-ember" style={`--dx:${ember.dx};--delay:${ember.delay}`}></span>)}
     </div>
-    <div class="fw-torch__bowl"></div>
+    <div class="fw-torch__cage"></div>
+    <i class="fw-torch__hoop fw-torch__hoop--1"></i><i class="fw-torch__hoop fw-torch__hoop--2"></i><i class="fw-torch__hoop fw-torch__hoop--3"></i>
+    <div class="fw-torch__cup"></div>
+    <div class="fw-torch__collar"></div>
+    <div class="fw-torch__knob"></div>
+    <div class="fw-torch__warm"></div>
   </div>
-  <div class="fw-torch__pole"></div>
+  <div class="fw-torch__pole"><i class="fw-torch__band fw-torch__band--1"></i><i class="fw-torch__band fw-torch__band--2"></i></div>
 </div>

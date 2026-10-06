@@ -125,7 +125,7 @@ function createCanvasFlames(stage: HTMLElement) {
   const flames = [...stage.querySelectorAll<HTMLElement>(".fw-torch__flames")].map((host) => {
     const canvas = document.createElement("canvas");
     canvas.width = 90;
-    canvas.height = 140;
+    canvas.height = 340;
     host.append(canvas);
     return { ctx: canvas.getContext("2d"), canvas, particles: [] as { x: number; y: number; vx: number; vy: number; life: number; decay: number }[], time: 0 };
   }).filter((flame): flame is typeof flame & { ctx: CanvasRenderingContext2D } => flame.ctx !== null);
@@ -139,7 +139,7 @@ function createCanvasFlames(stage: HTMLElement) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         flame.time += 0.03;
         for (let i = 0; i < 5; i += 1) {
-          particles.push({ x: 45 + (Math.random() - 0.5) * 16, y: 132, vx: (Math.random() - 0.5) * 0.5, vy: -(0.9 + Math.random() * 1.3), life: 1, decay: 0.012 + Math.random() * 0.014 });
+          particles.push({ x: 45 + (Math.random() - 0.5) * 16, y: 332, vx: (Math.random() - 0.5) * 0.5, vy: -(2.2 + Math.random() * 2.6), life: 1, decay: 0.012 + Math.random() * 0.014 });
         }
         ctx.globalCompositeOperation = "lighter";
         for (let i = particles.length - 1; i >= 0; i -= 1) {
