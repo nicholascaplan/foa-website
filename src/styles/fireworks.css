@@ -113,14 +113,6 @@ body:not(.fw-theme) .fw-kicker {
   }
 }
 
-@font-face {
-  font-family: "UnifrakturCook";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/UnifrakturCook-Bold.ttf") format("truetype");
-}
-
 body.fw-theme {
   --fw-blackletter: "UnifrakturCook", "Old English Text MT", Georgia, "Times New Roman", serif;
   --fw-night: #050806;

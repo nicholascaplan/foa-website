@@ -30,7 +30,7 @@ const fireworksMonth = datePart({ month: "short" });
     <div class="site-width hero-grid">
        <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions">{fireworks.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--secondary" href={withBase("/whats-on/")}>What's coming up <span aria-hidden="true">&rarr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help <span aria-hidden="true">&rarr;</span></a></div></div>
         <article class="event-feature event-feature--poster">
-          <p class="eyebrow">Next major event</p><h2>{fireworks.title}</h2>
+          <p class="event-feature-kicker">Remember Remember the 5th of November</p><h2>{fireworks.title}</h2>
           <a class="event-poster-link event-poster-link--wide event-poster-link--sponsored" href={withBase(fireworks.path!)}>
             <img src={withBase("/events/fireworks-1600.jpg")} alt="Fireworks lighting up the sky over the school field." width="1600" height="1066">
             <SponsorRibbon />
