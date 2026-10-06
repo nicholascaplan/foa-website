@@ -25,7 +25,7 @@ const eventJsonLd = {
   image: new URL(withBase("/events/fireworks-1600.jpg"), Astro.site).href,
 };
 ---
-<BaseLayout title={event.title} description={event.summary} image="/events/fireworks-1600.jpg" preloadImage="/events/fireworks-1600.jpg" bodyClass="fw-theme">
+<BaseLayout title={event.title} description={event.summary} image="/events/fireworks-1600.jpg" bodyClass="fw-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
   <div class="fw-event fw-stage" data-fw-stage>
     <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>

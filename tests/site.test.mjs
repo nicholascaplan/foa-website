@@ -40,6 +40,12 @@ test("Fireworks defaults to immersive experience with shared guide facts and no 
   }
 });
 
+test("the immersive Fireworks page keeps its social image without preloading the unused photograph", async () => {
+  const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
+  assert.doesNotMatch(html, /<link\b[^>]*rel="preload"[^>]*fireworks-1600\.jpg/);
+  assert.match(html, /<meta\b[^>]*property="og:image"[^>]*fireworks-1600\.jpg/);
+});
+
 test("Get Involved exposes the AGM volunteer teams and shared enquiry route", async () => {
   const html = await readFile(path.join(dist, "get-involved/index.html"), "utf8");
   for (const role of ["Pre-loved uniform sales", "Quartermasters", "Event comperes", "Eco Stall lead", "Fireworks shadowing", "Lead a community event"]) {
