@@ -27,7 +27,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Owner:** Share the Fireworks immersive alternative for review before deciding whether it should become the default. Check the canvas flames and opening fireworks on real phones, including reduced motion, battery/performance and keyboard/zoom access. The approved design and default-off behaviour are recorded in the brief; production browser regressions are covered by the deployment gate.
+- **Owner:** Share the [Fireworks immersive alternative](https://www.thefriendsofashley.org/events/fireworks-2026/?immersive=1) for review before deciding whether it should become the default. Check the canvas flames and opening fireworks on real phones, including reduced motion, battery/performance and keyboard/zoom access. The simplified parchment and shareable URL behaviour are recorded in the brief; responsive DOM checks passed at 390px and 1440px. Local production browser tests remain blocked by Chrome-launch sandbox permissions; the deployment gate runs them in CI.
 
 - **Owner:** Complete a final visual/content review of the redesigned Get Involved and Reps Hub pages, including volunteer vacancy status and the charter-based role summary. Reps Hub messages come first, actions align across desktop cards, and mobile cards are compact. Responsive DOM checks passed; local automated browser tests remain blocked by Chrome-launch sandbox permissions (see the browser-suite task below).
 

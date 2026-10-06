@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+test("clicking through from What's On does not show a return breadcrumb", async ({ page }) => {
+  await page.goto("/whats-on/");
+  await page.getByRole("link", { name: /Fireworks on the Field/ }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Fireworks on the Field" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Back to What's On/i })).toHaveCount(0);
+});
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   test(`the immersive switch stays clear of the summary at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -38,14 +45,13 @@ for (const width of [320, 390, 768, 1024, 1440]) {
   });
 }
 
-test("immersive mode is opt-in, uses canvas flames and resets on reload", async ({ page }) => {
+test("immersive mode is opt-in, uses canvas flames and survives reload through its URL", async ({ page }) => {
   await page.goto("/events/fireworks-2026/");
   const toggle = page.getByRole("switch", { name: "Immersive", exact: true });
   await expect(toggle).toHaveAttribute("aria-checked", "false");
   await expect(page.locator("body")).not.toHaveClass(/fw-theme/);
   await expect(page.locator(".fw-torches")).toBeHidden();
-  await expect(page.locator(".fw-ivy")).toHaveCount(6);
-  await expect(page.locator(".fw-ivy").first()).toBeHidden();
+  await expect(page.locator(".fw-ivy")).toHaveCount(0);
   await expect(page.locator(".poster-figure")).toHaveCount(0);
   const headerStyles = () => page.locator(".site-header, .brand, .brand-copy span, .desktop-nav a, .menu-toggle").evaluateAll((elements) => elements.map((element) => {
     const style = getComputedStyle(element);
@@ -54,26 +60,56 @@ test("immersive mode is opt-in, uses canvas flames and resets on reload", async 
   const standardHeader = await headerStyles();
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-checked", "true");
+  expect(new URL(page.url()).searchParams.get("immersive")).toBe("1");
   await expect(page.locator("body")).toHaveClass(/fw-theme/);
   await expect(page.locator(".fw-torch__flames canvas")).toHaveCount(2);
   await expect(page.locator(".fw-torches")).toBeVisible();
-  await expect(page.locator(".fw-ivy").first()).toBeVisible();
+  await expect(page.locator(".fw-ivy")).toHaveCount(0);
   expect(await headerStyles()).toEqual(standardHeader);
   expect(await page.locator(".event-summary").evaluate((element) => getComputedStyle(element, "::before").height)).toBe("24px");
+  expect(await page.locator(".fw-date").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return [style.borderTopWidth, style.borderBottomWidth];
+  })).toEqual(["0px", "0px"]);
   await toggle.click();
+  expect(new URL(page.url()).searchParams.has("immersive")).toBe(false);
   await expect(page.locator(".fw-torches")).toBeHidden();
-  await expect(page.locator(".fw-ivy").first()).toBeHidden();
   await expect(page.locator("[data-fw-stage]")).toHaveAttribute("data-fw-paused", "");
   await toggle.click();
   await expect(page.locator(".fw-torch__flames canvas")).toHaveCount(2);
   await page.reload();
+  await expect(toggle).toHaveAttribute("aria-checked", "true");
+  await toggle.click();
+  await page.reload();
   await expect(toggle).toHaveAttribute("aria-checked", "false");
+});
+
+test("shared immersive links activate the theme and preserve other URL details", async ({ page }) => {
+  await page.goto("/events/fireworks-2026/?source=share&immersive=1#evening");
+  const toggle = page.getByRole("switch", { name: "Immersive", exact: true });
+  await expect(toggle).toHaveAttribute("aria-checked", "true");
+  await expect(page.locator("body")).toHaveClass(/fw-theme/);
+  await toggle.click();
+  let url = new URL(page.url());
+  expect(url.searchParams.has("immersive")).toBe(false);
+  expect(url.searchParams.get("source")).toBe("share");
+  expect(url.hash).toBe("#evening");
+  await toggle.click();
+  url = new URL(page.url());
+  expect(url.searchParams.get("immersive")).toBe("1");
+  expect(url.searchParams.get("source")).toBe("share");
+  expect(url.hash).toBe("#evening");
+});
+
+test("other immersive parameter values leave the standard view enabled", async ({ page }) => {
+  await page.goto("/events/fireworks-2026/?immersive=0");
+  await expect(page.getByRole("switch", { name: "Immersive", exact: true })).toHaveAttribute("aria-checked", "false");
+  await expect(page.locator("body")).not.toHaveClass(/fw-theme/);
 });
 
 test("reduced motion keeps the immersive design but uses static flames", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/events/fireworks-2026/");
-  await page.getByRole("switch", { name: "Immersive", exact: true }).click();
+  await page.goto("/events/fireworks-2026/?immersive=1");
   await expect(page.locator("body")).toHaveClass(/fw-theme/);
   await expect(page.locator("[data-fw-stage]")).toHaveAttribute("data-fw-paused", "");
   await expect(page.locator(".fw-flame").first()).toBeVisible();

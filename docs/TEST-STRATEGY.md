@@ -93,7 +93,7 @@ Initial browser scenarios:
 
 Generated-site contracts in `tests/site.test.mjs` cover the homepage Welcome Tea poster and Fireworks hero-switch boundary attributes. Browser coverage for the UK-time date transition remains required in CI.
 
-Further browser scenarios now covered: the Fireworks "Back to What's On" link only appears when arriving from What's On; key event information stays reachable with JavaScript disabled (the footer is the mobile navigation fallback); and axe plus a no-horizontal-scroll check run at a 390px viewport, including the open mobile menu.
+Further browser scenarios now covered: clicking through from What's On opens the Fireworks page without a return breadcrumb; key event information stays reachable with JavaScript disabled (the footer is the mobile navigation fallback); and axe plus a no-horizontal-scroll check run at a 390px viewport, including the open mobile menu.
 
 Keep browser coverage concentrated on shared navigation and unique interactions. Static pages with no distinct behaviour should be covered by generated-site and accessibility checks rather than repetitive end-to-end tests.
 

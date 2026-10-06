@@ -133,8 +133,6 @@ body.fw-theme {
   --fw-ink: #2a1d0c;
   --fw-ink-soft: #4d3b1f;
   --fw-label: #6b4700;
-  --fw-ornament-gold: #957025;
-  --fw-ivy-vein: #87905d;
   --fw-roll-overhang: 10px;
   --fw-scroll-edge: #9e7b35;
   --fw-scroll-edge-soft: #b08a356b;
@@ -524,35 +522,6 @@ body.fw-theme::before {
 }
 
 /* Parchment panels */
-.fw-ivy {
-  display: none;
-}
-
-.fw-theme .fw-ivy {
-  position: absolute;
-  top: 8px;
-  left: 4px;
-  display: block;
-  width: 56px;
-  height: 56px;
-  color: var(--fw-forest);
-  pointer-events: none;
-}
-
-.fw-theme .fw-ivy--right {
-  right: 4px;
-  left: auto;
-  transform: scaleX(-1);
-}
-
-.fw-ivy__stem {
-  stroke: var(--fw-ornament-gold);
-}
-
-.fw-ivy__veins {
-  stroke: var(--fw-ivy-vein);
-}
-
 .fw-theme .event-summary,
 .fw-theme .event-main > .event-block {
   position: relative;
@@ -683,7 +652,6 @@ body.fw-theme::before {
   display: inline-block;
   margin: 1.25rem 0 0;
   padding: 0.5rem 0 0.6rem;
-  border-block: 2px solid rgba(240, 195, 90, 0.65);
   color: var(--fw-gold-light);
   font-size: clamp(1.15rem, 3.6vw, 1.75rem);
   font-weight: 800;

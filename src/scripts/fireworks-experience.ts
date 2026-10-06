@@ -231,8 +231,9 @@ function init(stage: HTMLElement) {
     }
   }, { threshold: 0.7 });
 
-  toggle.addEventListener("click", () => {
-    active = !active;
+  const setActive = (value: boolean) => {
+    if (active === value) return;
+    active = value;
     document.body.classList.toggle("fw-theme", active);
     stage.classList.toggle("fw-stage", active);
     toggle.setAttribute("aria-checked", String(active));
@@ -246,7 +247,19 @@ function init(stage: HTMLElement) {
       intro();
       stage.querySelectorAll("[data-fw-burst]").forEach((element) => observer.observe(element));
     }
+  };
+
+  toggle.addEventListener("click", () => {
+    setActive(!active);
+    const url = new URL(window.location.href);
+    if (active) url.searchParams.set("immersive", "1");
+    else url.searchParams.delete("immersive");
+    window.history.replaceState(window.history.state, "", url);
   });
+
+  const applyUrlMode = () => setActive(new URL(window.location.href).searchParams.get("immersive") === "1");
+  window.addEventListener("popstate", applyUrlMode);
+  applyUrlMode();
 }
 
 const stage = document.querySelector<HTMLElement>("[data-fw-stage]");

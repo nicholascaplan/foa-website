@@ -3,7 +3,6 @@ import { getEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SponsorRibbon from "../../components/SponsorRibbon.astro";
 import FireworksTorch from "../../components/FireworksTorch.astro";
-import FireworksIvy from "../../components/FireworksIvy.astro";
 import "../../styles/fireworks.css";
 import { withBase } from "../../lib/urls";
 import { ordinalDateFormatter } from "../../lib/dates";
@@ -33,7 +32,6 @@ const eventJsonLd = {
     <div class="fw-content">
       <section class="event-hero">
         <div class="site-width">
-          <a class="breadcrumb" href={withBase("/whats-on/")} data-whats-on-return-path={withBase("/whats-on/")} hidden><span aria-hidden="true">&larr;</span> Back to What's On</a>
           <div class="event-hero-grid">
             <div class="fw-title-copy">
               <p class="fw-kicker">Remember Remember the 5th of November</p>
@@ -44,7 +42,6 @@ const eventJsonLd = {
             <div class="fw-overview">
               <div class="fw-mode-bar" hidden data-fw-mode-bar><button class="fw-mode-switch" type="button" role="switch" aria-checked="false" data-fw-mode>Immersive <span class="fw-mode-switch__track" aria-hidden="true"></span></button></div>
             <aside class="event-summary">
-              <FireworksIvy />
               <dl>
                 <div><dt>When</dt><dd>{timeFormatter.format(event.start)}{event.end && `–${timeFormatter.format(event.end)}`}</dd></div>
                 <div><dt>Where</dt><dd>{event.location}</dd></div>
@@ -65,13 +62,11 @@ const eventJsonLd = {
         <div class="site-width event-body">
           <div class="event-main">
             <section class="event-block">
-              <FireworksIvy />
               <p class="eyebrow">Plan your evening</p>
               <h2>Two displays, one family night out.</h2>
               <ol class="schedule">{event.schedule?.map((item) => <li data-fw-burst={item.burst}><time datetime={item.time.toISOString()}>{timeFormatter.format(item.time)}</time><span><strong>{item.label}</strong>{item.detail && <small>{item.detail}</small>}</span></li>)}</ol>
             </section>
             {event.goodToKnow && <section class="event-block">
-              <FireworksIvy />
               <p class="eyebrow">Good to know</p>
               <h2>Before you come.</h2>
               <dl class="good-to-know">{event.goodToKnow.map((item) => <div><dt>{item.label}</dt><dd>{item.text}</dd></div>)}</dl>
@@ -84,18 +79,5 @@ const eventJsonLd = {
   </div>
   <script>
     import "../../scripts/fireworks-experience";
-  </script>
-  <script>
-    const returnLink = document.querySelector<HTMLAnchorElement>("[data-whats-on-return-path]");
-    if (returnLink && document.referrer) {
-      try {
-        const referrer = new URL(document.referrer);
-        if (referrer.origin === window.location.origin && referrer.pathname === returnLink.dataset.whatsOnReturnPath) {
-          returnLink.hidden = false;
-        }
-      } catch {
-        // Leave the link hidden when the referrer cannot be parsed.
-      }
-    }
   </script>
 </BaseLayout>
