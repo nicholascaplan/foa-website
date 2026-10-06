@@ -50,7 +50,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
 | Review the local Night Mode preview visually: forest-charcoal palette, muted light newsletter sheets, darker cork and desktop/mobile toggle placement. Check real-device zoom and keyboard focus before considering public rollout. | Owner | None |
 | Run `npm run test:dev` outside the sandbox or with an approved Chrome-launch override. Local Chrome launch remains blocked, so the development-only Night Mode suite is still unverified. Production browser tests run in the GitHub Actions deployment gate (`npm run verify`). Connected-browser checks cover public routes, responsive headers, representative Night Mode axe scans and enlarged-text layouts; they do not replace the dev suite. | Dev | Browser-capable environment |
-| Confirm the new static-mobile Fireworks browser regressions pass in Chromium and the focused WebKit project. The headless motion-policy tests pass locally, but Chrome launch is sandbox-blocked and the WebKit download is blocked by the network allowlist (`cdn.playwright.dev` / `playwright.download.prss.microsoft.com`). CI now installs both engines; check its result after pushing. | Dev | CI or browser-capable environment |
 
 ## Later
 
