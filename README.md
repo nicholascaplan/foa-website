@@ -51,7 +51,7 @@ npm run preview
 ```sh
 npm run verify                  # full gate used by CI: check, build, site tests, browser tests
 npm run test:dev                 # local-only Night Mode tests; starts a fresh dev server on port 4348
-npx playwright install chromium # first browser-test run only
+npx playwright install chromium webkit # first browser-test run only
 npm audit                       # dependency advisories
 ```
 

@@ -27,7 +27,7 @@ const eventJsonLd = {
 ---
 <BaseLayout title={event.title} description={event.summary} image="/events/fireworks-1600.jpg" bodyClass="fw-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
-  <div class="fw-event fw-stage" data-fw-stage>
+  <div class="fw-event fw-stage" data-fw-stage data-fw-paused>
     <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
     <div class="fw-content">
       <section class="event-hero">
@@ -74,7 +74,7 @@ const eventJsonLd = {
         </div>
       </section>
     </div>
-    <div class="fw-sky" aria-hidden="true"><canvas data-fw-sky></canvas></div>
+    <div class="fw-sky" aria-hidden="true"><canvas data-fw-sky width="0" height="0"></canvas></div>
   </div>
   <script>
     import "../../scripts/fireworks-experience";

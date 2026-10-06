@@ -33,6 +33,8 @@ const money = (value) => `£${value.toLocaleString("en-GB")}`;
 test("Fireworks defaults to immersive experience with shared guide facts and no poster", async () => {
   const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
   assert.match(html, /<body[^>]*fw-theme/);
+  assert.match(html, /<div[^>]*data-fw-stage[^>]*data-fw-paused/);
+  assert.match(html, /<canvas[^>]*data-fw-sky[^>]*width="0"[^>]*height="0"/);
   assert.doesNotMatch(html, /data-fw-mode|Immersive/);
   assert.doesNotMatch(html, /fireworks-poster\.jpg|ferris wheel/i);
   for (const fact of ["no on-site parking", "Harmony Centre", "St John Ambulance", "Event closes", "cash or card", "subject to availability"]) {

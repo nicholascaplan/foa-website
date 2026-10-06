@@ -18,6 +18,11 @@ export default defineConfig({
         channel: process.env.CI ? undefined : "chrome",
       },
     },
+    {
+      name: "webkit-fireworks",
+      testMatch: "fireworks.spec.ts",
+      use: { ...devices["Desktop Safari"] },
+    },
   ],
   webServer: {
     command: "npm run preview -- --ignore-lock --host 127.0.0.1 --port 4347",

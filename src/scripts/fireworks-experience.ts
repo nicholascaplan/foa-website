@@ -12,6 +12,8 @@ class Sky {
   private particles: Particle[] = [];
   private rockets: Rocket[] = [];
   private running = false;
+  private frameId = 0;
+  private suspended = false;
   private width = 0;
   private height = 0;
 
@@ -25,6 +27,7 @@ class Sky {
   }
 
   private resize() {
+    if (this.suspended) return;
     const rect = this.canvas.getBoundingClientRect();
     const ratio = Math.min(devicePixelRatio || 1, 2);
     this.width = rect.width;
@@ -35,6 +38,7 @@ class Sky {
   }
 
   launch(fx: number, fy: number, shade: Colour, kind: Kind) {
+    if (this.suspended) return;
     const targetY = fy * 0.8 * this.height;
     const climb = this.height - targetY;
     // With 1.5% drag per frame a rocket coasts to a stop after about (speed - 1.2) / 0.015 pixels.
@@ -63,15 +67,26 @@ class Sky {
   }
 
   stop() {
+    this.suspended = true;
+    cancelAnimationFrame(this.frameId);
+    this.running = false;
     this.particles = [];
     this.rockets = [];
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    // Release the high-resolution buffer as well as stopping drawing.
+    this.canvas.width = 0;
+    this.canvas.height = 0;
+  }
+
+  resume() {
+    if (!this.suspended) return;
+    this.suspended = false;
+    this.resize();
   }
 
   private start() {
-    if (this.running || document.hidden) return;
+    if (this.running || this.suspended || document.hidden || (!this.particles.length && !this.rockets.length)) return;
     this.running = true;
-    requestAnimationFrame(() => this.tick());
+    this.frameId = requestAnimationFrame(() => this.tick());
   }
 
   private tick() {
@@ -111,7 +126,7 @@ class Sky {
     }
 
     if ((this.particles.length || this.rockets.length) && !document.hidden) {
-      requestAnimationFrame(() => this.tick());
+      this.frameId = requestAnimationFrame(() => this.tick());
     } else {
       this.running = false;
       if (!this.particles.length && !this.rockets.length) this.ctx.clearRect(0, 0, this.width, this.height);
@@ -179,6 +194,8 @@ function createCanvasFlames(stage: HTMLElement) {
 
 function init(stage: HTMLElement) {
   const mobile = matchMedia("(max-width: 47.999rem)");
+  // Touch devices stay static even when a phone rotates to a wide viewport.
+  const staticEffects = matchMedia("(max-width: 47.999rem), (any-pointer: coarse)");
   const summary = stage.querySelector<HTMLElement>(".event-summary");
   const hero = stage.querySelector<HTMLElement>(".event-hero");
   const positionTorches = () => {
@@ -200,7 +217,6 @@ function init(stage: HTMLElement) {
   const timers: number[] = [];
   let sky: Sky | undefined;
   let setFlames: ((value: boolean) => void) | undefined;
-  let active = false;
   let paused = true;
   const later = (delay: number, action: () => void) => {
     timers.push(window.setTimeout(() => { if (!paused) action(); }, delay));
@@ -230,9 +246,6 @@ function init(stage: HTMLElement) {
     }
   };
 
-  applyPaused(true);
-  reduceMotion.addEventListener("change", () => applyPaused(!active || reduceMotion.matches));
-
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting || paused) continue;
@@ -243,24 +256,26 @@ function init(stage: HTMLElement) {
     }
   }, { threshold: 0.7 });
 
-  const setActive = (value: boolean) => {
-    if (active === value) return;
-    active = value;
-    document.body.classList.toggle("fw-theme", active);
-    stage.classList.toggle("fw-stage", active);
-    if (active) {
-      if (!sky && canvas) sky = new Sky(canvas);
-      setFlames ??= createCanvasFlames(stage);
+  const syncMotion = () => {
+    const shouldPause = staticEffects.matches || reduceMotion.matches;
+    if (shouldPause) {
+      applyPaused(true);
+      observer.disconnect();
+      return;
     }
-    applyPaused(!active || reduceMotion.matches);
-    if (!active) observer.disconnect();
-    if (!paused) {
-      intro();
-      stage.querySelectorAll("[data-fw-burst]").forEach((element) => observer.observe(element));
-    }
+    if (!paused) return;
+    // Never acquire a canvas context or start a drawing loop on static devices.
+    if (!sky && canvas) sky = new Sky(canvas);
+    sky?.resume();
+    setFlames ??= createCanvasFlames(stage);
+    applyPaused(false);
+    intro();
+    stage.querySelectorAll("[data-fw-burst]").forEach((element) => observer.observe(element));
   };
 
-  setActive(true);
+  staticEffects.addEventListener("change", syncMotion);
+  reduceMotion.addEventListener("change", syncMotion);
+  syncMotion();
 }
 
 const stage = document.querySelector<HTMLElement>("[data-fw-stage]");

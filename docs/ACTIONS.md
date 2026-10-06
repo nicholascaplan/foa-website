@@ -27,7 +27,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Owner:** Review the default Fireworks experience on real iPhones and Android phones, including animation with Reduce Motion on/off, battery/performance and enlarged text. The mobile kicker stays on one line, parchment panels leave space for the torch poles, and flame positioning follows the summary so it clears the introduction. Local Playwright launches remain blocked by macOS sandbox permissions; CI runs the production browser suite.
+- **Owner:** Ask both iPhone reporters to repeat their Fireworks scrolling journey after the static-mobile fix is deployed; also review Android, portrait/landscape, Reduce Motion on/off, battery/performance and enlarged text. Confirm smooth scrolling, static flames and no fireworks covering the practical information. Use a real-device testing service if physical devices are unavailable; WebKit automation is compatibility coverage, not proof of iPhone performance. Do not restore mobile effects without real-device evidence and a separate decision. Local Playwright launches remain blocked by macOS sandbox permissions; CI runs the production browser suite.
 
 - **Owner:** Complete a final visual/content review of the redesigned Get Involved and Reps Hub pages, including volunteer vacancy status and the charter-based role summary. Reps Hub messages come first, actions align across desktop cards, and mobile cards are compact. Responsive DOM checks passed; local automated browser tests remain blocked by Chrome-launch sandbox permissions (see the browser-suite task below).
 
@@ -50,6 +50,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
 | Review the local Night Mode preview visually: forest-charcoal palette, muted light newsletter sheets, darker cork and desktop/mobile toggle placement. Check real-device zoom and keyboard focus before considering public rollout. | Owner | None |
 | Run `npm run test:dev` outside the sandbox or with an approved Chrome-launch override. Local Chrome launch remains blocked, so the development-only Night Mode suite is still unverified. Production browser tests run in the GitHub Actions deployment gate (`npm run verify`). Connected-browser checks cover public routes, responsive headers, representative Night Mode axe scans and enlarged-text layouts; they do not replace the dev suite. | Dev | Browser-capable environment |
+| Confirm the new static-mobile Fireworks browser regressions pass in Chromium and the focused WebKit project. The headless motion-policy tests pass locally, but Chrome launch is sandbox-blocked and the WebKit download is blocked by the network allowlist (`cdn.playwright.dev` / `playwright.download.prss.microsoft.com`). CI now installs both engines; check its result after pushing. | Dev | CI or browser-capable environment |
 
 ## Later
 
