@@ -54,6 +54,44 @@ test("invalid saved values do not enable Night Mode", async ({ page }) => {
   await expect(page.getByRole("button", { name: toggleName })).toHaveAttribute("aria-pressed", "false");
 });
 
+test("desktop has one phone icon that opens a medium preview", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  await expect(page.getByRole("group", { name: "Phone preview size" })).toBeHidden();
+  const popupPromise = page.waitForEvent("popup");
+  await page.getByRole("button", { name: "Mobile preview", exact: true }).click();
+  const popup = await popupPromise;
+  await expect(popup).toHaveURL(/127\.0\.0\.1:4348\//);
+  await expect.poll(() => popup.evaluate(() => window.innerWidth)).toBe(390);
+  await popup.close();
+});
+
+test("phone size controls resize the preview itself and follow its viewport", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.name = "foa-mobile-preview";
+    // Capture resizing without relying on headless Chrome's native window support.
+    window.resizeTo = (width, height) => {
+      document.documentElement.dataset.previewResize = `${width},${height}`;
+    };
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/uniform/");
+  for (const width of [360, 390, 430]) {
+    const button = page.getByRole("button", { name: new RegExp(`phone preview \\(${width}px\\)`) });
+    await expect(button).toBeVisible();
+    await button.focus();
+    await page.keyboard.press("Space");
+    const expected = await page.evaluate((targetWidth) => `${targetWidth + Math.max(0, outerWidth - innerWidth)},${innerHeight + Math.max(0, outerHeight - innerHeight)}`, width);
+    await expect(page.locator("html")).toHaveAttribute("data-preview-resize", expected);
+    await page.setViewportSize({ width, height: 844 });
+    await expect(button).toHaveAttribute("aria-pressed", "true");
+    await expect(page).toHaveURL(/\/uniform\/$/);
+  }
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Large phone preview (430px)" })).toHaveAttribute("aria-pressed", "true");
+});
+
 for (const width of [320, 390, 1440]) {
   test(`${width}px: all routes remain readable and fit in both modes`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });

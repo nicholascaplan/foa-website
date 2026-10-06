@@ -1,31 +1,67 @@
 ---
 import DevNightModeToggle from "./DevNightModeToggle.astro";
+
+interface Props { mobile?: boolean; }
+const { mobile = false } = Astro.props;
+const sizes = [
+  { label: "Small", short: "S", width: 360, icon: "small" },
+  { label: "Medium", short: "M", width: 390, icon: "medium" },
+  { label: "Large", short: "L", width: 430, icon: "large" },
+];
 ---
 
-<div class="dev-tools">
-  <DevNightModeToggle />
-  <button class="dev-tool-button" type="button" data-mobile-preview>
+<div class:list={["dev-tools", { "dev-tools--mobile": mobile }]}>
+  {!mobile && <DevNightModeToggle />}
+  {mobile ? <div class="dev-phone-sizes" role="group" aria-label="Phone preview size">
+    {sizes.map((size) => (
+      <button class:list={["dev-phone-size", `dev-phone-size--${size.icon}`]} type="button" data-mobile-preview={size.width} aria-label={`${size.label} phone preview (${size.width}px)`} aria-pressed="false" title={`${size.label} phone preview (${size.width}px)`}>
+        <svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="4" y="2" width="16" height="26" rx="3"></rect>
+          <path d="M9 24h6"></path>
+        </svg>
+        <span>{size.short}</span>
+      </button>
+    ))}
+  </div> : <button class="dev-tool-button" type="button" data-mobile-preview="390" aria-label="Mobile preview" title="Mobile preview">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
       <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
       <path d="M10.5 18.5h3"></path>
     </svg>
-    <span class="visually-hidden">Mobile preview</span>
-  </button>
-  <button class="dev-tool-button" type="button" data-reset-cookie-preferences aria-label="Reset cookie consent" title="Reset cookie consent">
+  </button>}
+  {!mobile && <button class="dev-tool-button" type="button" data-reset-cookie-preferences aria-label="Reset cookie consent" title="Reset cookie consent">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M20.5 12.5A8.5 8.5 0 1 1 11.5 3a4 4 0 0 0 5 5 4 4 0 0 0 4 4.5Z"></path>
       <path d="M8 12h.01M12 16h.01M14 11h.01"></path>
     </svg>
-  </button>
+  </button>}
 </div>
 
 <script>
-  document.querySelector<HTMLButtonElement>("[data-mobile-preview]")?.addEventListener("click", () => {
-    const width = 390;
-    const height = Math.min(844, window.screen.availHeight - 80);
-    const left = Math.max(0, window.screen.availWidth - width - 24);
-    window.open(window.location.href, "foa-mobile-preview", `popup,width=${width},height=${height},left=${left},top=40`);
-  });
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-mobile-preview]");
+  const syncSize = () => {
+    buttons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(window.name === "foa-mobile-preview" && window.innerWidth === Number(button.dataset.mobilePreview)));
+    });
+  };
+  const resizePreview = (preview: Window, width: number, height: number) => {
+    // resizeTo uses the outer window dimensions; account for browser chrome.
+    preview.resizeTo(width + Math.max(0, preview.outerWidth - preview.innerWidth), height + Math.max(0, preview.outerHeight - preview.innerHeight));
+    preview.focus();
+  };
+
+  buttons.forEach((button) => button.addEventListener("click", () => {
+    const width = Number(button.dataset.mobilePreview);
+    if (window.name === "foa-mobile-preview") {
+      resizePreview(window, width, window.innerHeight);
+    } else {
+      const height = Math.min(844, window.screen.availHeight - 80);
+      const left = Math.max(0, window.screen.availWidth - width - 24);
+      const preview = window.open(window.location.href, "foa-mobile-preview", `popup,width=${width},height=${height},left=${left},top=40`);
+      if (preview) resizePreview(preview, width, height);
+    }
+  }));
+  window.addEventListener("resize", syncSize);
+  syncSize();
 
   document.querySelector<HTMLButtonElement>("[data-reset-cookie-preferences]")?.addEventListener("click", () => {
     window.dispatchEvent(new Event("foa:reset-cookie-preferences"));
@@ -37,12 +73,17 @@ import DevNightModeToggle from "./DevNightModeToggle.astro";
     display: flex;
     flex: none;
     gap: 0.4rem;
+    align-items: center;
+  }
+
+  .dev-tools--mobile {
+    display: none;
   }
 
   .dev-tool-button {
     display: grid;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 999px;
@@ -59,6 +100,54 @@ import DevNightModeToggle from "./DevNightModeToggle.astro";
     background: var(--green);
   }
 
+  .dev-phone-sizes {
+    display: flex;
+    gap: 0.3rem;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .dev-phone-size {
+    display: flex;
+    width: 2.75rem;
+    min-width: 44px;
+    min-height: 3.25rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.3rem;
+    border: 1px solid var(--action-background);
+    border-radius: 0.625rem;
+    color: var(--ink);
+    background: var(--surface);
+    font: inherit;
+    font-size: 0.6875rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .dev-phone-size[aria-pressed="true"] {
+    color: var(--action-foreground);
+    background: var(--action-background);
+  }
+
+  .dev-phone-size:hover {
+    border-color: var(--amber);
+  }
+
+  .dev-phone-size--small svg { width: 1.0625rem; height: 1.25rem; }
+  .dev-phone-size--medium svg { width: 1.3125rem; height: 1.5rem; }
+  .dev-phone-size--large svg { width: 1.5625rem; height: 1.75rem; }
+
+  .dev-phone-size svg { max-width: 100%; }
+
+  .dev-phone-size:focus-visible,
+  .dev-tool-button:focus-visible {
+    outline: 3px solid var(--amber);
+    outline-offset: 3px;
+  }
+
   .dev-tool-button svg {
     width: 1.25rem;
     height: 1.25rem;
@@ -67,6 +156,11 @@ import DevNightModeToggle from "./DevNightModeToggle.astro";
   @media (max-width: 47.99rem) {
     .dev-tools {
       display: none;
+    }
+
+    .dev-tools--mobile {
+      display: flex;
+      max-width: 100%;
     }
   }
 </style>

@@ -35,7 +35,7 @@ npm install      # once
 npm run dev      # opens http://localhost:4321/
 ```
 
-The dev server watches for changes; stop it with `Ctrl+C`. On desktop, three dev-only icon buttons sit in the header between the logo/name home link and navigation: Night Mode, mobile preview (opens the current route in a 390px window; allow pop-ups if blocked) and reset cookie consent. The header wraps when needed rather than covering text. On mobile, Night Mode sits beside the menu button. Its manual choice is remembered locally; it defaults to Day Mode regardless of the system preference. These controls and the Night Mode preview are absent from production builds (including `npm run preview`).
+The dev server watches for changes; stop it with `Ctrl+C`. On desktop, dev-only controls sit in the header between the logo/name home link and navigation: Night Mode, one mobile-preview icon (opens the current route at 390px), and reset cookie consent. Allow pop-ups if blocked. In the mobile top navigation, three growing phone icons labelled S / M / L (Small 360px, Medium 390px, Large 430px) resize the existing preview in place without reloading the page; its current size is highlighted. Local mobile branding uses the logo alone to fit the size controls beside Night Mode and the menu button. Browsers may restrict window resizing; browser device emulation remains the fallback. The header wraps when needed rather than covering text. The Night Mode choice is remembered locally; it defaults to Day Mode regardless of the system preference. These controls and the Night Mode preview are absent from production builds (including `npm run preview`).
 
 To review the production build:
 
