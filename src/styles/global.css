@@ -1284,10 +1284,6 @@ a {
   justify-content: center;
 }
 
-.empty-state__more {
-  margin: 1.5rem 0 0;
-}
-
 .empty-state h2 {
   margin: 0;
   font-family: var(--font-display);
