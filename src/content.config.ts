@@ -32,6 +32,14 @@ const events = defineCollection({
       detail: z.string().optional(),
       burst: z.enum(["small", "finale"]).optional(),
     })).optional(),
+    volunteerRoles: z.array(z.object({
+      name: z.string(),
+      group: z.string(),
+      dates: z.string(),
+      description: z.string(),
+      url: z.url(),
+      shifts: z.array(z.object({ label: z.string(), when: z.string(), helpers: z.number().int().positive() })),
+    })).optional(),
     reviewed: z.coerce.date().optional(),
   }),
 });

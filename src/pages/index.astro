@@ -28,7 +28,7 @@ const fireworksMonth = datePart({ month: "short" });
   <div class="notice-strip"><div class="site-width"><span class="notice-dot" aria-hidden="true"></span><span>Could you be our Co-Secretary for 2026/27?</span><a href={withBase("/get-involved/")}>See the role</a></div></div>
   <section class="hero">
     <div class="site-width hero-grid">
-       <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions">{fireworks.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--secondary" href={withBase("/whats-on/")}>What's coming up <span aria-hidden="true">&rarr;</span></a><a class="button button--secondary" href={withBase("/get-involved/")}>Find a way to help <span aria-hidden="true">&rarr;</span></a></div></div>
+       <div class="hero-copy"><p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions">{fireworks.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--primary button--large button--wide" href={withBase("/fireworks-volunteering/")}>Volunteer at Fireworks <span aria-hidden="true">&rarr;</span></a></div></div>
         <article class="event-feature event-feature--poster">
           <p class="event-feature-kicker">Remember Remember the 5th of November</p><h2>{fireworks.title}</h2>
           <a class="event-poster-link event-poster-link--wide event-poster-link--sponsored" href={withBase(fireworks.path!)}>
@@ -40,7 +40,7 @@ const fireworksMonth = datePart({ month: "short" });
      <div class="quick-list hero-links">
      {latestNewsletter && <a class="quick-row" href={withBase("/newsletter/")}><span><h3>Read the latest newsletter</h3><p>{latestNewsletter.title}</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>}
      <a class="quick-row" href={withBase("/events/fireworks-2026/")}><span><h3>Plan for Fireworks</h3><p>Times, tickets and what to expect on the night.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
-     <a class="quick-row" href={withBase("/uniform/")}><span><h3>Buy or donate uniform</h3><p>Sale dates, donation point and price list.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
+     <a class="quick-row" href={withBase("/fireworks-volunteering/")}><span><h3>Help at Fireworks</h3><p>Pick a slot with your year group's team.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
      <a class="quick-row" href={withBase("/get-involved/")}><span><h3>Get involved</h3><p>Roles, meetings, class reps and ways to help.</p></span><span class="quick-arrow" aria-hidden="true">&rarr;</span></a>
      </div>
     </div>

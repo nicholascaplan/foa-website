@@ -51,6 +51,7 @@ const eventJsonLd = {
                 <a class="button button--amber button--large" href={event.ticketUrl} target="_blank" rel="noopener noreferrer">Buy tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
                 {event.ticketNote ? <p class="ticket-tip"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"></path></svg><span><strong>Tip:</strong> {event.ticketNote}</span></p> : <p>Tickets are sold through our ticket provider and open in a new tab.</p>}
               </div>}
+              {event.volunteerRoles && <a class="button button--secondary summary-volunteer" href={withBase("/fireworks-volunteering/")}>Volunteer at Fireworks <span aria-hidden="true">&rarr;</span></a>}
             </aside>
             </div>
             <div class="event-hero-sponsor"><SponsorRibbon /></div>
@@ -69,6 +70,12 @@ const eventJsonLd = {
               <p class="eyebrow">Good to know</p>
               <h2>Before you come.</h2>
               <dl class="good-to-know">{event.goodToKnow.map((item) => <div><dt>{item.label}</dt><dd>{item.text}</dd></div>)}</dl>
+            </section>}
+            {event.volunteerRoles && <section class="event-block">
+              <p class="eyebrow">Volunteer</p>
+              <h2>To make this event awesome, we need your help!</h2>
+              <p>Each year group looks after one activity. Choose a slot and sign up on Volunteer Sign Up.</p>
+              <p><a class="button button--amber" href={withBase("/fireworks-volunteering/")}>Help at Fireworks <span aria-hidden="true">&rarr;</span></a></p>
             </section>}
           </div>
         </div>

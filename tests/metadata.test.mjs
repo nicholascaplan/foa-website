@@ -21,6 +21,7 @@ const publicRoutes = [
   "/contact/",
   "/privacy/",
   "/events/fireworks-2026/",
+  "/fireworks-volunteering/",
 ];
 
 const htmlFor = (route) => path.join(dist, route.replace(/^\//, ""), "index.html");

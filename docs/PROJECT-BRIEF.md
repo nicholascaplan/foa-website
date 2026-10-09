@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 6 October 2026
+**Last updated:** 9 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -97,7 +97,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 ### Personal information and safeguarding
 
 - Committee presentation uses names and roles only, plus an approved portrait. Names and roles for 2026/27 are confirmed: Helen Platt and Sarah Parish (Co-Chairs); Clare Birks and Darren Malone (Co-Treasurers); Nick Caplan and Cristy Amponsah (Co-Comms); Lizzie Grillo (Fundraising Initiatives Lead); Co-Secretary vacant.
-- Do not publish child year groups, or attribute notices to a parent plus a child's year group.
+- Do not publish child year groups, or attribute notices to a parent plus a child's year group. Deliberate exception: the Fireworks volunteering page labels each sign-up activity with the year group expected to cover it (for example, Bar: Year 4). These are rota labels for parents, not child information, and are never tied to a named person.
 - Use the shared FOA contact route (email address and approved Google Form), not individual contact details.
 - Meeting locations and schedules may be public.
 - Charity wording and registered charity number are confirmed as correct.
@@ -115,6 +115,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The site never processes payments or issues tickets. The Fireworks ticket journey is a normal link to an external provider, clearly described as leaving the site; no embedded checkout.
 - Provider: Buy Tickets (`https://buytickets.at/thefriendsofashley/2337508`), stored as `ticketUrl` in the Fireworks event content. It opens in a new tab and appears as the primary action in the homepage hero, the homepage Fireworks feature, the What's On upcoming list (any event with both a page and a `ticketUrl`) and the Fireworks event page summary, where `ticketNote` is shown as a lightbulb "Tip".
 - Remove unverified promises (payment methods, accounts, instant e-tickets).
+- Fireworks volunteering lives at `/fireworks-volunteering/` (not in primary navigation). It lists five activities (token presales: Y1 and Y2; prize table: Y3; bar: Y4; entrance: Y5; tokens: Y6), each with its shifts, helpers needed and a link to a Volunteer Sign Up sheet that opens in a new tab and is described on the page as a third-party site. Activities and links are stored as `volunteerRoles` in the Fireworks event content. It is linked from the Fireworks event page and replaces the Uniform quick link on the homepage. Shift times and helper counts were read from the Volunteer Sign Up sheets and must be updated in the event content if the sheets change. The Privacy Notice is deliberately unchanged.
 - Confirmed Fireworks facts: Thursday 5th November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead. Public attraction wording omits the specific wheel. The supplied 2026 Event Guide informs the structured food/payment, parking, wristband/lost-child help and first-aid information, the closing schedule entry and conditional gate-ticket advice. Event facts live in `src/content/events/fireworks-2026.json`.
 - Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
 - Christmas Fayre is Saturday 5th December 2026, led by Rachel and Sophie. Welcome Tea is Saturday 3rd October. Santa's Grotto is Wednesday 16th December 2026, run by parents and carers during the school day.
@@ -191,7 +192,7 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 - Mobile navigation is a real menu. Back, forward, refresh, bookmarks and shared links work through real URLs. The current page is identifiable.
 
 **Homepage**
-- Show the most important current event prominently; direct routes to current events, uniform, Get Involved (which covers class reps) and the latest newsletter (title and date generated from the newsletters collection); an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
+- Show the most important current event prominently; direct routes to current events, Fireworks volunteering (a hero button under Buy Fireworks tickets plus a quick link; the hero no longer carries What's On or Get Involved buttons), Get Involved (which covers class reps) and the latest newsletter (title and date generated from the newsletters collection); an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
 
 **What's On**
 - Upcoming events in chronological order, each with date, name, time, location and status where available.
