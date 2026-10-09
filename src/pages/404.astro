@@ -1,7 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CryingLogo from "../components/CryingLogo.astro";
+import { getCollection } from "astro:content";
 import { withBase } from "../lib/urls";
+const events = await getCollection("events");
+const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
 ---
 <BaseLayout title="Page not found" description="The requested page from The Friends of Ashley could not be found." noindex>
-  <section class="content-section"><div class="site-width empty-state"><p class="eyebrow">404</p><h1 class="editorial-heading">That page isn't here.</h1><p>Try the homepage or browse the next events from The FOA.</p><div class="hero-actions"><a class="button button--primary" href={withBase("/")}>Go to the homepage</a><a class="button button--secondary" href={withBase("/whats-on/")}>See what's on</a></div></div></section>
+  <section class="content-section"><div class="site-width empty-state"><CryingLogo /><p class="eyebrow">404</p><h1 class="editorial-heading">Oh no, we can't find that page.</h1><p>It may have been moved or handed in to lost property. Here are some places that will help.</p><div class="hero-actions">{fireworks?.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--primary button--large" href={withBase("/fireworks-volunteering/")}>Volunteer at Fireworks <span aria-hidden="true">&rarr;</span></a></div><p class="empty-state__more">Or try <a href={withBase("/")}>the homepage</a> or <a href={withBase("/whats-on/")}>what's on</a>.</p></div></section>
 </BaseLayout>
