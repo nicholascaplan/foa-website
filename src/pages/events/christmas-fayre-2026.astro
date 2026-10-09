@@ -1,0 +1,110 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChristmasBaubles from "../../components/ChristmasBaubles.astro";
+import ChristmasTrees from "../../components/ChristmasTrees.astro";
+import "../../styles/christmas.css";
+import { withBase } from "../../lib/urls";
+import { ordinalDateFormatter } from "../../lib/dates";
+
+const entry = await getEntry("events", "christmas-fayre-2026");
+if (!entry?.data.helpAreas || !entry.data.contactEmail) throw new Error("Christmas Fayre content is missing");
+const event = entry.data;
+const helpAreas = event.helpAreas!;
+const email = event.contactEmail!;
+const dateFormatter = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
+const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
+const mailto = `mailto:${email}?subject=${encodeURIComponent("Helping at the Christmas Fayre")}`;
+
+const icons = {
+  funzone: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM8.500 8.500h.01M15.500 8.500h.01M12 12h.01M8.500 15.500h.01M15.500 15.500h.01",
+  craft: "M6 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM20 4L8.100 15.900M14.500 14.500L20 20M8.100 8.100L12 12",
+  cafe: "M17 8h1a4 4 0 0 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4zM6 2v3M10 2v3M14 2v3",
+  photo: "M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7z",
+  tombola: "M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2 0-4-1-4-2.500S10.500 3 12 7zM12 7c2 0 4-1 4-2.500S13.500 3 12 7z",
+  tokens: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.500v9M9.500 10h4a1.500 1.500 0 0 1 0 3h-3a1.500 1.500 0 0 0 0 3H15",
+  sparkle: "M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800zM19 16l.8 2.200L22 19l-2.200.8L19 22l-.8-2.200L16 19l2.200-.8z",
+};
+
+const flakes = Array.from({ length: 28 }, (_, i) => ({
+  x: (i * 37 + 11) % 100,
+  size: 10 + ((i * 5) % 9),
+  duration: 11 + ((i * 7) % 10),
+  delay: -((i * 3.300) % 20),
+  y: (i * 29 + 7) % 100,
+  alpha: 0.55 + ((i * 11) % 4) * 0.1,
+}));
+
+const eventJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: event.title,
+  description: "A magical Christmas afternoon for the Ashley school community, organised by The Friends of Ashley.",
+  startDate: event.start.toISOString(),
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  location: { "@type": "Place", name: event.location, address: { "@type": "PostalAddress", addressLocality: "Walton-on-Thames", addressCountry: "GB" } },
+  organizer: { "@type": "Organization", name: "The Friends of Ashley", url: new URL(withBase("/"), Astro.site).href },
+};
+---
+<BaseLayout title={event.title} description="Something magical is coming. Help host the Ashley Christmas Fayre: join a slot with your friends, no experience needed." bodyClass="xmas-theme">
+  <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
+  <div class="xmas-stage">
+    <div class="xmas-snow" aria-hidden="true">
+      {flakes.map((f) => <i style={`--x:${f.x}%;--y:${f.y}%;--size:${f.size}px;--dur:${f.duration}s;--delay:${f.delay}s;--alpha:${f.alpha}`}></i>)}
+    </div>
+
+    <section class="xmas-hero" aria-labelledby="xmas-title">
+      <ChristmasBaubles />
+      <div class="site-width">
+        <div class="xmas-frame xmas-hero__frame">
+          <p class="xmas-kicker">Something magical is coming…</p>
+          <h1 id="xmas-title">{event.title}</h1>
+          <p class="xmas-hero__lead">And we need you!</p>
+          <p class="xmas-hero__intro">This year we’re trying something new to make helping out easier, more social and more fun for everyone.</p>
+          <dl class="xmas-facts">
+            <div><dt>When</dt><dd>{dateFormatter(event.start)}, {timeFormatter.format(event.start)}</dd></div>
+            <div><dt>Where</dt><dd>{event.location}</dd></div>
+            <div><dt>Led by</dt><dd>{event.lead}</dd></div>
+          </dl>
+          <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="xmas-section" aria-labelledby="xmas-areas-title">
+      <div class="site-width">
+        <h2 id="xmas-areas-title">Where we need friendly faces</h2>
+        <p class="xmas-section__lead">Instead of assigning stalls to year groups, anyone across the school can join in anywhere. Sign up for a slot alongside your friends and help with whatever you’re best at. Right now we’re looking for helpers (pairs welcomed!) to host our key areas:</p>
+        <ul class="xmas-areas">
+          {helpAreas.map((area) => (
+            <li class="xmas-area">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={icons[area.icon]}></path></svg>
+              <span>{area.name}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="xmas-notes">
+          <h3>Good to know</h3>
+          <ul class="xmas-points">
+            <li><strong>Join in anywhere.</strong> Open to everyone at school.</li>
+            <li><strong>Bring a friend.</strong> Friendly faces wanted; pairs welcome.</li>
+            <li><strong>No experience needed.</strong> You won’t be doing it alone. We’ll help with everything on the day.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="xmas-section xmas-section--last" aria-labelledby="xmas-contact-title">
+      <div class="site-width xmas-narrow">
+        <div class="xmas-frame xmas-contact">
+          <div class="xmas-contact__copy">
+            <h2 id="xmas-contact-title">Get in touch</h2>
+            <p>Email <a class="xmas-link" href={mailto}>{email}</a> or chat with the team in the playground to find out more and to sign up.</p>
+          </div>
+          <ChristmasTrees />
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

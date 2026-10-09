@@ -1,0 +1,578 @@
+/* Christmas Fayre: poster-inspired festive page.
+   Scoped to body.xmas-theme. Decoration is CSS only (no client JavaScript). */
+
+body.xmas-theme {
+  --xm-night: #08241a;
+  --xm-green: #0f3a27;
+  --xm-green-light: #17503a;
+  --xm-gold: #d9a93f;
+  --xm-gold-light: #f3d27c;
+  --xm-gold-dim: rgba(217, 169, 63, 0.55);
+  --xm-cream: #f7edd3;
+  --xm-snow: #ffffff;
+  background: var(--xm-night);
+}
+
+body.xmas-theme::before {
+  display: none;
+}
+
+.xmas-theme .site-footer {
+  border-top: 3px solid var(--xm-gold);
+}
+
+/* Stage: deep green night sky with faint stars */
+.xmas-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--xm-cream);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0 1px, transparent 1.8px) 0 0 / 113px 127px,
+    radial-gradient(circle, rgba(243, 210, 124, 0.5) 0 1px, transparent 1.8px) 47px 61px / 157px 139px,
+    radial-gradient(circle, rgba(255, 255, 255, 0.35) 0 0.8px, transparent 1.5px) 79px 23px / 71px 89px,
+    linear-gradient(#0c2f20 0%, #08241a 55%, #061c14 100%);
+}
+
+/* Snowfall: a viewport-height layer that stays in view while scrolling */
+.xmas-snow {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  margin-bottom: -100vh;
+  margin-bottom: -100svh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.xmas-snow i {
+  --flake: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath transform=%22rotate%280 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%2860 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28120 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28180 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28240 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28300 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3C/svg%3E");
+  position: absolute;
+  top: -20px;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  opacity: var(--alpha);
+  animation: xmas-fall var(--dur) linear var(--delay) infinite;
+  will-change: transform;
+}
+
+.xmas-snow i::before {
+  position: absolute;
+  inset: 0;
+  background: var(--flake) center / contain no-repeat;
+  content: "";
+  animation: xmas-spin calc(var(--dur) * 0.8) linear var(--delay) infinite;
+}
+
+.xmas-snow i:nth-child(even) {
+  --flake: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath transform=%22rotate%280 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%2860 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28120 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28180 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28240 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28300 12 12%29%22 d=%22M12 12V1.5M9.4 6.6L12 4l2.6 2.6M9.4 10.1L12 7.5l2.6 2.6%22/%3E%3C/svg%3E");
+}
+
+@keyframes xmas-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes xmas-fall {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 110vh, 0);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .xmas-snow i:nth-child(n + 15) {
+    display: none;
+  }
+}
+
+.xmas-hero,
+.xmas-section {
+  position: relative;
+  z-index: 2;
+}
+
+/* Hanging baubles and stars */
+.xmas-baubles {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xmas-baubles li {
+  position: relative;
+  flex: 1 1 0;
+  height: 5.5rem;
+}
+
+.xmas-baubles__string {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: var(--len);
+  background: rgba(243, 210, 124, 0.7);
+}
+
+.xmas-baubles__item {
+  position: absolute;
+  top: var(--len);
+  left: 50%;
+  transform-origin: 50% -1px;
+  animation: xmas-sway 3s ease-in-out calc(var(--i) * -0.6s) infinite alternate;
+}
+
+.xmas-baubles__ball {
+  width: var(--d);
+  height: var(--d);
+  margin-left: calc(var(--d) / -2);
+  border-radius: 50%;
+}
+
+.xmas-baubles__ball::before {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 9px;
+  height: 8px;
+  margin-left: -4.5px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(90deg, #a97d22, #f3d27c, #a97d22);
+  content: "";
+}
+
+.xmas-baubles__ball::after {
+  position: absolute;
+  top: 16%;
+  left: 22%;
+  width: 26%;
+  height: 20%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  content: "";
+  filter: blur(1px);
+  transform: rotate(-30deg);
+}
+
+.xmas-baubles__ball--red { background: radial-gradient(circle at 35% 30%, #ff9a8c, #d6322a 45%, #7d0f0f); }
+.xmas-baubles__ball--gold { background: radial-gradient(circle at 35% 30%, #fff1b8, #d9a93f 50%, #80581a); }
+.xmas-baubles__ball--green { background: radial-gradient(circle at 35% 30%, #a8f0c2, #2f9a5e 50%, #0e4a2a); }
+.xmas-baubles__ball--blue { background: radial-gradient(circle at 35% 30%, #c4e2ff, #3b83d4 50%, #143a78); }
+
+.xmas-baubles__star {
+  margin-left: -0.7rem;
+  color: var(--xm-gold-light);
+  font-size: 1.4rem;
+  line-height: 1;
+  text-shadow: 0 0 0.5rem var(--xm-gold-light);
+}
+
+.xmas-baubles__star::before {
+  content: "\2605";
+}
+
+@keyframes xmas-sway {
+  from {
+    transform: rotate(-4deg);
+  }
+
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .xmas-baubles li:not(:nth-child(3n + 2)) {
+    display: none;
+  }
+}
+
+/* Ornate gold frame, echoing the poster border */
+.xmas-frame {
+  position: relative;
+  border: 2px solid var(--xm-gold);
+  border-radius: 0.5rem;
+  background: linear-gradient(rgba(15, 58, 39, 0.9), rgba(10, 42, 29, 0.92));
+  box-shadow:
+    inset 0 0 0 6px #0c2f20,
+    inset 0 0 0 7px var(--xm-gold-dim),
+    0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.xmas-frame::before,
+.xmas-frame::after {
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--xm-gold);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.xmas-frame::before {
+  top: -0.4rem;
+  left: -0.4rem;
+}
+
+.xmas-frame::after {
+  right: -0.4rem;
+  bottom: -0.4rem;
+}
+
+/* Hero */
+.xmas-hero {
+  padding: 0 0 clamp(1.2rem, 4vw, 2.2rem);
+}
+
+.xmas-hero .site-width {
+  padding-top: 0.5rem;
+}
+
+.xmas-hero__frame {
+  max-width: 52rem;
+  margin-inline: auto;
+  padding: clamp(1.2rem, 4vw, 2.2rem) clamp(1.2rem, 5vw, 3rem);
+  text-align: center;
+}
+
+.xmas-kicker {
+  margin: 0 0 0.5rem;
+  color: var(--xm-gold-light);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3.6vw, 1.35rem);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.xmas-theme h1,
+.xmas-theme h2 {
+  margin: 0;
+  color: var(--xm-gold-light);
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .xmas-theme h1 {
+    background: linear-gradient(180deg, #fbe7a6 0%, #d9a93f 60%, #b8872a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.xmas-theme h1 {
+  font-size: clamp(2.2rem, 8.5vw, 4rem);
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.xmas-hero__lead {
+  margin: 0.4rem 0 0;
+  color: var(--xm-snow);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 5vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.xmas-hero__intro {
+  max-width: 34rem;
+  margin: 0.6rem auto 0;
+  font-size: clamp(1rem, 3.4vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.xmas-facts {
+  display: grid;
+  gap: 0.5rem 2.4rem;
+  margin: 1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--xm-gold-dim);
+}
+
+@media (min-width: 40rem) {
+  .xmas-facts {
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+  }
+}
+
+.xmas-facts div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 0.6rem;
+  justify-content: center;
+  align-items: baseline;
+}
+
+@media (min-width: 40rem) {
+  .xmas-facts div {
+    display: grid;
+    gap: 0.1rem;
+  }
+}
+
+.xmas-facts dt {
+  color: var(--xm-gold-light);
+  font-size: clamp(0.85rem, 2.6vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.xmas-facts dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 4.4vw, 1.85rem);
+  line-height: 1.2;
+}
+
+.xmas-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 1.2rem 0 0;
+}
+
+/* Sections */
+.xmas-section {
+  padding: clamp(1.2rem, 4vw, 2.2rem) 0;
+}
+
+.xmas-section--last {
+  padding-bottom: clamp(1.8rem, 5vw, 3rem);
+}
+
+.xmas-narrow {
+  max-width: 52rem;
+}
+
+.xmas-theme h2 {
+  font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+  line-height: 1.12;
+  text-align: center;
+}
+
+.xmas-theme h2::after {
+  display: block;
+  width: 5rem;
+  height: 2px;
+  margin: 0.5rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--xm-gold), transparent);
+  content: "";
+}
+
+.xmas-section__lead {
+  max-width: 40rem;
+  margin: 0.8rem auto 0;
+  font-size: clamp(1rem, 3.4vw, 1.15rem);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.xmas-link {
+  color: var(--xm-gold-light);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-underline-offset: 0.25rem;
+}
+
+.xmas-link:hover {
+  color: var(--xm-snow);
+}
+
+.xmas-theme :focus-visible {
+  outline: 3px solid var(--xm-gold-light);
+  outline-offset: 3px;
+}
+
+/* Reminders: plain ticked notes, deliberately unlike the framed activity cards */
+.xmas-notes {
+  max-width: 44rem;
+  margin: 1.6rem auto 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--xm-gold-dim);
+}
+
+.xmas-theme .xmas-notes h3 {
+  margin: 0 0 0.6rem;
+  color: var(--xm-gold-light);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.xmas-points {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xmas-points li {
+  position: relative;
+  padding-left: 1.8rem;
+  line-height: 1.5;
+}
+
+.xmas-points li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--xm-gold-light);
+  font-weight: 800;
+  content: "\2713";
+}
+
+.xmas-points strong {
+  color: var(--xm-gold-light);
+  font-family: var(--font-display);
+}
+
+/* Areas to help with */
+.xmas-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  max-width: 62rem;
+  margin: 1.2rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xmas-area {
+  display: flex;
+  flex: 0 0 calc(50% - 0.4rem);
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 0.5rem;
+  border: 1px solid var(--xm-gold);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(rgba(23, 80, 58, 0.7), rgba(15, 58, 39, 0.7));
+  box-shadow: inset 0 0 0 4px rgba(8, 36, 26, 0.9), inset 0 0 0 5px var(--xm-gold-dim);
+  color: var(--xm-gold-light);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.xmas-area svg {
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+@media (min-width: 40rem) {
+  .xmas-area {
+    flex-basis: calc(33.333% - 0.6rem);
+    flex-direction: column;
+    padding-block: 1.1rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 62rem) {
+  .xmas-area {
+    flex-basis: calc(25% - 0.6rem);
+  }
+}
+
+.xmas-area svg {
+  color: var(--xm-snow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .xmas-area {
+    transition: transform 200ms ease, border-color 200ms ease;
+  }
+
+  .xmas-area:hover {
+    border-color: var(--xm-gold-light);
+    transform: translateY(-3px);
+  }
+}
+
+/* Contact */
+.xmas-contact {
+  display: grid;
+  gap: 1rem;
+  align-items: end;
+  padding: clamp(1.2rem, 4vw, 2rem) clamp(1.2rem, 5vw, 2.4rem) 0;
+  overflow: hidden;
+}
+
+.xmas-contact h2,
+.xmas-contact h2::after {
+  text-align: left;
+  margin-left: 0;
+}
+
+.xmas-contact h2::after {
+  background: linear-gradient(90deg, var(--xm-gold), transparent);
+}
+
+.xmas-contact__copy p {
+  margin: 0.8rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.65;
+}
+
+
+.xmas-trees {
+  width: min(9rem, 50%);
+  height: auto;
+  justify-self: end;
+  margin-right: -0.5rem;
+}
+
+@media (min-width: 40rem) {
+  .xmas-contact {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.6rem;
+  }
+
+  .xmas-trees {
+    width: 11rem;
+    margin-right: 0;
+  }
+
+  .xmas-contact__copy {
+    padding-bottom: 1.6rem;
+  }
+
+}
+
+/* Reduced motion: flakes and baubles stay put */
+@media (prefers-reduced-motion: reduce) {
+  .xmas-snow i {
+    top: var(--y);
+    animation: none;
+    will-change: auto;
+  }
+
+  .xmas-snow i::before {
+    animation: none;
+  }
+
+  .xmas-baubles__item {
+    animation: none;
+  }
+}

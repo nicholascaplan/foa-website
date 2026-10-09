@@ -40,6 +40,11 @@ const events = defineCollection({
       url: z.url(),
       shifts: z.array(z.object({ label: z.string(), when: z.string(), helpers: z.number().int().positive() })),
     })).optional(),
+    contactEmail: z.email().optional(),
+    helpAreas: z.array(z.object({
+      name: z.string(),
+      icon: z.enum(["funzone", "craft", "cafe", "photo", "tombola", "tokens", "sparkle"]),
+    })).optional(),
     reviewed: z.coerce.date().optional(),
   }),
 });

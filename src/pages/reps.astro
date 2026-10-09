@@ -14,7 +14,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-GB", {
 const messages = [
   { month: "NOV", day: "05", title: "Fireworks on the Field", body: "The FOA Fireworks is on Thursday 5th November, 16:30-18:30, with the quiet display at 17:00 and main display at 18:00. Tickets are £8.50 per person; under-2s are free.", timing: fireworks, ticketUrl: fireworks?.ticketUrl, href: "/events/fireworks-2026/" },
   { month: "NOV", day: "06", title: "Pre-loved uniform", body: `The next sale is Friday 6th November${uniform?.end ? `, ${timeFormatter.format(uniform.start)}–${timeFormatter.format(uniform.end)}` : " at 15:25"}, in the school playground. The final sale of term is Friday 4th December at 15:25. New-logo items and coats are £3; all other items are £1. Card only.`, timing: uniform, href: "/uniform/" },
-  { month: "DEC", day: "05", title: "Christmas Fayre", body: "Save the date: Saturday 5th December. Rachel and Sophie are leading this year's Fayre.", href: "/whats-on/" },
+  { month: "DEC", day: "05", title: "Christmas Fayre", body: "Save the date: Saturday 5th December. Rachel and Sophie are leading this year's Fayre.", href: "/events/christmas-fayre-2026/" },
 ];
 ---
 <BaseLayout title="Reps Hub" description="Messages from The Friends of Ashley for class representatives to share.">

@@ -4,5 +4,18 @@
   "start": "2026-12-05T12:00:00+00:00",
   "location": "Ashley School",
   "status": "save-the-date",
-  "statusLabel": "Save the date"
+  "statusLabel": "Save the date",
+  "path": "/events/christmas-fayre-2026/",
+  "ctaLabel": "Help at the Fayre",
+  "lead": "Rachel and Sophie",
+  "contactEmail": "ashleyschoolchristmasfair2026@gmail.com",
+  "helpAreas": [
+    { "name": "Fun Zone", "icon": "funzone" },
+    { "name": "Craft Room", "icon": "craft" },
+    { "name": "Café", "icon": "cafe" },
+    { "name": "Photo Booth", "icon": "photo" },
+    { "name": "Tombola", "icon": "tombola" },
+    { "name": "Entrance & Tokens", "icon": "tokens" },
+    { "name": "Glitter Tattoos", "icon": "sparkle" }
+  ]
 }

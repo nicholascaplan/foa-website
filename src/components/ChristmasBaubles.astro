@@ -1,0 +1,20 @@
+---
+const colours = ["red", "gold", "green", "blue"];
+const lengths = [18, 46, 26, 56, 20, 44, 24, 52];
+const sizes = [34, 28, 38, 30, 36];
+const hangers = Array.from({ length: 20 }, (_, i) => ({
+  i,
+  star: i % 5 === 1,
+  colour: colours[i % colours.length],
+  length: lengths[i % lengths.length],
+  size: sizes[i % sizes.length],
+}));
+---
+<ul class="xmas-baubles" aria-hidden="true">
+  {hangers.map((h) => (
+    <li style={`--i:${h.i};--len:${h.length}px;--d:${h.size}px`}>
+      <i class="xmas-baubles__string"></i>
+      <i class:list={["xmas-baubles__item", h.star ? "xmas-baubles__star" : `xmas-baubles__ball xmas-baubles__ball--${h.colour}`]}></i>
+    </li>
+  ))}
+</ul>
