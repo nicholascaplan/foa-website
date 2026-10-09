@@ -13,9 +13,9 @@ const eyes = [
 ];
 const tears = [
   { x: 164, delay: "0s" },
-  { x: 164, delay: "1.1s" },
-  { x: 296, delay: "0.55s" },
-  { x: 296, delay: "1.65s" },
+  { x: 164, delay: "1.7s" },
+  { x: 296, delay: "0.85s" },
+  { x: 296, delay: "2.55s" },
 ];
 ---
 <svg class="crying-logo" viewBox="0 0 460 506" role="img" aria-label="The Friends of Ashley logo, crying">
@@ -32,7 +32,7 @@ const tears = [
       cy="480"
       rx="24"
       ry="5"
-      style={`--delay:${Number.parseFloat(tear.delay) + 1.85}s`}
+      style={`--delay:${Number.parseFloat(tear.delay) + 2.9}s`}
     />
   ))}
 
@@ -163,14 +163,14 @@ const tears = [
     .crying-logo__tear-drop {
       transform: none;
       opacity: 0;
-      animation: crying-logo-fall 2.2s ease-in 12 forwards;
+      animation: crying-logo-fall 3.4s ease-in 8 forwards;
       animation-delay: var(--delay);
     }
 
     .crying-logo__ripple {
       transform-box: fill-box;
       transform-origin: center;
-      animation: crying-logo-ripple 2.2s ease-out 12 forwards;
+      animation: crying-logo-ripple 3.4s ease-out 7 forwards;
       animation-delay: var(--delay);
     }
   }
@@ -206,7 +206,7 @@ const tears = [
   }
 
   @keyframes crying-logo-puddle-grow {
-    from { transform: scale(1); }
+    from { transform: scale(0.25, 0.35); }
     to { transform: scale(2.6, 2.9); }
   }
 </style>

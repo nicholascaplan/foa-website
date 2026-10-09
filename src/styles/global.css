@@ -2984,8 +2984,8 @@ a {
 }
 
 @media (max-width: 47.99rem) {
-  .not-found-page {
-    padding-block: 0.75rem 1.25rem;
+  .content-section.not-found-page {
+    padding-block: 0.25rem 1.25rem;
   }
 
   .not-found-page .empty-state {
@@ -2997,7 +2997,7 @@ a {
 
   .not-found-page .empty-state .crying-logo {
     max-width: 12rem;
-    margin: 0 auto -0.75rem;
+    margin: 0 auto -0.5rem;
   }
 
   .not-found-copy .eyebrow {

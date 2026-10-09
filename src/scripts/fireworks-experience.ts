@@ -208,7 +208,13 @@ function init(stage: HTMLElement) {
     // The flame canvas extends 200 head-coordinate pixels above the torch head.
     stage.style.setProperty("--fw-head-top", `${summaryTop + 200 * scale}px`);
   };
-  if (hero) new ResizeObserver(positionTorches).observe(hero);
+  // Observe the elements whose size moves the summary, not only the hero: wrapping text can shift
+  // the summary without changing the hero height, which would leave the torches stale.
+  const layoutObserver = new ResizeObserver(positionTorches);
+  for (const element of [hero, summary, stage.querySelector(".event-hero-intro"), stage.querySelector(".fw-title-copy h1")]) {
+    if (element) layoutObserver.observe(element);
+  }
+  void document.fonts?.ready.then(positionTorches);
   mobile.addEventListener("change", positionTorches);
   positionTorches();
 
