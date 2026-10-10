@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile, stat } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 
@@ -7,25 +7,25 @@ const dist = path.resolve("dist");
 const siteUrl = (process.env.SITE_URL || "https://example.com").replace(/\/$/, "");
 const basePath = (process.env.BASE_PATH || "/").replace(/\/$/, "");
 
-const publicRoutes = [
-  "/",
-  "/whats-on/",
-  "/get-involved/",
-  "/uniform/",
-  "/about/",
-  "/fundraising/",
-  "/committee/",
-  "/reps/",
-  "/newsletter/",
-  "/meeting-minutes/",
-  "/contact/",
-  "/privacy/",
-  "/events/fireworks-2026/",
-  "/fireworks-volunteering/",
-  "/events/christmas-fayre-2026/",
-];
+// Every built HTML page is checked unless it has an explicit reason not to be indexed.
+const excluded = new Set([
+  "/playground.html", // hidden, noindex contact prototype; checked separately below
+  "/404.html", // error page, not a sitemap entry; checked separately below
+]);
 
-const htmlFor = (route) => path.join(dist, route.replace(/^\//, ""), "index.html");
+const discoverRoutes = async (directory = dist, prefix = "") => {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(entries.map((entry) => {
+    if (entry.isDirectory()) return discoverRoutes(path.join(directory, entry.name), `${prefix}/${entry.name}`);
+    if (entry.name === "index.html") return [`${prefix}/`];
+    return entry.name.endsWith(".html") ? [`${prefix}/${entry.name}`] : [];
+  }));
+  return nested.flat();
+};
+
+const publicRoutes = (await discoverRoutes()).filter((route) => !excluded.has(route)).sort();
+
+const htmlFor = (route) => path.join(dist, route.replace(/^\//, ""), route.endsWith("/") ? "index.html" : "");
 const read = (file) => readFile(file, "utf8");
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
@@ -36,14 +36,11 @@ const canonicalOf = (html) =>
   attribute(tagsOf(html, "link").find((tag) => attribute(tag, "rel") === "canonical") ?? "", "href");
 const exists = async (file) => stat(file).then(() => true, () => false);
 
-test("every expected public route is generated", async () => {
-  const missing = [];
-  for (const route of publicRoutes) {
-    if (!(await exists(htmlFor(route)))) missing.push(route);
+test("public routes are discovered from the build, including the homepage", () => {
+  assert.ok(publicRoutes.includes("/"), "the build must include the homepage");
+  for (const route of excluded) {
+    assert.ok(!publicRoutes.includes(route), `${route} must be checked separately`);
   }
-  if (!(await exists(path.join(dist, "404.html")))) missing.push("/404.html");
-
-  assert.deepEqual(missing, [], "routes missing from the build");
 });
 
 test("public pages declare language, one h1, one main landmark, a title and a description", async () => {

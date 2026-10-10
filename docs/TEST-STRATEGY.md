@@ -66,7 +66,7 @@ Continue using Node's built-in test runner against `dist/`. These tests are fast
 - Every expected public route is generated.
 - Every generated internal link, stylesheet, script and local asset resolves.
 - Main navigation destinations are present on public pages.
-- Required metadata is present and canonical URLs respect `SITE_URL` and `BASE_PATH`.
+- Required metadata is present and canonical URLs respect `SITE_URL` and `BASE_PATH`. `tests/metadata.test.mjs` discovers HTML routes recursively from `dist/`, including standalone `.html` pages, so new pages receive metadata, social-image and exact sitemap-membership checks automatically. Only the playground and 404 pages are excluded from these public-route checks; both have separate assertions.
 - Sitemap, robots output and the no-indexed playground behaviour are correct.
 - Event structured data is valid JSON and contains the confirmed source fields.
 - Important collection-driven ordering and separation rules hold, such as upcoming versus archived events and latest versus previous newsletters.
@@ -162,7 +162,7 @@ Recommended cadence:
 - Before launch and after changes to shared CSS, navigation or interactions: Chromium plus WebKit, Firefox and manual mobile review.
 - Scheduled or pre-launch: dependency audit, deployed-site link check and mobile performance run.
 
-Pin the Node version used locally and in CI when project tooling is formalised. Cache Playwright browser downloads in CI only if it materially improves build time without obscuring failures.
+CI uses the latest available Node 22.x version at or above 22.18.0, which supports the default TypeScript type stripping required by the direct `src/lib/*.ts` unit-test imports. Cache Playwright browser downloads in CI only if it materially improves build time without obscuring failures.
 
 ## Coverage And Maintenance
 
