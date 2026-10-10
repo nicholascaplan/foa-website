@@ -23,30 +23,32 @@ const isCurrent = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-{!isHomepage && <>
-  <header class="site-header">
+  <header class:list={["site-header", { "site-header--home": isHomepage }]}>
     <div class="site-width header-inner">
-      <a class="brand" href={withBase("/")} aria-label="The Friends of Ashley home">
+      {isHomepage && <div class="home-introduction">
+        <img src={withBase("/brand/foa-logo.jpg")} alt="The Friends of Ashley logo" width="160" height="160">
+        <p><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></p>
+      </div>}
+      {!isHomepage && <a class="brand" href={withBase("/")} aria-label="The Friends of Ashley home">
         <img class:list={["brand-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="68" height="68">
         <span class="brand-copy"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
-      </a>
+      </a>}
       {import.meta.env.DEV && <DevMobilePreview />}
       <nav class="desktop-nav" aria-label="Primary navigation">
         {desktop.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
       </nav>
       <div class="header-actions">
         <span class="header-theme-toggle"><ThemeToggle /></span>
-        {import.meta.env.DEV && <DevMobilePreview mobile />}
-        <span class="menu-toggle-slot">
+        {!isHomepage && import.meta.env.DEV && <DevMobilePreview mobile />}
+        {!isHomepage && <span class="menu-toggle-slot">
           <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
           </button>
-        </span>
+        </span>}
       </div>
     </div>
   </header>
-  <div class="header-menu-sentinel" aria-hidden="true" data-header-menu-sentinel></div>
-</>}
+{!isHomepage && <div class="header-menu-sentinel" aria-hidden="true" data-header-menu-sentinel></div>}
 
 <style>
   @media (max-width: 47.99rem) {
@@ -77,16 +79,15 @@ const isCurrent = (href: string) =>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
 </button>}
 
-<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true" data-mobile-menu inert>
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true" data-mobile-menu inert hidden>
   <div class="mobile-menu-panel">
     <div class="mobile-menu-head">
       <img class:list={["mobile-menu-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="88" height="88">
-      <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>
+      <div class="mobile-menu-controls">
+        <span class="mobile-menu-theme"><ThemeToggle /></span>
+        <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>
+      </div>
       <p class="mobile-menu-name"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></p>
-    </div>
-    <div class="mobile-menu-theme">
-      <span>Night Mode</span>
-      <ThemeToggle />
     </div>
     <nav aria-label="Mobile navigation">
       {desktop.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
@@ -104,29 +105,22 @@ const isCurrent = (href: string) =>
 
   const setMenu = (open: boolean) => {
     if (!menu || !openButton) return;
+    menu.hidden = !open;
     menu.classList.toggle("is-open", open);
     menu.setAttribute("aria-hidden", String(!open));
     menu.inert = !open;
     openButton.setAttribute("aria-expanded", String(open));
     document.body.classList.toggle("menu-open", open);
     if (open) {
-      // Wait for the open state to reach rendering, then flush styles before focusing.
-      requestAnimationFrame(() => {
-        if (menu.classList.contains("is-open")) {
-          menu.getBoundingClientRect();
-          if (getComputedStyle(menu).visibility === "visible") {
-            closeButton?.focus({ preventScroll: true });
-          }
-        }
-      });
+      // Flush the close button's rendered state after removing hidden and inert.
+      // Focus must not depend on an animation frame or a visibility transition.
+      closeButton?.getBoundingClientRect();
+      closeButton?.focus({ preventScroll: true });
     } else openButton.focus({ preventScroll: true });
   };
 
   openButton?.addEventListener("click", () => setMenu(true));
   closeButton?.addEventListener("click", () => setMenu(false));
-  window.addEventListener("foa:reset-cookie-preferences", () => {
-    if (menu?.classList.contains("is-open")) setMenu(false);
-  });
   menu?.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target === menu || target.closest("a")) setMenu(false);

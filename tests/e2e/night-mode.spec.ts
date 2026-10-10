@@ -8,8 +8,7 @@ const nightBackground = "rgb(23, 36, 29)";
 const menuToggleOf = (page: Page) => page.locator(".mobile-menu [data-theme-toggle]");
 const headerToggleOf = (page: Page) => page.locator(".site-header [data-theme-toggle]");
 const themeToggleIsInMenu = async (page: Page) =>
-  (await page.locator(".site-header").count()) === 0
-  || page.evaluate(() => window.matchMedia("(max-width: 47.99rem)").matches);
+  !(await headerToggleOf(page).isVisible());
 const themeToggleOf = async (page: Page) => {
   const inMenu = await themeToggleIsInMenu(page);
   return inMenu ? menuToggleOf(page) : headerToggleOf(page);
@@ -62,6 +61,25 @@ test("the theme is applied before the page body so there is no flash", async ({ 
   const html = await (await page.goto("/"))!.text();
   expect(html.indexOf("data-theme-initializer")).toBeGreaterThan(-1);
   expect(html.indexOf("data-theme-initializer")).toBeLessThan(html.indexOf("<body"));
+});
+
+test("mobile Night Mode sits beside the close button without a labelled row", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
+  await page.goto("/");
+  await openMenu(page);
+  const toggle = menuToggleOf(page);
+  const close = page.getByRole("button", { name: "Close menu" });
+  await expect(toggle).toBeVisible();
+  await expect(page.locator(".mobile-menu-theme")).toHaveText("");
+  const toggleBox = await toggle.boundingBox();
+  const closeBox = await close.boundingBox();
+  expect(toggleBox).not.toBeNull();
+  expect(closeBox).not.toBeNull();
+  expect(toggleBox!.x + toggleBox!.width).toBeLessThanOrEqual(closeBox!.x);
+  expect(Math.abs(toggleBox!.y + toggleBox!.height / 2 - closeBox!.y - closeBox!.height / 2)).toBeLessThanOrEqual(1);
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
 });
 
 test("the toggle is keyboard accessible, remembered, and independent of cookie consent", async ({ page }) => {
@@ -148,7 +166,7 @@ test.describe("without JavaScript", () => {
   test("the page stays in Day Mode and the unusable toggle is not shown", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
-    await expect(page.locator("[data-theme-toggle]")).toBeHidden();
+    for (const toggle of await page.locator("[data-theme-toggle]").all()) await expect(toggle).toBeHidden();
   });
 });
 
@@ -178,7 +196,7 @@ for (const width of [320, 390, 1440]) {
             overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
             target: Math.min(toggle.width, toggle.height),
             insideHeader: insideMenu || Boolean(header && toggle.top >= header.top && toggle.bottom <= header.bottom && toggle.left >= 0 && toggle.right <= window.innerWidth),
-            sameRow: insideMenu || Boolean(brand && toggle.top < brand.bottom && toggle.bottom > brand.top),
+            sameRow: insideMenu || Boolean(!brand || (toggle.top < brand.bottom && toggle.bottom > brand.top)),
             clearOfMenu: insideMenu || menu.width === 0 || toggle.right <= menu.left || toggle.left >= menu.right,
             alteredImages: [...document.querySelectorAll<HTMLImageElement>("img")].filter((image) => getComputedStyle(image).filter !== "none").length,
           };

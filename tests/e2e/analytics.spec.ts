@@ -20,6 +20,51 @@ const dataLayer = (page: Page) =>
   page.evaluate(() => (((window as any).dataLayer ?? []) as ArrayLike<unknown>[]).map((entry) => Array.from(entry)));
 
 test.describe("Analytics consent", () => {
+  for (const width of [390, 768]) {
+    test(`the menu stays usable with unanswered consent at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      const requests = await trackAnalyticsRequests(page);
+      await page.goto("/");
+      const banner = page.locator("[data-cookie-banner]");
+      await expect(banner).toBeVisible();
+
+      await page.getByRole("button", { name: "Open menu" }).click();
+      await expect(page.getByRole("button", { name: "Close menu" })).toBeFocused();
+      await expect(banner).toBeHidden();
+      expect(await storedPreference(page)).toBeNull();
+
+      await page.keyboard.press("Escape");
+      await expect(banner).toBeVisible();
+      await page.getByRole("button", { name: "Open menu" }).click();
+      await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Uniform" }).click();
+      await expect(page).toHaveURL(/\/uniform\/$/);
+      await expect(banner).toBeVisible();
+      expect(await storedPreference(page)).toBeNull();
+      expect(requests).toEqual([]);
+    });
+  }
+
+  test("enlarged text stays inside the viewport with the menu closed and open", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await trackAnalyticsRequests(page);
+    await page.goto("/");
+    await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+    const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(await overflow()).toBeLessThanOrEqual(0);
+    expect(await page.locator(".cookie-banner, .cookie-banner-actions .button").evaluateAll((elements) =>
+      elements.every((element) => {
+        const { left, right } = element.getBoundingClientRect();
+        return left >= 0 && right <= window.innerWidth && element.scrollWidth <= element.clientWidth;
+      }),
+    )).toBe(true);
+
+    await page.getByRole("button", { name: "Open menu" }).click();
+    expect(await overflow()).toBeLessThanOrEqual(0);
+    expect(await page.locator(".mobile-menu-panel").evaluate((panel) => panel.scrollWidth - panel.clientWidth)).toBeLessThanOrEqual(0);
+    await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Uniform" }).click();
+    await expect(page).toHaveURL(/\/uniform\/$/);
+  });
+
   test("loads nothing from Google before a choice is made", async ({ page }) => {
     const requests = await trackAnalyticsRequests(page);
     await page.goto("/");

@@ -15,6 +15,7 @@ function harness() {
   const focus = [];
   const windowListeners = new Map();
   const menu = {
+    hidden: true,
     inert: true,
     classList: {
       toggle(name, enabled) { if (enabled) classes.add(name); else classes.delete(name); },
@@ -25,7 +26,16 @@ function harness() {
     addEventListener() {},
   };
   const openButton = { setAttribute() {}, addEventListener() {}, focus: () => focus.push("open") };
-  const closeButton = { addEventListener() {}, focus: () => focus.push("close") };
+  const closeButton = {
+    addEventListener() {},
+    getBoundingClientRect() {
+      assert.equal(menu.hidden, false);
+      assert.equal(menu.inert, false);
+      assert.equal(classes.has("is-open"), true);
+      return { width: 40, height: 40 };
+    },
+    focus: () => focus.push("close"),
+  };
   const window = {
     addEventListener(type, listener) { windowListeners.set(type, listener); },
   };
@@ -54,32 +64,34 @@ function harness() {
   };
 }
 
-test("menu focus waits for a render frame after the panel is revealed", () => {
+test("menu reveals and renders the close button before focusing without a queued frame", () => {
   const { menu, focus, frames, setMenu } = harness();
   setMenu(true);
   assert.equal(menu.inert, false);
-  assert.deepEqual(focus, []);
-  assert.equal(frames.length, 1);
-  frames.shift()();
+  assert.equal(menu.hidden, false);
+  assert.equal(frames.length, 0);
   assert.deepEqual(focus, ["close"]);
 });
 
-test("closing before the queued frame prevents focus returning to the hidden panel", () => {
+test("closing hides and inerts the menu with no deferred focus to steal focus back", () => {
   const { menu, focus, frames, setMenu } = harness();
   setMenu(true);
   setMenu(false);
   assert.equal(menu.inert, true);
-  frames.shift()();
-  assert.deepEqual(focus, ["open"]);
+  assert.equal(menu.hidden, true);
+  assert.equal(frames.length, 0);
+  assert.deepEqual(focus, ["close", "open"]);
 });
 
-test("resetting cookie preferences closes the open menu and returns focus", () => {
-  const { menu, focus, frames, setMenu, dispatchWindow } = harness();
+test("repeated menu opening and closing returns focus without queuing callbacks", () => {
+  const { menu, focus, frames, setMenu } = harness();
   setMenu(true);
-  dispatchWindow("foa:reset-cookie-preferences");
+  setMenu(false);
+  setMenu(true);
+  setMenu(false);
 
   assert.equal(menu.inert, true);
-  assert.deepEqual(focus, ["open"]);
-  frames.shift()();
-  assert.deepEqual(focus, ["open"]);
+  assert.equal(menu.hidden, true);
+  assert.equal(frames.length, 0);
+  assert.deepEqual(focus, ["close", "open", "close", "open"]);
 });

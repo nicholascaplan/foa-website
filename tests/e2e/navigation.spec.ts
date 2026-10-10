@@ -12,8 +12,7 @@ test("main task routes are reachable through normal navigation", async ({ page }
   ];
 
   const first = destinations[0];
-  await page.getByRole("button", { name: "Open menu" }).click();
-  await page.getByRole("navigation", { name: "Mobile navigation" })
+  await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: first.name }).click();
   await expect(page).toHaveURL(new RegExp(`${first.path}$`));
   await expect(page.getByRole("navigation", { name: "Primary navigation" })

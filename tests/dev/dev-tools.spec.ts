@@ -1,17 +1,18 @@
 import { expect, test } from "@playwright/test";
 
 test("homepage preview tools live inside the open mobile menu", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 390, height: 900 });
   await page.goto("/");
 
-  await expect(page.locator(".site-header")).toHaveCount(0);
+  await expect(page.locator(".site-header")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
   const tools = page.locator(".mobile-menu-dev-tools");
   await expect(tools).toHaveCount(1);
   await expect(tools).toBeHidden();
   await page.getByRole("button", { name: "Open menu" }).click();
   await expect(tools).toBeVisible();
-  await expect(tools.getByRole("button", { name: "Mobile preview", exact: true })).toBeVisible();
-  await expect(tools.getByRole("button", { name: "Reset cookie consent" })).toBeVisible();
+  await expect(tools.getByRole("button", { name: "Mobile preview", exact: true })).toBeHidden();
+  await expect(page.getByRole("button", { name: "Reset cookie consent" })).toHaveCount(0);
   await expect(tools.getByRole("button", { name: "Phone preview size" })).toBeVisible();
 });
 

@@ -154,10 +154,10 @@ test("production ships the responsive Night Mode theme but none of the local dev
   for (const page of ["index.html", "404.html", "uniform/index.html"]) {
     const html = await readFile(path.join(dist, page), "utf8");
     assert.equal(html.match(/data-theme-initializer/g)?.length, 1, page);
-    const expectedToggles = page === "index.html" ? 1 : 2;
+    const expectedToggles = 2;
     assert.equal(html.match(/data-theme-toggle(?!\])/g)?.length, expectedToggles, page);
     if (page === "index.html") {
-      assert.doesNotMatch(html, /<header\b[^>]*class="site-header"/, `${page} has no branded header`);
+      assert.match(html, /<header\b[^>]*class="site-header site-header--home"/, `${page} shares the introduction and desktop navigation in one header`);
       assert.match(html, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/, `${page} places Night Mode in the menu`);
     } else {
       assert.match(html, /<header\b[\s\S]*?data-theme-toggle[\s\S]*?<\/header>/, `${page} keeps the desktop control in the header`);

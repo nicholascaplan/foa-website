@@ -31,15 +31,31 @@ const focusDiagnostic = async (page: import("@playwright/test").Page) => {
 };
 
 for (const viewport of viewports) {
-  test(`${viewport.name}: the homepage starts without a header or recruitment strip and has a fixed menu`, async ({ page }) => {
+  test(`${viewport.name}: the homepage preserves desktop navigation and a mobile-only floating menu`, async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
 
-    await expect(page.locator(".site-header")).toHaveCount(0);
     await expect(page.locator(".notice-strip")).toHaveCount(0);
     await expect(page.locator(".menu-toggle")).toHaveCount(1);
     const trigger = page.locator(".menu-toggle");
+    if (viewport.width >= 1024) {
+      await expect(page.locator(".site-header")).toBeVisible();
+      await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+      await expect(trigger).toBeHidden();
+      const introduction = await page.locator(".home-introduction").boundingBox();
+      const navigation = await page.getByRole("navigation", { name: "Primary navigation" }).boundingBox();
+      expect(introduction).not.toBeNull();
+      expect(navigation).not.toBeNull();
+      expect(navigation!.y).toBeGreaterThanOrEqual(introduction!.y);
+      expect(navigation!.y + navigation!.height).toBeLessThanOrEqual(introduction!.y + introduction!.height);
+      expect(navigation!.x).toBeGreaterThanOrEqual(introduction!.x + introduction!.width);
+      await page.evaluate(() => window.scrollTo(0, 800));
+      await expect(trigger).toBeHidden();
+      return;
+    }
+    await expect(page.locator(".site-header")).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
     await expect(trigger).toBeVisible();
     await expect(trigger).toHaveCSS("position", "fixed");
 
@@ -56,6 +72,12 @@ for (const viewport of viewports) {
     expect(triggerStyle.left).toBeGreaterThan(viewport.width / 2);
     expect(triggerStyle.right).toBeLessThanOrEqual(viewport.width);
     expect(triggerStyle.opaque).toBe(true);
+    const introduction = await page.locator(".home-introduction").boundingBox();
+    const introductionTitle = await page.locator(".home-introduction strong").boundingBox();
+    expect(introduction).not.toBeNull();
+    expect(introductionTitle).not.toBeNull();
+    expect(Math.abs(introduction!.y - triggerStyle.top)).toBeLessThanOrEqual(1);
+    expect(introductionTitle!.x + introductionTitle!.width).toBeLessThanOrEqual(triggerStyle.left);
     await expect(page.locator(".footer-brand-home")).toHaveAttribute("href", "/");
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
     await trigger.click();
@@ -119,7 +141,7 @@ for (const viewport of viewports) {
       await expect(menuThemeToggle).toBeVisible();
       await expect(headerThemeToggle).toBeHidden();
     } else {
-      await expect(menuThemeToggle).toBeHidden();
+      await expect(menuThemeToggle).toBeVisible();
       await expect(headerThemeToggle).toBeVisible();
     }
     expect(await page.evaluate(() => window.scrollY)).toBe(retainedScroll);
@@ -146,6 +168,10 @@ for (const viewport of viewports) {
     const focusable = page.locator("[data-mobile-menu] a[href], [data-mobile-menu] button:not([disabled])");
     await page.evaluate(() => window.scrollTo(0, 800));
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(400);
+    // The scroll position updates before IntersectionObserver reveals the desktop trigger.
+    // Wait for floating placement so click auto-scrolling cannot bring the header back.
+    await expect(trigger).toHaveCSS("position", "fixed");
+    await expect(trigger).toBeVisible();
     await trigger.click();
     await expect(closeButton, await focusDiagnostic(page)).toBeFocused();
     expect(await focusable.count()).toBeGreaterThan(1);
@@ -159,5 +185,15 @@ for (const viewport of viewports) {
     await page.keyboard.press("Escape");
     await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "true");
     await expect(trigger).toBeFocused();
+  });
+}
+
+for (const width of [1023, 1024]) {
+  test(`${width}px: homepage navigation switches at the desktop breakpoint`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const desktop = width >= 1024;
+    await expect(page.getByRole("navigation", { name: "Primary navigation", includeHidden: true })).toBeVisible({ visible: desktop });
+    await expect(page.locator(".menu-toggle")).toBeVisible({ visible: !desktop });
   });
 }

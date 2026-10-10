@@ -25,6 +25,7 @@ Read the brief before substantial design, content or architecture work.
 - Warm modern editorial community noticeboard; mobile-first with deliberate desktop layouts.
 - Prioritise current events and practical parent tasks. Do not make the public site feel like a SaaS dashboard.
 - Primary navigation: Home, What's On, Fundraising, Get Involved, Uniform. Newsletter also appears in the desktop header and mobile menu, between Home and What's On.
+- The homepage must retain full desktop navigation (64rem and up). Its burger is mobile-only; do not replace desktop navigation with a floating menu. On narrower homepage views, align the introduction with the burger without an empty strip above it.
 - Heritage green is primary; amber is mainly for events and celebration.
 - Ticket purchases use an external provider. Auctions, parent accounts and unmoderated publishing are out of scope.
 

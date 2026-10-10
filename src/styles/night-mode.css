@@ -38,6 +38,10 @@
   border-bottom-color: var(--line);
 }
 
+:root[data-theme="night"] .site-header--home {
+  background: transparent;
+}
+
 :root[data-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-poster-link:not(.event-feature--poster *)) {
   border-color: var(--line);
 }

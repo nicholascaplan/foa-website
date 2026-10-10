@@ -167,6 +167,22 @@ a {
   gap: 1.5rem;
 }
 
+.site-header--home {
+  border-bottom: 0;
+  background: transparent;
+}
+
+.site-header--home .header-inner {
+  padding-block: max(1rem, env(safe-area-inset-top, 0px)) 0;
+  gap: 1rem;
+}
+
+.site-header--home .home-introduction {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
 .brand {
   display: inline-flex;
   min-width: 0;
@@ -343,6 +359,7 @@ a {
   z-index: 60;
   inset: 0;
   display: grid;
+  overflow: hidden;
   visibility: hidden;
   background: rgba(11, 32, 21, 0.58);
   opacity: 0;
@@ -357,6 +374,7 @@ a {
 
 .mobile-menu-panel {
   width: min(88vw, 25rem);
+  min-width: 0;
   height: 100%;
   padding: 1.25rem;
   overflow-y: auto;
@@ -385,20 +403,10 @@ a {
   padding-bottom: 0.9rem;
   border-bottom: 1px solid var(--line);
   text-align: center;
+  flex-shrink: 0;
 }
 
 .mobile-menu-theme {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 0.65rem;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink-soft);
-  font-weight: 700;
-}
-
-.homepage .mobile-menu-theme {
   display: flex;
 }
 
@@ -409,10 +417,16 @@ a {
   border-top: 1px solid var(--line);
 }
 
-.mobile-menu-head .menu-close {
+.mobile-menu-controls {
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-menu-head .menu-close {
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -422,6 +436,7 @@ a {
   height: 6rem;
   border-radius: 50%;
   object-fit: cover;
+  margin-top: 3rem;
 }
 
 .mobile-menu-name {
@@ -434,7 +449,7 @@ a {
   color: var(--heading);
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 6vw, 1.4rem);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .mobile-menu-name span {
@@ -459,6 +474,11 @@ a {
   flex: 1;
   align-content: start;
   padding-block: 0.5rem 0;
+}
+
+.mobile-menu nav a {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .mobile-menu nav a:not(.mobile-menu-cta) {
@@ -499,7 +519,18 @@ a {
 }
 
 .homepage .hero {
-  padding-top: clamp(4.75rem, calc(3vw + 3.5rem), 6.5rem);
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+}
+
+@media (max-width: 63.99rem) {
+  .site-header--home .header-actions,
+  .site-header--home .header-inner > .dev-tools {
+    display: none;
+  }
+
+  .homepage .home-introduction {
+    padding-right: calc(3rem + max(1rem, env(safe-area-inset-right, 0px)));
+  }
 }
 
 .home-introduction {
@@ -518,6 +549,7 @@ a {
 
 .home-introduction p {
   display: grid;
+  min-width: 0;
   margin: 0;
   line-height: 1.25;
 }
@@ -527,6 +559,7 @@ a {
   font-family: var(--font-display);
   font-size: clamp(1.45rem, 3vw, 2rem);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .home-introduction span {
@@ -2040,6 +2073,7 @@ a {
   right: 1rem;
   bottom: 1rem;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   width: min(calc(100% - 2rem), 31rem);
   padding: 1.25rem;
   border: 1px solid var(--line);
@@ -2047,6 +2081,11 @@ a {
   background: var(--surface);
   box-shadow: var(--shadow);
   gap: 1rem;
+}
+
+/* Keep the modal menu above the non-blocking consent prompt without making a choice. */
+body.menu-open .cookie-banner {
+  visibility: hidden;
 }
 
 .cookie-banner .eyebrow {
@@ -2081,9 +2120,12 @@ a {
 }
 
 .cookie-banner-actions .button {
+  min-width: 0;
+  max-width: 100%;
   min-height: 2.65rem;
   padding: 0.55rem 0.85rem;
   font-size: 0.82rem;
+  overflow-wrap: anywhere;
 }
 
 /* Event page */
@@ -3406,7 +3448,7 @@ a {
     display: grid;
   }
 
-  .mobile-menu-theme {
+  .homepage .menu-toggle {
     display: none;
   }
 

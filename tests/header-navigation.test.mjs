@@ -2,13 +2,18 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Home keeps navigation and Night Mode in its menu, while interior pages add a compact header", async () => {
+test("Home shares one introduction/navigation row, while interior pages keep their compact branding", async () => {
   const homepage = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
-  assert.doesNotMatch(homepage, /<header\b[^>]*class="site-header"/);
+  assert.match(homepage, /<header\b[^>]*class="site-header site-header--home"/);
   assert.equal(homepage.match(/<button\b[^>]*\bdata-menu-toggle(?:\s|>)/g)?.length, 1);
-  assert.equal(homepage.match(/\bdata-theme-toggle(?=[\s=>])/g)?.length, 1);
+  assert.equal(homepage.match(/\bdata-theme-toggle(?=[\s=>])/g)?.length, 2);
   assert.match(homepage, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/);
-  assert.doesNotMatch(homepage, /aria-label="Primary navigation"/);
+  assert.match(homepage, /aria-label="Primary navigation"/);
+  const homeHeader = homepage.match(/<header\b[\s\S]*?<\/header>/)?.[0];
+  assert.ok(homeHeader);
+  assert.doesNotMatch(homeHeader, /class="brand"/);
+  assert.match(homeHeader, /class="home-introduction"/);
+  assert.equal(homepage.match(/class="home-introduction"/g)?.length, 1);
 
   for (const route of ["uniform/index.html", "events/fireworks-2026/index.html", "events/christmas-fayre-2026/index.html"]) {
     const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
@@ -28,7 +33,7 @@ test("Home keeps navigation and Night Mode in its menu, while interior pages add
 
 test("the homepage shows its larger introduction logo above the main headline", async () => {
   const html = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
-  const introduction = html.match(/<div class="home-introduction">[\s\S]*?<\/div>/)?.[0];
+  const introduction = html.match(/<div\b[^>]*\bclass="home-introduction"[^>]*>[\s\S]*?<\/div>/)?.[0];
   assert.ok(introduction);
   assert.match(introduction, /The Friends of Ashley/);
   assert.match(introduction, /<img[^>]*width="160"[^>]*height="160"/);

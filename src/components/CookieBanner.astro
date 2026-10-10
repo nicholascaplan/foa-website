@@ -111,7 +111,7 @@ import { withBase } from "../lib/urls";
     else disableAnalytics();
     announcePreference(savedPreference);
   } else if (!import.meta.env.DEV) {
-    // Local dev servers never prompt automatically; the dev reset button and footer link still open it.
+    // Local dev servers never prompt automatically; the footer link still opens it.
     showBanner();
   }
 
@@ -123,14 +123,4 @@ import { withBase } from "../lib/urls";
     button.addEventListener("click", showBanner);
   });
 
-  window.addEventListener("foa:reset-cookie-preferences", () => {
-    try {
-      window.localStorage.removeItem(storageKey);
-    } catch {
-      // The banner can still be reopened when browser storage is unavailable.
-    }
-    disableAnalytics();
-    announcePreference(null);
-    showBanner();
-  });
 </script>
