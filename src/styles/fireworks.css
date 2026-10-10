@@ -781,3 +781,153 @@ body.fw-theme::before {
     margin-inline: var(--fw-panel-inset);
   }
 }
+
+/* Volunteering page: same night sky and torches, with each activity on a parchment scroll. */
+.fw-theme .fw-vol .event-hero {
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+.fw-theme .fw-vol .fw-title-copy {
+  max-width: 48rem;
+}
+
+.fw-theme .fw-vol .event-hero h1 {
+  max-width: 18ch;
+  font-size: clamp(1.9rem, 7vw, 3.6rem);
+  letter-spacing: 0;
+}
+
+.fw-vol-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 1rem 0 0;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(240, 195, 90, 0.5);
+  border-radius: 999px;
+  color: var(--fw-gold-light);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fw-theme .vol-tip {
+  border-color: rgba(122, 83, 0, 0.45);
+  color: var(--fw-ink);
+  background: var(--fw-parchment-light);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.fw-theme .vol-tip svg {
+  color: #7a5300;
+}
+
+.fw-theme .vol-grid {
+  gap: calc(1.75rem + 2 * var(--fw-roll-overhang));
+  margin-top: calc(1.75rem + var(--fw-roll-overhang));
+}
+
+.fw-theme .vol-card {
+  position: relative;
+  isolation: isolate;
+  padding-top: 2.5rem;
+  padding-bottom: 2rem;
+  border: 0;
+  border-inline: 2px solid var(--fw-scroll-edge-soft);
+  border-radius: 3px;
+  color: var(--fw-ink);
+  background: radial-gradient(ellipse at 30% 0%, var(--fw-parchment-light), #e0cc96 90%);
+  box-shadow:
+    inset 0 0 30px rgba(110, 75, 20, 0.22),
+    0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.fw-theme .vol-card::before,
+.fw-theme .vol-card::after {
+  position: absolute;
+  z-index: 2;
+  right: -6px;
+  left: -6px;
+  height: 24px;
+  border: 1px solid var(--fw-scroll-edge);
+  border-radius: 50% / 24%;
+  background: var(--fw-scroll-roll);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.33);
+  content: "";
+  pointer-events: none;
+}
+
+.fw-theme .vol-card::before {
+  top: calc(-1 * var(--fw-roll-overhang));
+}
+
+.fw-theme .vol-card::after {
+  bottom: calc(-1 * var(--fw-roll-overhang));
+}
+
+.fw-theme .vol-card__group {
+  color: var(--fw-gold-light);
+  background: var(--fw-forest);
+}
+
+.fw-theme .vol-card__dates {
+  color: var(--fw-label);
+  background: rgba(176, 138, 53, 0.25);
+}
+
+.fw-theme .vol-card h3,
+.fw-theme .vol-shifts dt {
+  color: var(--fw-forest);
+}
+
+.fw-theme .vol-card > p:not(.vol-card__group, .vol-card__dates),
+.fw-theme .vol-shifts dd,
+.fw-theme .vol-shifts dd span {
+  color: var(--fw-ink-soft);
+}
+
+.fw-theme .vol-shifts > div {
+  border-top-color: rgba(38, 54, 26, 0.3);
+}
+
+.fw-theme .vol-card .button--amber {
+  border: 2px solid #7a5a14;
+  color: #1d1204;
+  background: linear-gradient(#f1c24f, #c48f22);
+}
+
+.fw-theme .vol-card .button--amber:hover {
+  background: linear-gradient(#f7d06b, #d09a2b);
+}
+
+.fw-theme .vol-back .button--secondary {
+  border: 2px solid var(--fw-gold);
+  color: var(--fw-gold-light);
+  background: rgba(5, 8, 6, 0.6);
+}
+
+.fw-theme .vol-back .button--secondary:hover {
+  color: #1d1204;
+  background: var(--fw-gold-light);
+}
+
+.fw-theme .fw-vol .vol-back {
+  margin-top: calc(2rem + var(--fw-roll-overhang));
+}
+
+/* No torches on phones: they would sit over the copy, so use the full width. */
+@media (max-width: 47.999rem) {
+  .fw-theme .fw-vol {
+    --fw-gutter: 0.75rem;
+  }
+
+  .fw-theme .fw-vol .fw-torches {
+    display: none;
+  }
+
+  .fw-theme .fw-vol .vol-grid {
+    margin-top: calc(1.75rem + var(--fw-roll-overhang));
+  }
+}
