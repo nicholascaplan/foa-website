@@ -6,6 +6,12 @@ test("enlarged homepage text keeps the menu and hero actions inside a narrow vie
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
 
   await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+  expect(await page.locator(".footer-brand-home, .footer-brand-home img, .footer-brand-home h2").evaluateAll((elements) =>
+    elements.map((element) => {
+      const { left, right } = element.getBoundingClientRect();
+      return { element: element.tagName, left, right, viewport: window.innerWidth };
+    }).filter(({ left, right, viewport }) => left < 0 || right > viewport),
+  ), "Footer branding must reflow when text is enlarged").toEqual([]);
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth - document.documentElement.clientWidth,
   )).toBeLessThanOrEqual(0);
