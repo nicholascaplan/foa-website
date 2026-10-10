@@ -637,7 +637,7 @@ body.fw-theme::before {
   border-top-color: rgba(38, 54, 26, 0.3);
 }
 
-.fw-theme .ticket-cta .ticket-tip {
+.fw-theme .ticket-tip {
   border-color: rgba(122, 83, 0, 0.45);
   background: rgba(176, 138, 53, 0.18);
 }

@@ -2112,7 +2112,7 @@ a {
   font-size: 0.9rem;
 }
 
-.ticket-cta .ticket-tip {
+.ticket-tip {
   display: flex;
   margin: 0.8rem 0 0;
   padding: 0.65rem 0.85rem;
