@@ -1,13 +1,35 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 
-const routes = [
-  "/", "/whats-on/", "/events/fireworks-2026/", "/uniform/", "/get-involved/",
-  "/committee/", "/reps/", "/meeting-minutes/", "/about/", "/contact/",
-  "/newsletter/", "/privacy/", "/404.html",
-];
+// Routes are derived from src/pages, so a new page is covered automatically.
+// Add a route to `excluded` only with a reason.
+const excluded = new Set(["playground.html.ts", "robots.txt.ts"]); // not public pages
+
+const discoverRoutes = (directory = "src/pages", prefix = ""): string[] =>
+  readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    if (entry.isDirectory()) return discoverRoutes(join(directory, entry.name), `${prefix}/${entry.name}`);
+    if (!entry.name.endsWith(".astro") || excluded.has(entry.name)) return [];
+    const name = entry.name.replace(/\.astro$/, "");
+    if (name === "index") return [`${prefix}/`];
+    return [name === "404" ? "/404.html" : `${prefix}/${name}/`];
+  });
+
+const routes = discoverRoutes().sort();
+
+// Colour transitions make computed styles lag behind a theme switch, which skews contrast scans.
+const freezeTransitions = (page: Page) => page.addStyleTag({ content: "*, *::before, *::after { transition: none !important; }" });
+
 const key = "foa-dev-night-mode";
 const toggleName = "Night Mode (local preview)";
+
+test("every page in src/pages is covered by the Night Mode scans", () => {
+  expect(routes.length).toBeGreaterThanOrEqual(15);
+  for (const route of ["/", "/fundraising/", "/fireworks-volunteering/", "/events/christmas-fayre-2026/", "/events/fireworks-2026/", "/about/", "/whats-on/", "/404.html"]) {
+    expect(routes).toContain(route);
+  }
+});
 
 test("manual choice is keyboard accessible, remembered and independent of consent", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
@@ -101,10 +123,15 @@ for (const width of [320, 390, 1440]) {
       expect(response?.status(), route).toBe(route === "/404.html" ? 404 : 200);
       const toggle = page.getByRole("button", { name: toggleName });
       await expect(toggle).toBeVisible();
+      // Fireworks and Christmas pages keep their own night-sky theme in both modes.
+      const themed = (await page.locator("body.fw-theme, body.xmas-theme").count()) > 0;
+      let dayBackground = "";
       for (const night of [false, true]) {
         if (await toggle.getAttribute("aria-pressed") !== String(night)) await toggle.click();
         await expect(toggle).toHaveAttribute("aria-pressed", String(night));
-        await expect(page.locator("body")).toHaveCSS("background-color", night ? "rgb(23, 36, 29)" : "rgb(246, 241, 231)");
+        if (!night) dayBackground = await page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor);
+        const plainBackground = night ? "rgb(23, 36, 29)" : "rgb(246, 241, 231)";
+        await expect(page.locator("body")).toHaveCSS("background-color", themed ? dayBackground : plainBackground);
         const sizes = await page.evaluate(() => {
           const header = document.querySelector(".site-header")!.getBoundingClientRect();
           const toggle = [...document.querySelectorAll<HTMLElement>("[data-dev-night-mode]")].find((button) => button.getBoundingClientRect().width > 0)!.getBoundingClientRect();
@@ -149,12 +176,13 @@ test("desktop tools sit between the home link and navigation without overlaps", 
 });
 
 for (const width of [390, 1440]) {
-  for (const route of ["/", "/events/fireworks-2026/", "/uniform/", "/get-involved/", "/committee/", "/newsletter/", "/reps/", "/privacy/"]) {
+  for (const route of routes) {
     test(`${width}px: ${route} Night Mode accessibility`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.addInitScript((storageKey) => localStorage.setItem(storageKey, "night"), key);
       await page.goto(route);
+      await freezeTransitions(page);
       await expect(page.getByRole("button", { name: toggleName })).toHaveAttribute("aria-pressed", "true");
       if (route === "/newsletter/") {
         for (const button of await page.getByRole("button", { name: /Read more/ }).all()) await button.click();
@@ -184,4 +212,56 @@ test("mobile menu and cookie controls remain accessible at enlarged scale", asyn
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
   expect((await scan()).violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
+});
+
+test("patched amber and heading accents use the Night Mode ink", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript((storageKey) => localStorage.setItem(storageKey, "night"), key);
+  await page.goto("/about/");
+  await freezeTransitions(page);
+  for (const number of await page.locator(".pillar-number").all()) await expect(number).toHaveCSS("color", "rgb(244, 211, 157)");
+  await page.goto("/get-involved/");
+  await freezeTransitions(page);
+  const badge = page.locator(".involved-badge").first();
+  await expect(badge).toBeVisible();
+  await expect(badge).toHaveCSS("color", "rgb(244, 211, 157)");
+  await expect(badge).toHaveCSS("background-color", "rgb(73, 56, 30)");
+});
+
+test("pages with their own parchment or night-sky theme look the same in both modes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const snapshot = () => page.evaluate(() => {
+    const roots = document.querySelectorAll(".event-feature--poster, .fw-event, .fw-vol, .xmas-frame");
+    return [...roots].flatMap((root) => [root, ...root.querySelectorAll("*")]).filter((element) => !element.closest(".visually-hidden")).map((element, index) => {
+      const style = getComputedStyle(element);
+      const ownText = [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim());
+      return [index, element.tagName, element.className, ownText ? style.color : "", style.backgroundColor, style.backgroundImage, style.borderTopWidth === "0px" ? "" : style.borderColor, style.boxShadow].join("|");
+    });
+  });
+  for (const route of ["/", "/events/fireworks-2026/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
+    await page.goto(route);
+    await freezeTransitions(page);
+    const toggle = page.getByRole("button", { name: toggleName });
+    const day = await snapshot();
+    expect(day.length, route).toBeGreaterThan(10);
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-pressed", "true");
+    expect(await snapshot(), route).toEqual(day);
+    await toggle.click();
+  }
+});
+
+test("mobile menu keeps visible dividers and readable links in Night Mode", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript((storageKey) => localStorage.setItem(storageKey, "night"), key);
+  await page.goto("/");
+  await freezeTransitions(page);
+  await page.getByRole("button", { name: "Reject analytics cookies" }).click();
+  await page.getByRole("button", { name: "Open menu" }).click();
+  const link = page.locator(".mobile-menu nav a:not(.button)").first();
+  await expect(link).toBeVisible();
+  await expect(link).toHaveCSS("border-bottom-color", "rgb(101, 120, 107)");
+  await expect(link).toHaveCSS("color", "rgb(238, 232, 220)");
 });

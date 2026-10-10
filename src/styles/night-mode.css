@@ -39,18 +39,22 @@
   border-bottom-color: var(--line);
 }
 
-:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-feature--poster, .event-poster-link) {
+:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-poster-link:not(.event-feature--poster *)) {
   border-color: var(--line);
 }
 
-:root[data-dev-theme="night"] :is(.button--secondary, .category-label, .attraction, .access-item) {
+:root[data-dev-theme="night"] :is(.button--secondary, .category-label, .attraction, .access-item):not(:is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) *) {
   background: var(--surface);
 }
 
-:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout) {
+:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout, .involved-badge) {
   color: var(--night-amber-ink);
   background: var(--amber-light);
   border-color: var(--amber);
+}
+
+:root[data-dev-theme="night"] .pillar-number {
+  color: var(--night-amber-ink);
 }
 
 :root[data-dev-theme="night"] .vacancy-card {
@@ -64,6 +68,20 @@
 
 :root[data-dev-theme="night"] .pattern-library {
   background: var(--amber-light);
+}
+
+/* Themed artwork (parchment scroll, fireworks and Christmas stages) keeps the Day palette, like the newsletter paper below. */
+:root[data-dev-theme="night"] :is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) {
+  color-scheme: light;
+  --ink: #193127;
+  --ink-soft: #4f6358;
+  --green: #14532d;
+  --heading: #0b3920;
+  --action-background: #14532d;
+  --action-hover: #0b3920;
+  --action-foreground: #ffffff;
+  --line: #d9d0c1;
+  --shadow: 0 18px 45px rgba(34, 58, 44, 0.09);
 }
 
 /* Paper and printed artwork stay light, with a complete local foreground palette. */
