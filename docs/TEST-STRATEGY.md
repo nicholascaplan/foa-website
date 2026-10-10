@@ -105,7 +105,7 @@ Development-only Night Mode is covered separately by `tests/dev/night-mode.spec.
 
 ### 4. Automated accessibility checks
 
-Integrate `@axe-core/playwright` into the browser suite and scan a representative set of page types:
+`tests/e2e/accessibility.spec.ts` runs `@axe-core/playwright` against **every page in the production build** (discovered from `dist/`, at desktop and 390px mobile widths), so a new route is scanned with no test edit. Only `/playground.html` is excluded, in an explicit `excluded` list. Interactive states (expanded newsletters, the open mobile menu) are scanned separately. The page types this must always cover include:
 
 - Home
 - What's On

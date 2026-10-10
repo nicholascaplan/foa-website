@@ -1787,7 +1787,7 @@ a {
 .pillar-number {
   grid-column: 1;
   align-self: baseline;
-  color: var(--amber);
+  color: #9a5400;
   font-family: var(--font-display);
   font-size: 1.1rem;
 }
@@ -3974,11 +3974,11 @@ a {
 
 .vol-card__group {
   margin: 0;
-  padding: 0.3rem 0.7rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 999px;
-  color: var(--green-dark);
-  background: var(--green-light);
-  font-size: 0.7rem;
+  color: var(--white);
+  background: var(--green);
+  font-size: 0.85rem;
   line-height: 1;
   font-weight: 800;
   letter-spacing: 0.04em;

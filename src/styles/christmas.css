@@ -364,6 +364,19 @@ body.xmas-theme::before {
   text-align: center;
 }
 
+/* The cookie banner is a light surface: keep its heading out of the gold-on-green theme. */
+.xmas-theme .cookie-banner h2 {
+  color: var(--heading);
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.xmas-theme .cookie-banner h2::after {
+  content: none;
+}
+
 .xmas-theme h2::after {
   display: block;
   width: 5rem;

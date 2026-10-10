@@ -206,3 +206,82 @@ test("all generated internal links and assets resolve", async () => {
 
   assert.deepEqual(missing, []);
 });
+
+const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+const christmas = JSON.parse(await readFile(path.resolve("src/content/events/christmas-fayre-2026.json"), "utf8"));
+const fireworks = JSON.parse(await readFile(path.resolve("src/content/events/fireworks-2026.json"), "utf8"));
+
+test("the Christmas Fayre page lists every help area from the event record", async () => {
+  const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
+  const areas = [...html.matchAll(/<li class="xmas-area">[\s\S]*?<span>([^<]*)<\/span>/g)].map((match) => match[1]);
+  assert.deepEqual(areas, christmas.helpAreas.map((area) => escapeHtml(area.name)));
+  assert.equal(areas.length, 7);
+});
+
+test("the Christmas Fayre page uses the Fayre inbox for every sign-up link, with a clear subject", async () => {
+  const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
+  const links = [...html.matchAll(/href="(mailto:[^"]+)"/g)].map((match) => match[1]);
+  assert.equal(links.length, 2);
+  for (const link of links) {
+    assert.equal(link, `mailto:${christmas.contactEmail}?subject=Helping%20at%20the%20Christmas%20Fayre`);
+  }
+  assert.match(html, new RegExp(`>${christmas.contactEmail.replace(/\./g, "\\.")}</a>`));
+});
+
+test("the Christmas Fayre page keeps reminders in a plain list, separate from the help areas", async () => {
+  const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
+  const notes = html.match(/<div class="xmas-notes">([\s\S]*?)<\/div>/)?.[1] ?? "";
+  assert.match(notes, /<h3>Good to know<\/h3>/);
+  assert.equal([...notes.matchAll(/<li>/g)].length, 3);
+  for (const reminder of ["Join in anywhere", "Bring a friend", "No experience needed"]) assert.match(notes, new RegExp(reminder));
+  assert.doesNotMatch(notes, /xmas-area/);
+});
+
+test("the Christmas Fayre page shows the date, place and lead from the event record, with decoration hidden from assistive technology", async () => {
+  const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
+  assert.match(html, /<dd>Saturday 5th December, 12:00<\/dd>/);
+  assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
+  assert.match(html, new RegExp(`<dd>${christmas.lead}</dd>`));
+  assert.equal([...html.matchAll(/<ul class="xmas-baubles" aria-hidden="true">/g)].length, 1);
+  assert.equal([...html.matchAll(/<li style="--i:\d+;/g)].length, 20);
+  assert.equal([...html.matchAll(/<i style="--x:/g)].length, 28);
+  assert.match(html, /<div class="xmas-snow" aria-hidden="true">/);
+});
+
+test("the Fireworks volunteering page shows every role, shift and sign-up link from the event record", async () => {
+  const html = await readFile(path.join(dist, "fireworks-volunteering/index.html"), "utf8");
+  assert.equal([...html.matchAll(/<li class="vol-card">/g)].length, fireworks.volunteerRoles.length);
+  for (const role of fireworks.volunteerRoles) {
+    const card = html.split('<li class="vol-card">').find((part) => part.includes(`<h3>${escapeHtml(role.name)}</h3>`));
+    assert.ok(card, `no card for ${role.name}`);
+    assert.match(card, new RegExp(`vol-card__group">${escapeHtml(role.group)}<`));
+    assert.ok(card.includes(escapeHtml(role.dates)), `${role.name}: dates`);
+    assert.ok(card.includes(escapeHtml(role.description)), `${role.name}: description`);
+    for (const shift of role.shifts) {
+      assert.ok(card.includes(`<dt>${escapeHtml(shift.label)}</dt>`), `${role.name}: ${shift.label} label`);
+      assert.ok(card.includes(escapeHtml(shift.when)), `${role.name}: ${shift.label} time`);
+      assert.match(card, new RegExp(`${shift.helpers} ${shift.helpers === 1 ? "helper" : "helpers"} per (?:slot|shift)`));
+    }
+    assert.ok(card.includes(`href="${role.url}"`), `${role.name}: sign-up link`);
+  }
+});
+
+test("Fireworks volunteering sign-ups go to Volunteer Sign Up, open safely in a new tab and say so", async () => {
+  const html = await readFile(path.join(dist, "fireworks-volunteering/index.html"), "utf8");
+  const links = [...html.matchAll(/<a class="button button--amber vol-card__action"[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]);
+  assert.equal(links.length, fireworks.volunteerRoles.length);
+  for (const link of links) {
+    assert.match(link, /href="https:\/\/volunteersignup\.org\/[A-Za-z0-9]+"/);
+    assert.match(link, /target="_blank"/);
+    assert.match(link, /rel="noopener noreferrer"/);
+    assert.match(link, /\(opens Volunteer Sign Up in a new tab\)/);
+  }
+  const urls = fireworks.volunteerRoles.map((role) => role.url);
+  assert.equal(new Set(urls).size, urls.length, "each role has its own sign-up link");
+});
+
+test("Fireworks volunteering links back to the event page and never asks for personal details", async () => {
+  const html = await readFile(path.join(dist, "fireworks-volunteering/index.html"), "utf8");
+  assert.ok(html.includes(`href="${basePath}${fireworks.path}"`));
+  assert.doesNotMatch(html, /<form|<input|type="tel"/);
+});
