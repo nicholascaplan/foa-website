@@ -24,8 +24,8 @@ test("all pages share the larger desktop introduction/navigation row and an inde
     assert.equal(html.match(/<button\b[^>]*\bdata-menu-toggle(?:\s|>)/g)?.length, 1, route);
     assert.equal(html.match(/\bdata-theme-toggle(?=[\s=>])/g)?.length, 2, route);
     assert.match(html, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/, route);
-    assert.match(html, /<a class="mobile-menu-home" href="\/" aria-label="The Friends of Ashley home">/, route);
-    assert.match(html, /aria-label="Event details"[\s\S]*?href="\/events\/fireworks-2026\/"[\s\S]*?href="\/events\/christmas-fayre-2026\/"/, route);
+    assert.match(html, /<a class="mobile-menu-home" href="\/(?:foa-website\/)?" aria-label="The Friends of Ashley home">/, route);
+    assert.match(html, /aria-label="Event details"[\s\S]*?href="\/(?:foa-website\/)?events\/fireworks-2026\/"[\s\S]*?href="\/(?:foa-website\/)?events\/christmas-fayre-2026\/"/, route);
     const menuStart = html.indexOf('id="mobile-menu"');
     assert.ok(menuStart > html.indexOf("</header>"), route);
     assert.match(html.slice(menuStart), /data-theme-toggle\b/, route);
