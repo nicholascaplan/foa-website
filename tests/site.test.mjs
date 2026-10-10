@@ -225,7 +225,7 @@ test("the Christmas Fayre page uses the Fayre inbox for every sign-up link, with
   for (const link of links) {
     assert.equal(link, `mailto:${christmas.contactEmail}?subject=Helping%20at%20the%20Christmas%20Fayre`);
   }
-  assert.match(html, />Christmas Fayre team<\/a>/);
+  assert.equal([...html.matchAll(/>Email the Fayre team <span/g)].length, 2);
 });
 
 test("the Christmas Fayre page keeps reminders in a plain list, separate from the help areas", async () => {
