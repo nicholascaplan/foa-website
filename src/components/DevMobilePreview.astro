@@ -1,6 +1,4 @@
 ---
-import DevNightModeToggle from "./DevNightModeToggle.astro";
-
 interface Props { mobile?: boolean; }
 const { mobile = false } = Astro.props;
 const sizes = [
@@ -11,17 +9,20 @@ const sizes = [
 ---
 
 <div class:list={["dev-tools", { "dev-tools--mobile": mobile }]}>
-  {!mobile && <DevNightModeToggle />}
-  {mobile ? <div class="dev-phone-sizes" role="group" aria-label="Phone preview size">
-    {sizes.map((size) => (
-      <button class:list={["dev-phone-size", `dev-phone-size--${size.icon}`]} type="button" data-mobile-preview={size.width} aria-label={`${size.label} phone preview (${size.width}px)`} aria-pressed="false" title={`${size.label} phone preview (${size.width}px)`}>
-        <svg viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <rect x="4" y="2" width="16" height="26" rx="3"></rect>
-          <path d="M9 24h6"></path>
-        </svg>
-        <span>{size.short}</span>
-      </button>
-    ))}
+  {mobile ? <div class="dev-phone-menu">
+    <button class="dev-tool-button" type="button" aria-label="Phone preview size" title="Phone preview size" aria-haspopup="true" aria-expanded="false" aria-controls="dev-phone-sizes" data-phone-menu-toggle>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+        <path d="M10.5 18.5h3"></path>
+      </svg>
+    </button>
+    <div class="dev-phone-sizes" id="dev-phone-sizes" role="group" aria-label="Phone preview size" data-phone-menu hidden>
+      {sizes.map((size) => (
+        <button class="dev-phone-size" type="button" data-mobile-preview={size.width} aria-pressed="false">
+          {size.label} phone ({size.width}px)
+        </button>
+      ))}
+    </div>
   </div> : <button class="dev-tool-button" type="button" data-mobile-preview="390" aria-label="Mobile preview" title="Mobile preview">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
       <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
@@ -49,7 +50,26 @@ const sizes = [
     preview.focus();
   };
 
+  const menuToggle = document.querySelector<HTMLButtonElement>("[data-phone-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-phone-menu]");
+  const setMenu = (open: boolean) => {
+    if (!menu || !menuToggle) return;
+    menu.hidden = !open;
+    menuToggle.setAttribute("aria-expanded", String(open));
+  };
+  menuToggle?.addEventListener("click", () => setMenu(menu?.hidden ?? false));
+  document.addEventListener("click", (event) => {
+    if (menu && !menu.hidden && event.target instanceof Node && !menu.contains(event.target) && !menuToggle?.contains(event.target)) setMenu(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu && !menu.hidden) {
+      setMenu(false);
+      menuToggle?.focus();
+    }
+  });
+
   buttons.forEach((button) => button.addEventListener("click", () => {
+    setMenu(false);
     const width = Number(button.dataset.mobilePreview);
     if (window.name === "foa-mobile-preview") {
       resizePreview(window, width, window.innerHeight);
@@ -100,30 +120,35 @@ const sizes = [
     background: var(--green);
   }
 
+  .dev-phone-menu {
+    position: relative;
+  }
+
   .dev-phone-sizes {
-    display: flex;
-    gap: 0.3rem;
-    min-width: 0;
-    max-width: 100%;
+    position: absolute;
+    z-index: 80;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    display: grid;
+    min-width: 12.5rem;
+    gap: 0.25rem;
+    padding: 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--surface);
+    box-shadow: var(--shadow);
   }
 
   .dev-phone-size {
-    display: flex;
-    width: 2.75rem;
-    min-width: 44px;
-    min-height: 3.25rem;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    padding: 0.3rem;
-    border: 1px solid var(--action-background);
-    border-radius: 0.625rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
     color: var(--ink);
-    background: var(--surface);
+    background: transparent;
     font: inherit;
-    font-size: 0.6875rem;
-    line-height: 1;
+    font-size: 0.9375rem;
+    text-align: left;
     cursor: pointer;
   }
 
@@ -135,12 +160,6 @@ const sizes = [
   .dev-phone-size:hover {
     border-color: var(--amber);
   }
-
-  .dev-phone-size--small svg { width: 1.0625rem; height: 1.25rem; }
-  .dev-phone-size--medium svg { width: 1.3125rem; height: 1.5rem; }
-  .dev-phone-size--large svg { width: 1.5625rem; height: 1.75rem; }
-
-  .dev-phone-size svg { max-width: 100%; }
 
   .dev-phone-size:focus-visible,
   .dev-tool-button:focus-visible {
@@ -161,6 +180,43 @@ const sizes = [
     .dev-tools--mobile {
       display: flex;
       max-width: 100%;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Dev-only header layout: tools sit between the home link and navigation, wrapping rather than overlapping. */
+  @media (min-width: 48rem) {
+    .header-inner:has(> .dev-tools) {
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      padding-block: 0.5rem;
+    }
+
+    .header-inner:has(> .dev-tools) .desktop-nav {
+      margin-inline-start: auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .header-inner:has(> .dev-tools) .header-actions:has(> .menu-toggle) {
+      margin-inline-start: auto;
+    }
+  }
+
+  /* With the full navigation showing, let the links wrap so the theme toggle stays on the same row. */
+  @media (min-width: 64rem) {
+    .header-inner:has(> .dev-tools) {
+      flex-wrap: nowrap;
+    }
+
+    .header-inner:has(> .dev-tools) .desktop-nav {
+      min-width: 0;
+      flex: 0 1 auto;
+    }
+
+    .header-inner:has(> .dev-tools) .header-actions {
+      flex: none;
     }
   }
 </style>

@@ -1,24 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { readdirSync } from "node:fs";
-import { join } from "node:path";
-
-// Routes are discovered from the production build (`dist/`), so a new page is scanned automatically.
-// Add a route to `excluded` only with a reason.
-const excluded = new Set<string>([
-  "/playground.html", // hidden, noindex contact prototype, not a public route
-]);
-
-const discoverRoutes = (directory = "dist", prefix = ""): string[] =>
-  readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    if (entry.isDirectory()) return discoverRoutes(join(directory, entry.name), `${prefix}/${entry.name}`);
-    if (entry.name === "index.html") return [`${prefix}/`];
-    return entry.name.endsWith(".html") ? [`${prefix}/${entry.name}`] : [];
-  });
-
-const routes = discoverRoutes()
-  .filter((route) => !excluded.has(route) && !route.startsWith("/_astro/"))
-  .sort();
+import { routes } from "./routes";
 
 test("every public page in the build is covered by the accessibility scans", () => {
   expect(routes.length).toBeGreaterThanOrEqual(15);

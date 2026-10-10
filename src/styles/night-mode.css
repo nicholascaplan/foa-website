@@ -1,5 +1,4 @@
-/* Included inline by DevNightMode only in local development, never in a build. */
-:root[data-dev-theme="night"] {
+:root[data-theme="night"] {
   color-scheme: dark;
   --ink: #eee8dc;
   --ink-soft: #bbc7b7;
@@ -26,52 +25,52 @@
   --night-sheet: #e7decc;
 }
 
-:root[data-dev-theme="night"] body::before {
+:root[data-theme="night"] body::before {
   background-image: radial-gradient(rgb(175 211 170 / 5%) 0.7px, transparent 0.7px);
 }
 
-:root[data-dev-theme="night"] :focus-visible {
+:root[data-theme="night"] :focus-visible {
   outline-color: var(--night-focus);
 }
 
-:root[data-dev-theme="night"] .site-header {
+:root[data-theme="night"] .site-header {
   background: var(--night-header);
   border-bottom-color: var(--line);
 }
 
-:root[data-dev-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-poster-link:not(.event-feature--poster *)) {
+:root[data-theme="night"] :is(.mobile-menu nav a, .event-list, .notice-list, .event-list-item, .notice-list-item, .past-event, .event-poster-link:not(.event-feature--poster *)) {
   border-color: var(--line);
 }
 
-:root[data-dev-theme="night"] :is(.button--secondary, .category-label, .attraction, .access-item):not(:is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) *) {
+:root[data-theme="night"] :is(.button--secondary, .category-label, .attraction, .access-item):not(:is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) *) {
   background: var(--surface);
 }
 
-:root[data-dev-theme="night"] :is(.price-tag, .sale-time, .draft-callout, .involved-badge) {
+:root[data-theme="night"] :is(.price-tag, .sale-time, .draft-callout, .involved-badge) {
   color: var(--night-amber-ink);
   background: var(--amber-light);
   border-color: var(--amber);
 }
 
-:root[data-dev-theme="night"] .pillar-number {
+:root[data-theme="night"] .pillar-number {
   color: var(--night-amber-ink);
 }
 
-:root[data-dev-theme="night"] .vacancy-card {
+:root[data-theme="night"] .vacancy-card {
   background: var(--amber-light);
   border-color: var(--amber);
 }
 
-:root[data-dev-theme="night"] :is(.member-vacancy-name strong, .member-vacancy-copy) {
+:root[data-theme="night"] :is(.member-vacancy-name strong, .member-vacancy-copy) {
   color: var(--night-amber-ink);
 }
 
-:root[data-dev-theme="night"] .pattern-library {
+:root[data-theme="night"] .pattern-library {
   background: var(--amber-light);
 }
 
 /* Themed artwork (parchment scroll, fireworks and Christmas stages) keeps the Day palette, like the newsletter paper below. */
-:root[data-dev-theme="night"] :is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) {
+:root[data-theme="night"] :is(.event-feature--poster, .fw-event, .fw-vol, .xmas-frame) {
   color-scheme: light;
   --ink: #193127;
   --ink-soft: #4f6358;
@@ -85,7 +84,7 @@
 }
 
 /* Paper and printed artwork stay light, with a complete local foreground palette. */
-:root[data-dev-theme="night"] :is(.newsletter-sheet, .newsletter-board > .section-heading) {
+:root[data-theme="night"] :is(.newsletter-sheet, .newsletter-board > .section-heading) {
   color-scheme: light;
   color: #193127;
   --ink: #193127;
@@ -100,94 +99,43 @@
   background-color: var(--night-sheet);
 }
 
-:root[data-dev-theme="night"] .newsletter-sheet {
+:root[data-theme="night"] .newsletter-sheet {
   /* Retain the existing paper texture and subtle gradient. */
   border-color: var(--line);
 }
 
-:root[data-dev-theme="night"] .newsletter-board {
+:root[data-theme="night"] .newsletter-board {
   background-color: var(--night-cork);
   border-color: var(--night-cork-frame);
 }
 
-:root[data-dev-theme="night"] .newsletter-section.newsletter-board + .newsletter-section.newsletter-board {
+:root[data-theme="night"] .newsletter-section.newsletter-board + .newsletter-section.newsletter-board {
   border-top-color: var(--night-cork-frame);
 }
 
-/* Keep preview tools usable in both themes and clear of the mobile page content. */
-.site-header .header-actions {
+/* Header controls: keep the theme toggle beside the menu button without overlapping the brand. */
+.header-actions {
   display: flex;
 }
 
-.dev-tools .dev-tool-button,
-.header-actions .dev-night-toggle {
-  width: 2.75rem;
-  height: 2.75rem;
-  flex: none;
-}
-
-.dev-night-toggle {
-  display: grid;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  place-items: center;
-  color: var(--white);
-  background: var(--green-dark);
-  cursor: pointer;
-}
-
-.dev-night-toggle svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.dev-night-toggle[aria-pressed="true"] {
-  color: var(--action-foreground);
-  background: var(--action-background);
-  border-color: var(--action-background);
-}
-
-:root[data-dev-theme="night"] .dev-tools .dev-tool-button:hover {
-  color: var(--action-foreground);
-  background: var(--action-hover);
-}
-
-@media (min-width: 48rem) {
-  .header-inner:has(> .dev-tools) {
-    flex-wrap: wrap;
-    gap: 0.75rem 1.25rem;
-    padding-block: 0.5rem;
-  }
-
-  .header-inner:has(> .dev-tools) .desktop-nav {
-    margin-inline-start: auto;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .header-inner:has(> .dev-tools) .header-actions:has(> .menu-toggle) {
-    margin-inline-start: auto;
-  }
-
-  @media (min-width: 64rem) {
-    .header-inner:has(> .dev-tools) .header-actions {
-      display: none;
-    }
-  }
-
-  .header-actions .dev-night-toggle {
-    display: none;
-  }
-}
-
 @media (max-width: 47.99rem) {
+  /* If enlarged text leaves the brand too little room, the buttons drop to their own row instead of crushing it. */
+  .header-inner {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
   .header-inner .brand {
     min-width: 0;
+    flex: 1 1 9.5rem;
   }
 
   .header-inner .brand-logo,
   .header-actions {
     flex: none;
+  }
+
+  .header-actions {
+    margin-inline-start: auto;
   }
 }

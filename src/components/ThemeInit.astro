@@ -1,0 +1,51 @@
+---
+---
+
+<script is:inline data-theme-initializer>
+  (() => {
+    const key = "foa-theme";
+    const root = document.documentElement;
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    const read = () => {
+      try {
+        const saved = localStorage.getItem(key);
+        return saved === "day" || saved === "night" ? saved : null;
+      } catch {
+        return null;
+      }
+    };
+    // Held in memory too, so a choice still applies on this page when storage is blocked.
+    let choice = read();
+    const apply = () => {
+      const night = choice ? choice === "night" : query.matches;
+      if (night) root.dataset.theme = "night";
+      else delete root.dataset.theme;
+      document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+        button.hidden = false;
+        button.setAttribute("aria-pressed", String(night));
+      });
+    };
+
+    apply();
+    document.addEventListener("DOMContentLoaded", apply, { once: true });
+    query.addEventListener("change", apply);
+    window.addEventListener("storage", (event) => {
+      if (event.key !== null && event.key !== key) return;
+      choice = read();
+      apply();
+    });
+    document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element) || !event.target.closest("[data-theme-toggle]")) return;
+      const night = root.dataset.theme !== "night";
+      choice = night ? "night" : "day";
+      try {
+        localStorage.setItem(key, choice);
+      } catch {
+        // Switching still works on this page without persistence.
+      }
+      if (night) root.dataset.theme = "night";
+      else delete root.dataset.theme;
+      apply();
+    });
+  })();
+</script>

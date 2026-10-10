@@ -35,7 +35,7 @@ npm install      # once
 npm run dev      # opens http://localhost:4321/
 ```
 
-The dev server watches for changes; stop it with `Ctrl+C`. On desktop, dev-only controls sit in the header between the logo/name home link and navigation: Night Mode, one mobile-preview icon (opens the current route at 390px), and reset cookie consent. Allow pop-ups if blocked. In the mobile top navigation, three growing phone icons labelled S / M / L (Small 360px, Medium 390px, Large 430px) resize the existing preview in place without reloading the page; its current size is highlighted. Local mobile branding uses the logo alone to fit the size controls beside Night Mode and the menu button. Browsers may restrict window resizing; browser device emulation remains the fallback. The header wraps when needed rather than covering text. The Night Mode choice is remembered locally; it defaults to Day Mode regardless of the system preference. These controls and the Night Mode preview are absent from production builds (including `npm run preview`).
+The dev server watches for changes; stop it with `Ctrl+C`. On desktop, dev-only controls sit in the header between the logo/name home link and navigation: one mobile-preview icon (opens the current route at 390px), and reset cookie consent. Allow pop-ups if blocked. In the mobile top navigation, a single phone icon opens a dropdown to choose Small (360px), Medium (390px) or Large (430px); the choice resizes the existing preview in place without reloading the page, and the current size is highlighted in the dropdown. Local mobile branding uses the logo alone to fit the size controls beside the theme toggle and the menu button. Browsers may restrict window resizing; browser device emulation remains the fallback. The header wraps when needed rather than covering text. These controls are absent from production builds (including `npm run preview`). Night Mode itself is public and is tested in the production suite.
 
 To review the production build:
 
@@ -50,7 +50,7 @@ npm run preview
 
 ```sh
 npm run verify                  # full gate used by CI: check, build, site tests, browser tests
-npm run test:dev                 # local-only Night Mode tests; starts a fresh dev server on port 4348
+npm run test:dev                 # local-only dev tool tests (phone preview, header layout); starts a fresh dev server on port 4348
 npx playwright install chromium webkit # first browser-test run only
 npm audit                       # dependency advisories
 ```

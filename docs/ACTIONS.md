@@ -56,8 +56,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 | Pin Node to 22.18+ (or later) in CI: the unit tests import `src/lib/*.ts` directly and rely on default type stripping. | Dev | None |
 | Make event-date e2e tests independent of live content: `event-dates.spec.ts` still hard-codes Welcome Tea and Fireworks dates for What's On. Decide how to retire past events first. | Dev | Decision on retiring past events |
 | Without JavaScript the mobile menu button does nothing, so the footer is the only mobile navigation. Decide whether that fallback is acceptable or the nav should render by default and collapse once JS runs. | Owner | None |
-| Night Mode visual review is done (approved 10 October 2026). Before considering public rollout, check real-device zoom and keyboard focus, and run `npm run test:dev` outside the sandbox: the browser tests added in October (all-route axe scans, themed-artwork snapshot, mobile menu colours) have not yet run. | Owner | Sandbox override for Chrome |
-| Run `npm run test:dev` outside the sandbox or with an approved Chrome-launch override. Local Chrome launch remains blocked, so the development-only Night Mode suite is still unverified. Production browser tests run in the GitHub Actions deployment gate (`npm run verify`). Connected-browser checks cover public routes, responsive headers, representative Night Mode axe scans and enlarged-text layouts; they do not replace the dev suite. | Dev | Browser-capable environment |
+| Check public Night Mode on real devices (iOS Safari and Android Chrome): zoom, keyboard focus, flash on load, and device-setting changes. The production Night Mode e2e suite passes locally. | Owner | None |
+| Run `npm run test:dev` outside the sandbox or with an approved Chrome-launch override. Local Chrome launch remains blocked, so the development-only suite (phone preview and header layout with dev controls) is still unverified. Production browser tests, including Night Mode, run in the GitHub Actions deployment gate (`npm run verify`). | Dev | Browser-capable environment |
 
 ## Later
 
@@ -68,7 +68,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 - Optional homepage fundraising enhancement: milestone ticks (25%, 50%, 75%, 100%) that light up amber as the bar passes them, with short labels such as "Halfway!". Needs FOA-approved wording. Other ideas considered: moving end-marker, progress-based message under the bar.
 - Low-priority "Inspiration" archive of past event posters (standalone page or within What's On).
 - Selective screenshot visual regression, after the visual design is approved.
-- Public Night Mode rollout (low priority; separate approval after the local preview is reviewed).
 - AI support bot for common parent/carer questions. Needs approved knowledge sources, committee ownership, privacy/safeguarding boundaries, human escalation, accessibility, cost and failure handling. Must not answer safety-critical, transactional or sensitive queries without reviewed safeguards.
 - Confirm the wording of the inclusive membership statement against the FOA constitution.
 - Confirm who is authorised to approve website content.
