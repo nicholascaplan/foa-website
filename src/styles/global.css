@@ -345,17 +345,52 @@ a {
   transform: translateX(0);
 }
 
-.mobile-menu-head {
+.mobile-menu-panel {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--line);
+  flex-direction: column;
+  padding-top: 0.75rem;
 }
 
-.mobile-menu-head strong {
+.mobile-menu-head {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  row-gap: 0.35rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.mobile-menu-head .menu-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.mobile-menu-logo {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+}
+
+.mobile-menu-name {
+  display: grid;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.mobile-menu-name strong {
+  color: var(--heading);
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: clamp(1.1rem, 6vw, 1.4rem);
+  white-space: nowrap;
+}
+
+.mobile-menu-name span {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
 }
 
 .menu-close {
@@ -372,15 +407,26 @@ a {
 
 .mobile-menu nav {
   display: grid;
-  padding-block: 1rem;
+  flex: 1;
+  align-content: start;
+  padding-block: 0.5rem 0;
 }
 
-.mobile-menu nav a {
+.mobile-menu nav a:not(.mobile-menu-cta) {
   padding: 1rem 0.25rem;
   border-bottom: 1px solid #ebe3d8;
   font-family: var(--font-display);
   font-size: 1.55rem;
   text-decoration: none;
+}
+
+.mobile-menu nav a[aria-current="page"]:not(.mobile-menu-cta) {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.mobile-menu .mobile-menu-cta {
+  margin-top: 1.5rem;
 }
 
 .menu-note {

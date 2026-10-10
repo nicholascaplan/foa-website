@@ -89,7 +89,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 
 ### Information architecture
 
-- Primary navigation, in order: **Home, What's On, Fundraising, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us.
+- Primary navigation, in order: **Home, What's On, Fundraising, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us. The mobile menu panel opens with a centred logo, "The Friends of Ashley" on one line and the school tagline, with a small close button in the top-right corner. The current page is bold green (no shading or chevrons), and Contact Us is a full-width primary button.
 - Committee, Reps Hub and Meeting Minutes belong under Get Involved. About, Contact and policy pages are reached through the footer and relevant page content. Reps Hub is for class reps only, so it is linked from Get Involved (including the homepage Get involved row) and the footer, not the primary or mobile navigation.
 - What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
 - Individual events use reusable event pages without a **Back to What's On** breadcrumb; the shared navigation provides the route back to What's On.
