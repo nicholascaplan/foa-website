@@ -56,7 +56,12 @@ test.describe("mobile viewport", () => {
       await page.goto(route);
 
       await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
-      await expect(page.getByRole("button", { name: "Open menu" })).toHaveCSS("min-height", "44px");
+      const menuButton = page.getByRole("button", { name: "Open menu" });
+      await expect(menuButton).toBeVisible();
+      const target = await menuButton.boundingBox();
+      expect(target).not.toBeNull();
+      expect(target!.width).toBeGreaterThanOrEqual(44);
+      expect(target!.height).toBeGreaterThanOrEqual(44);
       expect(seriousOrCritical(await scan(page))).toEqual([]);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

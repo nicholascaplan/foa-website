@@ -97,8 +97,14 @@ const isCurrent = (href: string) =>
     menu.inert = !open;
     openButton.setAttribute("aria-expanded", String(open));
     document.body.classList.toggle("menu-open", open);
-    if (open) closeButton?.focus({ preventScroll: true });
-    else openButton.focus({ preventScroll: true });
+    if (open) {
+      // Apply visibility/inert changes before moving focus into the panel.
+      requestAnimationFrame(() => {
+        if (menu.classList.contains("is-open") && getComputedStyle(menu).visibility === "visible") {
+          closeButton?.focus({ preventScroll: true });
+        }
+      });
+    } else openButton.focus({ preventScroll: true });
   };
 
   openButton?.addEventListener("click", () => setMenu(true));
