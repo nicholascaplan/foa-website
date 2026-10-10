@@ -186,6 +186,15 @@ a {
   object-fit: cover;
 }
 
+/* The festive SVG has a padded viewBox (wreath and bow), so its circle is
+   smaller and lower than the standard logo. Scale and shift it, without
+   affecting layout, so the circle matches the standard logo exactly. */
+.brand-logo--festive {
+  border-radius: 0;
+  object-fit: contain;
+  transform: translateY(-5%) scale(1.174);
+}
+
 .type-options {
   display: grid;
   gap: 1.25rem;
