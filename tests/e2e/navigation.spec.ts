@@ -86,7 +86,7 @@ test.describe("mobile navigation", () => {
 
     const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
     await expect(navigation.getByRole("link"))
-      .toHaveText(["Home", "Newsletter", "What's On", "Fundraising", "Get Involved", "Uniform", "Contact Us"]);
+      .toHaveText(["Home", "Newsletter", "What's On", "Fireworks on the Field", "Christmas Fayre", "Fundraising", "Get Involved", "Uniform", "Contact Us"]);
 
     await navigation.getByRole("link", { name: "Uniform" }).click();
     await expect(page).toHaveURL(/\/uniform\/$/);

@@ -89,7 +89,7 @@ test("Fireworks uses the immersive design by default without a mode control", as
   await expect(page.locator(".fw-torches")).toBeVisible();
   await expect(page.locator(".fw-ivy")).toHaveCount(0);
   await expect(page.locator(".poster-figure")).toHaveCount(0);
-  const headerStyles = () => page.locator(".site-header, .brand, .brand-copy span, .menu-toggle").evaluateAll((elements) => elements.map((element) => {
+   const headerStyles = () => page.locator(".site-header, .brand, .brand p span, .menu-toggle").evaluateAll((elements) => elements.map((element) => {
     const style = getComputedStyle(element);
     return { color: style.color, background: style.backgroundColor, border: style.borderBottomColor };
   }));

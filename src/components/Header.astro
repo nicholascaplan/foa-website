@@ -2,6 +2,8 @@
 import { withBase } from "../lib/urls";
 import ThemeToggle from "./ThemeToggle.astro";
 import DevMobilePreview from "./DevMobilePreview.astro";
+import HomeIntroduction from "./HomeIntroduction.astro";
+import { getCollection } from "astro:content";
 
 interface Props { logo?: string; }
 const { logo = "/brand/foa-logo.jpg" } = Astro.props;
@@ -14,6 +16,12 @@ const primary = [
   { href: "/uniform/", label: "Uniform" },
 ];
 const desktop = [primary[0], { href: "/newsletter/", label: "Newsletter" }, ...primary.slice(1)];
+const events = await getCollection("events");
+const menuEvents = ["fireworks-2026", "christmas-fayre-2026"].map((id) => {
+  const event = events.find((entry) => entry.id === id)?.data;
+  if (!event?.path) throw new Error(`Menu event is missing: ${id}`);
+  return { href: event.path, label: event.title };
+});
 const mobileOnly = [
   { href: "/contact/", label: "Contact Us" },
 ];
@@ -23,15 +31,12 @@ const isCurrent = (href: string) =>
   href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-  <header class:list={["site-header", { "site-header--home": isHomepage, "site-header--dev-home": isHomepage && import.meta.env.DEV }]}>
+  <header class:list={["site-header", { "site-header--home": isHomepage }]}>
     <div class="site-width header-inner">
-      {isHomepage && <div class="home-introduction">
-        <img src={withBase("/brand/foa-logo.jpg")} alt="The Friends of Ashley logo" width="160" height="160">
-        <p><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></p>
-      </div>}
-      {!isHomepage && <a class="brand" href={withBase("/")} aria-label="The Friends of Ashley home">
-        <img class:list={["brand-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="68" height="68">
-        <span class="brand-copy"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></span>
+       {isHomepage && <HomeIntroduction />}
+       {!isHomepage && <a class="brand home-introduction" href={withBase("/")} aria-label="The Friends of Ashley home">
+         <img class:list={["brand-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="160" height="160">
+         <p><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></p>
       </a>}
       {import.meta.env.DEV && <DevMobilePreview />}
       <nav class="desktop-nav" aria-label="Primary navigation">
@@ -39,51 +44,20 @@ const isCurrent = (href: string) =>
       </nav>
       <div class="header-actions">
         <span class="header-theme-toggle"><ThemeToggle /></span>
-        {!isHomepage && import.meta.env.DEV && <DevMobilePreview mobile />}
-        {!isHomepage && <span class="menu-toggle-slot">
-          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-          </button>
-        </span>}
       </div>
     </div>
   </header>
-{!isHomepage && <div class="header-menu-sentinel" aria-hidden="true" data-header-menu-sentinel></div>}
-
-<style>
-  @media (max-width: 47.99rem) {
-    .header-inner:has(.dev-tools--mobile) {
-      gap: 0.25rem;
-      flex-wrap: wrap;
-    }
-
-    .header-inner:has(.dev-tools--mobile) .brand-copy {
-      display: none;
-    }
-
-    .header-inner:has(.dev-tools--mobile) .brand-logo {
-      width: 2.75rem;
-      height: 2.75rem;
-    }
-
-    .header-inner:has(.dev-tools--mobile) .header-actions {
-      display: flex;
-      gap: 0.25rem;
-      max-width: 100%;
-      flex-wrap: wrap;
-    }
-  }
-</style>
-
-{isHomepage && <button class="menu-toggle menu-toggle--floating" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+<button class="menu-toggle menu-toggle--floating" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-</button>}
-{isHomepage && import.meta.env.DEV && <div class="home-preview-tools"><DevMobilePreview mobile /></div>}
+</button>
+{import.meta.env.DEV && <div class="home-preview-tools"><DevMobilePreview mobile /></div>}
 
 <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true" data-mobile-menu inert hidden>
   <div class="mobile-menu-panel">
     <div class="mobile-menu-head">
-      <img class:list={["mobile-menu-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="88" height="88">
+      <a class="mobile-menu-home" href={withBase("/")} aria-label="The Friends of Ashley home">
+        <img class:list={["mobile-menu-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="88" height="88">
+      </a>
       <div class="mobile-menu-controls">
         <span class="mobile-menu-theme"><ThemeToggle /></span>
         <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>&times;</button>
@@ -91,7 +65,12 @@ const isCurrent = (href: string) =>
       <p class="mobile-menu-name"><strong>The Friends of Ashley</strong><span>Ashley C of E Primary School PTA</span></p>
     </div>
     <nav aria-label="Mobile navigation">
-      {desktop.map((item) => <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
+      {desktop.map((item) => <>
+        <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+        {item.href === "/whats-on/" && <div class="mobile-menu-events" role="group" aria-label="Event details">
+          {menuEvents.map((event) => <a href={withBase(event.href)} aria-current={isCurrent(event.href) ? "page" : undefined}>{event.label}</a>)}
+        </div>}
+      </>)}
       {mobileOnly.map((item) => <a class="button button--primary mobile-menu-cta" href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
     </nav>
   </div>
@@ -101,7 +80,6 @@ const isCurrent = (href: string) =>
   const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
   const openButton = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
   const closeButton = document.querySelector<HTMLButtonElement>("[data-menu-close]");
-  const sentinel = document.querySelector<HTMLElement>("[data-header-menu-sentinel]");
 
   const setMenu = (open: boolean) => {
     if (!menu || !openButton) return;
@@ -154,10 +132,4 @@ const isCurrent = (href: string) =>
     }
   });
 
-  if (sentinel && openButton && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(([entry]) => {
-      openButton.classList.toggle("menu-toggle--floating", !entry.isIntersecting);
-    });
-    observer.observe(sentinel);
-  }
 </script>

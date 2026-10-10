@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Home shares one introduction/navigation row, while interior pages keep their compact branding", async () => {
+test("all pages share the larger desktop introduction/navigation row and an independent mobile burger", async () => {
   const homepage = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
   assert.match(homepage, /<header\b[^>]*class="site-header site-header--home"/);
   assert.equal(homepage.match(/<button\b[^>]*\bdata-menu-toggle(?:\s|>)/g)?.length, 1);
@@ -13,7 +13,7 @@ test("Home shares one introduction/navigation row, while interior pages keep the
   assert.ok(homeHeader);
   assert.doesNotMatch(homeHeader, /class="brand"/);
   assert.match(homeHeader, /class="home-introduction"/);
-  assert.equal(homepage.match(/class="home-introduction"/g)?.length, 1);
+   assert.equal(homepage.match(/class="home-introduction"/g)?.length, 2);
 
   for (const route of ["uniform/index.html", "events/fireworks-2026/index.html", "events/christmas-fayre-2026/index.html"]) {
     const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
@@ -24,10 +24,15 @@ test("Home shares one introduction/navigation row, while interior pages keep the
     assert.equal(html.match(/<button\b[^>]*\bdata-menu-toggle(?:\s|>)/g)?.length, 1, route);
     assert.equal(html.match(/\bdata-theme-toggle(?=[\s=>])/g)?.length, 2, route);
     assert.match(html, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/, route);
+    assert.match(html, /<a class="mobile-menu-home" href="\/" aria-label="The Friends of Ashley home">/, route);
+    assert.match(html, /aria-label="Event details"[\s\S]*?href="\/events\/fireworks-2026\/"[\s\S]*?href="\/events\/christmas-fayre-2026\/"/, route);
     const menuStart = html.indexOf('id="mobile-menu"');
     assert.ok(menuStart > html.indexOf("</header>"), route);
     assert.match(html.slice(menuStart), /data-theme-toggle\b/, route);
-    assert.match(html, /data-header-menu-sentinel\b/, route);
+    assert.match(header, /class="brand home-introduction"/, route);
+    assert.match(header, /<img[^>]*width="160"[^>]*height="160"/, route);
+    assert.doesNotMatch(header, /data-menu-toggle/, route);
+    assert.doesNotMatch(html, /data-header-menu-sentinel\b/, route);
   }
 });
 

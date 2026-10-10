@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SponsorRibbon from "../components/SponsorRibbon.astro";
 import FundraisingSummary from "../components/FundraisingSummary.astro";
+import HomeIntroduction from "../components/HomeIntroduction.astro";
 import { withBase } from "../lib/urls";
 import { ordinalDateFormatter } from "../lib/dates";
 const events = await getCollection("events");
@@ -24,7 +25,8 @@ const fireworksWeekday = datePart({ weekday: "short" });
 const fireworksDay = datePart({ day: "numeric" });
 const fireworksMonth = datePart({ month: "short" });
 ---
-  <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/events/fireworks-1600.jpg" bodyClass="homepage">
+   <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/events/fireworks-1600.jpg" bodyClass="homepage">
+   <div class:list={["site-width mobile-home-introduction", { "mobile-home-introduction--dev": import.meta.env.DEV }]}><HomeIntroduction /></div>
   <section class="hero">
     <div class="site-width hero-grid">
        <div class="hero-copy">

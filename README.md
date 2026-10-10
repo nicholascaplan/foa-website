@@ -35,7 +35,7 @@ npm install      # once
 npm run dev      # opens http://localhost:4321/
 ```
 
-The dev server watches for changes; stop it with `Ctrl+C`. Desktop pages keep the local preview controls in the header: a desktop phone icon opens the current route at 390px, and the mobile phone icon offers Small (360px), Medium (390px) and Large (430px) widths without reloading the page. On the mobile homepage, it sits beside the floating burger button at the top-right, outside the menu. Allow pop-ups if blocked; browsers may restrict resizing, so device emulation remains the fallback. Controls leave room for text and are absent from production builds (including `npm run preview`). Public Night Mode is beside the close button inside the menu on mobile and in the header on desktop. Cookie preferences remain available from the footer; there is no developer cookie reset control.
+The dev server watches for changes; stop it with `Ctrl+C`. Desktop pages keep the local preview controls in the header: a desktop phone icon opens the current route at 390px, and the mobile phone icon offers Small (360px), Medium (390px) and Large (430px) widths without reloading the page. On every mobile page, it sits beside the floating burger button at the top-right, outside the hidden header and menu. Allow pop-ups if blocked; browsers may restrict resizing, so device emulation remains the fallback. Controls leave room for text and are absent from production builds (including `npm run preview`). Public Night Mode is beside the close button inside the menu on mobile and in the header on desktop. Cookie preferences remain available from the footer; there is no developer cookie reset control.
 
 To review the production build:
 

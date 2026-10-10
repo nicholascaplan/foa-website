@@ -155,7 +155,6 @@ a {
 .site-header {
   position: relative;
   z-index: 50;
-  border-bottom: 1px solid rgba(25, 49, 39, 0.13);
   background: var(--paper);
 }
 
@@ -172,12 +171,12 @@ a {
   background: transparent;
 }
 
-.site-header--home .header-inner {
+.site-header .header-inner {
   padding-block: max(1rem, env(safe-area-inset-top, 0px)) 0;
   gap: 1rem;
 }
 
-.site-header--home .home-introduction {
+.site-header .home-introduction {
   flex: 1;
   min-width: 0;
   margin-bottom: 0;
@@ -307,13 +306,6 @@ a {
   gap: 0.55rem;
 }
 
-.menu-toggle-slot {
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  flex: none;
-}
-
 .menu-toggle {
   min-height: 3rem;
   border: 1px solid var(--action-background);
@@ -346,12 +338,6 @@ a {
   right: max(1rem, env(safe-area-inset-right, 0px));
   display: grid;
   box-shadow: 0 8px 22px rgba(9, 31, 19, 0.24);
-}
-
-.header-menu-sentinel {
-  height: 1px;
-  margin-bottom: -1px;
-  pointer-events: none;
 }
 
 .mobile-menu {
@@ -487,6 +473,18 @@ a {
   font-weight: 700;
 }
 
+.mobile-menu-events {
+  display: grid;
+  padding-left: 1.25rem;
+}
+
+.mobile-menu nav .mobile-menu-events a {
+  min-height: 2.75rem;
+  padding-block: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
 .mobile-menu .mobile-menu-cta {
   margin-top: 1.5rem;
 }
@@ -516,13 +514,56 @@ a {
 }
 
 @media (max-width: 63.99rem) {
-  .site-header--home .header-actions,
-  .site-header--home .header-inner > .dev-tools {
+  .site-header {
     display: none;
   }
 
-  .homepage .home-introduction {
+  /* A compact, unbranded control area keeps every page's opening copy clear
+     of the fixed burger (and the development-only phone preview). */
+  #main-content {
+    padding-top: calc(max(1rem, env(safe-area-inset-top, 0px)) + 3rem);
+  }
+
+  /* The event artwork must reach the top of the page. Keep the same control
+     clearance within its stage so the body's flat background is not exposed. */
+  :is(.fw-theme, .xmas-theme) #main-content {
+    padding-top: 0;
+  }
+
+  .fw-stage {
+    padding-top: calc(max(1rem, env(safe-area-inset-top, 0px)) + 3rem);
+  }
+
+  .fw-event.fw-stage {
+    padding-top: 0;
+  }
+
+  .fw-theme .fw-event .fw-kicker {
+    min-height: 3rem;
+    padding-right: 3.5rem;
+    white-space: normal;
+  }
+
+  body:has(.home-preview-tools) .fw-event .fw-kicker {
+    padding-right: 6.5rem;
+  }
+
+  .homepage #main-content {
+    padding-top: 0;
+  }
+
+  .mobile-home-introduction {
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  .mobile-home-introduction .home-introduction {
+    margin-bottom: 0;
     padding-right: calc(3rem + max(1rem, env(safe-area-inset-right, 0px)));
+  }
+
+  .mobile-home-introduction--dev .home-introduction {
+    gap: 0.5rem;
+    padding-right: calc(6.25rem + max(1rem, env(safe-area-inset-right, 0px)));
   }
 
   .home-preview-tools {
@@ -536,18 +577,11 @@ a {
     display: flex;
   }
 
-  .site-header--dev-home .home-introduction {
-    gap: 0.5rem;
-    padding-right: calc(6.25rem + max(1rem, env(safe-area-inset-right, 0px)));
-  }
-
-  .site-header--dev-home .home-introduction img {
-    width: 2.75rem;
-  }
 }
 
 @media (min-width: 64rem) {
-  .home-preview-tools {
+  .home-preview-tools,
+  .mobile-home-introduction {
     display: none;
   }
 }
@@ -2021,8 +2055,9 @@ a {
 }
 
 .footer-brand-home img {
-  width: 5rem;
-  height: 5rem;
+  width: 7rem;
+  max-width: 100%;
+  height: auto;
   flex: none;
   border-radius: 50%;
   object-fit: cover;
@@ -3462,24 +3497,38 @@ body.menu-open .cookie-banner {
   }
 }
 
+@media (max-width: 63.99rem) {
+  /* Start the green panel near the top; reserve button clearance inside it,
+     rather than leaving a control-height empty strip above the panel. */
+  #main-content:has(.view-hero) {
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  .view-hero {
+    padding-top: 1.5rem;
+  }
+
+  .view-hero .eyebrow {
+    min-height: 1.5rem;
+    padding-right: 3.5rem;
+  }
+
+  body:has(.home-preview-tools) .view-hero .eyebrow {
+    padding-right: 6.5rem;
+  }
+}
+
 @media (min-width: 64rem) {
+  .site-header:not(.site-header--home) .header-inner {
+    padding-bottom: 1.5rem;
+  }
+
   .desktop-nav {
     display: flex;
   }
 
-  .menu-toggle-slot {
-    display: contents;
-  }
-
-  .menu-toggle {
-    display: none;
-  }
-
+  .menu-toggle,
   .menu-toggle--floating {
-    display: grid;
-  }
-
-  .homepage .menu-toggle {
     display: none;
   }
 

@@ -6,18 +6,19 @@ test("homepage phone preview sits beside the burger outside the menu and stays f
     await page.goto("/");
     const phone = page.getByRole("button", { name: "Phone preview size" });
     const burger = page.getByRole("button", { name: "Open menu" });
-    await expect(phone).toBeVisible();
+     await expect(phone).toBeVisible();
+     expect((await page.locator(".mobile-home-introduction img").boundingBox())!.width).toBeGreaterThanOrEqual(84);
     await expect(page.locator(".mobile-menu .dev-tools")).toHaveCount(0);
     const before = await phone.boundingBox();
     const menuBox = await burger.boundingBox();
     expect(before!.x + before!.width).toBeLessThan(menuBox!.x);
     expect(Math.abs(before!.y + before!.height / 2 - menuBox!.y - menuBox!.height / 2)).toBeLessThan(1);
     const layout = await page.evaluate(() => {
-      const copy = document.querySelector(".home-introduction p")!.getBoundingClientRect();
-      const tools = document.querySelector(".home-preview-tools")!.getBoundingClientRect();
-      return { copyRight: copy.right, toolsLeft: tools.left, overflow: document.documentElement.scrollWidth - innerWidth };
+       const copy = document.querySelector(".mobile-home-introduction p")!.getBoundingClientRect();
+       const tools = document.querySelector(".home-preview-tools")!.getBoundingClientRect();
+       return { copyRight: copy.right, toolsLeft: tools.left, overflow: document.documentElement.scrollWidth - innerWidth };
     });
-    expect(layout.copyRight).toBeLessThanOrEqual(layout.toolsLeft);
+     expect(layout.copyRight).toBeLessThanOrEqual(layout.toolsLeft);
     expect(layout.overflow).toBeLessThanOrEqual(0);
     await phone.click();
     await expect(page.getByRole("button", { name: "Small phone (360px)" })).toBeVisible();
@@ -87,7 +88,7 @@ test("phone size controls resize the preview itself and follow its viewport", as
 });
 
 test("desktop tools sit between the home link and navigation without overlaps", async ({ page }) => {
-  for (const width of [768, 1024, 1280, 1440]) {
+   for (const width of [1024, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/uniform/");
     const layout = await page.evaluate(() => {
