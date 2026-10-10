@@ -13,17 +13,22 @@ function harness() {
   const frames = [];
   const classes = new Set();
   const focus = [];
+  const windowListeners = new Map();
   const menu = {
     inert: true,
     classList: {
       toggle(name, enabled) { if (enabled) classes.add(name); else classes.delete(name); },
       contains: (name) => classes.has(name),
     },
+    getBoundingClientRect() { return { width: 300, height: 500 }; },
     setAttribute() {},
     addEventListener() {},
   };
   const openButton = { setAttribute() {}, addEventListener() {}, focus: () => focus.push("open") };
   const closeButton = { addEventListener() {}, focus: () => focus.push("close") };
+  const window = {
+    addEventListener(type, listener) { windowListeners.set(type, listener); },
+  };
   const document = {
     querySelector: (selector) => ({
       "[data-mobile-menu]": menu,
@@ -35,12 +40,18 @@ function harness() {
   };
   const context = vm.createContext({
     document,
-    window: {},
+    window,
     requestAnimationFrame: (callback) => frames.push(callback),
     getComputedStyle: () => ({ visibility: classes.has("is-open") ? "visible" : "hidden" }),
   });
   vm.runInContext(script, context);
-  return { menu, focus, frames, setMenu: (open) => vm.runInContext(`setMenu(${open})`, context) };
+  return {
+    menu,
+    focus,
+    frames,
+    setMenu: (open) => vm.runInContext(`setMenu(${open})`, context),
+    dispatchWindow: (type) => windowListeners.get(type)?.(),
+  };
 }
 
 test("menu focus waits for a render frame after the panel is revealed", () => {
@@ -58,6 +69,17 @@ test("closing before the queued frame prevents focus returning to the hidden pan
   setMenu(true);
   setMenu(false);
   assert.equal(menu.inert, true);
+  frames.shift()();
+  assert.deepEqual(focus, ["open"]);
+});
+
+test("resetting cookie preferences closes the open menu and returns focus", () => {
+  const { menu, focus, frames, setMenu, dispatchWindow } = harness();
+  setMenu(true);
+  dispatchWindow("foa:reset-cookie-preferences");
+
+  assert.equal(menu.inert, true);
+  assert.deepEqual(focus, ["open"]);
   frames.shift()();
   assert.deepEqual(focus, ["open"]);
 });

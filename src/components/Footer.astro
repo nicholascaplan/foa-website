@@ -22,7 +22,13 @@ const linkColumns = [
 <footer class="site-footer">
   <div class="site-width">
     <div class="footer-grid">
-      <div class="footer-brand"><h2>The Friends of Ashley</h2><p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p></div>
+      <div class="footer-brand">
+        <a class="footer-brand-home" href={withBase("/")} aria-label="The Friends of Ashley home">
+          <img src={withBase("/brand/foa-logo.jpg")} alt="" width="80" height="80">
+          <h2>The Friends of Ashley</h2>
+        </a>
+        <p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p>
+      </div>
       <nav class="footer-links" aria-label="Footer navigation">
         <div class="footer-link-column">
           {linkColumns[0].map(([href, label]) => <a href={withBase(href)}>{label}</a>)}

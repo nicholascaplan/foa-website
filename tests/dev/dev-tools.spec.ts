@@ -1,8 +1,23 @@
 import { expect, test } from "@playwright/test";
 
-test("desktop has one phone icon that opens a medium preview", async ({ page }) => {
+test("homepage preview tools live inside the open mobile menu", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+
+  await expect(page.locator(".site-header")).toHaveCount(0);
+  const tools = page.locator(".mobile-menu-dev-tools");
+  await expect(tools).toHaveCount(1);
+  await expect(tools).toBeHidden();
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(tools).toBeVisible();
+  await expect(tools.getByRole("button", { name: "Mobile preview", exact: true })).toBeVisible();
+  await expect(tools.getByRole("button", { name: "Reset cookie consent" })).toBeVisible();
+  await expect(tools.getByRole("button", { name: "Phone preview size" })).toBeVisible();
+});
+
+test("desktop has one phone icon that opens a medium preview", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/uniform/");
 
   await expect(page.getByRole("group", { name: "Phone preview size" })).toBeHidden();
   const popupPromise = page.waitForEvent("popup");
@@ -54,7 +69,7 @@ test("phone size controls resize the preview itself and follow its viewport", as
 test("desktop tools sit between the home link and navigation without overlaps", async ({ page }) => {
   for (const width of [768, 1024, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/");
+    await page.goto("/uniform/");
     const layout = await page.evaluate(() => {
       const brand = document.querySelector(".brand")!;
       const tools = document.querySelector(".dev-tools")!;
@@ -67,7 +82,7 @@ test("desktop tools sit between the home link and navigation without overlaps", 
         position: getComputedStyle(tools).position,
         themeToggleCount: document.querySelectorAll("[data-theme-toggle]").length,
         headerToggleOnBrandRow: (() => {
-          const toggle = document.querySelector(".site-header [data-theme-toggle]")!.getBoundingClientRect();
+          const toggle = document.querySelector(".site-header .header-theme-toggle [data-theme-toggle]")!.getBoundingClientRect();
           const home = brand.getBoundingClientRect();
           return toggle.top < home.bottom && toggle.bottom > home.top;
         })(),
@@ -76,7 +91,7 @@ test("desktop tools sit between the home link and navigation without overlaps", 
     expect(layout.order).toBe(true);
     expect(layout.overlaps, `${width}px header`).toBe(false);
     expect(layout.overflow).toBeLessThanOrEqual(0);
-    expect(layout.themeToggleCount).toBe(1);
+    expect(layout.themeToggleCount).toBe(2);
     expect(layout.headerToggleOnBrandRow, `${width}px header theme toggle row`).toBe(true);
     expect(layout.position).toBe("static");
   }

@@ -3,16 +3,26 @@ import { expect, test } from "@playwright/test";
 test("main task routes are reachable through normal navigation", async ({ page }) => {
   await page.goto("/");
 
-  for (const destination of [
+  const destinations = [
     { name: "Newsletter", path: "/newsletter/" },
     { name: "What's On", path: "/whats-on/" },
     { name: "Fundraising", path: "/fundraising/" },
     { name: "Uniform", path: "/uniform/" },
     { name: "Get Involved", path: "/get-involved/" },
-  ]) {
+  ];
+
+  const first = destinations[0];
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await page.getByRole("navigation", { name: "Mobile navigation" })
+    .getByRole("link", { name: first.name }).click();
+  await expect(page).toHaveURL(new RegExp(`${first.path}$`));
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })
+    .getByRole("link", { name: first.name }))
+    .toHaveAttribute("aria-current", "page");
+
+  for (const destination of destinations.slice(1)) {
     await page.getByRole("navigation", { name: "Primary navigation" })
-      .getByRole("link", { name: destination.name })
-      .click();
+      .getByRole("link", { name: destination.name }).click();
     await expect(page).toHaveURL(new RegExp(`${destination.path}$`));
     await expect(page.getByRole("navigation", { name: "Primary navigation" })
       .getByRole("link", { name: destination.name }))

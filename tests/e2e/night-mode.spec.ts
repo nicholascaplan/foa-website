@@ -5,13 +5,34 @@ import { routes } from "./routes";
 const key = "foa-theme";
 const dayBackground = "rgb(246, 241, 231)";
 const nightBackground = "rgb(23, 36, 29)";
-const toggleOf = (page: Page) => page.locator(".site-header [data-theme-toggle]");
+const menuToggleOf = (page: Page) => page.locator(".mobile-menu [data-theme-toggle]");
+const headerToggleOf = (page: Page) => page.locator(".site-header [data-theme-toggle]");
+const themeToggleIsInMenu = async (page: Page) =>
+  (await page.locator(".site-header").count()) === 0
+  || page.evaluate(() => window.matchMedia("(max-width: 47.99rem)").matches);
+const themeToggleOf = async (page: Page) => {
+  const inMenu = await themeToggleIsInMenu(page);
+  return inMenu ? menuToggleOf(page) : headerToggleOf(page);
+};
 const openMenu = async (page: Page) => {
   const trigger = page.getByRole("button", { name: "Open menu" });
   if (!(await trigger.isVisible())) await page.evaluate(() => window.scrollTo(0, 800));
   await expect(trigger).toBeVisible();
-  await trigger.click();
+  if (await page.locator("[data-mobile-menu]").getAttribute("aria-hidden") === "true") await trigger.click();
   await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "false");
+};
+const openThemeToggle = async (page: Page) => {
+  const toggle = await themeToggleOf(page);
+  if (await themeToggleIsInMenu(page)) await openMenu(page);
+  await expect(toggle).toBeVisible();
+  return toggle;
+};
+const closeMenu = async (page: Page) => {
+  if (await page.locator("[data-mobile-menu]").getAttribute("aria-hidden") === "false") {
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "true");
+    await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
+  }
 };
 
 // Colour transitions make computed styles lag behind a theme switch, which skews contrast scans.
@@ -30,7 +51,9 @@ for (const [scheme, night] of [["dark", true], ["light", false]] as const) {
     await page.goto("/");
     await expect(page.locator("html")).toHaveCSS("color-scheme", scheme);
     await expect(page.locator("body")).toHaveCSS("background-color", night ? nightBackground : dayBackground);
-    await expect(toggleOf(page)).toHaveAttribute("aria-pressed", String(night));
+    const toggle = await openThemeToggle(page);
+    await expect(toggle).toHaveAttribute("aria-pressed", String(night));
+    await closeMenu(page);
     expect(await page.evaluate((storageKey) => localStorage.getItem(storageKey), key)).toBeNull();
   });
 }
@@ -45,7 +68,7 @@ test("the toggle is keyboard accessible, remembered, and independent of cookie c
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
-  const toggle = toggleOf(page);
+  const toggle = await openThemeToggle(page);
   await expect(toggle).toBeVisible();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await toggle.focus();
@@ -56,16 +79,20 @@ test("the toggle is keyboard accessible, remembered, and independent of cookie c
   expect(await page.evaluate((storageKey) => localStorage.getItem(storageKey), key)).toBe("day");
   expect(await page.evaluate(() => localStorage.getItem("foa-cookie-preferences"))).toBeNull();
   await expect(page.locator("[data-google-analytics]")).toHaveCount(0);
+  await closeMenu(page);
 
   // An explicit Day choice beats a dark device setting, across navigation and reloads.
   await openMenu(page);
   await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Uniform" }).click();
   await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
   await page.reload();
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
-  await toggleOf(page).click();
+  const uniformToggle = await openThemeToggle(page);
+  await expect(uniformToggle).toHaveAttribute("aria-pressed", "false");
+  await uniformToggle.click();
+  await closeMenu(page);
   await page.reload();
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+  const reloadedToggle = await openThemeToggle(page);
+  await expect(reloadedToggle).toHaveAttribute("aria-pressed", "true");
   expect(await page.evaluate((storageKey) => localStorage.getItem(storageKey), key)).toBe("night");
 });
 
@@ -73,13 +100,17 @@ test("device setting changes apply only while the visitor has not chosen", async
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
+  const toggle = await openThemeToggle(page);
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await page.emulateMedia({ colorScheme: "dark" });
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
 
-  await toggleOf(page).click();
+  await toggle.click();
+  await closeMenu(page);
   await page.emulateMedia({ colorScheme: "light" });
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
+  const dayToggle = await openThemeToggle(page);
+  await expect(dayToggle).toHaveAttribute("aria-pressed", "false");
+  await closeMenu(page);
   await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
   await page.emulateMedia({ colorScheme: "dark" });
   await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
@@ -92,18 +123,23 @@ test("blocked storage falls back safely but still allows switching", async ({ pa
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
-  await toggleOf(page).click();
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+  const toggle = await openThemeToggle(page);
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await closeMenu(page);
   await expect(page.locator("body")).toHaveCSS("background-color", nightBackground);
   await page.reload();
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
+  await expect(await openThemeToggle(page)).toHaveAttribute("aria-pressed", "false");
+  await closeMenu(page);
 });
 
 test("invalid saved values are ignored in favour of the device setting", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.addInitScript((storageKey) => localStorage.setItem(storageKey, "unexpected"), key);
   await page.goto("/");
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+  const toggle = await openThemeToggle(page);
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await closeMenu(page);
 });
 
 test.describe("without JavaScript", () => {
@@ -112,7 +148,7 @@ test.describe("without JavaScript", () => {
   test("the page stays in Day Mode and the unusable toggle is not shown", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
-    await expect(toggleOf(page)).toBeHidden();
+    await expect(page.locator("[data-theme-toggle]")).toBeHidden();
   });
 });
 
@@ -124,35 +160,39 @@ for (const width of [320, 390, 1440]) {
       const response = await page.goto(route);
       // The static preview serves 404.html with a 200 when requested directly.
       expect(response?.status(), route).toBe(200);
-      const toggle = toggleOf(page);
+      const inMenu = await themeToggleIsInMenu(page);
       // Fireworks and Christmas pages keep their own night-sky theme in both modes.
       const themed = (await page.locator("body.fw-theme, body.xmas-theme").count()) > 0;
       let themedBackground = "";
       for (const night of [false, true]) {
         await page.evaluate(() => window.scrollTo(0, 0));
+        const toggle = await openThemeToggle(page);
         if (await toggle.getAttribute("aria-pressed") !== String(night)) await toggle.click();
         await expect(toggle).toHaveAttribute("aria-pressed", String(night));
-        if (!night) themedBackground = await page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor);
-        await expect(page.locator("body")).toHaveCSS("background-color", themed ? themedBackground : night ? nightBackground : dayBackground);
-        const sizes = await page.evaluate(() => {
-          const header = document.querySelector(".site-header")!.getBoundingClientRect();
-          const toggle = document.querySelector(".site-header [data-theme-toggle]")!.getBoundingClientRect();
-          const brand = document.querySelector(".brand")!.getBoundingClientRect();
+        const sizes = await page.evaluate((insideMenu) => {
+          const toggle = document.querySelector(insideMenu ? ".mobile-menu [data-theme-toggle]" : ".site-header [data-theme-toggle]")!.getBoundingClientRect();
+          const header = document.querySelector(".site-header")?.getBoundingClientRect();
+          const brand = document.querySelector(".brand")?.getBoundingClientRect();
           const menu = document.querySelector(".menu-toggle")!.getBoundingClientRect();
           return {
             overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
             target: Math.min(toggle.width, toggle.height),
-            insideHeader: toggle.top >= header.top && toggle.bottom <= header.bottom && toggle.left >= 0 && toggle.right <= window.innerWidth,
-            sameRow: toggle.top < brand.bottom && toggle.bottom > brand.top,
-            clearOfMenu: menu.width === 0 || toggle.right <= menu.left || toggle.left >= menu.right,
+            insideHeader: insideMenu || Boolean(header && toggle.top >= header.top && toggle.bottom <= header.bottom && toggle.left >= 0 && toggle.right <= window.innerWidth),
+            sameRow: insideMenu || Boolean(brand && toggle.top < brand.bottom && toggle.bottom > brand.top),
+            clearOfMenu: insideMenu || menu.width === 0 || toggle.right <= menu.left || toggle.left >= menu.right,
             alteredImages: [...document.querySelectorAll<HTMLImageElement>("img")].filter((image) => getComputedStyle(image).filter !== "none").length,
           };
-        });
+        }, inMenu);
+        await closeMenu(page);
+        if (!night) themedBackground = await page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor);
+        await expect(page.locator("body")).toHaveCSS("background-color", themed ? themedBackground : night ? nightBackground : dayBackground);
         expect(sizes.overflow, `${route} ${night ? "night" : "day"}`).toBeLessThanOrEqual(0);
         expect(sizes.target).toBeGreaterThanOrEqual(44);
-        expect(sizes.insideHeader, route).toBe(true);
-        expect(sizes.sameRow, `${route} ${width}px toggle row`).toBe(true);
-        expect(sizes.clearOfMenu, route).toBe(true);
+        if (!inMenu) {
+          expect(sizes.insideHeader, route).toBe(true);
+          expect(sizes.sameRow, `${route} ${width}px toggle row`).toBe(true);
+          expect(sizes.clearOfMenu, route).toBe(true);
+        }
         expect(sizes.alteredImages).toBe(0);
       }
     }
@@ -166,7 +206,9 @@ for (const width of [390, 1440]) {
       await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" });
       await page.goto(route);
       await freezeTransitions(page);
-      await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+      const toggle = await openThemeToggle(page);
+      await expect(toggle).toHaveAttribute("aria-pressed", "true");
+      await closeMenu(page);
       if (route === "/newsletter/") {
         for (const id of ["newsletter-latest-more", "newsletter-back-to-school-2026-more"]) {
           await page.locator(`[aria-controls="${id}"]`).click();
@@ -211,13 +253,18 @@ test("pages with their own parchment or night-sky theme look the same in both mo
   for (const route of ["/", "/events/fireworks-2026/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
     await page.goto(route);
     await freezeTransitions(page);
-    const toggle = toggleOf(page);
+    let toggle = await openThemeToggle(page);
+    await closeMenu(page);
     const day = await snapshot();
     expect(day.length, route).toBeGreaterThan(10);
+    toggle = await openThemeToggle(page);
     await toggle.click();
     await expect(toggle).toHaveAttribute("aria-pressed", "true");
+    await closeMenu(page);
     expect(await snapshot(), route).toEqual(day);
+    toggle = await openThemeToggle(page);
     await toggle.click();
+    await closeMenu(page);
   }
 });
 
@@ -228,7 +275,7 @@ test("mobile menu keeps visible dividers and readable links in Night Mode", asyn
   await freezeTransitions(page);
   await page.getByRole("button", { name: "Reject analytics cookies" }).click();
   await page.getByRole("button", { name: "Open menu" }).click();
-  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
+  await expect(menuToggleOf(page)).toHaveAttribute("aria-pressed", "true");
   const link = page.locator(".mobile-menu nav a:not(.button):not([aria-current])").first();
   await expect(link).toBeVisible();
   await expect(link).toHaveCSS("border-bottom-color", "rgb(101, 120, 107)");

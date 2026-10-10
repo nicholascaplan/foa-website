@@ -81,10 +81,11 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.ok(!cards[2].includes('class="message-time"'));
 });
 
-test("Fundraising appears after What's On in both navigation menus", async () => {
+test("navigation exposes the menu on Home and both menus on interior pages", async () => {
   for (const route of ["index.html", "fundraising/index.html"]) {
     const html = await readFile(path.join(dist, route), "utf8");
-    for (const label of ["Primary navigation", "Mobile navigation"]) {
+    const labels = route === "index.html" ? ["Mobile navigation"] : ["Primary navigation", "Mobile navigation"];
+    for (const label of labels) {
       const nav = html.match(new RegExp(`<nav[^>]*aria-label="${label}"[^>]*>([\\s\\S]*?)<\\/nav>`))?.[1];
       assert.ok(nav);
       const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
@@ -135,23 +136,48 @@ test("fundraising uses shared totals, approved estimates and annual support", as
   assert.doesNotMatch(html, /gross income/i);
 });
 
-test("production ships the Night Mode theme but none of the local development tools", async () => {
+test("production ships the responsive Night Mode theme but none of the local development tools", async () => {
   const outputFiles = (await filesUnder(dist)).filter((file) => /\.(html|css|js)$/.test(file));
   let themeStyles = false;
   for (const file of outputFiles) {
     const content = await readFile(file, "utf8");
     assert.doesNotMatch(content, /data-dev-|foa-dev-night-mode/, path.relative(dist, file));
     // Dev tool CSS is bundled with the header component, so only markup and scripts are checked for the tools themselves.
-    if (!/\.css$/.test(file)) assert.doesNotMatch(content, /dev-tools|data-mobile-preview/, path.relative(dist, file));
+    if (!/\.css$/.test(file)) {
+      // Component styles are inlined on the standalone playground; only the rendered tool markup/scripts are forbidden.
+      const markupAndScripts = content.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "");
+      assert.doesNotMatch(markupAndScripts, /dev-tools|data-mobile-preview/, path.relative(dist, file));
+    }
     if (/\.css$/.test(file) && /data-theme=["']?night/.test(content)) themeStyles = true;
   }
   assert.ok(themeStyles, "the Night Mode stylesheet is built");
   for (const page of ["index.html", "404.html", "uniform/index.html"]) {
     const html = await readFile(path.join(dist, page), "utf8");
     assert.equal(html.match(/data-theme-initializer/g)?.length, 1, page);
-    assert.equal(html.match(/data-theme-toggle(?!\])/g)?.length, 1, page);
-    assert.match(html, /<header\b[\s\S]*?data-theme-toggle[\s\S]*?<\/header>/, `${page} keeps Night Mode in the header`);
+    const expectedToggles = page === "index.html" ? 1 : 2;
+    assert.equal(html.match(/data-theme-toggle(?!\])/g)?.length, expectedToggles, page);
+    if (page === "index.html") {
+      assert.doesNotMatch(html, /<header\b[^>]*class="site-header"/, `${page} has no branded header`);
+      assert.match(html, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/, `${page} places Night Mode in the menu`);
+    } else {
+      assert.match(html, /<header\b[\s\S]*?data-theme-toggle[\s\S]*?<\/header>/, `${page} keeps the desktop control in the header`);
+      assert.match(html, /class="mobile-menu-theme"[\s\S]*?data-theme-toggle/, `${page} keeps the mobile control in the menu`);
+    }
     assert.ok(html.indexOf("data-theme-initializer") < html.indexOf("<body"), `${page} sets the theme before the body`);
+  }
+});
+
+test("the homepage omits the recruitment notice and every footer logo links home", async () => {
+  const html = await readFile(path.join(dist, "index.html"), "utf8");
+  assert.doesNotMatch(html, /class="notice-strip"/);
+  const htmlFiles = (await filesUnder(dist)).filter((file) => file.endsWith(".html"));
+  for (const file of htmlFiles) {
+    if (path.basename(file) === "playground.html") continue;
+    const page = await readFile(file, "utf8");
+    if (!page.includes('<footer class="site-footer">')) continue;
+    const logo = page.match(/<a class="footer-brand-home" href="([^"]+)"/);
+    assert.ok(logo, path.relative(dist, file));
+    assert.equal(logo[1], `${basePath}/`, path.relative(dist, file));
   }
 });
 
