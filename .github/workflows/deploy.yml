@@ -36,6 +36,14 @@ jobs:
         env:
           SITE_URL: https://www.thefriendsofashley.org
           BASE_PATH: /
+      - name: Retain browser diagnostics and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 14
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
         with:

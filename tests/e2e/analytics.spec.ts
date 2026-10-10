@@ -58,9 +58,22 @@ test.describe("Analytics consent", () => {
       }),
     )).toBe(true);
 
-    await page.getByRole("button", { name: "Open menu" }).click();
+    const banner = page.locator("[data-cookie-banner]");
+    const menuButton = page.getByRole("button", { name: "Open menu" });
+    const bannerBounds = await banner.boundingBox();
+    const menuBounds = await menuButton.boundingBox();
+    expect(bannerBounds!.y, "The consent prompt must leave the menu button unobstructed").toBeGreaterThanOrEqual(menuBounds!.y + menuBounds!.height);
+
+    await menuButton.click();
     expect(await overflow()).toBeLessThanOrEqual(0);
     expect(await page.locator(".mobile-menu-panel").evaluate((panel) => panel.scrollWidth - panel.clientWidth)).toBeLessThanOrEqual(0);
+    await page.keyboard.press("Escape");
+    await expect(banner).toBeVisible();
+    // Playwright scrolls the prompt to its action: consent remains usable at 200%.
+    await page.getByRole("button", { name: "Reject analytics cookies" }).click();
+    await expect(banner).toBeHidden();
+    expect(await storedPreference(page)).toBe("essential");
+    await menuButton.click();
     await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Uniform" }).click();
     await expect(page).toHaveURL(/\/uniform\/$/);
   });

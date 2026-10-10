@@ -1,19 +1,38 @@
 import { expect, test } from "@playwright/test";
 
-test("homepage preview tools live inside the open mobile menu", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 900 });
+test("homepage phone preview sits beside the burger outside the menu and stays fixed", async ({ page }) => {
+  for (const width of [320, 390, 768, 1023]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const phone = page.getByRole("button", { name: "Phone preview size" });
+    const burger = page.getByRole("button", { name: "Open menu" });
+    await expect(phone).toBeVisible();
+    await expect(page.locator(".mobile-menu .dev-tools")).toHaveCount(0);
+    const before = await phone.boundingBox();
+    const menuBox = await burger.boundingBox();
+    expect(before!.x + before!.width).toBeLessThan(menuBox!.x);
+    expect(Math.abs(before!.y + before!.height / 2 - menuBox!.y - menuBox!.height / 2)).toBeLessThan(1);
+    const layout = await page.evaluate(() => {
+      const copy = document.querySelector(".home-introduction p")!.getBoundingClientRect();
+      const tools = document.querySelector(".home-preview-tools")!.getBoundingClientRect();
+      return { copyRight: copy.right, toolsLeft: tools.left, overflow: document.documentElement.scrollWidth - innerWidth };
+    });
+    expect(layout.copyRight).toBeLessThanOrEqual(layout.toolsLeft);
+    expect(layout.overflow).toBeLessThanOrEqual(0);
+    await phone.click();
+    await expect(page.getByRole("button", { name: "Small phone (360px)" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await expect(phone).toBeInViewport();
+    await expect(burger).toBeInViewport();
+    expect((await phone.boundingBox())!.y).toBe(before!.y);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-
-  await expect(page.locator(".site-header")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
-  const tools = page.locator(".mobile-menu-dev-tools");
-  await expect(tools).toHaveCount(1);
-  await expect(tools).toBeHidden();
-  await page.getByRole("button", { name: "Open menu" }).click();
-  await expect(tools).toBeVisible();
-  await expect(tools.getByRole("button", { name: "Mobile preview", exact: true })).toBeHidden();
+  await expect(page.getByRole("button", { name: "Phone preview size" })).toBeHidden();
+  await expect(page.getByRole("button", { name: "Open menu" })).toBeHidden();
+  await expect(page.getByRole("button", { name: "Mobile preview", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Reset cookie consent" })).toHaveCount(0);
-  await expect(tools.getByRole("button", { name: "Phone preview size" })).toBeVisible();
 });
 
 test("desktop has one phone icon that opens a medium preview", async ({ page }) => {

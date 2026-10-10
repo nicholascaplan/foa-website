@@ -410,13 +410,6 @@ a {
   display: flex;
 }
 
-.mobile-menu-dev-tools {
-  display: grid;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-}
-
 .mobile-menu-controls {
   position: absolute;
   top: 0;
@@ -531,10 +524,37 @@ a {
   .homepage .home-introduction {
     padding-right: calc(3rem + max(1rem, env(safe-area-inset-right, 0px)));
   }
+
+  .home-preview-tools {
+    position: fixed;
+    z-index: 55;
+    top: calc(max(1rem, env(safe-area-inset-top, 0px)) + 0.125rem);
+    right: calc(max(1rem, env(safe-area-inset-right, 0px)) + 3.5rem);
+  }
+
+  .home-preview-tools .dev-tools--mobile {
+    display: flex;
+  }
+
+  .site-header--dev-home .home-introduction {
+    gap: 0.5rem;
+    padding-right: calc(6.25rem + max(1rem, env(safe-area-inset-right, 0px)));
+  }
+
+  .site-header--dev-home .home-introduction img {
+    width: 2.75rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-preview-tools {
+    display: none;
+  }
 }
 
 .home-introduction {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
   align-items: center;
   gap: 1rem;
@@ -542,6 +562,7 @@ a {
 
 .home-introduction img {
   width: clamp(5.25rem, 9vw, 7rem);
+  max-width: 100%;
   height: auto;
   flex: none;
   border-radius: 50%;
@@ -549,9 +570,11 @@ a {
 
 .home-introduction p {
   display: grid;
+  flex: 1 1 0;
   min-width: 0;
   margin: 0;
   line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .home-introduction strong {
@@ -2079,6 +2102,10 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   width: min(calc(100% - 2rem), 31rem);
+  /* Leave the floating menu reachable, even on short screens or enlarged text. */
+  max-height: calc(100dvh - 6rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.25rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);

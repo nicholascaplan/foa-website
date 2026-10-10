@@ -91,7 +91,7 @@ Initial browser scenarios:
 6. Verify Today/Tomorrow labels using a fixed browser clock near a date boundary rather than depending on the day the test runs.
 7. Confirm the development-only mobile-preview control is absent from the production build.
 
-Generated-site contracts in `tests/site.test.mjs` cover the homepage Welcome Tea poster and Fireworks hero-switch boundary attributes. Browser coverage for the UK-time date transition remains required in CI.
+Generated-site contracts in `tests/site.test.mjs` cover Fireworks in the initial homepage HTML without Welcome Tea or date switching, and the Welcome Tea archive boundary on What's On. Browser date tests freeze only Date (not animation or interval timers), assert successful navigation and verify UK-time event visibility across visitor timezones.
 
 Further browser scenarios now covered: clicking through from What's On opens the Fireworks page without a return breadcrumb; key event information stays reachable with JavaScript disabled (the footer is the mobile navigation fallback); and axe plus a no-horizontal-scroll check run at a 390px viewport, including the open mobile menu.
 
@@ -129,6 +129,10 @@ Do not start with broad screenshot regression while page content and spacing are
 
 Use Lighthouse or an equivalent deployed-site check as a scheduled or pre-launch diagnostic rather than a blocking check on every change at first. Track mobile performance, image weight, layout shift and accessibility; set blocking budgets only after measuring a stable baseline.
 
+`tests/performance.test.mjs` adds blocking generated-output budgets for the seven mobile-menu destinations, with headroom over the October 2026 build: 4 KiB estimated gzip for directly referenced and inline JavaScript, 18 KiB estimated gzip for linked stylesheets, and route-specific eager-image byte limits. Preloaded images are included and duplicate URLs counted once. These are inventory estimates, not measured HTTP transfers: CSS backgrounds, fonts, lazy images, responsive `srcset` candidates, transitive script imports and consented third-party resources are outside this inventory. Each test prints its measured sizes and eager-image list for diagnosis; existing large images are not optimised or rejected by the initial budgets.
+
+`tests/e2e/navigation-performance.spec.ts` follows all seven menu destinations in touch-enabled Chromium with a Pixel 5 viewport, 150ms synthetic latency, 3Mbps download, 1Mbps upload and 4x CPU slowdown. It takes two samples per destination with cleared HTTP cache, then two with caching permitted. It asserts successful navigation, a visible destination heading, closed menu and no page errors, but does not impose uncalibrated timing thresholds. Its JSON attachment and console report contain menu-link activation to navigation, heading visibility, DOMContentLoaded, first contentful paint and load timings, plus document TTFB and resource timings/transfer bytes. Heading visibility includes test-observation overhead; FCP is not proof of usable content; zero resource transfer bytes can mean cached or unexposed timing data. These local-preview diagnostics neither benchmark a physical Android phone nor measure GitHub Pages latency. Analytics is rejected to keep third-party traffic out of the baseline. Run the focused diagnostic with `npx playwright test tests/e2e/navigation-performance.spec.ts --project=chromium --workers=1 --retries=0` after a production build; asset diagnostics run with `node --test tests/performance.test.mjs`. Both are included in the existing verification gate.
+
 ## Manual Testing
 
 Automation cannot approve facts, tone or usability. Retain these manual activities:
@@ -165,6 +169,10 @@ Recommended cadence:
 - Scheduled or pre-launch: dependency audit, deployed-site link check and mobile performance run.
 
 CI uses the latest available Node 22.x version at or above 22.18.0, which supports the default TypeScript type stripping required by the direct `src/lib/*.ts` unit-test imports. Cache Playwright browser downloads in CI only if it materially improves build time without obscuring failures.
+
+The deployment workflow retains `test-results/` as a `browser-test-results` artifact for 14 days, including mobile-navigation diagnostic JSON and available browser-failure evidence, even when verification fails.
+
+Test-suite runtime evidence and proposed optimisations are tracked in [`ACTIONS.md` → Test-suite runtime follow-up](ACTIONS.md#test-suite-runtime-follow-up). These proposals do not change the verification gate until implemented; distinguish test runtime from browser installation, retries and aggregate worker time when comparing measurements.
 
 ## Coverage And Maintenance
 

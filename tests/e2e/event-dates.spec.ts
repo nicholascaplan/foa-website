@@ -5,8 +5,10 @@ const lastMomentOfWelcomeTea = "2026-10-03T11:59:30Z";
 const firstMomentAfterWelcomeTea = "2026-10-03T12:00:00Z";
 
 const openAt = async (page: Page, isoTime: string, path: string) => {
-  await page.clock.install({ time: new Date(isoTime) });
-  await page.goto(path);
+  // Only freeze Date: event rules do not need mocked animation or interval timers.
+  await page.clock.setFixedTime(new Date(isoTime));
+  const response = await page.goto(path);
+  expect(response?.status(), `Navigation to ${path} at ${isoTime} must succeed`).toBe(200);
 };
 
 const homepageWelcomeTea = (page: Page) =>
