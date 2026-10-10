@@ -1,4 +1,16 @@
+import { execFileSync } from "node:child_process";
 import { defineConfig, devices } from "@playwright/test";
+
+// Pick a free port once in the main process; workers inherit it via the environment.
+process.env.PLAYWRIGHT_PORT ??= execFileSync(
+  process.execPath,
+  [
+    "-e",
+    "const s=require('net').createServer().listen(0,'127.0.0.1',()=>{console.log(s.address().port);s.close()})",
+  ],
+  { encoding: "utf8" },
+).trim();
+const origin = `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT}`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -7,7 +19,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:4347",
+    baseURL: origin,
     trace: "on-first-retry",
   },
   projects: [
@@ -25,8 +37,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run preview -- --ignore-lock --host 127.0.0.1 --port 4347",
-    url: "http://127.0.0.1:4347",
+    command: `npm run preview -- --ignore-lock --host 127.0.0.1 --port ${process.env.PLAYWRIGHT_PORT}`,
+    url: origin,
     reuseExistingServer: false,
   },
 });

@@ -79,7 +79,7 @@ Prefer structural parsing over increasingly broad regular expressions when these
 
 ### 3. Browser end-to-end tests
 
-Use Playwright for interactions and complete parent journeys. Run against a production build served locally so routing, built scripts and base-path behaviour match deployment closely. The production suite starts a dedicated preview server on port 4347 with `--ignore-lock` and does not reuse an existing server, keeping it separate from normal development/preview sessions and the development suite.
+Use Playwright for interactions and complete parent journeys. Run against a production build served locally so routing, built scripts and base-path behaviour match deployment closely. The production suite starts a dedicated preview server on a free port chosen at run time (override with `PLAYWRIGHT_PORT`) with `--ignore-lock` and does not reuse an existing server, keeping it separate from normal development/preview sessions and the development suite.
 
 Initial browser scenarios:
 
