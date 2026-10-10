@@ -3997,6 +3997,7 @@ a {
 
 .involved-closing {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem 2rem;
   align-items: center;
   margin-top: clamp(2rem, 5vw, 3rem);
@@ -4015,6 +4016,10 @@ a {
 
 .involved-closing p {
   margin: 0.4rem 0 0;
+}
+
+.involved-closing .involved-action {
+  white-space: normal;
 }
 
 @media (min-width: 48rem) {
