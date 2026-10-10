@@ -63,7 +63,7 @@ const eventJsonLd = {
           <p class="xmas-hero__lead">And we need you!</p>
           <p class="xmas-hero__intro">This year we’re trying something new to make helping out easier, more social and more fun for everyone.</p>
           <dl class="xmas-facts">
-            <div><dt>When</dt><dd>{dateFormatter(event.start)}, {timeFormatter.format(event.start)}</dd></div>
+            <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{timeFormatter.format(event.start)}</span></dd></div>
             <div><dt>Where</dt><dd>{event.location}</dd></div>
             <div><dt>Led by</dt><dd>{event.lead}</dd></div>
           </dl>
@@ -100,7 +100,7 @@ const eventJsonLd = {
         <div class="xmas-frame xmas-contact">
           <div class="xmas-contact__copy">
             <h2 id="xmas-contact-title">Get in touch</h2>
-            <p>Email <a class="xmas-link" href={mailto}>{email}</a> or chat with the team in the playground to find out more and to sign up.</p>
+            <p>Email the <a class="xmas-link" href={mailto}>Christmas Fayre team</a> or chat with the team in the playground to find out more and to sign up.</p>
           </div>
           <ChristmasTrees />
         </div>

@@ -300,25 +300,25 @@ body.xmas-theme::before {
   border-top: 1px solid var(--xm-gold-dim);
 }
 
-@media (min-width: 40rem) {
-  .xmas-facts {
-    grid-template-columns: repeat(3, auto);
-    justify-content: center;
-  }
-}
-
 .xmas-facts div {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.1rem 0.6rem;
-  justify-content: center;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 0.1rem;
+  align-items: center;
 }
 
 @media (min-width: 40rem) {
+  .xmas-facts {
+    grid-template-columns: auto auto;
+    justify-content: center;
+    column-gap: 1.2rem;
+    row-gap: 0.4rem;
+    align-items: baseline;
+    text-align: left;
+  }
+
   .xmas-facts div {
-    display: grid;
-    gap: 0.1rem;
+    display: contents;
   }
 }
 
@@ -335,6 +335,16 @@ body.xmas-theme::before {
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 4.4vw, 1.85rem);
   line-height: 1.2;
+}
+
+.xmas-nowrap {
+  white-space: nowrap;
+}
+
+@media (max-width: 24rem) {
+  .xmas-facts dd {
+    font-size: clamp(1.1rem, 5.6vw, 1.3rem);
+  }
 }
 
 .xmas-actions {
@@ -397,7 +407,7 @@ body.xmas-theme::before {
 .xmas-link {
   color: var(--xm-gold-light);
   font-weight: 800;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
   text-underline-offset: 0.25rem;
 }
 

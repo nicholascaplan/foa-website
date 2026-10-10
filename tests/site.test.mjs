@@ -225,7 +225,7 @@ test("the Christmas Fayre page uses the Fayre inbox for every sign-up link, with
   for (const link of links) {
     assert.equal(link, `mailto:${christmas.contactEmail}?subject=Helping%20at%20the%20Christmas%20Fayre`);
   }
-  assert.match(html, new RegExp(`>${christmas.contactEmail.replace(/\./g, "\\.")}</a>`));
+  assert.match(html, />Christmas Fayre team<\/a>/);
 });
 
 test("the Christmas Fayre page keeps reminders in a plain list, separate from the help areas", async () => {
@@ -239,7 +239,7 @@ test("the Christmas Fayre page keeps reminders in a plain list, separate from th
 
 test("the Christmas Fayre page shows the date, place and lead from the event record, with decoration hidden from assistive technology", async () => {
   const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
-  assert.match(html, /<dd>Saturday 5th December, 12:00<\/dd>/);
+  assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00<\/span><\/dd>/);
   assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
   assert.match(html, new RegExp(`<dd>${christmas.lead}</dd>`));
   assert.equal([...html.matchAll(/<ul class="xmas-baubles" aria-hidden="true">/g)].length, 1);
