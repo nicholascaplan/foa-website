@@ -195,6 +195,12 @@ a {
   transform: translateY(-5%) scale(1.174);
 }
 
+/* The Fireworks SVG is centred on the logo circle with symmetric padding,
+   so it only needs scaling (550 / 457) to match the standard logo's circle. */
+.brand-logo--fireworks {
+  transform: scale(1.203);
+}
+
 .type-options {
   display: grid;
   gap: 1.25rem;
