@@ -2746,6 +2746,38 @@ a {
   font-weight: 800;
 }
 
+.event-list-cta--button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  align-items: center;
+  gap: 0.4rem;
+  color: #382107;
+  background: #f3ad38;
+  box-shadow: 0 10px 22px rgba(217, 119, 6, 0.22);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  transition: transform 160ms ease;
+}
+
+.event-list-item:hover .event-list-cta--button,
+.event-list-item:focus-visible .event-list-cta--button {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-list-cta--button {
+    transition: none;
+  }
+
+  .event-list-item:hover .event-list-cta--button,
+  .event-list-item:focus-visible .event-list-cta--button {
+    transform: none;
+  }
+}
+
 .member-details p {
   margin: 0.35rem 0 0;
   color: var(--green);

@@ -47,7 +47,7 @@ const eventJsonLd = {
   organizer: { "@type": "Organization", name: "The Friends of Ashley", url: new URL(withBase("/"), Astro.site).href },
 };
 ---
-<BaseLayout title={event.title} description="Something magical is coming. Help host the Ashley Christmas Fayre: join a slot with your friends, no experience needed." bodyClass="xmas-theme">
+<BaseLayout title={event.title} description="Something magical is coming. Help host the Ashley Christmas Fayre: join a slot with your friends, no experience needed." image="/brand/foa-logo-christmas-og.png" headerLogo="/brand/foa-logo-christmas.svg" bodyClass="xmas-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
   <div class="xmas-stage">
     <div class="xmas-snow" aria-hidden="true">

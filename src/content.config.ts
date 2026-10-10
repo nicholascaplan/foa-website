@@ -14,6 +14,7 @@ const events = defineCollection({
     statusLabel: z.string(),
     path: z.string().optional(),
     ctaLabel: z.string().optional(),
+    ctaButton: z.boolean().default(false),
     archive: z.boolean().default(false),
     allDay: z.boolean().default(false),
     archiveFrom: z.coerce.date().optional(),
