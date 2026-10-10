@@ -55,6 +55,7 @@ Applies to site copy, metadata, navigation labels, structured data and documenta
 - Keep important body copy comfortably readable.
 - Use real links and buttons, not clickable generic elements.
 - Keep design values in central CSS tokens.
+- For floating controls, check ancestor styles as well as the control itself: `filter`, `backdrop-filter` and transforms can make a fixed element scroll with its ancestor. A `display: none` wrapper also hides a fixed child. Verify the control stays in the viewport after scrolling at both mobile and desktop widths.
 - Keep event facts in one structured source (the content collections); do not duplicate them in page copy.
 - Use `withBase()` for asset and internal URLs so the site works at the root and at `/foa-website/`.
 - Avoid new external runtime dependencies or optional tracking unless explicitly approved. Analytics is consent-controlled; extend the Privacy Notice and consent control before adding anything optional.

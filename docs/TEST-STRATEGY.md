@@ -105,6 +105,8 @@ Night Mode is covered by `tests/e2e/night-mode.spec.ts` against the production b
 
 ### 4. Automated accessibility checks
 
+The floating-menu regression suite covers mobile and desktop scrolling: the header and its only Night Mode control leave the viewport, a single 48px menu trigger stays fixed, and scrolling slightly upwards does not restore the full header. It also checks menu focus containment, close/focus recovery, the absence of a theme control in the menu, and responsive overflow. Browser execution is still required to verify rendered positioning and interactions.
+
 `tests/e2e/accessibility.spec.ts` runs `@axe-core/playwright` against **every page in the production build** (discovered from `dist/`, at desktop and 390px mobile widths), so a new route is scanned with no test edit. Only `/playground.html` is excluded, in an explicit `excluded` list. Interactive states (expanded newsletters, the open mobile menu) are scanned separately. The page types this must always cover include:
 
 - Home

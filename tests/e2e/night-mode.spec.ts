@@ -3,10 +3,16 @@ import { expect, test, type Page } from "@playwright/test";
 import { routes } from "./routes";
 
 const key = "foa-theme";
-const toggleName = "Night mode";
 const dayBackground = "rgb(246, 241, 231)";
 const nightBackground = "rgb(23, 36, 29)";
-const toggleOf = (page: Page) => page.getByRole("button", { name: toggleName });
+const toggleOf = (page: Page) => page.locator(".site-header [data-theme-toggle]");
+const openMenu = async (page: Page) => {
+  const trigger = page.getByRole("button", { name: "Open menu" });
+  if (!(await trigger.isVisible())) await page.evaluate(() => window.scrollTo(0, 800));
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "false");
+};
 
 // Colour transitions make computed styles lag behind a theme switch, which skews contrast scans.
 const freezeTransitions = (page: Page) => page.addStyleTag({ content: "*, *::before, *::after { transition: none !important; }" });
@@ -36,9 +42,11 @@ test("the theme is applied before the page body so there is no flash", async ({ 
 });
 
 test("the toggle is keyboard accessible, remembered, and independent of cookie consent", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
   const toggle = toggleOf(page);
+  await expect(toggle).toBeVisible();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await toggle.focus();
   await page.keyboard.press("Space");
@@ -50,7 +58,8 @@ test("the toggle is keyboard accessible, remembered, and independent of cookie c
   await expect(page.locator("[data-google-analytics]")).toHaveCount(0);
 
   // An explicit Day choice beats a dark device setting, across navigation and reloads.
-  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Uniform" }).click();
+  await openMenu(page);
+  await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Uniform" }).click();
   await expect(page.locator("body")).toHaveCSS("background-color", dayBackground);
   await page.reload();
   await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
@@ -61,6 +70,7 @@ test("the toggle is keyboard accessible, remembered, and independent of cookie c
 });
 
 test("device setting changes apply only while the visitor has not chosen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
   await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "false");
@@ -79,6 +89,7 @@ test("blocked storage falls back safely but still allows switching", async ({ pa
   await page.addInitScript(() => {
     Object.defineProperty(window, "localStorage", { get() { throw new DOMException("Blocked", "SecurityError"); } });
   });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
   await toggleOf(page).click();
@@ -114,27 +125,26 @@ for (const width of [320, 390, 1440]) {
       // The static preview serves 404.html with a 200 when requested directly.
       expect(response?.status(), route).toBe(200);
       const toggle = toggleOf(page);
-      await expect(toggle).toBeVisible();
       // Fireworks and Christmas pages keep their own night-sky theme in both modes.
       const themed = (await page.locator("body.fw-theme, body.xmas-theme").count()) > 0;
       let themedBackground = "";
       for (const night of [false, true]) {
+        await page.evaluate(() => window.scrollTo(0, 0));
         if (await toggle.getAttribute("aria-pressed") !== String(night)) await toggle.click();
         await expect(toggle).toHaveAttribute("aria-pressed", String(night));
         if (!night) themedBackground = await page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor);
         await expect(page.locator("body")).toHaveCSS("background-color", themed ? themedBackground : night ? nightBackground : dayBackground);
         const sizes = await page.evaluate(() => {
           const header = document.querySelector(".site-header")!.getBoundingClientRect();
-          const button = document.querySelector("[data-theme-toggle]")!.getBoundingClientRect();
-          const menu = document.querySelector(".menu-toggle")!.getBoundingClientRect();
+          const toggle = document.querySelector(".site-header [data-theme-toggle]")!.getBoundingClientRect();
           const brand = document.querySelector(".brand")!.getBoundingClientRect();
+          const menu = document.querySelector(".menu-toggle")!.getBoundingClientRect();
           return {
             overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-            target: Math.min(button.width, button.height),
-            insideHeader: button.top >= header.top && button.bottom <= header.bottom && button.left >= 0 && button.right <= window.innerWidth,
-            // The toggle must share a row with the brand rather than wrapping onto its own line.
-            sameRow: button.top < brand.bottom && button.bottom > brand.top,
-            clearOfMenu: menu.width === 0 || button.right <= menu.left || button.left >= menu.right,
+            target: Math.min(toggle.width, toggle.height),
+            insideHeader: toggle.top >= header.top && toggle.bottom <= header.bottom && toggle.left >= 0 && toggle.right <= window.innerWidth,
+            sameRow: toggle.top < brand.bottom && toggle.bottom > brand.top,
+            clearOfMenu: menu.width === 0 || toggle.right <= menu.left || toggle.left >= menu.right,
             alteredImages: [...document.querySelectorAll<HTMLImageElement>("img")].filter((image) => getComputedStyle(image).filter !== "none").length,
           };
         });
@@ -166,6 +176,7 @@ for (const width of [390, 1440]) {
         await expect(page.locator(".newsletter-sheet").first()).toHaveCSS("color", "rgb(25, 49, 39)");
         await expect(page.locator(".newsletter-sheet").first()).toHaveCSS("background-color", "rgb(231, 222, 204)");
       }
+      await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "true");
       const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
       expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
     });
@@ -217,6 +228,7 @@ test("mobile menu keeps visible dividers and readable links in Night Mode", asyn
   await freezeTransitions(page);
   await page.getByRole("button", { name: "Reject analytics cookies" }).click();
   await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(toggleOf(page)).toHaveAttribute("aria-pressed", "true");
   const link = page.locator(".mobile-menu nav a:not(.button):not([aria-current])").first();
   await expect(link).toBeVisible();
   await expect(link).toHaveCSS("border-bottom-color", "rgb(101, 120, 107)");

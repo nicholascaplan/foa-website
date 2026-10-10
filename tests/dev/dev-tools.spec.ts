@@ -65,8 +65,9 @@ test("desktop tools sit between the home link and navigation without overlaps", 
         overlaps: rectangles.some((a, i) => rectangles.slice(i + 1).some((b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top)),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         position: getComputedStyle(tools).position,
-        toggleOnBrandRow: (() => {
-          const toggle = document.querySelector("[data-theme-toggle]")!.getBoundingClientRect();
+        themeToggleCount: document.querySelectorAll("[data-theme-toggle]").length,
+        headerToggleOnBrandRow: (() => {
+          const toggle = document.querySelector(".site-header [data-theme-toggle]")!.getBoundingClientRect();
           const home = brand.getBoundingClientRect();
           return toggle.top < home.bottom && toggle.bottom > home.top;
         })(),
@@ -75,7 +76,8 @@ test("desktop tools sit between the home link and navigation without overlaps", 
     expect(layout.order).toBe(true);
     expect(layout.overlaps, `${width}px header`).toBe(false);
     expect(layout.overflow).toBeLessThanOrEqual(0);
-    expect(layout.toggleOnBrandRow, `${width}px theme toggle row`).toBe(true);
+    expect(layout.themeToggleCount).toBe(1);
+    expect(layout.headerToggleOnBrandRow, `${width}px header theme toggle row`).toBe(true);
     expect(layout.position).toBe("static");
   }
 });

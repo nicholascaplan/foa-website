@@ -150,6 +150,7 @@ test("production ships the Night Mode theme but none of the local development to
     const html = await readFile(path.join(dist, page), "utf8");
     assert.equal(html.match(/data-theme-initializer/g)?.length, 1, page);
     assert.equal(html.match(/data-theme-toggle(?!\])/g)?.length, 1, page);
+    assert.match(html, /<header\b[\s\S]*?data-theme-toggle[\s\S]*?<\/header>/, `${page} keeps Night Mode in the header`);
     assert.ok(html.indexOf("data-theme-initializer") < html.indexOf("<body"), `${page} sets the theme before the body`);
   }
 });
