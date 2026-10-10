@@ -76,7 +76,12 @@ test.describe("Christmas Fayre layout", () => {
   test("keeps the sign-up button and help areas reachable by keyboard", async ({ page }) => {
     await page.goto(route);
 
-    const button = page.getByRole("link", { name: /Email the Fayre team/ });
+    const buttons = page.getByRole("link", { name: /Email the Fayre team/ });
+    await expect(buttons).toHaveCount(2);
+    for (const link of await buttons.all()) {
+      await expect(link).toHaveAttribute("href", /^mailto:.+\?subject=Helping%20at%20the%20Christmas%20Fayre$/);
+    }
+    const button = buttons.first();
     await expect(button).toHaveAttribute("href", /^mailto:.+\?subject=Helping%20at%20the%20Christmas%20Fayre$/);
     await button.focus();
     await expect(button).toBeFocused();
@@ -94,6 +99,7 @@ test.describe("Christmas Fayre without JavaScript", () => {
     await expect(page.getByRole("heading", { level: 2, name: "Where we need friendly faces" })).toBeVisible();
     await expect(page.locator(".xmas-area")).toHaveCount(7);
     await expect(page.getByRole("heading", { name: "Good to know" })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Email the Fayre team/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Email the Fayre team/ }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /Email the Fayre team/ }).last()).toBeVisible();
   });
 });
