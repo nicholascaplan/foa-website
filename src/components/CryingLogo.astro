@@ -1,30 +1,30 @@
 ---
-const hex = (cx: number, cy: number, r: number) =>
-  [-90, -30, 30, 90, 150, 210]
-    .map((deg, i) => {
-      const a = (deg * Math.PI) / 180;
-      return `${i ? "L" : "M"}${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)}`;
-    })
-    .join(" ") + " Z";
+import logoSvg from "../../assets/brand/foa-logo.svg?raw";
+
+const body = logoSvg.replace(/^\s*<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+// Keep the ring, hexagons, curved title and top icon; the PTA label and the two
+// lower icons give way to the face (eyes in the lower hexagons, mouth beneath).
+const paths = [...body.matchAll(/<path[^>]*\/>/g)].map((m) => m[0]);
+const artwork = [4, 6, 7].reduce((svg, i) => svg.replace(paths[i], ""), body);
 
 const eyes = [
-  { cx: 164, cy: 302, flip: 1 },
-  { cx: 296, cy: 302, flip: -1 },
+  { cx: 160.5, cy: 312, flip: 1 },
+  { cx: 304.5, cy: 312, flip: -1 },
 ];
+
 const tears = [
-  { x: 164, delay: "0s" },
-  { x: 164, delay: "1.7s" },
-  { x: 296, delay: "0.85s" },
-  { x: 296, delay: "2.55s" },
+  { x: 160.5, delay: "0s" },
+  { x: 160.5, delay: "1.7s" },
+  { x: 304.5, delay: "0.85s" },
+  { x: 304.5, delay: "2.55s" },
 ];
 ---
-<svg class="crying-logo" viewBox="0 0 460 506" role="img" aria-label="The Friends of Ashley logo, crying">
+<svg class="crying-logo" viewBox="0 0 457 506" role="img" aria-label="The Friends of Ashley logo, crying">
   <defs>
-    <path id="crying-logo-arc" d="M 80.3 256.4 A 152 152 0 1 1 379.7 256.4" />
     <path id="crying-logo-tear" d="M0 -16 C 9 -3 11 3 11 7 A 11 11 0 0 1 -11 7 C -11 3 -9 -3 0 -16 Z" />
   </defs>
 
-  <ellipse class="crying-logo__puddle" cx="230" cy="480" rx="76" ry="8" />
+  <ellipse class="crying-logo__puddle" cx="228.5" cy="480" rx="76" ry="8" />
   {tears.map((tear) => (
     <ellipse
       class="crying-logo__ripple"
@@ -37,45 +37,34 @@ const tears = [
   ))}
 
   <g class="crying-logo__body">
-    <circle cx="230" cy="230" r="215" fill="#fff" stroke="var(--logo-teal)" stroke-width="14" />
-    <text class="crying-logo__title" font-size="38" letter-spacing="1" text-anchor="middle">
-      <textPath href="#crying-logo-arc" startOffset="50%">Friends of Ashley</textPath>
-    </text>
-
-    <path d={hex(230, 190, 64)} class="crying-logo__hex" />
-
-    <path d={hex(164, 302, 64)} class="crying-logo__hex" />
-    <path d={hex(296, 302, 64)} class="crying-logo__hex" />
+    <g set:html={artwork} />
 
     {eyes.map((eye) => (
       <g>
-        <circle cx={eye.cx} cy={eye.cy} r="29" fill="var(--logo-teal)" />
+        <circle cx={eye.cx} cy={eye.cy} r="28" fill="var(--logo-teal)" />
         <path
-          d={`M ${eye.cx - 23} ${eye.cy + 17.6} A 29 29 0 0 0 ${eye.cx + 23} ${eye.cy + 17.6} Q ${eye.cx} ${eye.cy + 10} ${eye.cx - 23} ${eye.cy + 17.6} Z`}
+          d={`M ${eye.cx - 22} ${eye.cy + 17} A 28 28 0 0 0 ${eye.cx + 22} ${eye.cy + 17} Q ${eye.cx} ${eye.cy + 9} ${eye.cx - 22} ${eye.cy + 17} Z`}
           fill="#8fd3cb"
         />
         <g class="crying-logo__pupil">
-          <circle cx={eye.cx - 9} cy={eye.cy - 8} r="10" fill="#fff" />
-          <circle cx={eye.cx + 11} cy={eye.cy + 3} r="5" fill="#fff" />
-          <circle cx={eye.cx - 2} cy={eye.cy + 12} r="2.5" fill="#fff" />
+          <circle cx={eye.cx - 9} cy={eye.cy - 8} r="9.5" fill="#fff" />
+          <circle cx={eye.cx + 11} cy={eye.cy + 3} r="4.5" fill="#fff" />
+          <circle cx={eye.cx - 2} cy={eye.cy + 12} r="2.3" fill="#fff" />
         </g>
         <path
-          d={`M ${eye.cx - 22 * eye.flip} ${eye.cy - 38} L ${eye.cx + 20 * eye.flip} ${eye.cy - 48}`}
-          fill="none" stroke="var(--logo-teal)" stroke-width="6" stroke-linecap="round"
+          d={`M ${eye.cx - 30 * eye.flip} ${eye.cy - 36} L ${eye.cx + 26 * eye.flip} ${eye.cy - 50}`}
+          fill="none" stroke="var(--logo-teal)" stroke-width="6.5" stroke-linecap="round"
         />
       </g>
     ))}
 
-    <path class="crying-logo__mouth" d="M200 402 Q 215 382 230 392 Q 245 382 260 402" />
-    <ellipse cx="112" cy="356" rx="16" ry="10" class="crying-logo__blush" />
-    <ellipse cx="348" cy="356" rx="16" ry="10" class="crying-logo__blush" />
+    <path class="crying-logo__mouth" d="M205 413 Q 218 392 232.5 402 Q 247 392 260 413" />
   </g>
 
   {tears.map((tear) => (
-    <g class="crying-logo__tear" style={`--delay:${tear.delay}`} transform={`translate(${tear.x} 344)`}>
+    <g class="crying-logo__tear" style={`--delay:${tear.delay}`} transform={`translate(${tear.x} 338)`}>
       <g class="crying-logo__tear-drop">
         <use href="#crying-logo-tear" fill="var(--logo-teal)" />
-        <path d={hex(0, 6, 5)} fill="var(--logo-gold)" />
       </g>
     </g>
   ))}
@@ -88,24 +77,6 @@ const tears = [
     height: auto;
     margin: 0 auto;
     overflow: visible;
-  }
-
-  .crying-logo__title {
-    fill: var(--logo-teal);
-    font-family: var(--font-body);
-    font-weight: 600;
-  }
-
-  .crying-logo__hex {
-    fill: #fffaf0;
-    stroke: var(--logo-gold);
-    stroke-width: 6;
-    stroke-linejoin: round;
-  }
-
-  .crying-logo__blush {
-    fill: #f4a6a0;
-    opacity: 0.55;
   }
 
   .crying-logo__mouth {
@@ -140,7 +111,7 @@ const tears = [
   }
 
   .crying-logo__tear-drop {
-    transform: translateY(70px);
+    transform: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -196,8 +167,8 @@ const tears = [
   @keyframes crying-logo-fall {
     0% { opacity: 0; transform: translateY(0) scale(0.4); }
     12% { opacity: 1; transform: translateY(8px) scale(1); }
-    85% { opacity: 1; transform: translateY(118px) scale(1); }
-    100% { opacity: 0; transform: translateY(130px) scale(0.8); }
+    85% { opacity: 1; transform: translateY(122px) scale(1); }
+    100% { opacity: 0; transform: translateY(134px) scale(0.8); }
   }
 
   @keyframes crying-logo-ripple {
