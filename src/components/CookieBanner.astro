@@ -110,7 +110,8 @@ import { withBase } from "../lib/urls";
     if (savedPreference === "analytics") loadAnalytics();
     else disableAnalytics();
     announcePreference(savedPreference);
-  } else {
+  } else if (!import.meta.env.DEV) {
+    // Local dev servers never prompt automatically; the dev reset button and footer link still open it.
     showBanner();
   }
 
