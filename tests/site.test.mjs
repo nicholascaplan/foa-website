@@ -65,20 +65,37 @@ test("Get Involved exposes the AGM volunteer teams and shared enquiry route", as
 test("Reps Hub puts shareable messages first and preserves ticket links and sale timings when copied", async () => {
   const html = await readFile(path.join(dist, "reps/index.html"), "utf8");
   assert.ok(html.indexOf('class="message-grid"') < html.indexOf('id="reps-role-title"'));
-  const cards = [...html.matchAll(/<article class="message-card">([\s\S]*?)<\/article>/g)].map((match) => match[1]);
-  assert.equal(cards.length, 3);
+  const cards = [...html.matchAll(/<article class="message-card"[^>]*>([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+  assert.equal(cards.length, 4);
   const fireworks = JSON.parse(await readFile(path.resolve("src/content/events/fireworks-2026.json"), "utf8"));
   const uniform = JSON.parse(await readFile(path.resolve("src/content/events/uniform-november-2026.json"), "utf8"));
   assert.ok(cards[0].includes(`href="${fireworks.ticketUrl}"`));
   assert.ok(cards[0].includes("Buy Fireworks tickets"));
-  assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Tickets: ${fireworks.ticketUrl}`));
+  assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Buy Fireworks tickets: ${fireworks.ticketUrl}`));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" });
   const range = `${time.format(new Date(uniform.start))}–${time.format(new Date(uniform.end))}`;
-  assert.ok(cards[1].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
+  assert.ok(cards[2].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
   for (const date of [uniform.start, uniform.end]) {
-    assert.ok(cards[1].includes(`datetime="${new Date(date).toISOString()}"`));
+    assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
   }
-  assert.ok(!cards[2].includes('class="message-time"'));
+  assert.ok(cards[3].includes('class="message-time"'));
+  assert.ok(cards[3].includes("From "));
+  assert.ok(cards[3].includes("12:00"));
+  assert.ok(cards[2].includes("weather permitting"));
+  assert.ok(cards[3].includes("rather than stalls being assigned to year groups"));
+  assert.ok(cards[3].includes("No experience needed"));
+  for (const [index, route] of ["/events/fireworks-2026/", "/fireworks-volunteering/", "/uniform/", "/events/christmas-fayre-2026/"].entries()) {
+    const url = `https://www.thefriendsofashley.org${basePath}${route}`;
+    assert.ok(cards[index].includes(`>${url}</a>`), `Missing visible URL: ${url}`);
+    assert.ok(cards[index].match(/data-copy-text="([^"]*)"/)?.[1].includes(url), `Missing copied URL: ${url}`);
+  }
+  for (const role of fireworks.volunteerRoles) {
+    assert.ok(cards[1].includes(role.name.toLowerCase()));
+  }
+  assert.doesNotMatch(cards.join(""), /—|Tombola, Entrance &amp; Tokens, and Glitter Tattoos/);
+  assert.doesNotMatch(html, /class leads for the Christmas Fayre/);
+  assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 4);
+  assert.equal([...html.matchAll(/data-expires-at="/g)].length, 4);
 });
 
 test("navigation exposes the menu on Home and both menus on interior pages", async () => {

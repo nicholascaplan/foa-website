@@ -3,19 +3,84 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { getCollection } from "astro:content";
 import { withBase } from "../lib/urls";
+import { ordinalDateFormatter } from "../lib/dates";
 const events = await getCollection("events");
 const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
 const uniform = events.find(({ id }) => id === "uniform-november-2026")?.data;
+const decemberUniform = events.find(({ id }) => id === "uniform-december-2026")?.data;
+const christmas = events.find(({ id }) => id === "christmas-fayre-2026")?.data;
+if (!fireworks?.schedule || !fireworks.volunteerRoles || !uniform || !decemberUniform || !christmas?.helpAreas) {
+  throw new Error("Reps Hub event content is missing");
+}
+const dateFormatter = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
+const dateTileFormatter = new Intl.DateTimeFormat("en-GB", { month: "short", timeZone: "Europe/London" });
+const dayFormatter = new Intl.DateTimeFormat("en-GB", { day: "2-digit", timeZone: "Europe/London" });
 const timeFormatter = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Europe/London",
   hour: "2-digit",
   minute: "2-digit",
 });
+const list = (items: string[]) => items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
+const publicUrl = (path: string) => new URL(withBase(path), "https://www.thefriendsofashley.org").href;
+const timeRange = (event: typeof uniform) => event.end
+  ? `${timeFormatter.format(event.start)}–${timeFormatter.format(event.end)}`
+  : `from ${timeFormatter.format(event.start)}`;
+const quietDisplay = fireworks.schedule.find(({ label }) => label === "Quiet display");
+const mainDisplay = fireworks.schedule.find(({ label }) => label === "Main display");
+if (!quietDisplay || !mainDisplay) throw new Error("Reps Hub Fireworks schedule is missing");
 const messages = [
-  { month: "NOV", day: "05", title: "Fireworks on the Field", body: "The FOA Fireworks is on Thursday 5th November, 16:30-18:30, with the quiet display at 17:00 and main display at 18:00. Tickets are £8.50 per person; under-2s are free.", timing: fireworks, ticketUrl: fireworks?.ticketUrl, href: "/events/fireworks-2026/" },
-  { month: "NOV", day: "06", title: "Pre-loved uniform", body: `The next sale is Friday 6th November${uniform?.end ? `, ${timeFormatter.format(uniform.start)}–${timeFormatter.format(uniform.end)}` : " at 15:25"}, in the school playground. The final sale of term is Friday 4th December at 15:25. New-logo items and coats are £3; all other items are £1. Card only.`, timing: uniform, href: "/uniform/" },
-  { month: "DEC", day: "05", title: "Christmas Fayre", body: "Save the date: Saturday 5th December. Rachel and Sophie are leading this year's Fayre.", href: "/events/christmas-fayre-2026/" },
-];
+  {
+    title: fireworks.title,
+    paragraphs: [
+      `${fireworks.title} is on ${dateFormatter(fireworks.start)} at ${fireworks.location}, ${timeRange(fireworks)}. The quiet display is at ${timeFormatter.format(quietDisplay.time)} and the main display at ${timeFormatter.format(mainDisplay.time)}.`,
+      `Tickets are ${fireworks.ticketPrice}. ${fireworks.ticketNote}`,
+    ],
+    timing: fireworks,
+    href: fireworks.path!,
+    linkLabel: "Event details and practical information",
+    ticketUrl: fireworks.ticketUrl,
+  },
+  {
+    title: "Fireworks volunteering",
+    paragraphs: [
+      `Can you help at ${fireworks.title}? Each year group is looking after an activity: ${fireworks.volunteerRoles.map((role) => `${role.group.replace(/Y(\d)/g, "Year $1")} (${role.name.toLowerCase()})`).join("; ")}.`,
+      `Presales run from ${fireworks.volunteerRoles[0].dates}, with event-day roles on ${dateFormatter(fireworks.start)}. Find your team, see the slots and sign up here:`,
+    ],
+    timing: fireworks,
+    href: "/fireworks-volunteering/",
+    linkLabel: "Volunteer activities and sign-up links",
+  },
+  {
+    title: "Pre-loved uniform",
+    paragraphs: [
+      `The next pre-loved uniform sale is ${dateFormatter(uniform.start)}, ${timeRange(uniform)}, in the school playground, weather permitting. The final sale of term is ${dateFormatter(decemberUniform.start)} ${timeRange(decemberUniform)}.`,
+      "New-logo items and coats are £3; all other items are £1. Card payments only.",
+    ],
+    timing: uniform,
+    href: "/uniform/",
+    linkLabel: "Prices, donations and how to reserve uniform",
+  },
+  {
+    title: christmas.title,
+    paragraphs: [
+      `The ${christmas.title} is on ${dateFormatter(christmas.start)} from ${timeFormatter.format(christmas.start)} at ${christmas.location}, led by ${christmas.lead}. They’re looking for helpers!`,
+      `This year, anyone across the school can help in any area, rather than stalls being assigned to year groups. Bring a friend and help with the ${list(christmas.helpAreas.map(({ name }) => name))}. No experience needed.`,
+    ],
+    timing: christmas,
+    href: christmas.path!,
+    linkLabel: "See how to get involved and contact the Fayre team",
+  },
+].map((message) => ({
+  ...message,
+  reviewed: "2026-10-11",
+  expires: (message.timing.end ?? message.timing.start).toISOString(),
+  url: publicUrl(message.href),
+  copyText: [
+    ...message.paragraphs,
+    ...(message.ticketUrl ? [`Buy Fireworks tickets: ${message.ticketUrl}`] : []),
+    `${message.linkLabel}: ${publicUrl(message.href)}`,
+  ].join("\n\n"),
+})).filter(({ expires }) => Date.now() < Date.parse(expires));
 ---
 <BaseLayout title="Reps Hub" description="Messages from The Friends of Ashley for class representatives to share.">
   <PageHero eyebrow="For class representatives" title="Reps Hub" intro="Copy a message below, paste it into your class group, and share the latest updates from The FOA." />
@@ -23,24 +88,27 @@ const messages = [
     <div class="site-width">
       <div class="message-grid">
         {messages.map((message) => (
-          <article class="message-card">
+          <article class="message-card" data-reviewed={message.reviewed} data-expires-at={message.expires}>
             <div class="message-when">
-              <div class="message-date" aria-label={`${message.month} ${message.day}`}><span>{message.month}</span><strong>{message.day}</strong></div>
+              <div class="message-date" aria-label={dateFormatter(message.timing.start)}><span>{dateTileFormatter.format(message.timing.start).toUpperCase()}</span><strong>{dayFormatter.format(message.timing.start)}</strong></div>
               {message.timing && !message.timing.allDay && <span class="message-time">
                 {!message.timing.end && "From "}<time datetime={message.timing.start.toISOString()}>{timeFormatter.format(message.timing.start)}</time>
                 {message.timing.end && <>–<time datetime={message.timing.end.toISOString()}>{timeFormatter.format(message.timing.end)}</time></>}
               </span>}
             </div>
             <h2>{message.title}</h2>
-            <p>{message.body}{message.ticketUrl && <> <a href={message.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets<span class="visually-hidden"> (opens in a new tab)</span></a></>}</p>
+            {message.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {message.ticketUrl && <p>Buy Fireworks tickets: <a href={message.ticketUrl} target="_blank" rel="noopener noreferrer">{message.ticketUrl}<span class="visually-hidden"> (opens in a new tab)</span></a></p>}
+            <p>{message.linkLabel}: <a href={withBase(message.href)}>{message.url}</a></p>
             <div class="message-actions">
-              <button class="button button--secondary" type="button" data-copy-button data-copy-text={message.ticketUrl ? `${message.body} Tickets: ${message.ticketUrl}` : message.body}>Copy message</button>
+              <button class="button button--secondary" type="button" data-copy-button data-copy-text={message.copyText}>Copy message</button>
               <a class="text-link" href={withBase(message.href)}>Learn more <span aria-hidden="true">&rarr;</span></a>
             </div>
             <p class="copy-feedback" data-copy-feedback role="status" aria-live="polite"></p>
           </article>
         ))}
       </div>
+      <p data-messages-empty hidden={messages.length > 0}>There are no current messages to share. Check <a href={withBase("/whats-on/")}>What's On</a> for event updates.</p>
     </div>
   </section>
   <section class="content-section content-section--compact content-section--snug reps-role" aria-labelledby="reps-role-title">
@@ -48,10 +116,10 @@ const messages = [
       <div class="section-heading">
         <p class="eyebrow">What class reps do</p>
         <h2 id="reps-role-title">A link between school and families.</h2>
-        <p>Class reps are volunteers who connect class teachers with parents, and The Friends of Ashley (FOA) with each class group.</p>
+        <p>Class reps are volunteers who connect class teachers with parents and The Friends of Ashley (FOA) with each class group.</p>
         <ul>
           <li>Pass on teacher messages, updates from The FOA and event reminders.</li>
-          <li>Ask for volunteers for class trips and class leads for the Christmas Fayre and Summer Fete.</li>
+          <li>Help coordinate volunteers for class trips and share calls for helpers at The FOA's events.</li>
           <li>Gather parent contact information and manage class collections for teacher gifts.</li>
           <li>Organise social events for classes or year groups.</li>
         </ul>
@@ -63,6 +131,16 @@ const messages = [
 </BaseLayout>
 
 <script>
+  import { syncEventVisibility } from "../lib/event-visibility";
+  const updateMessages = () => {
+    syncEventVisibility();
+    const empty = document.querySelector<HTMLElement>("[data-messages-empty]");
+    if (empty) empty.hidden = Boolean(document.querySelector(".message-card:not([hidden])"));
+  };
+  updateMessages();
+  window.setInterval(updateMessages, 60000);
+  document.addEventListener("visibilitychange", updateMessages);
+
   const copyText = async (text: string) => {
     if (!navigator.clipboard?.writeText) throw new Error("Copy was not available");
     await navigator.clipboard.writeText(text);

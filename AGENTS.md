@@ -33,6 +33,8 @@ The full decision list is in the brief.
 
 ## Content and Safety Rules
 
+- Use British English in new and updated copy and documentation. Do not use em dashes or Oxford commas.
+- Whenever the site is updated or a page is added, review `src/pages/reps.astro` for related messages that need adding, updating or retiring. Keep visible and copied messages consistent with the canonical pages, include full public website links and check review and expiry dates. If the change has no relevance to class reps, no message change is needed.
 - Do not invent event, accessibility, ticketing, uniform, committee or legal facts. Label unknown or provisional information clearly; the provisional list is in `docs/ACTIONS.md`.
 - Committee presentation uses names and roles (plus approved portraits) only.
 - Do not publish child year groups or other unnecessary child-related information.

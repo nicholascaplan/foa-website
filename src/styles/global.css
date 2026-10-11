@@ -1412,6 +1412,7 @@ a {
 
 .message-card > p:not(.copy-feedback) {
   margin: 0.75rem 0;
+  overflow-wrap: anywhere;
 }
 
 .reps-role .section-heading {
@@ -3258,6 +3259,10 @@ body.menu-open .cookie-banner {
   .status-patterns,
   .message-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .message-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .link-grid {

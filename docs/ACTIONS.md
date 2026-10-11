@@ -35,6 +35,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 - **Owner:** Complete a final visual/content review of the redesigned Get Involved and Reps Hub pages, including volunteer vacancy status and the charter-based role summary. Reps Hub messages come first, actions align across desktop cards, and mobile cards are compact. Responsive DOM checks passed; local automated browser tests remain blocked by Chrome-launch sandbox permissions (see the browser-suite task below).
 
+- **Dev / Owner:** Check the refreshed Reps Hub at mobile and desktop widths: four messages in two desktop columns, wrapping full public URLs, clipboard/manual-copy parity and expiry/empty-state behaviour. Content checks and all 88 site/unit tests pass, but the updated browser tests could not run because Chrome launch was sandbox-blocked. Review tools were unavailable.
+
 | Item | Owner | Blocked by |
 |---|---|---|
 | Review the shared larger desktop logo/name/navigation row on all pages, hidden mobile headers, preserved larger homepage mobile logo, 112px footer logo, and fixed mobile burger/phone controls. Check green-panel eyebrows beside the controls, desktop header-to-panel spacing, Fireworks kicker wrapping beside the controls, the simplified “Fireworks Volunteering” heading without an event-name kicker (two lines beside the mobile controls, compact intro gap, single line on desktop), Christmas baubles without extra top padding, linked menu logo and event sublinks, Night Mode, menu focus, enlarged text and scrolling at 320px, 390px, 1023px, 1024px and 1440px. Prioritise the compact mobile menu: confirm Contact Us fits without scrolling on a 667px-high phone, the raised logo clears both controls (including festive artwork), and short screens/enlarged text can still scroll to Contact Us. Focused coverage is in `tests/e2e/navigation.spec.ts`; local execution is blocked by Chrome-launch permissions. All 16 public page templates/styles were audited for the same spacer issue and their development responses/headings checked; rendered verification remains outstanding. Local Chrome launch is sandbox-blocked and Review tools were unavailable; CI regression coverage does not replace real-device review. | Dev / Owner | Browser-capable environment and real-device review |
@@ -134,7 +136,6 @@ Resolve these as part of the related items above, then record outcomes in the br
 - Is the page intentionally unlisted or public?
 - Who writes and approves messages? How do expired messages disappear?
 - Should native device sharing and translated versions be offered? (Dev view: keep Copy as the primary action. If sharing is added, make it a feature-detected `navigator.share` enhancement alongside Copy, not a replacement.)
-- Should copied messages include the absolute "Learn more" URL so recipients can follow it to the canonical page?
 
 ### Notice Board
 

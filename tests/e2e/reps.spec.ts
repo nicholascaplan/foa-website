@@ -6,21 +6,45 @@ test("Reps Hub actions align across desktop cards", async ({ page }) => {
   const tops = await page.locator(".message-actions").evaluateAll((rows) =>
     rows.map((row) => row.getBoundingClientRect().top),
   );
-  expect(tops).toHaveLength(3);
-  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(1);
+  expect(tops).toHaveLength(4);
+  for (const row of [tops.slice(0, 2), tops.slice(2)]) {
+    expect(Math.max(...row) - Math.min(...row)).toBeLessThan(1);
+  }
 });
 
 test("Fireworks uses a readable ticket link and keeps its URL in copied text", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/reps/");
   const card = page.locator(".message-card").first();
-  const ticket = card.getByRole("link", { name: "Buy Fireworks tickets" });
+  const ticket = card.getByRole("link", { name: /https:\/\/buytickets\.at/ });
   await expect(ticket).toBeVisible();
   const url = await ticket.getAttribute("href");
   expect(url).toBeTruthy();
   expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text"))
-    .toContain(`Tickets: ${url}`);
+    .toContain(`Buy Fireworks tickets: ${url}`);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("all messages keep their visible website URLs when copied", async ({ page }) => {
+  await page.goto("/reps/");
+  for (const card of await page.locator(".message-card").all()) {
+    const url = await card.getByRole("link", { name: /https:\/\/www\.thefriendsofashley\.org/ }).innerText();
+    expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text")).toContain(url);
+  }
+});
+
+test("expired messages disappear and the empty state becomes visible", async ({ page }) => {
+  await page.clock.install({ time: new Date("2026-10-11T12:00:00Z") });
+  await page.goto("/reps/");
+  await expect(page.locator(".message-card:visible")).toHaveCount(4);
+  await page.clock.setSystemTime(new Date("2026-11-07T12:00:00Z"));
+  await page.clock.fastForward(60000);
+  await expect(page.locator(".message-card:visible")).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Christmas Fayre", exact: true })).toBeVisible();
+  await page.clock.setSystemTime(new Date("2026-12-05T12:00:00Z"));
+  await page.clock.fastForward(60000);
+  await expect(page.locator(".message-card:visible")).toHaveCount(0);
+  await expect(page.locator("[data-messages-empty]")).toBeVisible();
 });
 
 test.describe("Reps Hub copy actions", () => {
