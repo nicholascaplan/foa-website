@@ -797,6 +797,12 @@ body.fw-theme::before {
   letter-spacing: 0;
 }
 
+@media (max-width: 63.99rem) {
+  .fw-theme .fw-vol .event-hero {
+    padding-top: clamp(1rem, 3vw, 2rem);
+  }
+}
+
 .fw-vol-date {
   display: inline-flex;
   align-items: center;

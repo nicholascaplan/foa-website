@@ -31,7 +31,15 @@ for (const width of [320, 390, 768, 1023]) {
       if (await stage.count()) {
         expect((await stage.boundingBox())!.y, `${route}: event artwork must reach the page top`).toBe(0);
         await expect(page.locator("#main-content")).toHaveCSS("padding-top", "0px");
-        await expect(stage).toHaveCSS("padding-top", route === "/fireworks-volunteering/" ? "64px" : "0px");
+        await expect(stage).toHaveCSS("padding-top", "0px");
+        if (route === "/fireworks-volunteering/" || route === "/events/fireworks-2026/") {
+          const kicker = page.locator(".fw-kicker");
+          await expect(kicker).toHaveCSS("min-height", "48px");
+          const kickerBox = await kicker.boundingBox();
+          expect(kickerBox!.y, `${route}: kicker should start beside the controls`).toBeCloseTo(Math.max(16, Math.min(width * 0.03, 32)), 1);
+          const title = await page.locator("main h1").boundingBox();
+          expect(title!.y, `${route}: main heading should clear the controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
+        }
       }
       const overlapping = await page.locator("main h1, main h2, main p, main a, main button").evaluateAll((elements) => {
         const burger = document.querySelector(".menu-toggle")!.getBoundingClientRect();
