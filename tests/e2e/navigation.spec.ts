@@ -51,6 +51,47 @@ test("cookie choices are unobtrusive, remembered and can be changed", async ({ p
 test.describe("mobile navigation", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
+  for (const width of [320, 360, 390, 430]) {
+    test(`Contact Us fits without scrolling at ${width}px wide`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 667 });
+      await page.goto("/events/fireworks-2026/");
+      await page.getByRole("button", { name: "Open menu" }).click();
+      const panel = page.locator(".mobile-menu-panel");
+      await expect(panel).toHaveJSProperty("scrollTop", 0);
+      const contact = await panel.getByRole("link", { name: "Contact Us", exact: true }).boundingBox();
+      expect(contact).not.toBeNull();
+      expect(contact!.y + contact!.height).toBeLessThanOrEqual(667 - 16);
+      const layout = await panel.evaluate((element) => ({
+        overflow: element.scrollWidth - element.clientWidth,
+        targets: [...element.querySelectorAll("nav a, button")].map((target) => target.getBoundingClientRect().height),
+        logoTopGap: getComputedStyle(element.querySelector(".mobile-menu-logo")!).marginTop,
+      }));
+      expect(layout.overflow).toBeLessThanOrEqual(0);
+      for (const height of layout.targets) expect(height).toBeGreaterThanOrEqual(44);
+      expect(layout.logoTopGap).toBe(width >= 384 ? "8px" : "44px");
+      if (width >= 384) {
+        const logo = await panel.locator(".mobile-menu-logo").boundingBox();
+        const controls = await panel.locator(".mobile-menu-controls").boundingBox();
+        expect(logo!.y).toBeLessThan(controls!.y + controls!.height);
+        expect(logo!.x + logo!.width).toBeLessThanOrEqual(controls!.x);
+      }
+    });
+  }
+
+  test("Contact Us remains reachable on short screens with enlarged text", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 480 });
+    await page.goto("/");
+    await page.addStyleTag({ content: "html { font-size: 200%; }" });
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const panel = page.locator(".mobile-menu-panel");
+    const contact = panel.getByRole("link", { name: "Contact Us", exact: true });
+    await contact.scrollIntoViewIfNeeded();
+    await expect(contact).toBeInViewport({ ratio: 1 });
+    expect(await panel.evaluate((element) => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0);
+    await contact.click();
+    await expect(page).toHaveURL(/\/contact\/$/);
+  });
+
   test("opens with accessible state and closes by button, Escape and backdrop", async ({ page }) => {
     await page.goto("/");
 
