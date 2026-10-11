@@ -38,7 +38,7 @@ jobs:
           BASE_PATH: /
       - name: Retain browser diagnostics and failure evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: browser-test-results
           path: test-results/
