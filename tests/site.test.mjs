@@ -205,7 +205,7 @@ test("the homepage shows Fireworks in the initial HTML without Welcome Tea or da
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   assert.match(homepage, /<article class="event-feature event-feature--poster">/);
   assert.match(homepage, /<h2>Fireworks on the Field<\/h2>/);
-  assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-1600.jpg"`));
+  assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-960.webp"`));
   assert.doesNotMatch(homepage, /Welcome Tea|welcome-tea|data-show-before|data-show-from/);
 });
 

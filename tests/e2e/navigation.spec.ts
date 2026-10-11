@@ -106,8 +106,8 @@ test.describe("mobile navigation", () => {
       }));
       expect(layout.overflow).toBeLessThanOrEqual(0);
       for (const height of layout.targets) expect(height).toBeGreaterThanOrEqual(44);
-      expect(layout.logoTopGap).toBe(width >= 384 ? "8px" : "44px");
-      if (width >= 384) {
+      expect(layout.logoTopGap).toBe(width >= 416 ? "8px" : "44px");
+      if (width >= 416) {
         const logo = await panel.locator(".mobile-menu-logo").boundingBox();
         const controls = await panel.locator(".mobile-menu-controls").boundingBox();
         expect(logo!.y).toBeLessThan(controls!.y + controls!.height);
@@ -165,7 +165,20 @@ test.describe("mobile navigation", () => {
 
     const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
     await expect(navigation.getByRole("link"))
-      .toHaveText(["Home", "Newsletter", "What's On", "Fireworks on the Field", "Christmas Fayre", "Fundraising", "Get Involved", "Uniform", "Contact Us"]);
+      .toHaveText(["Home→", "Newsletter→", "What's On→", "Fireworks on the Field→", "Christmas Fayre→", "Fundraising→", "Get Involved→", "Uniform→", "Contact Us"]);
+    await expect(navigation.locator(".mobile-menu-arrow")).toHaveCount(8);
+    for (const arrow of await navigation.locator(".mobile-menu-arrow").all()) {
+      await expect(arrow).toHaveAttribute("aria-hidden", "true");
+    }
+    const typography = await navigation.evaluate((element) => {
+      const main = getComputedStyle(element.querySelector("a")!);
+      const event = getComputedStyle(element.querySelector(".mobile-menu-events a")!);
+      return { mainSize: main.fontSize, eventSize: event.fontSize, mainFont: main.fontFamily, eventFont: event.fontFamily };
+    });
+    expect(typography.mainSize).toBe("22px");
+    expect(typography.eventSize).toBe("21px");
+    expect(typography.eventFont).toBe(typography.mainFont);
+    await expect(page.locator(".mobile-menu-logo")).toHaveCSS("width", "104px");
 
     await navigation.getByRole("link", { name: "Uniform" }).click();
     await expect(page).toHaveURL(/\/uniform\/$/);

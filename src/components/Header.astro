@@ -56,7 +56,7 @@ const isCurrent = (href: string) =>
   <div class="mobile-menu-panel">
     <div class="mobile-menu-head">
       <a class="mobile-menu-home" href={withBase("/")} aria-label="The Friends of Ashley home">
-        <img class:list={["mobile-menu-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="88" height="88">
+        <img class:list={["mobile-menu-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="104" height="104">
       </a>
       <div class="mobile-menu-controls">
         <span class="mobile-menu-theme"><ThemeToggle /></span>
@@ -66,9 +66,9 @@ const isCurrent = (href: string) =>
     </div>
     <nav aria-label="Mobile navigation">
       {desktop.map((item) => <>
-        <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+        <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}><span>{item.label}</span><span class="mobile-menu-arrow" aria-hidden="true">&rarr;</span></a>
         {item.href === "/whats-on/" && <div class="mobile-menu-events" role="group" aria-label="Event details">
-          {menuEvents.map((event) => <a href={withBase(event.href)} aria-current={isCurrent(event.href) ? "page" : undefined}>{event.label}</a>)}
+          {menuEvents.map((event) => <a href={withBase(event.href)} aria-current={isCurrent(event.href) ? "page" : undefined}><span>{event.label}</span><span class="mobile-menu-arrow" aria-hidden="true">&rarr;</span></a>)}
         </div>}
       </>)}
       {mobileOnly.map((item) => <a class="button button--primary mobile-menu-cta" href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}

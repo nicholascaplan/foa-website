@@ -7,11 +7,11 @@ import test from "node:test";
 const dist = path.resolve("dist");
 const base = (process.env.BASE_PATH || "/").replace(/\/$/, "");
 const kib = 1024;
-// Headroom above the October 2026 build, not target mobile load sizes.
-// Tighten only after approved optimisation; don't silently raise a failing budget.
+// Headroom above the optimised October 2026 build, not target load timings.
+// Don't silently raise a failing budget.
 const routes = [
-  { route: "/", eagerImageKiB: 850 },
-  { route: "/whats-on/", eagerImageKiB: 1400 },
+  { route: "/", eagerImageKiB: 500 },
+  { route: "/whats-on/", eagerImageKiB: 100 },
   ...["newsletter", "fundraising", "get-involved", "uniform", "contact"].map((name) => ({
     route: `/${name}/`, eagerImageKiB: 100,
   })),
@@ -35,14 +35,20 @@ for (const { route, eagerImageKiB } of routes) {
     const imageFiles = new Set();
     for (const [tag] of html.matchAll(/<(?:link|img)\b[^>]*>/g)) {
       if (tag.startsWith("<img") && attribute(tag, "loading") !== "lazy") {
-        const file = localFile(attribute(tag, "src"));
+        // Count the largest candidate once: a conservative viewport-independent budget.
+        const candidates = (attribute(tag, "srcset") || "").split(",").filter(Boolean);
+        const largest = candidates.at(-1)?.trim().split(/\s+/)[0];
+        const file = localFile(largest || attribute(tag, "src"));
         if (file) imageFiles.add(file);
       }
       if (tag.startsWith("<link")) {
         const file = localFile(attribute(tag, "href"));
         if (!file) continue;
         if (attribute(tag, "rel") === "stylesheet") styleFiles.add(file);
-        if (attribute(tag, "rel") === "preload" && attribute(tag, "as") === "image") imageFiles.add(file);
+        if (attribute(tag, "rel") === "preload" && attribute(tag, "as") === "image") {
+          const largest = attribute(tag, "imagesrcset")?.split(",").at(-1)?.trim().split(/\s+/)[0];
+          imageFiles.add(localFile(largest) || file);
+        }
       }
     }
     const compressedBytes = async (files) => (await Promise.all([...files].map(async (file) => gzipSync(await readFile(file)).length)))
@@ -60,3 +66,36 @@ for (const { route, eagerImageKiB } of routes) {
     assert.ok(eagerImages <= eagerImageKiB * kib, `${route}: eager image bytes ${eagerImages} exceed ${eagerImageKiB} KiB`);
   });
 }
+
+test("homepage image and preload share responsive candidates without downloading the original JPEG", async () => {
+  const html = await readFile(path.join(dist, "index.html"), "utf8");
+  const image = [...html.matchAll(/<img\b[^>]*>/g)].map(([tag]) => tag)
+    .find((tag) => attribute(tag, "src")?.includes("fireworks-960.webp"));
+  const preload = [...html.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag)
+    .find((tag) => attribute(tag, "rel") === "preload" && attribute(tag, "as") === "image");
+  assert.ok(image && preload);
+  assert.equal(attribute(preload, "imagesrcset"), attribute(image, "srcset"));
+  assert.equal(attribute(preload, "imagesizes"), attribute(image, "sizes"));
+  assert.equal(attribute(image, "fetchpriority"), "high");
+  for (const [width, budget] of [[640, 110], [960, 210], [1600, 450]]) {
+    const url = `${base}/events/fireworks-${width}.webp`;
+    assert.ok(attribute(image, "srcset").includes(`${url} ${width}w`));
+    assert.ok((await stat(localFile(url))).size <= budget * kib, `${url} exceeds ${budget} KiB`);
+  }
+  assert.doesNotMatch(image, /fireworks-1600\.jpg/);
+  assert.doesNotMatch(preload, /fireworks-1600\.jpg/);
+});
+
+test("past-event posters are deferred and the Welcome Tea derivative remains compact", async () => {
+  const html = await readFile(path.join(dist, "whats-on/index.html"), "utf8");
+  const posters = [...html.matchAll(/<article class="past-event"[^>]*>([\s\S]*?)<\/article>/g)];
+  assert.ok(posters.length);
+  for (const [, article] of posters) {
+    const image = article.match(/<img\b[^>]*>/)?.[0];
+    assert.ok(image);
+    assert.equal(attribute(image, "loading"), "lazy");
+    assert.equal(attribute(image, "decoding"), "async");
+  }
+  assert.ok(html.includes(`${base}/events/welcome-tea.webp`));
+  assert.ok((await stat(localFile(`${base}/events/welcome-tea.webp`))).size <= 180 * kib);
+});
