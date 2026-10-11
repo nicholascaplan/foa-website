@@ -23,7 +23,7 @@ Built with Astro 7 (static output), typed local content collections and locally 
 - `src/scripts/`: Fireworks canvas effects and experience initialization
 - `src/fonts/`: self-hosted Fireworks display font and its licence
 - `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
-- `tests/`: generated-site and unit tests (`*.test.mjs`), production Playwright/axe tests (`e2e/`) and local preview tests (`dev/`)
+- `tests/`: generated-site and unit tests (`*.test.mjs`), production Playwright/axe tests (`e2e/`), opt-in performance diagnostics (`diagnostics/`) and local preview tests (`dev/`)
 - `fundraising-progress-options.html`: unlinked design review page
 - [`assets/documents/key-events-2026-27.md`](assets/documents/key-events-2026-27.md): editable calendar summary that follows the published website; public event listings use the structured event collection
 - `.github/workflows/deploy.yml`: verify and deploy
@@ -51,6 +51,7 @@ npm run preview
 ```sh
 npm run verify                  # full gate used by CI: check, build, site tests, browser tests
 npm run test:dev                 # local-only dev tool tests (phone preview, header layout); starts a fresh dev server on port 4348
+npm run test:performance         # fresh build, then throttled mobile navigation diagnostics (outside the CI gate)
 npx playwright install chromium webkit # first browser-test run only
 npm audit                       # dependency advisories
 ```

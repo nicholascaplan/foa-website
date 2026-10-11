@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 
 test("main task routes are reachable through normal navigation", async ({ page }) => {
   await page.goto("/");
@@ -27,6 +27,44 @@ test("main task routes are reachable through normal navigation", async ({ page }
       .getByRole("link", { name: destination.name }))
       .toHaveAttribute("aria-current", "page");
   }
+});
+
+test.describe("mobile menu touch journeys", () => {
+  const { defaultBrowserType: _browserType, ...device } = devices["Pixel 5"];
+  test.use(device);
+
+  test("all menu task routes load successfully and close the menu", async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("foa-cookie-preferences", "essential");
+    });
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto("/");
+
+    for (const destination of [
+      { name: "Get Involved", path: "/get-involved/" },
+      { name: "Uniform", path: "/uniform/" },
+      { name: "Contact Us", path: "/contact/" },
+      { name: "Home", path: "/" },
+      { name: "What's On", path: "/whats-on/" },
+      { name: "Fundraising", path: "/fundraising/" },
+      { name: "Newsletter", path: "/newsletter/" },
+    ]) {
+      await page.getByRole("button", { name: "Open menu" }).tap();
+      const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
+      const [response] = await Promise.all([
+        page.waitForResponse((response) => response.request().isNavigationRequest()
+          && response.request().frame() === page.mainFrame()
+          && new URL(response.url()).pathname === destination.path),
+        navigation.getByRole("link", { name: destination.name, exact: true }).tap(),
+      ]);
+      expect(response.status(), destination.name).toBe(200);
+      await expect(page).toHaveURL((url) => url.pathname === destination.path);
+      await expect(page.locator("main h1")).toBeVisible();
+      await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("aria-hidden", "true");
+    }
+    expect(errors).toEqual([]);
+  });
 });
 
 test("cookie choices are unobtrusive, remembered and can be changed", async ({ page }) => {
