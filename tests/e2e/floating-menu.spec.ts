@@ -32,13 +32,20 @@ for (const width of [320, 390, 768, 1023]) {
         expect((await stage.boundingBox())!.y, `${route}: event artwork must reach the page top`).toBe(0);
         await expect(page.locator("#main-content")).toHaveCSS("padding-top", "0px");
         await expect(stage).toHaveCSS("padding-top", "0px");
-        if (route === "/fireworks-volunteering/" || route === "/events/fireworks-2026/") {
+        if (route === "/events/fireworks-2026/") {
           const kicker = page.locator(".fw-kicker");
           await expect(kicker).toHaveCSS("min-height", "48px");
           const kickerBox = await kicker.boundingBox();
           expect(kickerBox!.y, `${route}: kicker should start beside the controls`).toBeCloseTo(Math.max(16, Math.min(width * 0.03, 32)), 1);
           const title = await page.locator("main h1").boundingBox();
           expect(title!.y, `${route}: main heading should clear the controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
+        }
+        if (route === "/fireworks-volunteering/") {
+          await expect(page.locator(".fw-kicker")).toHaveCount(0);
+          const title = await page.getByRole("heading", { level: 1, name: "Fireworks Volunteering" }).boundingBox();
+          expect(title!.y, `${route}: wrapped heading should start beside the controls`).toBe(16);
+          await expect(page.locator("main h1 span")).toHaveCSS("display", "block");
+          await expect(page.locator(".event-hero-intro")).toHaveCSS("margin-top", "12px");
         }
       }
       const overlapping = await page.locator("main h1, main h2, main p, main a, main button").evaluateAll((elements) => {

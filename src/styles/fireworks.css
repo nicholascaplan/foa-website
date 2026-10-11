@@ -792,14 +792,31 @@ body.fw-theme::before {
 }
 
 .fw-theme .fw-vol .event-hero h1 {
-  max-width: 18ch;
+  max-width: none;
   font-size: clamp(1.9rem, 7vw, 3.6rem);
+  font-variant: normal;
   letter-spacing: 0;
 }
 
 @media (max-width: 63.99rem) {
   .fw-theme .fw-vol .event-hero {
-    padding-top: clamp(1rem, 3vw, 2rem);
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  .fw-theme .fw-vol .event-hero h1 {
+    padding-right: 3.5rem;
+  }
+
+  body:has(.home-preview-tools) .fw-vol .event-hero h1 {
+    padding-right: 6.5rem;
+  }
+
+  .fw-theme .fw-vol .event-hero h1 span {
+    display: block;
+  }
+
+  .fw-theme .fw-vol .event-hero-intro {
+    margin-top: 0.75rem;
   }
 }
 

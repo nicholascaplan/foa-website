@@ -538,13 +538,13 @@ a {
     padding-top: 0;
   }
 
-  .fw-theme :is(.fw-event, .fw-vol) .fw-kicker {
+  .fw-theme .fw-event .fw-kicker {
     min-height: 3rem;
     padding-right: 3.5rem;
     white-space: normal;
   }
 
-  body:has(.home-preview-tools) :is(.fw-event, .fw-vol) .fw-kicker {
+  body:has(.home-preview-tools) .fw-event .fw-kicker {
     padding-right: 6.5rem;
   }
 

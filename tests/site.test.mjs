@@ -291,6 +291,9 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
 
 test("the Fireworks volunteering page shows every role, shift and sign-up link from the event record", async () => {
   const html = await readFile(path.join(dist, "fireworks-volunteering/index.html"), "utf8");
+  assert.match(html, /<h1>Fireworks <span>Volunteering<\/span><\/h1>/);
+  assert.doesNotMatch(html, /class="fw-kicker"/);
+  assert.match(html, /Help make Fireworks on the Field awesome\./);
   assert.equal([...html.matchAll(/<li class="vol-card">/g)].length, fireworks.volunteerRoles.length);
   for (const role of fireworks.volunteerRoles) {
     const card = html.split('<li class="vol-card">').find((part) => part.includes(`<h3>${escapeHtml(role.name)}</h3>`));
