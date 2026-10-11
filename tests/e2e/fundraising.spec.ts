@@ -64,6 +64,15 @@ for (const route of ["/", "/fundraising/"]) {
       await page.goto(route);
       await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+      if (route === "/") {
+        const action = page.getByRole("link", { name: "See Our Fundraising Plans" });
+        await expect(action).toBeVisible();
+        expect(await action.evaluate((element) => {
+          const bounds = element.getBoundingClientRect();
+          return bounds.left >= 0 && bounds.right <= window.innerWidth
+            && element.scrollWidth <= element.clientWidth;
+        })).toBe(true);
+      }
     });
   }
 }

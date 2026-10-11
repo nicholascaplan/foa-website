@@ -515,7 +515,7 @@ a {
 
 .mobile-menu .mobile-menu-cta {
   min-height: var(--menu-touch-target);
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .menu-note {
@@ -3717,6 +3717,20 @@ body.menu-open .cookie-banner {
 
 .fundraising-card__cta .external-link-icon {
   margin-left: 0.35em;
+}
+
+.fundraising-card__cta .button {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fundraising-card__cta-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fundraising-card__cta .button > [aria-hidden] {
+  flex-shrink: 0;
 }
 
 @media (min-width: 48rem) {
