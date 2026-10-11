@@ -1,0 +1,16 @@
+---
+import { isHidden } from "../lib/event-visibility";
+
+// Astro compiles away the types. Serialise only the self-contained predicate
+// so build-time, early browser and subsequent module checks share one rule.
+const initializer = `(() => {
+  const isHidden = ${isHidden.toString()};
+  const now = Date.now();
+  document.querySelectorAll("[data-show-before], [data-show-from], [data-expires-at], [data-expires-on]").forEach((element) => {
+    element.hidden = isHidden(element.dataset, now);
+  });
+  const pastSection = document.querySelector("[data-past-events-section]");
+  if (pastSection) pastSection.hidden = !pastSection.querySelector(".past-event:not([hidden])");
+})();`;
+---
+<script is:inline data-event-visibility-initializer set:html={initializer} />

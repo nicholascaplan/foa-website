@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
+import { isHidden } from "../src/lib/event-visibility.ts";
 
 const dist = path.resolve("dist");
 const basePath = (process.env.BASE_PATH || "/").replace(/\/$/, "");
@@ -213,6 +215,46 @@ test("What's On switches Welcome Tea from upcoming to past at the content archiv
   const whatsOn = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");
   assert.match(whatsOn, new RegExp(`data-show-before="${archiveFrom}"`));
   assert.match(whatsOn, new RegExp(`data-show-from="${archiveFrom}"`));
+});
+
+test("What's On delivers build-time visibility and a standalone early date check", async () => {
+  const html = await readFile(path.join(dist, "whats-on", "index.html"), "utf8");
+  const initializer = html.match(/<script\b[^>]*data-event-visibility-initializer[^>]*>([\s\S]*?)<\/script>/);
+  assert.ok(initializer, "A synchronous inline date check must precede the footer");
+  assert.ok(initializer.index < html.indexOf("<footer"));
+  assert.doesNotMatch(initializer[0], /\b(?:src|type|defer|async)=/);
+
+  const entries = [...html.matchAll(/<(?:article|a)\b[^>]*class="(?:event-list-item|past-event)"[^>]*>/g)].map(([tag]) => {
+    const dataset = Object.fromEntries([...tag.matchAll(/data-(show-before|show-from|expires-at|expires-on)="([^"]+)"/g)]
+      .map(([, name, value]) => [name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()), value]));
+    return { dataset, hidden: /\shidden(?:\s|>|=)/.test(tag), past: tag.includes('class="past-event"') };
+  });
+  assert.ok(entries.length > 0);
+  for (const entry of entries) {
+    assert.equal(entry.hidden, isHidden(entry.dataset, Date.now()), JSON.stringify(entry.dataset));
+  }
+  const sectionTag = html.match(/<section\b[^>]*data-past-events-section[^>]*>/)?.[0];
+  assert.ok(sectionTag);
+  assert.equal(/\shidden(?:\s|>|=)/.test(sectionTag), !entries.some((entry) => entry.past && !entry.hidden));
+
+  // Run the actual generated script with no downloaded modules, including
+  // times before the build and after the summer/winter all-day boundaries.
+  for (const iso of ["2026-10-03T11:59:59Z", archiveFrom, "2026-12-17T00:00:00Z"]) {
+    const now = Date.parse(iso);
+    const nodes = entries.map((entry) => ({ ...entry }));
+    const pastSection = { hidden: true, querySelector: () => nodes.find((node) => node.past && !node.hidden) };
+    class FixedDate extends Date { static now() { return now; } }
+    runInNewContext(initializer[1], {
+      Date: FixedDate,
+      Intl,
+      document: {
+        querySelectorAll: () => nodes,
+        querySelector: () => pastSection,
+      },
+    });
+    for (const node of nodes) assert.equal(node.hidden, isHidden(node.dataset, now), `${iso}: ${JSON.stringify(node.dataset)}`);
+    assert.equal(pastSection.hidden, !nodes.some((node) => node.past && !node.hidden));
+  }
 });
 
 test("the homepage and Fireworks event page credit the sponsor with an accessible local logo", async () => {

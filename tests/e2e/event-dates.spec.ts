@@ -1,4 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
+
+const welcomeTea = JSON.parse(readFileSync(new URL("../../src/content/events/welcome-tea-2026.json", import.meta.url), "utf8"));
+const archiveTime = Date.parse(welcomeTea.archiveFrom);
 
 // Welcome Tea starts at 13:00 BST (12:00 UTC) on 2026-10-03 and archives from then; Fireworks is on 2026-11-05.
 const lastMomentOfWelcomeTea = "2026-10-03T11:59:30Z";
@@ -40,6 +44,25 @@ test.describe("What's On event sections (UK time)", () => {
   const welcomeTeaListItem = (page: Page) =>
     page.locator(".event-list-item").filter({ hasText: "Welcome Tea" });
   const pastEvents = (page: Page) => page.locator("[data-past-events-section]");
+
+  for (const offset of [-1000, 0]) {
+    test(`sets event visibility without downloaded JavaScript ${offset < 0 ? "before" : "at"} the archive boundary`, async ({ page }) => {
+      // A blocked module represents an arbitrarily slow script download.
+      // The parser-time inline check must still correct a stale build.
+      await page.route("**/*", (route) => route.request().resourceType() === "script" ? route.abort() : route.continue());
+      await openAt(page, new Date(archiveTime + offset).toISOString(), "/whats-on/");
+      await expect(welcomeTeaListItem(page)).toHaveJSProperty("hidden", offset >= 0);
+      await expect(pastEvents(page)).toHaveJSProperty("hidden", offset < 0);
+      const fireworks = page.locator(".event-list-item").filter({ hasText: "Fireworks on the Field" });
+      await expect(fireworks).toBeVisible();
+      for (const width of [390, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+        const box = await fireworks.boundingBox();
+        expect(box?.width).toBeGreaterThan(0);
+      }
+    });
+  }
 
   test("lists Welcome Tea as upcoming and hides the past section before the archive date", async ({ page }) => {
     await openAt(page, lastMomentOfWelcomeTea, "/whats-on/");

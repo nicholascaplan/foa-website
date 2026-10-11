@@ -29,7 +29,11 @@ export const isHidden = ({ showBefore, showFrom, expiresAt, expiresOn }: Visibil
     (showBefore && now >= Date.parse(showBefore))
     || (showFrom && now < Date.parse(showFrom))
     || (expiresAt && now >= Date.parse(expiresAt))
-    || (expiresOn && ukDateKey(new Date(now)) >= expiresOn),
+    // Keep this function self-contained: the early inline initializer uses the
+    // same function in the browser without waiting for a module download.
+    || (expiresOn && new Intl.DateTimeFormat("en-CA", {
+      year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London",
+    }).format(new Date(now)) >= expiresOn),
   );
 
 export const syncEventVisibility = (now = Date.now()) => {
