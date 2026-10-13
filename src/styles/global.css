@@ -289,12 +289,17 @@ a {
 
 .desktop-nav {
   display: none;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.6rem;
+  justify-content: flex-end;
+  gap: 0.75rem 1.6rem;
 }
 
 .desktop-nav a {
   position: relative;
+  white-space: nowrap;
   color: var(--ink-soft);
   font-size: 0.9rem;
   font-weight: 700;
@@ -318,6 +323,7 @@ a {
 
 .header-actions {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 0.55rem;
 }
@@ -2794,6 +2800,10 @@ body.menu-open .cookie-banner {
   margin-top: 0.45rem;
 }
 
+.info-card:has(.price-list) {
+  container-type: inline-size;
+}
+
 .price-list {
   display: grid;
   margin: 0;
@@ -2803,10 +2813,9 @@ body.menu-open .cookie-banner {
 }
 
 .price-list li {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
 }
 
@@ -2823,8 +2832,19 @@ body.menu-open .cookie-banner {
   text-align: center;
 }
 
+@container (max-width: 18rem) {
+  .price-list li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .price-tag {
+    justify-self: end;
+  }
+}
+
 .price-note {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 0.6rem;
   margin: 1.1rem 0;

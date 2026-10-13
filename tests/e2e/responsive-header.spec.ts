@@ -68,6 +68,33 @@ test.describe("homepage heading without JavaScript", () => {
   });
 });
 
+for (const width of [1024, 1440]) {
+  for (const route of ["/", "/uniform/", "/events/christmas-fayre-2026/"]) {
+    test(`${route}: desktop navigation and Night Mode fit enlarged text at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route);
+      await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator(".site-header .home-introduction")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Open menu" })).toBeHidden();
+      const controls = page.locator(".desktop-nav a, .header-theme-toggle button");
+      const layout = await controls.evaluateAll((elements) => elements.map((element) => {
+        const bounds = element.getBoundingClientRect();
+        return { label: element.textContent?.trim() || element.getAttribute("aria-label"), left: bounds.left, right: bounds.right, viewport: innerWidth };
+      }));
+      expect(layout.length).toBeGreaterThan(0);
+      for (const control of layout) {
+        expect(control.left, control.label ?? route).toBeGreaterThanOrEqual(0);
+        expect(control.right, control.label ?? route).toBeLessThanOrEqual(control.viewport);
+      }
+      const navigation = await page.locator(".desktop-nav").boundingBox();
+      const theme = await page.locator(".header-theme-toggle").boundingBox();
+      expect(navigation!.x + navigation!.width).toBeLessThanOrEqual(theme!.x);
+      expect(await page.locator(".header-inner").evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    });
+  }
+}
+
 for (const route of ["/", "/newsletter/", "/uniform/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
   test(`${route}: mobile logos stay beside headings and reflow with enlarged text`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });

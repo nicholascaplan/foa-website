@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-for (const width of [320, 390, 554, 768, 1024, 1200, 1440]) {
+for (const width of [320, 390, 554, 768, 1023, 1024, 1200, 1440]) {
   for (const enlargedText of [false, true]) {
     test(`uniform action icons stay beside their labels at ${width}px${enlargedText ? " with enlarged text" : ""}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
@@ -43,7 +43,7 @@ for (const width of [320, 390, 554, 768, 1024, 1200, 1440]) {
         expect(layout.iconRight).toBeLessThan(layout.buttonRight);
         expect(layout.height).toBeGreaterThanOrEqual(44);
         heights.push(layout.height);
-        if (width < (enlargedText ? 2048 : 1024)) {
+        if (width < 1024 || enlargedText) {
           expect(Math.abs(layout.width - layout.availableWidth)).toBeLessThan(1);
         }
         if (!enlargedText && width >= 390) {
@@ -51,7 +51,55 @@ for (const width of [320, 390, 554, 768, 1024, 1200, 1440]) {
         }
       }
       expect(Math.abs(heights[0] - heights[1])).toBeLessThan(1);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+      const prices = await page.locator(".price-list li").evaluateAll((rows) => rows.map((row) => {
+        const label = row.querySelector("span")!.getBoundingClientRect();
+        const price = row.querySelector("strong")!.getBoundingClientRect();
+        const bounds = row.getBoundingClientRect();
+        return {
+          stacked: price.top >= label.bottom,
+          priceRight: price.right,
+          rowRight: bounds.right,
+          labelRight: label.right,
+        };
+      }));
+      expect(prices).toHaveLength(2);
+      expect(prices[0].stacked).toBe(prices[1].stacked);
+      expect(Math.abs(prices[0].priceRight - prices[1].priceRight)).toBeLessThan(1);
+      for (const price of prices) {
+        expect(price.priceRight).toBeLessThanOrEqual(price.rowRight + 1);
+        expect(price.labelRight).toBeLessThanOrEqual(price.rowRight + 1);
+      }
+      expect(await page.locator(".price-note").evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+      const overflow = await page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const outside = (rect: DOMRect) => rect.width > 0 && (rect.left < -1 || rect.right > viewport + 1);
+        const elements = Array.from(document.body.querySelectorAll<HTMLElement>("*"))
+          .filter((element) => element instanceof HTMLElement)
+          .flatMap((element) => {
+            if (element.closest(".visually-hidden") || element.matches(".skip-link:not(:focus)") || !element.getClientRects().length) return [];
+            const style = getComputedStyle(element);
+            if (style.visibility === "hidden" || style.display === "none") return [];
+            const bounds = element.getBoundingClientRect();
+            const text = Array.from(element.childNodes).flatMap((node) => {
+              if (node.nodeType !== Node.TEXT_NODE || !node.textContent?.trim()) return [];
+              const range = document.createRange();
+              range.selectNodeContents(node);
+              return Array.from(range.getClientRects()).filter(outside).map(({ left, right }) => ({
+                text: node.textContent!.trim().slice(0, 100), left, right,
+              }));
+            });
+            if (!outside(bounds) && !text.length) return [];
+            return [{
+              element: element.tagName.toLowerCase(), class: element.className,
+              left: bounds.left, right: bounds.right, text,
+              fontSize: style.fontSize, minWidth: style.minWidth,
+              columns: style.gridTemplateColumns, overflowWrap: style.overflowWrap,
+            }];
+          });
+        return { viewport, scrollWidth: document.documentElement.scrollWidth, elements };
+      });
+      expect(overflow.scrollWidth, JSON.stringify(overflow, null, 2)).toBeLessThanOrEqual(overflow.viewport);
     });
   }
 }

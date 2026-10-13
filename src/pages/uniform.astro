@@ -9,30 +9,62 @@ import PageHero from "../components/PageHero.astro";
       <a class="button button--amber button--large uniform-action" href="https://tinyurl.com/foapreloved" target="_blank" rel="noopener noreferrer"><span>Reserve via Google Form</span><span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
     </Fragment>
   </PageHero>
-  <section class="content-section content-section--compact content-section--snug"><div class="site-width split-layout split-layout--snug"><div><p class="eyebrow">Next sale</p><h2 class="editorial-heading">Friday 6th November</h2><p class="section-copy">The final sale of term is <strong>Friday 4th December</strong>.</p><div class="sale-time">
+  <section class="content-section content-section--compact content-section--snug uniform-details"><div class="site-width split-layout split-layout--snug uniform-details-grid"><div><p class="eyebrow">Next sale</p><h2 class="editorial-heading">Friday 6th November</h2><p class="section-copy">The final sale of term is <strong>Friday 4th December</strong>.</p><div class="sale-time">
     <svg class="sale-time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
     <div><h3 class="sale-time-title">Sales start at <strong>15:25</strong></h3><p>In the school playground, weather permitting.</p></div>
   </div></div><article class="info-card"><h2>What you need to know</h2><ul class="price-list"><li><span>New-logo items and coats</span><strong class="price-tag">£3 each</strong></li><li><span>All other items</span><strong class="price-tag">£1 each</strong></li></ul><p class="price-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>Card payments only</p><p class="donation-note">If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!</p></article></div></section>
 </BaseLayout>
 
 <style>
+  :global(.view-hero:has(.uniform-action)) {
+    container: uniform-hero / inline-size;
+  }
+
+  :global(.view-hero-inner:has(.uniform-action)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   :global(.view-hero-action:has(.uniform-action)) {
     width: 100%;
     grid-auto-rows: 1fr;
   }
 
-  .uniform-action {
+  .button.uniform-action {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  @media (min-width: 64rem) {
-    :global(.view-hero-action:has(.uniform-action)) {
-      width: max-content;
-    }
+  .uniform-details {
+    container: uniform-details / inline-size;
+  }
 
-    .uniform-action {
-      padding-inline: 1.5rem;
+  .split-layout.uniform-details-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .uniform-details .editorial-heading {
+    overflow-wrap: anywhere;
+  }
+
+  @container uniform-details (min-width: 48rem) {
+    .split-layout.uniform-details-grid {
+      grid-template-columns: minmax(0, 0.65fr) minmax(0, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    @container uniform-hero (min-width: 55rem) {
+      :global(.view-hero-inner:has(.uniform-action)) {
+        grid-template-columns: minmax(0, 1fr) max-content;
+      }
+
+      :global(.view-hero-action:has(.uniform-action)) {
+        width: max-content;
+      }
+
+      .button.uniform-action {
+        padding-inline: 1.5rem;
+      }
     }
   }
 </style>
