@@ -15,6 +15,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 | Item | Owner | Blocked by |
 |---|---|---|
+| Fix the Newsletter page's 7px horizontal overflow at 320px and rerun deployment. Commit `eabbd07` failed the floating-menu and Night Mode layout checks; 209 browser tests passed, including the corrected Grotto date test, but deployment was skipped. See [CI evidence](https://github.com/nicholascaplan/foa-website/actions/runs/38404300314). | Dev | Browser-capable environment or CI for rendered verification |
 | Confirm Fireworks capacity, refund/cancellation and bad-weather policy, accessibility details and provider data-processing responsibilities (provider is Buy Tickets). | FOA | FOA decision |
 | Confirm access and retention arrangements for the shared FOA inbox and the Google contact form (ownership, who has access, retention). The Privacy Notice currently records these as pending. | FOA | FOA decision |
 | Obtain higher-resolution committee portraits (Nick Caplan's replacement is already in use) and complete the final publication-consent check for all names, roles and portraits. | FOA / Owner | Supplied photos, consent |
