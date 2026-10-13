@@ -22,7 +22,7 @@ Save the date for our festive get-together at Ashley School, starting at **12 no
 
 Take a look at the attached Christmas Fayre poster for more information and ways to get involved.
 
-Rachel and Sophie are gathering helpers for the Fun Zone, Craft Room, Café, Photo Booth, Tombola, Entrance & Tokens and Glitter Tattoos. **You can help in any area, bring a friend and no experience is needed.**
+Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox) are gathering helpers for the Fun Zone, Craft Room, Café, Photo Booth, Tombola, Entrance & Tokens and Glitter Tattoos. **You can help in any area, bring a friend and no experience is needed.**
 
 [Find out how to help](https://www.thefriendsofashley.org/events/christmas-fayre-2026/), or speak to the organisers in the playground.
 

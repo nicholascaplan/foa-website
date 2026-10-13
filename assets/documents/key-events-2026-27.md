@@ -21,7 +21,7 @@ The October uniform sale and Welcome Tea have already taken place. Uniform sales
 ### Event notes
 
 - **Fireworks:** gates open at 16:30, the quiet display is at 17:00 and the main display is at 18:00. See the [Fireworks page](https://www.thefriendsofashley.org/events/fireworks-2026/) for tickets and practical details.
-- **Christmas Fayre:** led by Rachel and Sophie.
+- **Christmas Fayre:** led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox).
 - **Santa's Grotto:** run by parents and carers during the school day. Please keep it a surprise for the children.
 
 ## Meetings and volunteering

@@ -37,7 +37,7 @@ The full decision list is in the brief.
 - Whenever the site is updated or a page is added, review `src/pages/reps.astro` for related messages that need adding, updating or retiring. Keep visible and copied messages consistent with the canonical pages, include full public website links and check review and expiry dates. If the change has no relevance to class reps, no message change is needed.
 - Do not invent event, accessibility, ticketing, uniform, committee or legal facts. Label unknown or provisional information clearly; the provisional list is in `docs/ACTIONS.md`.
 - Committee presentation uses names and roles (plus approved portraits) only.
-- Do not publish child year groups or other unnecessary child-related information.
+- Do not publish children's names or other unnecessary child-related personal information. Class names may be included alongside adult organisers when supplied and approved by the project owner.
 - Do not add personal contact details; use the shared FOA contact route.
 - Safety-critical and transactional translations require human review.
 - A final pre-publication check is still required for committee names, roles and portrait consent.

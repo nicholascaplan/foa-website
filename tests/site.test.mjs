@@ -96,11 +96,20 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   }
   assert.doesNotMatch(cards.join(""), /—|Tombola, Entrance &amp; Tokens, and Glitter Tattoos/);
   assert.doesNotMatch(html, /class leads for the Christmas Fayre/);
-  assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 3);
-  assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 1);
+  assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 2);
+  assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 2);
   assert.ok(cards[0].includes("now on sale to the wider public"));
   assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes("now on sale to the wider public"));
   assert.equal([...html.matchAll(/data-expires-at="/g)].length, 4);
+});
+
+test("Christmas Fayre organisers include approved surnames and class names across the site", async () => {
+  const christmas = JSON.parse(await readFile(path.resolve("src/content/events/christmas-fayre-2026.json"), "utf8"));
+  assert.equal(christmas.lead, "Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox)");
+  for (const route of ["newsletter", "events/christmas-fayre-2026", "get-involved", "reps"]) {
+    const html = await readFile(path.join(dist, route, "index.html"), "utf8");
+    assert.ok(html.includes(christmas.lead), `${route} should include the approved organiser names and classes`);
+  }
 });
 
 test("navigation exposes the menu on Home and both menus on interior pages", async () => {
@@ -344,7 +353,7 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
   const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
   assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00<\/span><\/dd>/);
   assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
-  assert.match(html, new RegExp(`<dd>${christmas.lead}</dd>`));
+  assert.ok(html.includes(`<dd>${escapeHtml(christmas.lead)}</dd>`));
   assert.equal([...html.matchAll(/<ul class="xmas-baubles" aria-hidden="true">/g)].length, 1);
   assert.equal([...html.matchAll(/<li style="--i:\d+;/g)].length, 20);
   assert.equal([...html.matchAll(/<i style="--x:/g)].length, 28);
