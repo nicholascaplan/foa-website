@@ -97,6 +97,9 @@
   --green-dark: #0b3920;
   --heading: #0b3920;
   --green-light: #cddac5;
+  --action-background: var(--green);
+  --action-hover: var(--green-dark);
+  --action-foreground: var(--white);
   --line: #b4ab99;
   --amber: #a75600;
   --night-focus: #8a4a05;

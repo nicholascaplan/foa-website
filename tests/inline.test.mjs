@@ -23,6 +23,32 @@ test("mailto links are plain links", () => {
   assert.doesNotMatch(html, /target=/);
 });
 
+test("links to our website use the existing text-link style and open in the same tab", () => {
+  assert.equal(
+    renderInline("[Event information](https://www.thefriendsofashley.org/events/fireworks-2026/)"),
+    '<a class="text-link" href="/events/fireworks-2026/">Event information</a>',
+  );
+});
+
+test("internal newsletter links use the supplied base-aware URL helper", () => {
+  const html = renderInline(
+    "[Uniform](https://www.thefriendsofashley.org/uniform/?size=small&item=coat#requests)",
+    (path) => `/foa-website${path}`,
+  );
+  assert.equal(html, '<a class="text-link" href="/foa-website/uniform/?size=small&amp;item=coat#requests">Uniform</a>');
+  assert.equal(renderInline("[Home](https://www.thefriendsofashley.org/)"), '<a class="text-link" href="/">Home</a>');
+});
+
+test("lookalike hosts and URLs with credentials are not treated as internal", () => {
+  for (const href of [
+    "https://www.thefriendsofashley.org.example.com/uniform/",
+    "https://www.thefriendsofashley.org@other.example/uniform/",
+    "https://user@www.thefriendsofashley.org/uniform/",
+  ]) {
+    assert.match(renderInline(`[Visit](${href})`), /target="_blank"/);
+  }
+});
+
 test("only http, https and mailto links are linkified", () => {
   for (const href of ["javascript:alert(1)", "data:text/html,x", "/relative", "ftp://example.org"]) {
     const html = renderInline(`[x](${href})`);

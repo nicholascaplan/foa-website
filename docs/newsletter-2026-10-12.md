@@ -1,0 +1,55 @@
+# The Friends of Ashley: This Week’s News
+
+Dear Parents, Carers and Teachers,
+
+With the two-week half term break just around the corner, we hope you all enjoy some lovely time together! There’s plenty to look forward to when we’re back, so here’s a quick round-up from The Friends of Ashley (FOA), with dates for your diary and ways to lend a hand.
+
+You can find the full newsletter on our new website: [www.thefriendsofashley.org/newsletter/](https://www.thefriendsofashley.org/newsletter/).
+
+## 🎆 Fireworks on the Field: Thursday 5th November
+
+Join us on the Ashley School field for fireworks, food and family fun! **Gates open at 4:30pm**, with the **quiet display at 5pm** and the **main display at 6pm**. The evening finishes at 6:30pm.
+
+Tickets are **£8.50 per person, with under-2s free**, and have **now gone on sale to the wider public**. If you’re planning to come but haven’t bought your tickets yet, **don’t delay!** The event usually sells out in advance.
+
+[Buy tickets](https://buytickets.at/thefriendsofashley/2337508) · [Event information](https://www.thefriendsofashley.org/events/fireworks-2026/)
+
+**Could you lend a hand?** From token presales to the prize table, bar and entrance, our volunteers make the evening possible. Please check the rota for your year group and choose a slot using the [volunteer sign-up links](https://www.thefriendsofashley.org/fireworks-volunteering/). Thank you!
+
+## 🎄 Christmas Fayre: Saturday 5th December
+
+Save the date for our festive get-together at Ashley School, starting at **12 noon**!
+
+Take a look at the attached Christmas Fayre poster for more information and ways to get involved.
+
+Rachel and Sophie are gathering helpers for the Fun Zone, Craft Room, Café, Photo Booth, Tombola, Entrance & Tokens and Glitter Tattoos. **You can help in any area, bring a friend and no experience is needed.**
+
+[Find out how to help](https://www.thefriendsofashley.org/events/christmas-fayre-2026/), or speak to the organisers in the playground.
+
+## 🎅 Santa’s Grotto: Wednesday 16th December
+
+A little Christmas magic is coming to Ashley during the school day, with our parent and carer volunteers helping to make it happen. **Please keep it a surprise for the children!**
+
+## 👕 Pre-loved Uniform: Friday 6th November
+
+Our next sale is **3:25pm to 3:45pm in the school playground**, subject to weather. Coats and new-logo items are **£3**, with all other items **£1**. **Card payments only, please.**
+
+Pick up a bargain, give uniform a second life and support the school. [Uniform information and requests](https://www.thefriendsofashley.org/uniform/)
+
+## 💚 £1,457 raised so far!
+
+Thanks to your support, we’ve raised **£1,457 this school year** through uniform sales, Happy Bags and Art Projects for Schools. That’s a lovely start towards our **£25,000 target**!
+
+[See our fundraising plans](https://www.thefriendsofashley.org/fundraising/)
+
+## 📱 Your handy home for The FOA
+
+Forgotten an event date or looking for a volunteer link? Our website brings together **what’s on, tickets, volunteering, pre-loved uniform, newsletters and fundraising updates**. Bookmark it for the next time you need a quick answer:
+
+[www.thefriendsofashley.org](https://www.thefriendsofashley.org/)
+
+Thank you for everything you do to support our school community.
+
+Warmest wishes,
+
+**The FOA Team**

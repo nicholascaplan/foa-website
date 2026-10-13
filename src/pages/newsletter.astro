@@ -4,15 +4,19 @@ import PageHero from "../components/PageHero.astro";
 import { withBase } from "../lib/urls";
 import { ordinalDateFormatter } from "../lib/dates";
 import NewsletterSection from "../components/NewsletterSection.astro";
-import autumnTerm from "../content/newsletters/autumn-term-2026.json";
-import backToSchool from "../content/newsletters/back-to-school-2026.json";
-const latest = autumnTerm;
+import NewsletterPeek from "../components/NewsletterPeek.astro";
+import { getCollection } from "astro:content";
+const newsletters = (await getCollection("newsletters"))
+  .sort((a, b) => (b.data.published?.getTime() ?? 0) - (a.data.published?.getTime() ?? 0));
+const latestIssue = newsletters.find(({ data }) => data.latest);
+if (!latestIssue) throw new Error("No latest newsletter is configured");
+const latest = latestIssue.data;
 const latestPreviewCount = 3;
 const latestSections = latest.sections ?? [];
 const latestPreview = latestSections.slice(0, latestPreviewCount);
 const latestRest = latestSections.slice(latestPreviewCount);
 const latestBodyId = "newsletter-latest-more";
-const previous = [{ id: "back-to-school-2026", data: backToSchool }];
+const previous = newsletters.filter(({ id }) => id !== latestIssue.id);
 const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
@@ -21,34 +25,40 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
     <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
       <article class="newsletter-issue newsletter-sheet">
-        <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
+        <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
+          <NewsletterPeek section={latestRest[0]} />
           <div class="newsletter-more" id={latestBodyId} hidden>
             {latestRest.map((section) => <NewsletterSection section={section} />)}
           </div>
-          <button class="newsletter-read-more" type="button" aria-expanded="false" aria-controls={latestBodyId}>
-            <span data-label>Read more</span> <span aria-hidden="true" data-icon>&darr;</span>
-          </button>
+          <div class="newsletter-expansion-actions">
+            <button class="button button--primary newsletter-read-more" type="button" aria-expanded="false" aria-controls={latestBodyId}>
+              <span data-label>Read the full newsletter</span> <span aria-hidden="true" data-icon>&darr;</span>
+            </button>
+          </div>
         </>}
       </article>
     </section>
     <section class="newsletter-section newsletter-board">
-      <div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA. Read more to see the full newsletter.</p></div>
+      <div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA. Open a newsletter to read it in full.</p></div>
       {previous.map(({ id, data }) => {
         const [first, ...rest] = data.sections ?? [];
         const bodyId = `newsletter-${id}-more`;
         return <article class="newsletter-summary newsletter-sheet">
-          <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
+          <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published.toISOString()}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
           <p class="newsletter-summary-label">{data.title}</p>
           {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
           {rest.length > 0 && <>
+            <NewsletterPeek section={rest[0]} />
             <div class="newsletter-more" id={bodyId} hidden>
               {rest.map((section) => <NewsletterSection section={section} />)}
             </div>
-            <button class="newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
-              <span data-label>Read more</span> <span aria-hidden="true" data-icon>&darr;</span>
-            </button>
+            <div class="newsletter-expansion-actions">
+              <button class="button button--primary newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
+                <span data-label>Read the full newsletter</span> <span aria-hidden="true" data-icon>&darr;</span>
+              </button>
+            </div>
           </>}
         </article>;
       })}
@@ -63,18 +73,25 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
   document.querySelectorAll<HTMLButtonElement>(".newsletter-read-more").forEach((button) => {
     const more = document.getElementById(button.getAttribute("aria-controls") || "");
     if (!more) return;
+    const peek = more.previousElementSibling as HTMLElement | null;
     let animation: Animation | undefined;
 
     button.addEventListener("click", () => {
       const expand = button.getAttribute("aria-expanded") !== "true";
+      const anchorTop = button.getBoundingClientRect().top;
       button.setAttribute("aria-expanded", String(expand));
-      button.querySelector("[data-label]")!.textContent = expand ? "Show less" : "Read more";
+      button.querySelector("[data-label]")!.textContent = expand ? "Show less" : "Read the full newsletter";
       button.querySelector("[data-icon]")!.innerHTML = expand ? "&uarr;" : "&darr;";
 
       animation?.cancel();
-      if (expand) more.hidden = false;
+      if (expand) {
+        if (peek) peek.hidden = true;
+        more.hidden = false;
+      }
       if (reducedMotion.matches) {
         more.hidden = !expand;
+        if (peek) peek.hidden = expand;
+        if (!expand) window.scrollBy({ top: button.getBoundingClientRect().top - anchorTop, behavior: "instant" });
         return;
       }
 
@@ -87,7 +104,6 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
         timing,
       );
       if (!expand) {
-        const anchorTop = button.getBoundingClientRect().top;
         const current = animation;
         const keepButtonInPlace = () => {
           if (animation !== current) return;
@@ -99,6 +115,8 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
       }
       animation.onfinish = () => {
         more.hidden = !expand;
+        if (peek) peek.hidden = expand;
+        if (!expand) window.scrollBy({ top: button.getBoundingClientRect().top - anchorTop, behavior: "instant" });
         animation?.cancel();
         animation = undefined;
       };

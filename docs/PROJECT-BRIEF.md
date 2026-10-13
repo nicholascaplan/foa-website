@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 11 October 2026
+**Last updated:** 13 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -53,7 +53,9 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - It is a public information and community site, not an internal committee administration system.
 - The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
 - Content is concise, plain-English and suitable for readers who use English as an additional language.
-- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full in `src/content/newsletters/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read more / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body weight, with key facts bolded. The redundant Markdown source drafts are not retained in the publicly served asset directory.
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full in `src/content/newsletters/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read the full newsletter / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). A shallow, unblurred peek at the next section fades out above the green expansion button; the decorative peek is inert and hidden from assistive technology, disappears on expansion and returns on collapse. Archived sheets have a responsive gap between them. A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body size and weight, with key facts bolded. The redundant Markdown source drafts are not retained in the publicly served asset directory.
+- Newsletter latest/archive placement is read from the content collection: the issue marked `latest` is featured and the remaining issues are archived in descending publication-date order, with no hardcoded issue imports in the page.
+- Newsletter links to `https://www.thefriendsofashley.org` render as base-aware internal links in the same tab using the existing green text-link style, without external-link markers. Links to third-party sites retain the external-link icon and new-tab announcement. Source newsletters keep their full public URLs for reuse outside the site.
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 

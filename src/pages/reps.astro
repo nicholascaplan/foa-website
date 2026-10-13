@@ -33,12 +33,13 @@ const messages = [
     title: fireworks.title,
     paragraphs: [
       `${fireworks.title} is on ${dateFormatter(fireworks.start)} at ${fireworks.location}, ${timeRange(fireworks)}. The quiet display is at ${timeFormatter.format(quietDisplay.time)} and the main display at ${timeFormatter.format(mainDisplay.time)}.`,
-      `Tickets are ${fireworks.ticketPrice}. ${fireworks.ticketNote}`,
+      `Tickets are ${fireworks.ticketPrice} and are now on sale to the wider public. If you’re planning to come but haven’t bought your tickets yet, don’t delay! ${fireworks.ticketNote}`,
     ],
     timing: fireworks,
     href: fireworks.path!,
     linkLabel: "Event details and practical information",
     ticketUrl: fireworks.ticketUrl,
+    reviewed: "2026-10-13",
   },
   {
     title: "Fireworks volunteering",
@@ -72,7 +73,7 @@ const messages = [
   },
 ].map((message) => ({
   ...message,
-  reviewed: "2026-10-11",
+  reviewed: message.reviewed ?? "2026-10-11",
   expires: (message.timing.end ?? message.timing.start).toISOString(),
   url: publicUrl(message.href),
   copyText: [

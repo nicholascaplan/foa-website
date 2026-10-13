@@ -1,0 +1,16 @@
+---
+import NewsletterSection from "./NewsletterSection.astro";
+
+interface Props {
+  section: { title?: string; paragraphs?: string[]; list?: string[] };
+}
+const { section } = Astro.props;
+const preview = {
+  title: section.title,
+  paragraphs: section.paragraphs?.slice(0, 1),
+  list: section.paragraphs?.length ? undefined : section.list?.slice(0, 2),
+};
+---
+<div class="newsletter-peek" data-newsletter-peek aria-hidden="true" inert>
+  <NewsletterSection section={preview} />
+</div>

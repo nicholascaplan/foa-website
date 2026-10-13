@@ -99,6 +99,55 @@ test("the newsletter page presents the latest issue first and archives the rest"
   }
 });
 
+test("the half term newsletter omits email-only copy and renders clean links", async () => {
+  const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
+  const latest = html.slice(html.indexOf("Latest newsletter"), html.indexOf("Previous newsletters"));
+  assert.ok(latest.includes("Friday 16th October"));
+  assert.ok(latest.includes('datetime="2026-10-16T00:00:00.000Z"'));
+  assert.ok(latest.includes("two-week half term break"));
+  assert.ok(!latest.includes("You can find the full newsletter on our new website"));
+  assert.ok(!latest.includes("attached poster"));
+  assert.ok(!latest.includes("\\!"));
+  for (const label of ["Buy tickets", "Event information", "volunteer sign-up links", "Find out how to help", "uniform information and requests", "See our fundraising plans"]) {
+    assert.ok(latest.includes(`>${label}<`), `${label} should render as a clean link label`);
+  }
+});
+
+test("newsletter links to our pages stay internal while ticket links remain external", async () => {
+  const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
+  const latest = html.slice(html.indexOf("Latest newsletter"), html.indexOf("Previous newsletters"));
+  const links = [...latest.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
+  for (const route of ["/events/fireworks-2026/", "/fireworks-volunteering/", "/events/christmas-fayre-2026/", "/uniform/", "/fundraising/", "/"]) {
+    const link = links.find(([, attributes]) => {
+      const href = attributes.match(/href="([^"]+)"/)?.[1];
+      return href?.startsWith("/") && href.endsWith(route);
+    });
+    assert.ok(link, `${route} should be an internal link`);
+    assert.match(link[1], /class="text-link"/);
+    assert.doesNotMatch(link[1], /target=|rel=/);
+    assert.doesNotMatch(link[2], /external-link-icon|opens in a new tab/);
+  }
+  const ticketLink = links.find(([, attributes]) => attributes.includes("https://buytickets.at/"));
+  assert.ok(ticketLink);
+  assert.match(ticketLink[1], /target="_blank"/);
+  assert.match(ticketLink[2], /external-link-icon/);
+});
+
+test("newsletter expansion offers an inert faded peek and a clear primary action", async () => {
+  const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
+  const newsletters = await loadCollection("newsletters");
+  const expandableCount = newsletters.filter(({ data }) => (data.sections?.length ?? 0) > (data.latest ? 3 : 1)).length;
+  const peeks = [...html.matchAll(/<div class="newsletter-peek"([^>]*)>/g)];
+  assert.equal(peeks.length, expandableCount);
+  for (const [, attributes] of peeks) {
+    assert.match(attributes, /aria-hidden="true"/);
+    assert.match(attributes, /\binert\b/);
+  }
+  const buttons = [...html.matchAll(/<button class="button button--primary newsletter-read-more"[^>]*>([\s\S]*?)<\/button>/g)];
+  assert.equal(buttons.length, expandableCount);
+  assert.ok(buttons.every(([, content]) => content.includes("Read the full newsletter")));
+});
+
 test("committee entries have unique display order, names, roles and existing portraits", async () => {
   const members = await loadCollection("committee");
   const orders = members.map(({ data }) => data.order);

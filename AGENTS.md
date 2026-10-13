@@ -103,6 +103,7 @@ Full rules and rationale are in [`docs/README.md`](docs/README.md). The essentia
 - When an action is resolved, move its outcome into the brief and delete it from `ACTIONS.md`.
 - Do not add new documentation files without a clear question that no existing file answers.
 - Update `README.md` only if commands, entry points or the file layout change.
+- The user does not want Atlassian Artifacts uploads. Do not ask about or offer uploading files to Atlassian Artifacts; keep files in the repository unless the user explicitly requests another destination.
 
 ## Session Closure
 
