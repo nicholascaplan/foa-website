@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 const route = "/events/christmas-fayre-2026/";
 
 const shown = (page: Page, selector: string) =>
-  page.locator(selector).evaluateAll((nodes) => nodes.filter((node) => getComputedStyle(node).display !== "none").length);
+  page.locator(selector).evaluateAll((nodes) => nodes.filter((node) => node.getClientRects().length > 0 && getComputedStyle(node).display !== "none").length);
 
 test.describe("Christmas Fayre decoration", () => {
   test("shows every bauble and snowflake on a desktop-width screen", async ({ page }) => {
@@ -27,7 +27,9 @@ test.describe("Christmas Fayre decoration", () => {
   test("is hidden from assistive technology and never takes focus", async ({ page }) => {
     await page.goto(route);
 
-    await expect(page.locator(".xmas-baubles")).toHaveAttribute("aria-hidden", "true");
+    for (const baubles of await page.locator(".xmas-baubles").all()) {
+      await expect(baubles).toHaveAttribute("aria-hidden", "true");
+    }
     await expect(page.locator(".xmas-snow")).toHaveAttribute("aria-hidden", "true");
     await expect(page.locator(".xmas-baubles a, .xmas-baubles button, .xmas-snow a, .xmas-snow button")).toHaveCount(0);
   });

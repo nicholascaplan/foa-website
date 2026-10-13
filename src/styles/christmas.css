@@ -108,6 +108,10 @@ body.xmas-theme::before {
   list-style: none;
 }
 
+.xmas-baubles--mobile {
+  display: none;
+}
+
 .xmas-baubles li {
   position: relative;
   flex: 1 1 0;
@@ -274,6 +278,34 @@ body.xmas-theme::before {
   font-size: clamp(2.2rem, 8.5vw, 4rem);
   line-height: 1.02;
   text-transform: uppercase;
+}
+
+@media (max-width: 63.99rem) {
+  .xmas-baubles--desktop {
+    display: none;
+  }
+
+  .xmas-baubles--mobile {
+    display: flex;
+    margin-top: 0.75rem;
+  }
+
+  .xmas-hero .site-width {
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  .xmas-hero__frame {
+    max-width: none;
+    padding: calc(var(--mobile-heading-panel-padding) - 2px) calc(var(--mobile-heading-inset) - 2px) var(--mobile-heading-panel-padding);
+  }
+
+  .xmas-theme .mobile-page-heading h1 {
+    font-size: clamp(1rem, 14cqi, 3rem);
+  }
+
+  .xmas-theme .mobile-page-heading .xmas-kicker {
+    font-size: clamp(1rem, 7cqi, 1.35rem);
+  }
 }
 
 .xmas-hero__lead {

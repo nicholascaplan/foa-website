@@ -1,4 +1,6 @@
 ---
+interface Props { placement?: "desktop" | "mobile"; }
+const { placement } = Astro.props;
 const colours = ["red", "gold", "green", "blue"];
 const lengths = [18, 46, 26, 56, 20, 44, 24, 52];
 const sizes = [34, 28, 38, 30, 36];
@@ -10,7 +12,7 @@ const hangers = Array.from({ length: 20 }, (_, i) => ({
   size: sizes[i % sizes.length],
 }));
 ---
-<ul class="xmas-baubles" aria-hidden="true">
+<ul class:list={["xmas-baubles", placement && `xmas-baubles--${placement}`]} aria-hidden="true">
   {hangers.map((h) => (
     <li style={`--i:${h.i};--len:${h.length}px;--d:${h.size}px`}>
       <i class="xmas-baubles__string"></i>

@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SponsorRibbon from "../components/SponsorRibbon.astro";
 import FundraisingSummary from "../components/FundraisingSummary.astro";
-import HomeIntroduction from "../components/HomeIntroduction.astro";
+import MobilePageHeading from "../components/MobilePageHeading.astro";
 import { withBase } from "../lib/urls";
 import { ordinalDateFormatter } from "../lib/dates";
 const events = await getCollection("events");
@@ -29,11 +29,13 @@ const fireworksSrcset = [640, 960, 1600].map((width) => `${withBase(`/events/fir
 const fireworksSizes = "(min-width: 80rem) 30rem, (min-width: 48rem) 40vw, calc(100vw - 5rem)";
 ---
    <BaseLayout title="The Friends of Ashley" description="The Friends of Ashley, the PTA for Ashley C of E Primary School in Walton-on-Thames." preloadImage="/events/fireworks-960.webp" preloadImageSrcset={fireworksSrcset} preloadImageSizes={fireworksSizes} bodyClass="homepage">
-   <div class:list={["site-width mobile-home-introduction", { "mobile-home-introduction--dev": import.meta.env.DEV }]}><HomeIntroduction /></div>
   <section class="hero">
     <div class="site-width hero-grid">
        <div class="hero-copy">
-         <p class="eyebrow">Parent-led. Child-focused. All welcome.</p><h1>Helping Ashley children <em>flourish.</em></h1><p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions">{fireworks.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--primary button--large button--wide" href={withBase("/fireworks-volunteering/")}>Volunteer at Fireworks <span aria-hidden="true">&rarr;</span></a></div>
+          <MobilePageHeading>
+            <h1 data-fit-heading>Helping Ashley children <em>flourish.</em></h1>
+          </MobilePageHeading>
+          <p>The Friends of Ashley brings parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community.</p><div class="hero-actions">{fireworks.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}<a class="button button--primary button--large button--wide" href={withBase("/fireworks-volunteering/")}>Volunteer at Fireworks <span aria-hidden="true">&rarr;</span></a></div>
        </div>
         <article class="event-feature event-feature--poster">
           <p class="event-feature-kicker">Remember Remember the 5th of November</p><h2>{fireworks.title}</h2>
@@ -55,3 +57,8 @@ const fireworksSizes = "(min-width: 80rem) 30rem, (min-width: 48rem) 40vw, calc(
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import { initHeadingFit } from "../lib/heading-fit";
+  initHeadingFit();
+</script>

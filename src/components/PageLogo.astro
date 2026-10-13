@@ -1,0 +1,10 @@
+---
+import { withBase } from "../lib/urls";
+
+interface Props { logo?: string; }
+const { logo = "/brand/foa-logo.jpg" } = Astro.props;
+---
+
+<a class="mobile-page-logo page-logo-home" href={withBase("/")} aria-label="The Friends of Ashley home">
+  <img class:list={["brand-logo", { "brand-logo--festive": logo !== "/brand/foa-logo.jpg", "brand-logo--fireworks": logo.includes("fireworks") }]} src={withBase(logo)} alt="" width="160" height="160">
+</a>

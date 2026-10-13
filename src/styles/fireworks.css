@@ -734,8 +734,7 @@ body.fw-theme::before {
   .fw-event .event-hero-grid {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      "kicker kicker"
-      "title title"
+      "heading heading"
       "intro intro"
       "summary summary"
       "sponsor sponsor";
@@ -747,7 +746,7 @@ body.fw-theme::before {
     display: contents;
   }
 
-  .fw-event .fw-kicker { grid-area: kicker; }
+  .fw-event .mobile-page-heading { grid-area: heading; }
   .fw-event .event-hero h1 {
     grid-area: title;
     max-width: none;
@@ -803,20 +802,31 @@ body.fw-theme::before {
     padding-top: max(1rem, env(safe-area-inset-top, 0px));
   }
 
-  .fw-theme .fw-vol .event-hero h1 {
-    padding-right: 3.5rem;
-  }
-
-  body:has(.home-preview-tools) .fw-vol .event-hero h1 {
-    padding-right: 6.5rem;
-  }
-
   .fw-theme .fw-vol .event-hero h1 span {
     display: block;
   }
 
   .fw-theme .fw-vol .event-hero-intro {
     margin-top: 0.75rem;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .fw-theme :is(.fw-event, .fw-vol) .event-hero {
+    margin-inline: calc(-1 * var(--fw-gutter));
+    padding-top: calc(max(1rem, env(safe-area-inset-top, 0px)) + var(--mobile-heading-panel-padding));
+    padding-inline: calc(2 * var(--mobile-heading-inset));
+  }
+
+  .fw-theme .event-hero .mobile-page-heading h1 {
+    font-size: clamp(1.5rem, 15cqi, 2.6rem);
+  }
+
+  .fw-theme .mobile-page-heading .fw-kicker {
+    min-height: 0;
+    padding-right: 0;
+    font-size: clamp(0.875rem, 7cqi, 1.125rem);
+    white-space: normal;
   }
 }
 

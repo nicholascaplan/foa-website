@@ -7,18 +7,21 @@ test("homepage phone preview sits beside the burger outside the menu and stays f
     const phone = page.getByRole("button", { name: "Phone preview size" });
     const burger = page.getByRole("button", { name: "Open menu" });
      await expect(phone).toBeVisible();
-     expect((await page.locator(".mobile-home-introduction img").boundingBox())!.width).toBeGreaterThanOrEqual(84);
+    const logo = (await page.locator(".hero-copy .page-logo-home").boundingBox())!;
+    expect(logo.width).toBe(128);
+    expect(logo.x).toBe(32);
+    expect(logo.y).toBe(40);
     await expect(page.locator(".mobile-menu .dev-tools")).toHaveCount(0);
     const before = await phone.boundingBox();
     const menuBox = await burger.boundingBox();
     expect(before!.x + before!.width).toBeLessThan(menuBox!.x);
     expect(Math.abs(before!.y + before!.height / 2 - menuBox!.y - menuBox!.height / 2)).toBeLessThan(1);
     const layout = await page.evaluate(() => {
-       const copy = document.querySelector(".mobile-home-introduction p")!.getBoundingClientRect();
+       const copy = document.querySelector(".hero-copy h1")!.getBoundingClientRect();
        const tools = document.querySelector(".home-preview-tools")!.getBoundingClientRect();
-       return { copyRight: copy.right, toolsLeft: tools.left, overflow: document.documentElement.scrollWidth - innerWidth };
+       return { copyTop: copy.top, toolsBottom: tools.bottom, overflow: document.documentElement.scrollWidth - innerWidth };
     });
-     expect(layout.copyRight).toBeLessThanOrEqual(layout.toolsLeft);
+    expect(layout.copyTop).toBeGreaterThanOrEqual(layout.toolsBottom);
     expect(layout.overflow).toBeLessThanOrEqual(0);
     await phone.click();
     await expect(page.getByRole("button", { name: "Small phone (360px)" })).toBeVisible();

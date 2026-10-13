@@ -1,4 +1,5 @@
 ---
+import MobilePageHeading from "../components/MobilePageHeading.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CryingLogo from "../components/CryingLogo.astro";
 import { getCollection } from "astro:content";
@@ -11,8 +12,10 @@ const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
     <div class="site-width empty-state">
       <CryingLogo />
       <div class="not-found-copy">
-        <p class="eyebrow">404</p>
-        <h1 class="editorial-heading">Oh no, we can't find that page.</h1>
+        <MobilePageHeading>
+          <p class="eyebrow">404</p>
+          <h1 class="editorial-heading">Oh no, we can't find that page.</h1>
+        </MobilePageHeading>
         <p>It may have been moved or handed in to lost property. Here are some places that will help.</p>
         <div class="hero-actions">
           {fireworks?.ticketUrl && <a class="button button--amber button--large" href={fireworks.ticketUrl} target="_blank" rel="noopener noreferrer">Buy Fireworks tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>}

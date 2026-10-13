@@ -18,9 +18,10 @@ const latestRest = latestSections.slice(latestPreviewCount);
 const latestBodyId = "newsletter-latest-more";
 const previous = newsletters.filter(({ id }) => id !== latestIssue.id);
 const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
+const newsletterLogo = "/brand/foa-logo-newsletter.svg";
 ---
-<BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
-  <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." />
+<BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters." image="/brand/foa-logo-newsletter-og.png" headerLogo={newsletterLogo} bodyClass="newsletter-logo-page">
+  <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." logo={newsletterLogo} />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
     <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
@@ -65,6 +66,31 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
     </section>
   </div></section>
 </BaseLayout>
+
+<style is:global>
+  /* The circle is 380 units wide inside a 550-unit SVG. Match its size and
+     position to the standard logo, with clearance beneath for the envelope. */
+  .newsletter-logo-page .brand-logo--festive {
+    border-radius: 0;
+    object-fit: contain;
+    transform-origin: top left;
+    transform: translate(var(--newsletter-logo-offset-x), var(--newsletter-logo-offset-y)) scale(var(--newsletter-logo-scale));
+  }
+
+  .newsletter-logo-page .site-header .brand-logo {
+    margin-bottom: calc(var(--introduction-logo-size) * var(--newsletter-logo-extra-height));
+  }
+
+  .newsletter-logo-page .mobile-menu-logo {
+    margin-bottom: calc(var(--menu-logo-size) * var(--newsletter-logo-extra-height));
+  }
+
+  @media (max-width: 63.99rem) {
+    .newsletter-logo-page .page-logo-home {
+      aspect-ratio: 380 / 483;
+    }
+  }
+</style>
 
 <script>
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

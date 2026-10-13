@@ -1,4 +1,5 @@
 ---
+import MobilePageHeading from "../../components/MobilePageHeading.astro";
 import { getEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SponsorRibbon from "../../components/SponsorRibbon.astro";
@@ -34,8 +35,10 @@ const eventJsonLd = {
         <div class="site-width">
           <div class="event-hero-grid">
             <div class="fw-title-copy">
-              <p class="fw-kicker">Remember Remember the 5th of November</p>
-              <h1>{event.title}</h1>
+              <MobilePageHeading logo="/brand/foa-logo-fireworks.svg">
+                <p class="fw-kicker">Remember Remember the 5th of November</p>
+                <h1>{event.title}</h1>
+              </MobilePageHeading>
               <p class="event-hero-intro">{event.summary}</p>
             </div>
             <div class="fw-overview">

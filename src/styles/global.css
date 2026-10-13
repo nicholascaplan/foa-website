@@ -29,6 +29,17 @@
   --menu-link-size: 1.375rem;
   --menu-event-link-size: 1.3125rem;
   --menu-arrow-size: 1.25rem;
+  --introduction-logo-size: clamp(5.25rem, 9vw, 7rem);
+  --mobile-page-logo-size: 8rem;
+  --newsletter-logo-scale: calc(550 / 380);
+  --newsletter-logo-offset-x: calc(-85 / 380 * 100%);
+  --newsletter-logo-offset-y: calc(-29 / 380 * 100%);
+  --newsletter-logo-extra-height: calc(103 / 380);
+  --mobile-heading-inset: 1rem;
+  --mobile-heading-panel-padding: 1.5rem;
+  --mobile-heading-control-clearance: 2rem;
+  --home-heading-fit-max: 3rem;
+  --home-heading-line-height: 1.2;
   --font-display: Georgia, "Times New Roman", serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -542,15 +553,52 @@ a {
   padding-top: max(1rem, env(safe-area-inset-top, 0px));
 }
 
+.mobile-page-heading,
+.mobile-page-heading-copy {
+  display: contents;
+}
+
 @media (max-width: 63.99rem) {
   .site-header {
     display: none;
   }
 
-  /* A compact, unbranded control area keeps every page's opening copy clear
-     of the fixed burger (and the development-only phone preview). */
+  /* Logos belong inside the opening title panels, not in a separate strip. */
   #main-content {
-    padding-top: calc(max(1rem, env(safe-area-inset-top, 0px)) + 3rem);
+    padding-top: 0;
+  }
+
+  .mobile-page-heading {
+    display: grid;
+    grid-template-columns: min(var(--mobile-page-logo-size), calc(100% - 4rem)) minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem;
+    text-align: left;
+  }
+
+  .mobile-page-heading-copy {
+    display: block;
+    min-width: 0;
+    padding-top: var(--mobile-heading-control-clearance);
+    container-type: inline-size;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-page-heading-copy h1 {
+    overflow-wrap: anywhere;
+  }
+
+  .page-logo-home {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+  }
+
+  .page-logo-home img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   /* The event artwork must reach the top of the page. Keep the same control
@@ -567,32 +615,8 @@ a {
     padding-top: 0;
   }
 
-  .fw-theme .fw-event .fw-kicker {
-    min-height: 3rem;
-    padding-right: 3.5rem;
-    white-space: normal;
-  }
-
-  body:has(.home-preview-tools) .fw-event .fw-kicker {
-    padding-right: 6.5rem;
-  }
-
   .homepage #main-content {
     padding-top: 0;
-  }
-
-  .mobile-home-introduction {
-    padding-top: max(1rem, env(safe-area-inset-top, 0px));
-  }
-
-  .mobile-home-introduction .home-introduction {
-    margin-bottom: 0;
-    padding-right: calc(3rem + max(1rem, env(safe-area-inset-right, 0px)));
-  }
-
-  .mobile-home-introduction--dev .home-introduction {
-    gap: 0.5rem;
-    padding-right: calc(6.25rem + max(1rem, env(safe-area-inset-right, 0px)));
   }
 
   .home-preview-tools {
@@ -610,7 +634,7 @@ a {
 
 @media (min-width: 64rem) {
   .home-preview-tools,
-  .mobile-home-introduction {
+  .mobile-page-logo {
     display: none;
   }
 }
@@ -624,7 +648,7 @@ a {
 }
 
 .home-introduction img {
-  width: clamp(5.25rem, 9vw, 7rem);
+  width: var(--introduction-logo-size);
   max-width: 100%;
   height: auto;
   flex: none;
@@ -1792,6 +1816,7 @@ a {
 }
 
 .newsletter-board {
+  overflow-wrap: anywhere;
   padding: clamp(1rem, 4vw, 2.5rem);
   border: clamp(0.5rem, 1.5vw, 0.9rem) solid #6b4a2e;
   border-radius: 0.5rem;
@@ -1933,7 +1958,13 @@ a {
 
 .newsletter-read-more {
   max-width: 100%;
+  flex-wrap: wrap;
+  padding-inline: min(1.15rem, 8%);
   font-family: var(--font-body);
+}
+
+.newsletter-read-more [data-label] {
+  min-width: 0;
 }
 
 .newsletter-more[hidden] {
@@ -3531,23 +3562,89 @@ body.menu-open .cookie-banner {
 }
 
 @media (max-width: 63.99rem) {
-  /* Start the green panel near the top; reserve button clearance inside it,
-     rather than leaving a control-height empty strip above the panel. */
+  /* Put Option A inside the panel, with the copy clear of floating controls. */
+  .view-hero,
+  .homepage .hero-grid,
+  .xmas-hero > .site-width,
+  .not-found-page > .site-width {
+    width: min(calc(100% - 2rem), var(--max-width));
+  }
+
+  .homepage .hero-copy {
+    padding: var(--mobile-heading-panel-padding) var(--mobile-heading-inset);
+    border-radius: var(--radius-md);
+    background: var(--green-light);
+  }
+
+  .homepage .hero-copy .mobile-page-heading h1 {
+    max-width: none;
+    /* Option C is the readable fallback and the fitter's wrapping baseline. */
+    font-size: clamp(1.5rem, 14cqi, 1.75rem);
+    line-height: var(--home-heading-line-height);
+  }
+
+  .homepage .hero-copy > p {
+    margin-top: 1rem;
+    font-size: 1.08rem;
+  }
+
   #main-content:has(.view-hero) {
     padding-top: max(1rem, env(safe-area-inset-top, 0px));
   }
 
   .view-hero {
-    padding-top: 1.5rem;
+    padding-top: var(--mobile-heading-panel-padding);
   }
 
-  .view-hero .eyebrow {
-    min-height: 1.5rem;
-    padding-right: 3.5rem;
+  .view-hero > .site-width {
+    padding-inline: var(--mobile-heading-inset);
   }
 
-  body:has(.home-preview-tools) .view-hero .eyebrow {
-    padding-right: 6.5rem;
+  .view-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .view-hero-action {
+    justify-self: start;
+  }
+
+  .view-hero .mobile-page-heading-copy h1 {
+    font-size: clamp(1.5rem, 15cqi, 2.65rem);
+  }
+
+  .content-section.not-found-page {
+    padding-top: calc(max(1rem, env(safe-area-inset-top, 0px)) + var(--mobile-heading-panel-padding));
+  }
+
+  .not-found-page .empty-state {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-inline: var(--mobile-heading-inset);
+  }
+
+  .not-found-copy {
+    display: contents;
+  }
+
+  .not-found-copy .mobile-page-heading {
+    grid-row: 1;
+  }
+
+  .not-found-copy .mobile-page-heading h1 {
+    max-width: none;
+    font-size: clamp(1.5rem, 15cqi, 2.65rem);
+  }
+
+  .not-found-page .empty-state .crying-logo {
+    grid-row: 2;
+    max-width: 12rem;
+    margin: 0 auto -0.5rem;
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .homepage .hero-grid > .event-feature {
+    margin-top: var(--mobile-heading-control-clearance);
   }
 }
 

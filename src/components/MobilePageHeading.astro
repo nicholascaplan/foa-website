@@ -1,0 +1,11 @@
+---
+import PageLogo from "./PageLogo.astro";
+
+interface Props { logo?: string; }
+const { logo } = Astro.props;
+---
+
+<div class="mobile-page-heading">
+  <PageLogo logo={logo} />
+  <div class="mobile-page-heading-copy"><slot /></div>
+</div>

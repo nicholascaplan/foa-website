@@ -1,4 +1,5 @@
 ---
+import MobilePageHeading from "../../components/MobilePageHeading.astro";
 import { getEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChristmasBaubles from "../../components/ChristmasBaubles.astro";
@@ -55,17 +56,20 @@ const eventJsonLd = {
     </div>
 
     <section class="xmas-hero" aria-labelledby="xmas-title">
-      <ChristmasBaubles />
+      <ChristmasBaubles placement="desktop" />
       <div class="site-width">
         <div class="xmas-frame xmas-hero__frame">
-          <p class="xmas-kicker">Something magical is coming…</p>
-          <h1 id="xmas-title">{event.title}</h1>
+          <MobilePageHeading logo="/brand/foa-logo-christmas.svg">
+            <p class="xmas-kicker">Something magical is coming…</p>
+            <h1 id="xmas-title">{event.title}</h1>
+          </MobilePageHeading>
           <p class="xmas-hero__lead">And we need you!</p>
           <p class="xmas-hero__intro">This year we’re trying something new to make helping out easier, more social and more fun for everyone.</p>
+          <ChristmasBaubles placement="mobile" />
           <dl class="xmas-facts">
             <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{timeFormatter.format(event.start)}</span></dd></div>
             <div><dt>Where</dt><dd>{event.location}</dd></div>
-            <div><dt>Led by</dt><dd>{event.lead}</dd></div>
+            <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
           <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a></p>
         </div>

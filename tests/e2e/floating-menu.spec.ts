@@ -17,35 +17,70 @@ for (const width of [320, 390, 768, 1023]) {
       expect(before!.width).toBe(48);
       expect(before!.height).toBe(48);
       expect(before!.x + before!.width).toBeLessThanOrEqual(width);
+      {
+        const logo = page.locator(".page-logo-home");
+        await expect(logo, route).toBeVisible();
+        await expect(logo).toHaveAttribute("href", "/");
+        const logoBox = (await logo.boundingBox())!;
+        expect(logoBox.width, `${route}: approved 128px logo size`).toBe(128);
+        expect(logoBox.x, `${route}: consistent left anchor`).toBe(32);
+        expect(logoBox.y, `${route}: consistent top anchor`).toBe(40);
+        expect(logoBox.x + logoBox.width, route).toBeLessThan(before!.x);
+        await expect(logo.locator("p, strong, span")).toHaveCount(0);
+        const heading = (await page.locator(".mobile-page-heading-copy").boundingBox())!;
+        expect(heading.x, `${route}: the heading sits beside the logo`).toBeGreaterThanOrEqual(logoBox.x + logoBox.width);
+      }
+      const logoBottom = await page.locator(".mobile-page-logo").evaluate((element) => element.getBoundingClientRect().bottom);
       if (route === "/") {
-        await expect(page.locator(".mobile-home-introduction")).toBeVisible();
-        expect((await page.locator(".mobile-home-introduction img").boundingBox())!.width).toBeGreaterThanOrEqual(84);
+        const copy = page.locator(".hero-copy");
+        await expect(copy.locator(".page-logo-home")).toBeVisible();
+        await expect(copy.locator(".eyebrow")).toHaveCount(0);
+        const title = (await copy.locator("h1").boundingBox())!;
+        expect(title.y, "Homepage heading moves up without covering the controls").toBe(72);
+        expect(await copy.locator("h1").evaluate((element) => parseFloat(getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(24);
+        const intro = (await copy.locator(":scope > p").boundingBox())!;
+        const logo = (await copy.locator(".page-logo-home").boundingBox())!;
+        expect(intro.x, "Homepage introduction uses the full panel width").toBe(logo.x);
+        expect(intro.y, "Homepage introduction follows the logo/title row").toBeGreaterThanOrEqual(logoBottom);
       }
       const panel = page.locator(".view-hero");
       if (await panel.count()) {
         expect((await panel.boundingBox())!.y, route).toBe(16);
+        await expect(panel.locator(".page-logo-home"), route).toBeVisible();
         const eyebrow = await panel.locator(".eyebrow").boundingBox();
-        expect(eyebrow!.y, `${route}: eyebrow should use the space beside the controls`).toBe(40);
+        expect(eyebrow!.y, `${route}: eyebrow should clear the floating controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
+        const intro = (await panel.locator(".view-hero-copy > p").boundingBox())!;
+        const logo = (await panel.locator(".page-logo-home").boundingBox())!;
+        expect(intro.x, `${route}: introduction uses the full panel width`).toBe(logo.x);
+        expect(intro.y, `${route}: introduction sits below the logo`).toBeGreaterThanOrEqual(logoBottom);
       }
       const stage = page.locator(".fw-stage, .xmas-stage");
       if (await stage.count()) {
-        expect((await stage.boundingBox())!.y, `${route}: event artwork must reach the page top`).toBe(0);
+        expect((await stage.boundingBox())!.y, `${route}: artwork starts at the top without a logo strip`).toBe(0);
+        await expect(stage.locator(".page-logo-home"), route).toBeVisible();
         await expect(page.locator("#main-content")).toHaveCSS("padding-top", "0px");
         await expect(stage).toHaveCSS("padding-top", "0px");
         if (route === "/events/fireworks-2026/") {
           const kicker = page.locator(".fw-kicker");
-          await expect(kicker).toHaveCSS("min-height", "48px");
+          await expect(kicker).toHaveCSS("min-height", "0px");
           const kickerBox = await kicker.boundingBox();
-          expect(kickerBox!.y, `${route}: kicker should start beside the controls`).toBeCloseTo(Math.max(16, Math.min(width * 0.03, 32)), 1);
+          expect(kickerBox!.y, `${route}: kicker should clear the floating controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
           const title = await page.locator("main h1").boundingBox();
           expect(title!.y, `${route}: main heading should clear the controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
         }
         if (route === "/fireworks-volunteering/") {
           await expect(page.locator(".fw-kicker")).toHaveCount(0);
           const title = await page.getByRole("heading", { level: 1, name: "Fireworks Volunteering" }).boundingBox();
-          expect(title!.y, `${route}: wrapped heading should start beside the controls`).toBe(16);
+          expect(title!.y, `${route}: heading should clear the floating controls`).toBeGreaterThanOrEqual(before!.y + before!.height);
           await expect(page.locator("main h1 span")).toHaveCSS("display", "block");
           await expect(page.locator(".event-hero-intro")).toHaveCSS("margin-top", "12px");
+        }
+        if (route === "/events/christmas-fayre-2026/") {
+          await expect(page.locator(".xmas-baubles--desktop")).toBeHidden();
+          await expect(page.locator(".xmas-baubles--mobile")).toBeVisible();
+          const baubles = (await page.locator(".xmas-baubles--mobile").boundingBox())!;
+          const intro = (await page.locator(".xmas-hero__intro").boundingBox())!;
+          expect(baubles.y, "Baubles must not push the opening logo down").toBeGreaterThanOrEqual(intro.y + intro.height);
         }
       }
       const overlapping = await page.locator("main h1, main h2, main p, main a, main button").evaluateAll((elements) => {
@@ -61,6 +96,9 @@ for (const width of [320, 390, 768, 1023]) {
       await page.evaluate(() => window.scrollTo(0, 800));
       await expect(trigger).toBeInViewport();
       expect((await trigger.boundingBox())!.y, route).toBe(before!.y);
+      if (await page.evaluate((bottom) => scrollY > bottom, logoBottom)) {
+        await expect(page.locator(".page-logo-home"), route).not.toBeInViewport();
+      }
       const scroll = await page.evaluate(() => scrollY);
       await trigger.click();
       await expect(page.getByRole("button", { name: "Close menu" })).toBeFocused();
@@ -78,6 +116,12 @@ for (const width of [320, 390, 768, 1023]) {
       await page.locator(".mobile-menu-home").click();
       await expect(page).toHaveURL(/\/$/);
       await expect(page.locator("body")).toHaveClass("homepage");
+      if (route !== "/") {
+        await page.goto(route);
+        await page.locator(".page-logo-home").click();
+        await expect(page).toHaveURL(/\/$/);
+        await expect(page.locator("body")).toHaveClass("homepage");
+      }
     }
   });
 }
@@ -89,6 +133,11 @@ for (const width of [1024, 1440]) {
     for (const route of routes) {
       await page.goto(route);
       await expect(page.locator(".site-header"), route).toBeVisible();
+      await expect(page.locator(".mobile-page-logo"), route).toBeHidden();
+      if (route === "/events/christmas-fayre-2026/") {
+        await expect(page.locator(".xmas-baubles--desktop")).toBeVisible();
+        await expect(page.locator(".xmas-baubles--mobile")).toBeHidden();
+      }
       await expect(page.getByRole("navigation", { name: "Primary navigation" }), route).toBeVisible();
       await expect(page.locator(".menu-toggle"), route).toBeHidden();
       const introduction = await page.locator(".site-header .home-introduction").boundingBox();

@@ -108,7 +108,9 @@ test("Christmas Fayre organisers include approved surnames and class names acros
   assert.equal(christmas.lead, "Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox)");
   for (const route of ["newsletter", "events/christmas-fayre-2026", "get-involved", "reps"]) {
     const html = await readFile(path.join(dist, route, "index.html"), "utf8");
-    assert.ok(html.includes(christmas.lead), `${route} should include the approved organiser names and classes`);
+    for (const lead of christmas.lead.split(/(?<=\)) and /)) {
+      assert.ok(html.includes(lead), `${route} should include the approved organiser names and classes`);
+    }
   }
 });
 
@@ -353,9 +355,15 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
   const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
   assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00<\/span><\/dd>/);
   assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
-  assert.ok(html.includes(`<dd>${escapeHtml(christmas.lead)}</dd>`));
-  assert.equal([...html.matchAll(/<ul class="xmas-baubles" aria-hidden="true">/g)].length, 1);
-  assert.equal([...html.matchAll(/<li style="--i:\d+;/g)].length, 20);
+  assert.ok(html.includes(`<dd>${christmas.lead.split(/(?<=\)) and /).map(escapeHtml).join("<br>")}</dd>`));
+  // One visible decoration row at each breakpoint, in its approved position.
+  assert.match(html, /<ul class="xmas-baubles xmas-baubles--desktop" aria-hidden="true">/);
+  assert.match(html, /<ul class="xmas-baubles xmas-baubles--mobile" aria-hidden="true">/);
+  const baubleRows = [...html.matchAll(/<ul class="xmas-baubles xmas-baubles--(?:desktop|mobile)" aria-hidden="true">([\s\S]*?)<\/ul>/g)];
+  assert.equal(baubleRows.length, 2);
+  for (const [, row] of baubleRows) {
+    assert.equal([...row.matchAll(/<li style="--i:\d+;/g)].length, 20);
+  }
   assert.equal([...html.matchAll(/<i style="--x:/g)].length, 28);
   assert.match(html, /<div class="xmas-snow" aria-hidden="true">/);
 });
