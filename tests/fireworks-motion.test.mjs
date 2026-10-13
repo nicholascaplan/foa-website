@@ -9,7 +9,7 @@ const script = ts.transpileModule(source, { compilerOptions: { target: ts.Script
 
 // Exercise the real initializer and cancellation logic without needing a browser
 // launch. Browser tests separately cover CSS, viewport detection and interaction.
-function experience({ narrow = false, touch = false, reduced = false } = {}) {
+function experience({ narrow = false, touch = false, touchPoints = 0, reduced = false } = {}) {
   const media = { narrow, touch, reduced };
   const queries = [];
   const frames = new Map();
@@ -42,6 +42,7 @@ function experience({ narrow = false, touch = false, reduced = false } = {}) {
     document: { hidden: false, querySelector: () => stage, createElement: canvas, addEventListener() {} },
     window: { setTimeout(callback) { const key = ++id; timers.set(key, callback); return key; }, clearTimeout: (key) => timers.delete(key) },
     matchMedia,
+    navigator: { maxTouchPoints: touchPoints },
     devicePixelRatio: 3,
     requestAnimationFrame(callback) { const key = ++id; frames.set(key, callback); return key; },
     cancelAnimationFrame: (key) => frames.delete(key),
@@ -99,6 +100,19 @@ test("touch devices stay idle through orientation and motion-preference changes"
     assertIdle(view);
     assert.equal(view.contexts, 0);
   }
+});
+
+test("touch capability keeps effects idle even when pointer media queries report fine", () => {
+  const view = experience({ touchPoints: 1, narrow: true });
+  for (const next of [{ narrow: false }, { reduced: true }, { reduced: false }, { narrow: true }]) {
+    view.change(next);
+    view.resize();
+    view.launchOpening();
+    assertIdle(view);
+    assert.equal(view.contexts, 0);
+    assert.equal(view.flameCanvases.length, 0);
+  }
+  assertIdle(experience({ touchPoints: 5 }));
 });
 
 test("desktop-to-static transitions cancel both drawing loops, bursts and canvas allocation", () => {

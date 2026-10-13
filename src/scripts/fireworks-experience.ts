@@ -195,6 +195,8 @@ function createCanvasFlames(stage: HTMLElement) {
 function init(stage: HTMLElement) {
   const mobile = matchMedia("(max-width: 47.999rem)");
   // Touch devices stay static even when a phone rotates to a wide viewport.
+  // Also check capability: pointer media queries can report fine on hybrid devices.
+  const touchCapable = navigator.maxTouchPoints > 0;
   const staticEffects = matchMedia("(max-width: 47.999rem), (any-pointer: coarse)");
   const summary = stage.querySelector<HTMLElement>(".event-summary");
   const hero = stage.querySelector<HTMLElement>(".event-hero");
@@ -263,7 +265,7 @@ function init(stage: HTMLElement) {
   }, { threshold: 0.7 });
 
   const syncMotion = () => {
-    const shouldPause = staticEffects.matches || reduceMotion.matches;
+    const shouldPause = touchCapable || staticEffects.matches || reduceMotion.matches;
     if (shouldPause) {
       applyPaused(true);
       observer.disconnect();

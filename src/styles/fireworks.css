@@ -490,7 +490,7 @@ body.fw-theme::before {
 /* Static by default; desktop JavaScript progressively enables motion. */
 .fw-stage[data-fw-paused] .fw-flame,
 .fw-stage[data-fw-paused] .fw-torch__halo {
-  animation-play-state: paused;
+  animation: none;
 }
 
 .fw-stage[data-fw-paused] .fw-ember,

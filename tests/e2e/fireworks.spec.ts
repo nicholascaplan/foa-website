@@ -155,6 +155,22 @@ test.describe("touch-device safety", () => {
   });
 });
 
+test("a wide touch-capable device with a fine pointer starts no canvas work", async ({ page }) => {
+  await recordCanvasWork(page);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "maxTouchPoints", { get: () => 1 });
+  });
+  await page.setViewportSize({ width: 1194, height: 834 });
+  await page.goto("/events/fireworks-2026/");
+  expect(await page.evaluate(() => matchMedia("(any-pointer: coarse)").matches)).toBe(false);
+  await expectStaticEffects(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expectStaticEffects(page);
+  await page.waitForTimeout(800);
+  expect(await page.evaluate(() => window.__fwWork)).toEqual({ contexts: 0, frames: 0 });
+});
+
 test("switching desktop to narrow or reduced motion stops drawing and releases the sky buffer", async ({ page }) => {
   await recordCanvasWork(page);
   await page.setViewportSize({ width: 1440, height: 900 });
