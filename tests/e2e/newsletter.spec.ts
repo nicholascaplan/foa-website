@@ -26,6 +26,22 @@ test.describe("Newsletter expansion", () => {
   });
 
   for (const width of [390, 1440]) {
+    test(`newsletter peeks fill a five-line fade at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      for (const peek of await page.locator("[data-newsletter-peek]").all()) {
+        const sizes = await peek.evaluate((element) => {
+          const style = getComputedStyle(element);
+          return {
+            height: element.getBoundingClientRect().height,
+            contentHeight: element.scrollHeight,
+            expectedHeight: 5 * parseFloat(style.lineHeight) + 3 * parseFloat(getComputedStyle(document.documentElement).fontSize),
+          };
+        });
+        expect(sizes.height).toBeCloseTo(sizes.expectedHeight, 0);
+        expect(sizes.contentHeight).toBeGreaterThan(sizes.height);
+      }
+    });
+
     test(`newsletter introductions match body text size at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       for (const sheet of await page.locator(".newsletter-sheet").all()) {

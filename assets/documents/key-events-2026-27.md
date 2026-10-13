@@ -12,7 +12,7 @@ Editable summary of information published on The Friends of Ashley website, chec
 | Pre-loved Uniform sale | Friday 6th November 2026 | 15:25, school playground |
 | Pre-loved Uniform sale | Friday 4th December 2026 | 15:25, school playground |
 | Christmas Fayre | Saturday 5th December 2026 | 12:00, Ashley School |
-| Santa's Grotto | Wednesday 16th December 2026 | During the school day, Ashley School |
+| Santa's Grotto | Monday 14th December 2026 | During the school day, Ashley School |
 | Happy Bags | Wednesday 13th January 2027 | No collection time published, Ashley School |
 | Happy Bags | Monday 26th April 2027 | No collection time published, Ashley School |
 

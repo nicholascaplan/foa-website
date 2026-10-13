@@ -28,7 +28,7 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
         <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
-          <NewsletterPeek section={latestRest[0]} />
+          <NewsletterPeek sections={latestRest} />
           <div class="newsletter-more" id={latestBodyId} hidden>
             {latestRest.map((section) => <NewsletterSection section={section} />)}
           </div>
@@ -50,7 +50,7 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
           <p class="newsletter-summary-label">{data.title}</p>
           {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
           {rest.length > 0 && <>
-            <NewsletterPeek section={rest[0]} />
+            <NewsletterPeek sections={rest} />
             <div class="newsletter-more" id={bodyId} hidden>
               {rest.map((section) => <NewsletterSection section={section} />)}
             </div>

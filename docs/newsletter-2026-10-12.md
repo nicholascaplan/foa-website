@@ -26,7 +26,7 @@ Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox) are gathering helpers
 
 [Find out how to help](https://www.thefriendsofashley.org/events/christmas-fayre-2026/), or speak to the organisers in the playground.
 
-## 🎅 Santa’s Grotto: Wednesday 16th December
+## 🎅 Santa’s Grotto: Monday 14th December
 
 A little Christmas magic is coming to Ashley during the school day, with our parent and carer volunteers helping to make it happen. **Please keep it a surprise for the children!**
 

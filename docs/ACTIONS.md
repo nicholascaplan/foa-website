@@ -31,7 +31,7 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Dev / Owner:** Review the newsletter's faded next-section peeks and green "Read the full newsletter" buttons on mobile and desktop, including Day/Night Mode, enlarged text, keyboard access, expansion/collapse scroll position and reduced motion. Also check archive-sheet spacing, matching introduction/body text sizes and wrapping of the organisers' full names and class labels on Newsletter, Christmas Fayre, Get Involved and Reps Hub. Astro check/build and all 98 site/unit tests pass; HTTP checks confirm the updated preview is served. Automated browser coverage runs in CI; local rendered and interaction verification remains blocked by Chrome-launch sandbox permissions and unavailable Review tools. Regression coverage is in `tests/e2e/newsletter.spec.ts`.
+- **Dev / Owner:** Review the newsletter's five-line faded peeks (continuing into following sections when needed) and green "Read the full newsletter" buttons on mobile and desktop, including Day/Night Mode, enlarged text, keyboard access, expansion/collapse scroll position and reduced motion. Also check archive-sheet spacing, matching introduction/body text sizes and wrapping of the organisers' full names and class labels on Newsletter, Christmas Fayre, Get Involved and Reps Hub. Astro check/build and all 98 site/unit tests pass; HTTP checks confirm the updated preview is served. Automated browser coverage runs in CI; local rendered and interaction verification remains blocked by Chrome-launch sandbox permissions and unavailable Review tools. Regression coverage, including five-line preview sizing at 390px and 1440px, is in `tests/e2e/newsletter.spec.ts`.
 
 - **Dev / Owner:** Verify the approved mobile-menu treatment: 104px logo, 22px main links, 21px serif event links and consistent decorative arrows on plain links. Check logo/control clearance for standard and festive variants, wrapping at 320px and 390px, Contact Us visibility on a 667px-high screen and scrolling with enlarged text. The compact logo placement now starts at 26rem. Local check/build and site/unit tests passed, but rendered verification is blocked by Chrome-launch sandbox permissions and unavailable Review tools.
 
@@ -106,7 +106,7 @@ These facts appear on the site or in drafts but are not confirmed by an authoris
 - Co-Secretary recruitment copy (final wording and publication review).
 - AGM volunteer recruitment: reconfirm whether the Eco Stall lead and Summer Fete/Big Picnic organiser opportunities remain open, and confirm those events' plans and dates before listing them as confirmed events. Get Involved labels the event plans as unconfirmed and routes enquiries to the committee.
 - Arabic translation quality (demonstration only; human review required).
-- Santa's Grotto (16 December 2026): the start time, location wording and whether to list it publicly (it is usually a secret from the children) are unconfirmed. It is listed as an all-day event at Ashley School.
+- Santa's Grotto (14th December 2026): the start time, location wording and whether to list it publicly (it is usually a secret from the children) are unconfirmed. It is listed as an all-day event at Ashley School.
 
 ## Open Questions
 

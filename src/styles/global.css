@@ -1912,10 +1912,11 @@ a {
 }
 
 .newsletter-peek {
-  max-height: 8rem;
+  /* Five body lines, with extra room for the opening heading and its gap. */
+  max-height: calc(5lh + 3rem);
   margin-top: 1.5rem;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, #000 0%, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 100%);
   pointer-events: none;
   user-select: none;
 }
