@@ -10,6 +10,17 @@ test.describe("Newsletter expansion", () => {
     await expect(page.locator(".newsletter-issue").getByText("Christmas Fayre: Saturday 5th December")).toBeVisible();
   });
 
+  test("collapsed and expanded newsletters fit a 320px screen", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    expect(await overflow()).toBeLessThanOrEqual(0);
+    for (const trigger of await page.locator(".newsletter-read-more").all()) {
+      await trigger.click();
+      expect(await overflow()).toBeLessThanOrEqual(0);
+    }
+  });
+
   test("reduced motion expands immediately and restores the peek on collapse", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     const more = page.locator("#newsletter-latest-more");
