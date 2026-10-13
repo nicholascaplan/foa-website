@@ -68,9 +68,9 @@ test.describe("homepage heading without JavaScript", () => {
   });
 });
 
-test("mobile logos stay beside headings and reflow with enlarged text", async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 900 });
-  for (const route of ["/", "/newsletter/", "/uniform/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
+for (const route of ["/", "/newsletter/", "/uniform/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
+  test(`${route}: mobile logos stay beside headings and reflow with enlarged text`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
     await page.goto(route);
     await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
     await expect(page.locator(".page-logo-home"), route).toBeVisible();
@@ -82,8 +82,8 @@ test("mobile logos stay beside headings and reflow with enlarged text", async ({
     expect(layout.copyLeft, route).toBeGreaterThanOrEqual(layout.logoRight);
     expect(layout.copyRight, route).toBeLessThanOrEqual(layout.viewport);
     expect(layout.overflow, route).toBeLessThanOrEqual(0);
-  }
-});
+  });
+}
 
 test("enlarged homepage text keeps the menu and hero actions inside a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 900 });

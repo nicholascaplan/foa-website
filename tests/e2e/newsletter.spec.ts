@@ -29,7 +29,9 @@ test.describe("Newsletter expansion", () => {
     await trigger.click();
     await expect(more).toBeVisible();
     await expect(peek).toBeHidden();
-    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+    expect(await more.evaluate((element) => element.getAnimations().length)).toBe(0);
+    // Reduced-motion CSS still permits near-instant focus/hover transitions.
+    await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0);
     await trigger.click();
     await expect(more).toBeHidden();
     await expect(peek).toBeVisible();
