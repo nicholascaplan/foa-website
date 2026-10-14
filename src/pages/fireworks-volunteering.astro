@@ -11,14 +11,14 @@ const event = entry?.data;
 if (!event?.volunteerRoles) throw new Error("Fireworks volunteering content is missing");
 const eventDate = ordinalDateFormatter({ timeZone: "Europe/London" })(event.start);
 ---
-<BaseLayout title="Fireworks Volunteering" description="Sign up to help at Fireworks on the Field. Choose a slot with your year group's team on Volunteer Sign Up." image="/events/fireworks-1600.jpg" headerLogo="/brand/foa-logo-fireworks.svg" bodyClass="fw-theme">
+<BaseLayout title="Fireworks Volunteering" description="Sign up to help at Fireworks on the Field. Choose a slot with your year group's team on Volunteer Sign Up." image="/events/fireworks-1600.jpg" headerLogo="/brand/foa-logo-fireworks-ivory.svg" bodyClass="fw-theme">
   <div class="fw-vol fw-stage" data-fw-paused>
     <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
     <div class="fw-content">
       <section class="event-hero">
         <div class="site-width">
           <div class="fw-title-copy">
-            <MobilePageHeading logo="/brand/foa-logo-fireworks.svg">
+            <MobilePageHeading logo="/brand/foa-logo-fireworks-ivory.svg">
               <h1>Fireworks <span>Volunteering</span></h1>
             </MobilePageHeading>
             <p class="event-hero-intro">Help make Fireworks on the Field awesome. Every Ashley family can play a part. Each year group is looking after one activity, so find your child's year, choose a slot and sign up in moments.</p>

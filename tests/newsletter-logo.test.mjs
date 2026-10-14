@@ -12,14 +12,14 @@ test("the newsletter uses the envelope logo on desktop, mobile and in the menu w
     html.match(/class="mobile-menu-home"[\s\S]*?<\/a>/)?.[0],
   ]) {
     assert.ok(region);
-    assert.match(region, /src="[^"]*\/brand\/foa-logo-newsletter\.svg"/);
+    assert.match(region, /src="[^"]*\/brand\/foa-logo-newsletter-ivory\.svg"/);
   }
   assert.match(html, /property="og:image" content="[^"]*\/brand\/foa-logo-newsletter-og\.png"/);
-  assert.match(html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "", /src="[^"]*\/brand\/foa-logo\.jpg"/);
+  assert.match(html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "", /src="[^"]*\/brand\/foa-logo-ivory\.svg"/);
   const letterheads = html.match(/class="newsletter-letterhead"[^>]*>[\s\S]*?<\/div>/g);
   assert.ok(letterheads?.length);
   for (const letterhead of letterheads) {
-    assert.match(letterhead, /src="[^"]*\/brand\/foa-logo\.jpg"/);
+    assert.match(letterhead, /src="[^"]*\/brand\/foa-logo\.svg"/);
   }
 });
 

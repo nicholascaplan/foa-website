@@ -3683,7 +3683,9 @@ body.menu-open .cookie-banner {
 
 @media (min-width: 64rem) {
   .site-header:not(.site-header--home) .header-inner {
-    padding-bottom: 1.5rem;
+    /* Reserve the envelope's overhang on every interior page, outside the
+       shared branding row, so names and navigation never shift by route. */
+    padding-bottom: max(1.5rem, calc(var(--introduction-logo-size) * var(--newsletter-logo-extra-height)));
   }
 
   .desktop-nav {

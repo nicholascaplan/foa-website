@@ -18,7 +18,7 @@ const latestRest = latestSections.slice(latestPreviewCount);
 const latestBodyId = "newsletter-latest-more";
 const previous = newsletters.filter(({ id }) => id !== latestIssue.id);
 const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
-const newsletterLogo = "/brand/foa-logo-newsletter.svg";
+const newsletterLogo = "/brand/foa-logo-newsletter-ivory.svg";
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters." image="/brand/foa-logo-newsletter-og.png" headerLogo={newsletterLogo} bodyClass="newsletter-logo-page">
   <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." logo={newsletterLogo} />
@@ -26,7 +26,7 @@ const newsletterLogo = "/brand/foa-logo-newsletter.svg";
     <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
       <article class="newsletter-issue newsletter-sheet">
-        <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
+        <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.svg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
           <NewsletterPeek sections={latestRest} />
@@ -47,7 +47,7 @@ const newsletterLogo = "/brand/foa-logo-newsletter.svg";
         const [first, ...rest] = data.sections ?? [];
         const bodyId = `newsletter-${id}-more`;
         return <article class="newsletter-summary newsletter-sheet">
-          <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.jpg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published.toISOString()}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
+          <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.svg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published.toISOString()}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
           <p class="newsletter-summary-label">{data.title}</p>
           {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
           {rest.length > 0 && <>
@@ -75,10 +75,6 @@ const newsletterLogo = "/brand/foa-logo-newsletter.svg";
     object-fit: contain;
     transform-origin: top left;
     transform: translate(var(--newsletter-logo-offset-x), var(--newsletter-logo-offset-y)) scale(var(--newsletter-logo-scale));
-  }
-
-  .newsletter-logo-page .site-header .brand-logo {
-    margin-bottom: calc(var(--introduction-logo-size) * var(--newsletter-logo-extra-height));
   }
 
   .newsletter-logo-page .mobile-menu-logo {
