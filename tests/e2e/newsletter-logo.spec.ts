@@ -88,7 +88,9 @@ for (const width of [1024, 1440]) {
     const logo = await page.locator(".site-header .brand-logo").boundingBox();
     // Artwork extends beyond the square image box but fits in the shared header.
     const envelopeBottom = logo!.y + logo!.height * 512 / 550;
-    expect(envelopeBottom).toBeLessThanOrEqual(newsletter.row.y + newsletter.row.height);
+    // SVG transforms retain fractional pixels while layout boxes round to
+    // 1/64px. Allow subpixel rounding, not visible artwork overflow.
+    expect(envelopeBottom).toBeLessThanOrEqual(newsletter.row.y + newsletter.row.height + 0.5);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
     await page.locator(".desktop-nav").getByRole("link", { name: "Uniform", exact: true }).click();
     expect(await measure()).toEqual(standard);
