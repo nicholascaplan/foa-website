@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 14 October 2026
+**Last updated:** 15 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -306,6 +306,7 @@ Source layout:
 ### 5.2 Hosting, domain and deployment
 
 - Pushes to `main` run `npm run verify`; `dist/` is uploaded and deployed only if it passes, with concurrency so older builds cannot overwrite newer ones. The workflow installs Chromium for Playwright.
+- The deployment workflow also runs daily at 08:00 UK time (`Europe/London`, automatically observing GMT and BST) and can be started manually. Scheduled runs rebuild the latest default-branch commit through the same verification gate, refreshing date-sensitive static content even without code changes. GitHub may delay scheduled starts and automatically disables schedules in public repositories after 60 days without repository activity.
 - The workflow builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`. The canonical domain is `www.thefriendsofashley.org`, with HTTPS enforced by GitHub Pages; the apex domain redirects to `www`. `SITE_URL` is not needed for ordinary local development.
 - DNS is at 123 Reg: apex A records point to GitHub Pages (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` is a CNAME to `nicholascaplan.github.io`. Existing email, SPF, DKIM, DMARC and nameserver records must not be changed.
 - The custom domain is assigned to this repository (`nicholascaplan/foa-website`). The earlier pre-launch holding page lives in `nicholascaplan/foa-holding-page` and no longer holds the domain.
