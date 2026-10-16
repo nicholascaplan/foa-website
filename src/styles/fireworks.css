@@ -981,7 +981,6 @@ body.fw-theme::before {
   }
 
   .fw-theme .event-summary dl > div:first-child dd,
-  .fw-theme .event-summary dl > div:last-child dd,
   .fw-theme .event-summary .fw-map-link {
     white-space: nowrap;
   }
