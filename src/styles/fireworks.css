@@ -966,6 +966,19 @@ body.fw-theme::before {
 }
 
 
+@media (max-width: 47.999rem) {
+  .fw-theme .event-summary dl > div:has(.fw-map-link) {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .fw-theme .event-summary .fw-map-link {
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+}
+
+
 /* Keep the external arrow separate from the underlined map-link text. */
 .fw-event .fw-map-link {
   text-decoration: none;
