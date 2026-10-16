@@ -49,7 +49,6 @@ const eventJsonLd = {
                 <div><dt>When</dt><dd>{timeFormatter.format(event.start)}{event.end && `–${timeFormatter.format(event.end)}`}</dd></div>
                 <div><dt>Where</dt><dd>{mapUrl ? <a class="fw-map-link" href={mapUrl} target="_blank" rel="noopener noreferrer"><span class="fw-map-link__label">{event.location}</span>{"\u00A0"}<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a> : event.location}</dd></div>
                 <div><dt>Tickets</dt><dd>{event.ticketPrice?.split(/(under-2s)/g).map((part) => part === "under-2s" ? <span class="fw-ticket-price__unbreakable">{part}</span> : part)}</dd></div>
-                <div><dt>Lead</dt><dd>{event.lead}</dd></div>
               </dl>
               {event.ticketUrl && <div class="ticket-cta">
                 <a class="button button--amber button--large" href={event.ticketUrl} target="_blank" rel="noopener noreferrer">Buy tickets <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
