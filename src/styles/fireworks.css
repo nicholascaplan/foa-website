@@ -964,3 +964,14 @@ body.fw-theme::before {
     margin-top: calc(1.75rem + var(--fw-roll-overhang));
   }
 }
+
+
+/* Keep the external arrow separate from the underlined map-link text. */
+.fw-event .fw-map-link {
+  text-decoration: none;
+}
+
+.fw-event .fw-map-link__label {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
