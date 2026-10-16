@@ -964,3 +964,43 @@ body.fw-theme::before {
     margin-top: calc(1.75rem + var(--fw-roll-overhang));
   }
 }
+
+
+@media (max-width: 47.999rem) {
+  .fw-theme .fw-stage {
+    --fw-panel-inset: 1rem;
+  }
+
+  .fw-theme .event-summary {
+    padding-inline: 0.6875rem;
+  }
+
+  .fw-theme .event-summary dl > div {
+    grid-template-columns: 4.125rem minmax(0, 1fr);
+    gap: 0.25rem;
+  }
+
+  .fw-theme .event-summary dl > div:first-child dd,
+  .fw-theme .event-summary .fw-map-link {
+    white-space: nowrap;
+  }
+
+  .fw-theme .event-summary .fw-ticket-price__unbreakable {
+    white-space: nowrap;
+  }
+
+  .fw-theme .event-summary .fw-map-link {
+    font-size: 0.85rem;
+  }
+}
+
+
+/* Keep the external arrow separate from the underlined map-link text. */
+.fw-event .fw-map-link {
+  text-decoration: none;
+}
+
+.fw-event .fw-map-link__label {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
