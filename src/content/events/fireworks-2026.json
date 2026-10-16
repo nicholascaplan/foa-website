@@ -46,6 +46,18 @@
       "text": "This is a pet, smoke and sparkler-free zone."
     }
   ],
+  "gettingThere": [
+    {
+      "label": "Address",
+      "text": "Ashley C of E Primary School, Ashley Road, Walton-on-Thames KT12 1HX. The event is on the school field."
+    },
+    {
+      "label": "Map",
+      "text": "Find the school on Google Maps.",
+      "url": "https://www.google.com/maps/search/?api=1&query=Ashley+C+of+E+Primary+School+Ashley+Road+Walton-on-Thames+KT12+1HX",
+      "urlLabel": "Google Maps"
+    }
+  ],
   "reviewed": "2026-10-05",
   "schedule": [
     {

@@ -75,6 +75,16 @@ const eventJsonLd = {
               <h2>Before you come.</h2>
               <dl class="good-to-know">{event.goodToKnow.map((item) => <div><dt>{item.label}</dt><dd>{item.text}</dd></div>)}</dl>
             </section>}
+            {event.gettingThere && <section class="event-block">
+              <p class="eyebrow">Getting there</p>
+              <h2>Find your way.</h2>
+              <dl class="good-to-know">{event.gettingThere.map((item) => {
+                const linkLabel = item.urlLabel ?? "Open map";
+                const link = item.url && <a href={item.url} target="_blank" rel="noopener noreferrer">{linkLabel}{"\u00A0"}<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>;
+                const at = item.url && item.urlLabel ? item.text.indexOf(item.urlLabel) : -1;
+                return <div><dt>{item.label}</dt><dd>{at >= 0 ? <>{item.text.slice(0, at)}{link}{item.text.slice(at + linkLabel.length)}</> : <>{item.text}{link && <> {link}</>}</>}</dd></div>;
+              })}</dl>
+            </section>}
             {event.volunteerRoles && <section class="event-block">
               <p class="eyebrow">Volunteer</p>
               <h2>To make this event awesome, we need your help!</h2>
