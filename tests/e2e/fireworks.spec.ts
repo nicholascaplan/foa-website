@@ -42,6 +42,71 @@ test("clicking through from What's On does not show a return breadcrumb", async 
   await expect(page.getByRole("link", { name: /Back to What's On/i })).toHaveCount(0);
 });
 
+for (const width of [360, 390, 430]) {
+  test(`the Fireworks mobile summary keeps every row aligned and readable at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1100 });
+    await page.goto("/events/fireworks-2026/");
+    const layout = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const summary = document.querySelector(".event-summary")!;
+      const rows = [...summary.querySelectorAll("dl > div")].map((row) => {
+        const label = row.querySelector("dt")!;
+        const value = row.querySelector("dd")!;
+        const labelRect = label.getBoundingClientRect();
+        const valueRect = value.getBoundingClientRect();
+        const mapLink = value.querySelector<HTMLAnchorElement>(".fw-map-link");
+        const range = document.createRange();
+        range.selectNodeContents(value);
+        const textLines = mapLink
+          ? mapLink.getClientRects().length
+          : new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top * 10) / 10)).size;
+        const hyphenatedWord = value.querySelector<HTMLElement>(".fw-ticket-price__unbreakable");
+        return {
+          label: label.textContent?.trim(),
+          labelX: labelRect.x,
+          labelWidth: labelRect.width,
+          labelScrollWidth: label.scrollWidth,
+          valueX: valueRect.x,
+          valueWidth: valueRect.width,
+          valueHeight: valueRect.height,
+          textLines,
+          underTwoLines: hyphenatedWord?.getClientRects().length ?? 0,
+          text: value.textContent?.replace(/\s+/g, " ").trim(),
+        };
+      });
+      const mapLink = summary.querySelector<HTMLAnchorElement>(".fw-map-link")!;
+      const linkLabel = mapLink.querySelector<HTMLElement>(".fw-map-link__label")!;
+      const arrow = mapLink.querySelector<HTMLElement>(".external-link-icon")!;
+      const date = summary.querySelector(".fw-date")!;
+      const dateRange = document.createRange();
+      dateRange.selectNodeContents(date);
+      return {
+        rows,
+        linkLabelTop: linkLabel.getBoundingClientRect().top,
+        arrowTop: arrow.getBoundingClientRect().top,
+        arrowDecoration: getComputedStyle(arrow).textDecorationLine,
+        dateLineCount: new Set([...dateRange.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top * 10) / 10)).size,
+        noHorizontalOverflow: document.documentElement.scrollWidth <= innerWidth,
+      };
+    });
+    expect(layout.rows.map((row) => row.label)).toEqual(["When", "Where", "Tickets", "Lead"]);
+    expect(new Set(layout.rows.map((row) => row.labelX)).size).toBe(1);
+    expect(new Set(layout.rows.map((row) => row.valueX)).size).toBe(1);
+    expect(new Set(layout.rows.map((row) => row.labelWidth)).size).toBe(1);
+    expect(layout.rows.every((row) => row.labelScrollWidth <= row.labelWidth + 1)).toBe(true);
+    expect(layout.rows[0].textLines).toBe(1);
+    expect(layout.rows[1].textLines).toBe(1);
+    expect(layout.rows[2].textLines).toBeLessThanOrEqual(2);
+    expect(layout.rows[2].underTwoLines).toBe(1);
+    expect(layout.rows[2].text).toBe("£8.50 per person; under-2s free");
+    expect(layout.rows[3].textLines).toBe(1);
+    expect(Math.abs(layout.linkLabelTop - layout.arrowTop)).toBeLessThanOrEqual(2.1);
+    expect(layout.arrowDecoration).toBe("none");
+    expect(layout.dateLineCount).toBe(1);
+    expect(layout.noHorizontalOverflow).toBe(true);
+  });
+}
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   test(`the Fireworks experience fits without overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
