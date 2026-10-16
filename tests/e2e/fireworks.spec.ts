@@ -68,6 +68,7 @@ for (const width of [360, 390, 430]) {
           labelScrollWidth: label.scrollWidth,
           valueX: valueRect.x,
           valueWidth: valueRect.width,
+          valueScrollWidth: value.scrollWidth,
           valueHeight: valueRect.height,
           textLines,
           underTwoLines: hyphenatedWord?.getClientRects().length ?? 0,
@@ -89,17 +90,17 @@ for (const width of [360, 390, 430]) {
         noHorizontalOverflow: document.documentElement.scrollWidth <= innerWidth,
       };
     });
-    expect(layout.rows.map((row) => row.label)).toEqual(["When", "Where", "Tickets", "Lead"]);
+    expect(layout.rows.map((row) => row.label)).toEqual(["When", "Where", "Tickets"]);
     expect(new Set(layout.rows.map((row) => row.labelX)).size).toBe(1);
     expect(new Set(layout.rows.map((row) => row.valueX)).size).toBe(1);
     expect(new Set(layout.rows.map((row) => row.labelWidth)).size).toBe(1);
     expect(layout.rows.every((row) => row.labelScrollWidth <= row.labelWidth + 1)).toBe(true);
+    expect(layout.rows.every((row) => row.valueScrollWidth <= row.valueWidth + 1)).toBe(true);
     expect(layout.rows[0].textLines).toBe(1);
     expect(layout.rows[1].textLines).toBe(1);
     expect(layout.rows[2].textLines).toBeLessThanOrEqual(2);
     expect(layout.rows[2].underTwoLines).toBe(1);
     expect(layout.rows[2].text).toBe("£8.50 per person; under-2s free");
-    expect(layout.rows[3].textLines).toBe(1);
     expect(Math.abs(layout.linkLabelTop - layout.arrowTop)).toBeLessThanOrEqual(2.1);
     expect(layout.arrowDecoration).toBe("none");
     expect(layout.dateLineCount).toBe(1);
