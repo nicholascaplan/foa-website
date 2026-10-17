@@ -1,0 +1,358 @@
+# The Friends of Ashley Website: Project Brief
+
+**Last updated:** 15 October 2026
+**Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
+**Live site:** <https://www.thefriendsofashley.org/>
+
+This is the canonical record of **what the site is, what has been decided and how it is built**. It deliberately contains no backlog or status narrative:
+
+- Outstanding work, open questions and provisional content live in [`ACTIONS.md`](ACTIONS.md).
+- Agent behaviour rules live in [`../AGENTS.md`](../AGENTS.md).
+- Testing lives in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
+- The documentation rules and rationale are in [`README.md`](README.md).
+
+Contents: 1 Summary · 2 Decisions · 3 Scope · 4 Requirements · 5 Technical specification
+
+## 1. Summary
+
+The FOA needs a fast, welcoming and maintainable public website for parents, carers and staff. Its purpose is to answer practical questions quickly, reduce repeated or outdated WhatsApp messages, explain what The FOA does and make participation feel approachable.
+
+Design character: a **warm, modern editorial community noticeboard**: the quick access of a bento layout with calmer hierarchy, larger typography, fewer cards and less app-like visual language.
+
+Implementation: Astro 7 static site with typed local content collections, built locally with project CSS and deployed through GitHub Pages.
+
+### Routes
+
+```text
+/                       Home
+/whats-on/              What's On
+/events/fireworks-2026/ Fireworks on the Field
+/events/christmas-fayre-2026/ Christmas Fayre (helper call)
+/uniform/               Uniform
+/get-involved/          Get Involved
+/committee/             Committee
+/reps/                  Reps Hub
+/meeting-minutes/       Meeting Minutes archive
+/about/                 About The FOA
+/fundraising/           Fundraising
+/contact/               Contact Us
+/newsletter/            Newsletter
+/privacy/               Privacy Notice
+/404.html               Not found
+```
+
+The Community Notice Board and a public accessibility statement are deferred and have no route. Final event URL conventions remain open (see [`ACTIONS.md`](ACTIONS.md)).
+
+## 2. Decisions
+
+These are confirmed unless the project owner explicitly revises them. Edit entries in place when decisions change; do not append contradicting entries.
+
+### Product and audience
+
+- The audience is busy parents and carers using phones, often at drop-off or pickup.
+- It is a public information and community site, not an internal committee administration system.
+- The homepage first answers: "What do I need to know or do right now?" Practical information takes priority over explaining the organisation.
+- Content is concise, plain-English and suitable for readers who use English as an additional language.
+- The Newsletter page is an archive with a clearly identified latest issue followed by previous issues. Newsletters are reproduced in full in `src/content/newsletters/`, on straight paper sheets with an FOA letterhead, each pinned to a cork noticeboard. The latest issue and the archive sit on two separate boards, drawn in CSS only (no photography). The latest issue previews its first three sections and each previous issue previews its opening section; Read the full newsletter / Show less expands the rest in place with a short animation (instant under reduced motion; no dialog). An unblurred peek fades out above the green expansion button, with room for five body lines plus the opening heading. It continues into following sections when the first is short rather than leaving blank space; the decorative peek is inert and hidden from assistive technology, disappears on expansion and returns on collapse. Archived sheets have a responsive gap between them. A newsletter section marked `"heading": true` renders as a larger divider title, and the sections after it use smaller headings. The opening paragraph uses the body size and weight, with key facts bolded. The redundant Markdown source drafts are not retained in the publicly served asset directory.
+- Newsletter latest/archive placement is read from the content collection: the issue marked `latest` is featured and the remaining issues are archived in descending publication-date order, with no hardcoded issue imports in the page.
+- Newsletter links to `https://www.thefriendsofashley.org` render as base-aware internal links in the same tab using the existing green text-link style, without external-link markers. Links to third-party sites retain the external-link icon and new-tab announcement. Source newsletters keep their full public URLs for reuse outside the site.
+- External-link arrows are never underlined; underline only the link text.
+- Newsletter sheets allow long words and URLs to wrap within the paper width, including faded previews and expanded issues on narrow phones.
+- The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
+- A FAQs page is later, low-priority scope.
+
+### Design
+
+- Warm modern editorial; community-led rather than corporate or software-like.
+- Restrained cards and badges; confident editorial typography; generous spacing. Do not depend on photography.
+- Interior page heroes use a centred, inset heritage-green panel rather than a full-bleed banner. On mobile the panel starts 1rem from the top, respecting the safe area. Inside it, a home-linked logo sits to the left of the eyebrow and title, with introductory copy full width below (approved Option A). The approved larger logo is 128px at the default text size (size C), top-aligned rather than vertically centred against the heading. Every route, including the homepage, themed pages and the 404, uses the same mobile logo anchor: 32px from the left and 40px from the top at the default text size. Safe areas and enlarged text are respected; the logo shrinks only if needed to leave room for readable copy. The heading column clears the floating burger and development-only phone icon; the title scales to its available width and wraps when necessary. Mobile and tablet hero actions stack below the full-width copy so they cannot alter the logo position. There is no separate logo strip or empty control row above the panel.
+- Mobile Fireworks, Fireworks Volunteering and Christmas Fayre artwork starts at the top without a separate logo strip. Event-specific home-linked logos use the shared size and top-left anchor beside the kicker and title inside the opening artwork, with introductory copy full width below. The Christmas logo is inside the gold-framed title panel; mobile baubles follow the opening lead and introduction, while desktop retains its baubles above the frame. Fireworks and Fireworks Volunteering reserve control clearance within the heading column. Fireworks Volunteering uses the explicit main heading “Fireworks Volunteering” in normal serif lettering without small caps and no event-name kicker; its appeal for help is smaller supporting copy beneath the title. On mobile the title wraps onto two lines and retains a compact 0.75rem gap before the intro. Desktop retains the single-line title.
+- Heritage green is the primary brand colour; amber is for events and celebratory emphasis. Warm ivory/paper surfaces.
+- Desktop interior headers reserve the same bottom clearance for decorative logo overhang on every route. Newsletter envelope space belongs in that shared padding, not a page-specific image margin, so the organisation name, navigation and start of the title panel do not jump when switching pages. Mobile title panels and menus retain their envelope-specific clearance.
+- Uniform hero actions are stacked and equal in height, with matching text sizes and icons beside their labels. Below the 64rem desktop breakpoint they always fill the available width below the copy, clear of the mobile burger; on desktop their shared column sizes to the longer label so neither label wraps at the default text size. Email stays green; Reserve via Google Form uses the homepage's amber action style. Labels may wrap when needed on narrow screens or with enlarged text. The hero and sale-details columns use container queries so enlarged text can return them to a full-width stacked layout; the sale-date heading may break long words if needed rather than overflow. Price badges share a right-hand column; narrow cards put both badges below their descriptions, aligned right, rather than mixing wrapped and unwrapped rows. Card-payment text wraps beside its icon without overflowing.
+- Desktop navigation shares the available header width with branding and reserves room for Night Mode. Links can wrap between items when space is limited or text is enlarged, while individual link labels remain intact. Desktop never replaces the navigation with a burger.
+- The Newsletter page uses the approved envelope logo (`assets/brand/foa-logo-newsletter-ivory.svg`) in the desktop header, mobile title panel and mobile menu: the original logo in an open envelope with an amber heart seal, no surrounding decorative marks, and seams that stop at the envelope's folded edge. The compact envelope (approved width option A) is slightly narrower than the circle, keeping its outline away from the mobile panel border. Its circle matches the standard logo's size and position on desktop, rather than fitting the whole envelope into that square. On mobile the Newsletter header uses a compact 72px circle with tighter panel padding (approved 17th October 2026) so more of the newsletter shows without scrolling; other pages keep the 128px mobile logo. Geometry tokens scale and offset the artwork without circular clipping; the layout reserves space beneath the circle for the envelope and uses the standard mobile heading gap. Its social-sharing image is `assets/brand/foa-logo-newsletter-og.png`, a 1200x630 PNG with the envelope logo centred on white, following the Christmas logo preview convention. Newsletter letterheads and the footer retain the standard logo, with the white and ivory treatments respectively.
+- Every page uses the homepage's larger logo/name and inline navigation treatment on desktop (64rem and up), with Night Mode alongside the navigation and event-specific logo variants retained. There is no separate navigation band or duplicate visible branding. The header scrolls away normally; no desktop burger appears, including after scrolling. Below that breakpoint, the entire branded header is hidden on every page. A solid circular menu button is fixed at the top-right from arrival, outside the header. Every page uses the inline mobile logo/title arrangement described above, without the organisation name or school tagline, and retains event-specific variants. The logo scrolls away normally. On mobile, Night Mode is inside the burger menu beside the close button. The homepage has no Co-Secretary recruitment banner. The shared footer includes the standard logo linking home.
+- Night Mode is public. A first-time visitor sees the theme matching their device's light/dark setting (Day when JavaScript is unavailable); a simple moon/sun toggle in the mobile menu or desktop header switches between Day and Night and stores the explicit choice as `day` or `night` under `foa-theme` in local storage. Responsive instances stay synchronised through the shared initializer. The choice stays on the device, is user-requested, and is independent of analytics consent, so it needs no consent prompt but is disclosed in the Privacy Notice ("Display preference"). An inline initializer in the document head sets `data-theme="night"` on the root before first paint to avoid a flash, tracks later device-setting changes until the visitor chooses, and reveals the toggle only when JavaScript runs. Night uses forest-charcoal backgrounds, green-tinted surfaces, warm off-white text, sage accents and restrained amber. Newsletter sheets retain muted light paper and their letterhead/pin treatment on darker cork; photographs, logos, sponsor artwork and posters are unchanged. Themed artwork (the homepage Fireworks parchment scroll, Fireworks and Christmas stages) keeps its Day palette and renders identically in both modes.
+- Typography: Georgia serif display with a system sans-serif body. Keep this unless a self-hosted pairing offers a clear brand benefit.
+- Use the approved logo artwork with the warm-ivory badge (approved option B, `#f3ead6`) as the website default in both Day and Night modes. The standard, Fireworks, Christmas and Newsletter variants are `assets/brand/foa-logo-ivory.svg`, `foa-logo-fireworks-ivory.svg`, `foa-logo-christmas-ivory.svg` and `foa-logo-newsletter-ivory.svg`. Only the circular badge fill changes; lettering, icons, borders, decorations, size and positioning are retained. Apply this to desktop branding, mobile title panels, menus, the footer, the standalone contact experiment and the 404 crying logo. Original JPG/SVG assets remain unchanged; newsletter letterheads retain white using the smaller original SVG rather than the JPG to stay within the image-size budget. Existing social-sharing PNGs, posters and sponsor artwork are unchanged. Retain `assets/brand/school-logo-big.png` for possible future display; renaming and retaining it is not approval to display Ashley School branding, which still requires approval.
+- The supplied Fireworks photograph is the focal homepage event image and the standard event-page hero background; event facts are available as structured text.
+- The annual calendar is retained as an editable Markdown summary at `assets/documents/key-events-2026-27.md`, replacing the PDF. The published website is the source of truth: update this reference after site changes are published, and do not preserve superseded PDF details. Public event listings continue to use structured event records.
+- The homepage Fireworks artwork includes a straight, full-width dark-green sponsor strip flush beneath the photo, with “With thanks to” and the supplied Martin Flashman and Co logo (`assets/sponsors/martin-flashman.jpeg`). The event-page hero repeats the strip beneath its introduction on desktop and beneath the ticket summary parchment on mobile, using one component instance. On mobile the sponsor strip fills the content column to match the parchment width; desktop retains its narrower cap. The strip does not cover the people or fireworks; the original photograph and retained poster asset (not displayed on the event page) remain unchanged.
+- The Fireworks event page no longer displays the poster and always opens in its immersive presentation; there is no mode switch or URL parameter controlling the mode. The header retains the shared site's ivory/green styling. The experience uses a night sky, parchment scrolls, antique gold and torches with a ribbed metal cage, flared cup and banded, flame-lit pole (pure CSS, no image assets). Narrow viewports (below 48rem) and touch-capable devices, including touch phones in landscape, use static CSS flames, stars and halos, no fireworks, and an opaque header without backdrop blur. Touch capability is detected through either a coarse-pointer media query or a positive `navigator.maxTouchPoints`, so fine-pointer reporting cannot enable effects on a touch-capable device. JavaScript must not acquire canvas contexts or start decorative drawing loops in this mode; the paused stage also disables CSS flame and halo animations. Wide non-touch desktop views progressively enable tall canvas particle flames, an opening fireworks sequence and schedule-triggered bursts. Switching into static mode cancels queued bursts and drawing frames and releases the sky canvas buffer. Reduced motion also stays static without initialising renderers; without JavaScript the static presentation remains usable at every width. The blackletter kicker uses the self-hosted UnifrakturCook font; it scales down to fit on one line on mobile. The title and section headings use the site's Georgia display font; body copy uses the system sans-serif. The full event date is shown inside the parchment summary above the time/location details, not in the hero. The parchment uses soft rolled top/bottom edges (approved option P1) instead of a heavy green frame, with no leafy corner ornaments, vine border or gold divider. Rolls are decorative and static. The immersive presentation uses the same semantic HTML and structured event facts as before.
+- The Christmas Fayre page (`/events/christmas-fayre-2026/`) is a festive helper call built from the organisers' poster: deep green and antique gold, a gold-framed hero with hanging baubles (every fifth hanger is a star), CSS-only straight-falling six-armed snowflakes that spin in place, and snowy fir trees beside the contact box. Pure CSS, no client JavaScript. Decoration is reduced on narrow viewports (7 hangers, 14 flakes) and static under reduced motion. The seven help areas (Fun Zone, Craft Room, Café, Photo Booth, Tombola, Entrance & Tokens, Glitter Tattoos) are gold-framed icon cards; the reminders (join anywhere, bring a friend, no experience needed) are a plain ticked "Good to know" list so the two kinds of content look different. The only sign-up route is the Fayre's own shared email (`contactEmail` in `src/content/events/christmas-fayre-2026.json`) or the playground; no personal details. Facts and area names live in that event record; styles are in `src/styles/christmas.css`. Only this page uses the Christmas logo (the SVG redraw of the logo in a holly wreath with a bow) in the header, via the `headerLogo` prop on `BaseLayout`; its link-preview image is `assets/brand/foa-logo-christmas-og.png` (1200x630, PNG because social sites do not read SVG). The Fireworks page likewise uses the Fireworks logo (the SVG redraw with a gold, amber and red firework burst at top right and a smaller one at bottom left, plus a sparkle outside the circle at each remaining corner) in its header via `headerLogo`; its link preview remains the fireworks photograph. Both use the approved ivory variants specified above. On What's On, an event row's call to action is plain green text unless the event sets `ctaButton: true`; the Christmas Fayre does, which gives it the amber button look (the whole row stays one link).
+- On mobile, the Fireworks title area remains wide while parchment panels are inset to leave the torch poles visible. The sponsor strip matches the inset summary width. Torch flames start alongside the summary, below the introduction; their vertical position follows the rendered hero height as text wraps or resizes.
+- Committee portraits are shown compactly because source files are low resolution.
+- Get Involved keeps the Co-Secretary vacancy and volunteering introduction in one section, with a compact responsive gap rather than stacked section padding.
+- The warm editorial direction, level of playfulness and Fireworks prominence were approved at review.
+- The homepage retains its full logo/name introduction in the desktop header. Below 64rem, its hero copy uses an inset heritage-green panel with the shared mobile logo/heading treatment: the logo beside the “Helping Ashley children flourish” heading, then the introduction and ticket/volunteer actions full width below. The “Parent-led. Child-focused. All welcome.” eyebrow is omitted at every width, moving the heading up. The approved heading option C keeps the whole title beside the logo with a smaller responsive baseline (`clamp(1.5rem, 14cqi, 1.75rem)`). Its approved airier line spacing uses a line-height of 1.2 without changing font size or wrapping. A small progressive enhancement (`src/lib/heading-fit.ts`) increases the font to the largest size, within 0.1px and capped at 3rem, that keeps the same words on each baseline line and avoids horizontal overflow. It measures real text ranges, repeats after fonts load or the available width/text size changes and clears its override on desktop. It never shrinks the baseline, adds no animation and leaves the CSS fallback readable without JavaScript. The logo retains its size and position. There is no separate mobile organisation-name or school-tagline block. The current-event card and remaining homepage content retain their existing order and desktop presentation.
+- Homepage hero shows the Fireworks editorial card directly in the initial HTML, with its photograph preloaded and no date-driven card switching. Welcome Tea is no longer featured on the homepage and must not return there; its past-event listing remains on What's On. The Fireworks card is a centred parchment scroll with rolled top and bottom edges, matching the event page's immersive skin but static and with no torches or animation (approved option E). It has no "Next major event" eyebrow; instead a blackletter kicker, "Remember Remember the 5th of November", sits above the title, which stays in the normal serif heading font for readability. Then come the image, a gold date badge (weekday, day, month), a timeline of the event schedule (gates open, quiet display, main display) and a plain location line with pin icon. Focus rings inside the card are dark green for contrast on parchment. The timeline runs nearly the full card width and is proportional to the schedule times, except that the inner stops are pulled 20% toward the centre so neighbouring labels never collide down to a 320px phone. The card ends with a single Event details button; Buy tickets lives only in the hero copy column (the price is on the event page). On desktop (48rem and up) the card is compacted so it fits closer to the first screen: reduced spacing, an image capped at `24vh` tall with a cover crop, date badge and location on one row, and the card vertically centred against the hero copy. The hero secondary links are limited to the newsletter and Get involved, because Event details and the Volunteer button already cover Fireworks planning and volunteering. Timeline labels wrap one word per line. Schedule times come from the event's `schedule` list in the content collection, which the Fireworks event page also renders.
+- After Fireworks on 5th November 2026, the Christmas Fayre replaces it as the featured homepage event.
+- Event and sale dates matching the visitor's local date are labelled **Today** or **Tomorrow** automatically. Do not apply to newsletter dates or document metadata.
+- What's On drops timed events from Upcoming at their start time. Events with `allDay` show no time and drop off at the end of their UK day. Events with `archiveFrom` use that date-time instead. An event with an `info` entry shows an expandable explanatory note under its details (used for Happy Bags, which run on Wednesday 13th January and Monday 26th April 2027; the 30th September 2026 date has passed).
+- What's On renders event and past-section visibility at build time, then runs a synchronous inline date check immediately after the event sections, without waiting for downloaded JavaScript. This corrects expiry since deployment without the delayed module-driven row jump; a minute-by-minute check maintains visibility on pages left open. Without JavaScript, visibility reflects the last build.
+- Public date copy uses ordinal days (`5th November`, never `5 November` or `5 Nov`), including weekday forms (`Monday 14th December`). Use `ordinalDateFormatter` in `src/lib/dates.ts` for generated dates; the compact calendar tile (`OCT` / `02`) is the only exception.
+- No event status pills in event lists or past-event cards.
+- A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.
+- Quick-action rows must not animate padding on hover (it shifts text wrapping on touch devices).
+- The Committee page shows the vacant Co-Secretary role as an eighth card, visually distinct from confirmed members, linking to the shared Co-Secretary enquiry email; a full-width recruitment callout remains below the grid.
+- Footer: independent link columns and a larger 112px home-linked logo; Ashley School Website and Donate via JustGiving links open in a new tab and are labelled as such.
+- Removed on purpose: draft/readiness banners in public pages; the hash router; the earlier public Community and Accessibility pages.
+
+### Information architecture
+
+- Primary navigation, in order: **Home, What's On, Fundraising, Get Involved, Uniform**. The desktop header also shows **Newsletter** between Home and What's On; the mobile menu uses the same order, followed by Contact Us. The mobile menu panel opens with a compact centred 104px logo linking home, "The Friends of Ashley" on one line and the school tagline, with Night Mode and Close side by side in the top-right corner. Compact navigation rows retain at least 44px touch targets so Contact Us fits on a typical 667px-high phone screen without scrolling; shorter screens and enlarged text can scroll within the panel. All plain mobile navigation links, including the indented event links, have a consistent decorative right arrow to show they open a page. Main links use 22px serif text and event links use the same serif at 21px. The current page is bold green with no shading or extra marker, and Contact Us is a full-width primary button without an arrow.
+- Committee, Reps Hub and Meeting Minutes belong under Get Involved. About, Contact and policy pages are reached through the footer and relevant page content. Reps Hub is for class reps only, so it is linked from Get Involved (including the homepage Get involved row) and the footer, not the primary or mobile navigation.
+- What's On is a chronological list: upcoming events first, then a clearly separate **Earlier this year** section of selected completed events. Past events are never mixed into the upcoming list or presented as current calls to action; completed event pages may remain for context.
+- Individual events use reusable event pages without a **Back to What's On** breadcrumb; the shared navigation provides the route back to What's On.
+- The mobile burger menu includes indented Fireworks on the Field and Christmas Fayre detail links directly beneath What's On. Their labels and routes come from the event collection; desktop primary navigation is unchanged. At widths of 26rem and above, the menu logo starts just 0.5rem below the panel's top padding, beside the controls, reclaiming 36px of vertical space at the default text size. Narrower screens retain the control-height gap to avoid collisions with the festive logo artwork; text enlargement also retains that protective layout.
+- The 2026 Pre-loved Uniform sales are Fridays 2nd October, 6th November and 4th December at 15:25 in the school playground, card-only and subject to weather. They are listed as structured event content and link to the Uniform page.
+- Homepage order: current important event or status; immediate parent tasks; What's On preview; volunteer prompt; purpose and three pillars; contact, governance and legal information.
+
+### Personal information and safeguarding
+
+- Committee presentation uses names and roles only, plus an approved portrait. Names and roles for 2026/27 are confirmed: Helen Platt and Sarah Parish (Co-Chairs); Clare Birks and Darren Malone (Co-Treasurers); Nick Caplan and Cristy Amponsah (Co-Comms); Lizzie Grillo (Fundraising Initiatives Lead); Co-Secretary vacant.
+- Adult event organisers may be identified by class names supplied and approved by the project owner. Do not publish children's names or unnecessary child-related personal information. The Fireworks volunteering page labels each sign-up activity with the year group expected to cover it (for example, Bar: Year 4); these are rota labels for parents, not individual children.
+- Use the shared FOA contact route (email address and approved Google Form), not individual contact details.
+- Meeting locations and schedules may be public.
+- Charity wording and registered charity number are confirmed as correct.
+- Final pre-publication consent check for committee names, roles and portraits is outstanding (see [`ACTIONS.md`](ACTIONS.md)).
+
+### Language
+
+- English-first. One Arabic RTL demonstration validates layout direction.
+- Do not show a language selector that translates only part of the site.
+- Safety, ticketing, accessibility, privacy and operational translations require human review.
+- Name languages in text; do not use flags.
+
+### Ticketing
+
+- The site never processes payments or issues tickets. The Fireworks ticket journey is a normal link to an external provider, clearly described as leaving the site; no embedded checkout.
+- Provider: Buy Tickets (`https://buytickets.at/thefriendsofashley/2337508`), stored as `ticketUrl` in the Fireworks event content. It opens in a new tab and appears as the primary action in the homepage hero, the homepage Fireworks feature, the What's On upcoming list (any event with both a page and a `ticketUrl`) and the Fireworks event page summary, where `ticketNote` is shown as a lightbulb "Tip".
+- Remove unverified promises (payment methods, accounts, instant e-tickets).
+- Fireworks volunteering lives at `/fireworks-volunteering/` (not in primary navigation). It lists five activities (token presales: Y1 and Y2; prize table: Y3; bar: Y4; entrance: Y5; tokens: Y6), each with its shifts, helpers needed and a link to a Volunteer Sign Up sheet that opens in a new tab and is described on the page as a third-party site. Activities and links are stored as `volunteerRoles` in the Fireworks event content. It uses the Fireworks night-sky theme (`fw-theme`): static torches on desktop only (hidden below 48rem so they never cover copy), parchment scroll cards, and no sky canvas or Fireworks script. It is linked from the Fireworks event page and replaces the Uniform quick link on the homepage. Shift times and helper counts were read from the Volunteer Sign Up sheets and must be updated in the event content if the sheets change. The Privacy Notice is deliberately unchanged.
+- Confirmed Fireworks facts: Thursday 5th November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead. Public attraction wording omits the specific wheel. The supplied 2026 Event Guide informs the structured food/payment, parking, wristband/lost-child help and first-aid information, the closing schedule entry and conditional gate-ticket advice. Event facts live in `src/content/events/fireworks-2026.json`.
+- Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
+- Christmas Fayre is Saturday 5th December 2026, led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox). Welcome Tea is Saturday 3rd October. Santa's Grotto is Monday 14th December 2026, run by parents and carers during the school day.
+
+### Notice Board
+
+- Deferred; no public route. If introduced, it is editorial and committee-managed: no unmoderated publishing, notices need publication and expiry dates, and the Committee owns review, expiry and takedowns.
+- Show an honest empty state rather than invented notices.
+
+### Reps Hub
+
+- Prioritise existing reps' tasks: copy-and-paste guidance and shareable messages come first; "What class reps do" follows as reference information.
+- Message cards show confirmed timings beside the date badge, sourced from the event collection and formatted in UK time. Copied messages retain their full timings; date-only messages do not invent a time.
+- The role introduction summarises the supplied [Class Rep Charter](../assets/documents/Class%20Rep%20Charter.md): volunteer liaison between teachers, parents and The FOA; messages, volunteer coordination, contact information, class gift collections and social events; boundaries around school communications, event leadership, complaints and disagreements. Sharing responsibilities is optional, not a mandated team structure. Messages are shareable copy with copy-to-clipboard actions, visible success/failure feedback (success clears after three seconds), class-representative wording and "Learn more" links to canonical pages. No draft or workflow labels in public copy.
+- The Fireworks message includes the ticket link (from the event content) in both the visible and the copied text.
+- All messages include the full public source-page URL in both visible and copied text, including for manual copying. The current set covers Fireworks tickets, Fireworks volunteering, pre-loved uniform and Christmas Fayre helpers. Event dates, times, ticket information, volunteer activities and Fayre help areas are generated from the event collection. Fireworks volunteering follows the year-group rota; Christmas Fayre helpers can join any area with friends, with no experience required. The role guidance reflects this distinction rather than requesting class leads for the Fayre.
+- Messages carry internal review and expiry dates. They are excluded after expiry at build time and hidden on open pages using the shared event-visibility helper. Ticket and volunteer reminders expire when Fireworks ends, the November uniform reminder when that sale ends and the Fayre helper appeal at its start while its end time remains unconfirmed. An empty state links to What's On when no messages remain. Desktop uses two columns for the four messages.
+- The Fireworks quiet display is scheduled for 17:00 across all pages and messages.
+
+### Contact, donations and analytics
+
+- Contact Us offers the shared email address and the approved Google Form. The form is unlinked/no-indexed at `/playground.html` as an experiment only.
+- A persistent **Donate via JustGiving** link (`https://www.justgiving.com/charity/Friends-of-Ashley`) is in the footer, repeated on About The FOA beside the fundraising-impact content. Navigation and the homepage hero remain free of it so it does not compete with events and tasks.
+- A calm **Fundraising update** band sits below the homepage hero: heading "Fundraising 2026/27" (target of £25,000 approved), the total raised on the left and the goal on the right (lighter) above a progress bar. Copy and height are deliberately fixed: line items are not listed on the homepage, so the band does not grow as sources are added. The line items (Uniform Sales, Happy Bags, Art Projects for Schools) stay in the collection, which calculates the total. Its only action is **See Our Fundraising Plans**, styled as the existing green primary button; the donation link remains on Fundraising and in the footer, not in the homepage band. Figures live in the `fundraising` content collection (`src/content/fundraising/current-appeal.json`); the total and percentage are calculated from the sources. `fundraising-progress-options.html` (option 02) is the archived design reference.
+- **Fundraising** at `/fundraising/` is the canonical home for current-year source totals, previous-year impact, approved spending priorities, recurring annual support and ways to help. It appears after What's On in the desktop header and mobile menu. The homepage band links to it explicitly; About The FOA links to it and reads its impact summary from the same collection. Both pages share `FundraisingSummary.astro` and its progressively enhanced animation. Its figures carry an italic content-update date, not the build date. The page uses compact spacing and headings, a lightly bordered paper table, an amber-backed previous-year total and recurring support in three themed groups (In the classroom, Ashley traditions, Beyond the curriculum), each item with a decorative line icon (`SupportIcon.astro`) and green, amber or neutral accents from the existing palette, rather than floating bullets alongside a tall heading. The "ways to help" cards are whole-card links that each end in a primary button (See what's on, See ways to help, Get in touch) pinned to the card bottom so the buttons align across the row. The previous-year heading spans both columns; the total/impact and contributing activities align at their top edges below it and stack in that order on mobile. The project-estimates footnote and closing AGM/accounts paragraph are omitted.
+- The project owner confirmed the 2025/26 total as **£25,730**, superseding the AGM's approximate "just under £25,000". Current fundraising amounts represent gross receipts, not profit or money available to spend; public wording is simply **raised**, never "gross income". AGM-approved spending priorities are classroom visualisers, additional playground equipment, additional iPads and beekeeping suits. The iPad estimate is **£10,000**, confirmed by the project owner. Estimates live in the fundraising collection and their sum is calculated; they are not the full annual budget, and approval must not be presented as funding secured or purchases completed.
+- The Fundraising page includes all recurring support listed at the AGM: learning technology, beekeeping, Reception bookbags, Year 3 ties, Year 6 leavers' events, Santa's Grotto and enrichment experiences. It also offers routes to events, volunteering and business connections; the JustGiving link sits only with the current-year figures (not repeated beneath the ways-to-help cards, so it does not compete with them). It does not duplicate event dates or publish a separate financial-account balance.
+- Fundraising presentation uses one continuous heritage-green-to-amber gradient, not source-coloured segments or a new palette. The owner approved a modestly wider visual fill on both Home and Fundraising: four percentage points of lift, tapering to zero at the goal; zero raised still shows an empty bar and the fill never exceeds 100%. This is a presentation choice only: amounts and accessible progress values remain exact. When 60% of the card enters the viewport, the bar fills over 1.4 seconds and the raised figure counts up with an ease-out; this runs once per page load, not continuously with scroll position. A single light shimmer follows. No milestone ticks, milestone labels or moving end-marker are included. Milestones remain optional later scope in `ACTIONS.md`, not approved current copy.
+- The fundraising count reserves a measured minimum width using an all-8s amount of the same digit length (re-measured after fonts load), with tabular/lining numerals requested where supported, so changing digits do not resize the adjacent progress track. Without JavaScript, with reduced motion enabled at initialization, or without IntersectionObserver, the final amount and progress remain visible. The progressbar's accessible value always represents the real raised amount, not an intermediate animation value. Animation logic is in `src/lib/fundraising-progress.ts`. Fundraising action button labels wrap within the available width at enlarged text sizes while their decorative arrow remains separate.
+- Google Analytics (`G-V2X8ZMQ5XZ`) is consent-controlled: the tag is absent until a visitor selects **Allow analytics cookies**. Rejecting or withdrawing consent denies analytics storage and removes known Analytics cookies. The banner is non-blocking, remembers the choice locally and is reopenable from the footer. Its height is constrained to leave the floating menu reachable on short screens and with enlarged text; long content scrolls inside the banner so consent actions remain accessible. It is never shown automatically on local dev servers (`import.meta.env.DEV`); the footer link still opens it. There is no local-dev cookie reset control.
+- Required Google Analytics property settings: 2-month event/user retention with reset-on-activity disabled; Google Signals and user-provided data disabled; email redaction active; no advertising, cross-domain or connected-site integrations.
+- Do not add other optional technologies without extending the Privacy Notice and consent control.
+- The Privacy Notice at `/privacy/` covers website enquiries, the external Google Form and consented analytics. Shared-inbox and Google Form retention are recorded as pending.
+
+### Technical direction
+
+- Astro 7, static output, separate generated pages and normal path-based links. Never use hash routing.
+- Typed local content collections are the interim source for events, newsletters, committee members and fundraising until a CMS is chosen. Keep models compatible with a later CMS adapter. Sanity is a candidate only.
+- CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
+- Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions, the cookie banner, the progressive-enhancement fundraising animation, the homepage's wrap-preserving heading fit and Fireworks canvas effects.
+- GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
+- Routine verification retains mobile-menu navigation correctness and generated-output asset budgets; synthetic throttled navigation timings are an opt-in diagnostic outside the deployment gate. Coverage and methodology live in `TEST-STRATEGY.md`.
+- Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page. The 404 shows a cute, gentle crying version of the FOA logo (the real logo artwork from `assets/brand/foa-logo.svg` with a sad face drawn over it, `src/components/CryingLogo.astro`; motion settles within 30 seconds and remains static for reduced-motion preferences) beside the page explanation on desktop and stacked compactly on mobile. The landing puddle starts as a small dot and grows to a capped size; tears fall slowly and ripples only begin once the first tear lands. Fireworks ticket and volunteer actions are followed by tiles linking to What's On, Fundraising, Get Involved and Uniform.
+- The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
+- Asset URLs must go through the shared `withBase()` helper so the site works at both root and the temporary `/foa-website/` base path.
+- Development-only phone preview controls are omitted from production builds. Desktop pages place them in the header between the logo/name and navigation; a single phone icon opens the current route in a 390px popup. On mobile pages, the phone icon offers Small (360px), Medium (390px) and Large (430px) widths, resizing the current preview without reloading and highlighting its viewport size. Below the desktop-navigation breakpoint, every page places this icon beside the floating burger at the top-right, outside both the hidden header and shared menu, and keeps both visible after scrolling. Controls never overlay opening text.
+- The Night Mode palette is scoped by the `data-theme="night"` root attribute (`src/styles/night-mode.css`, loaded after the global stylesheet); semantic heading and action colour pairs prevent shared brand colours from breaking contrast. The initializer is `src/components/ThemeInit.astro` and the control is `src/components/ThemeToggle.astro`.
+
+## 3. Scope
+
+### MVP (delivered or in progress)
+
+Responsive homepage; What's On with earlier-this-year section; reusable event pages and the Fireworks 2026 page; external ticket link; Pre-loved Uniform hub; Get Involved, Committee and the Co-Secretary vacancy; Reps Hub; Meeting Minutes archive; Newsletter; About The FOA and three pillars; Fundraising with shared totals, impact, spending priorities and annual support; shared contact route; Privacy Notice; SEO metadata, sitemap and canonical URLs; GitHub Pages deployment.
+
+### Later scope
+
+See [`ACTIONS.md`](ACTIONS.md) → Later.
+
+### Out of scope for MVP
+
+- Auctions or bidding
+- Processing payments or issuing tickets on the site
+- Parent accounts or custom authentication on GitHub Pages
+- An open, unmoderated community feed or public self-service notice publishing
+- Internal committee task management
+- Storing child information, or publishing child year groups alongside named adults
+- A guarantee of six complete languages
+- Real-time dynamic content without a static rebuild
+- Dependence on a large professional photography library
+
+## 4. Requirements
+
+### 4.1 Functional
+
+**Global navigation**
+- Home, What's On, Uniform and Get Involved are reachable from every public page.
+- Mobile navigation is a real menu. Back, forward, refresh, bookmarks and shared links work through real URLs. The current page is identifiable.
+
+**Homepage**
+- Show the most important current event prominently; direct routes to current events, Fireworks volunteering (a hero button under Buy Fireworks tickets plus a quick link; the hero no longer carries What's On or Get Involved buttons), Get Involved (which covers class reps) and the latest newsletter (title and date generated from the newsletters collection); an upcoming-event preview; current volunteer needs; purpose and three pillars without displacing practical information; contact and charity information in the footer.
+
+**What's On**
+- Upcoming events in chronological order, each with date, name, time, location and status where available.
+- Past events separated under **Earlier this year**, with completed-event styling and no ticket calls to action.
+- Event data model supports upcoming, on-sale, sold-out, cancelled and completed states.
+
+**Fundraising**
+- Current academic-year goal, calculated total and source breakdown; previous-year amount and impact; approved spending priorities with estimated costs; recurring annual support; ways to contribute.
+- Financial content has one structured source shared with the homepage and About page. Its update date is explicitly maintained, not inferred from the build.
+- Keep amounts and accessible progress exact even though the visual fill has an approved presentation lift. Distinguish approved spending priorities from funded or completed purchases; do not describe receipts as profit or funds available to spend.
+- Desktop navigation and the mobile menu expose the page after What's On, with current-page indication; the homepage band retains its explicit link.
+
+**Event pages**
+- Title, date, time, location, schedule and concise summary; ticket price and external link where relevant, clearly identified as external.
+- Accessibility and practical-attendance information, cancellation/refund information (or a link), attractions and FAQs where relevant, and a last-reviewed date for operational information.
+- No unverified provider or accessibility claims.
+
+**Uniform**
+- How and where to donate; next confirmed sale date, time and location; price list; accepted/rejected items; payment methods; a contact route for questions or size requests if supported. The page hero leads with two actions: "Email the Preloved team" (prefilled subject and body asking for sizes and quantities) and "Fill in the Google Form" (external request form).
+
+**Get Involved and Committee**
+- Explain that meetings are informal and open to all; show current approved committee names and roles and active vacancies; explain time commitment and support; provide the shared contact action; expose no unnecessary information about children.
+- Get Involved opens with a Co-Secretary vacancy panel, then groups roles by what visitors can offer (help at an event, put your skills to use, support throughout the year) as icon rows with one consistently sized action each, and closes with a "Not sure where you fit?" enquiry. Roles with no page of their own use the shared inbox. Pre-loved uniform is two rows: helping at sales (enquiry) and donating or buying (links to Uniform).
+- Get Involved brings the AGM volunteering routes together: pre-loved uniform sale helpers, Quartermasters (equipment maintenance and event set-up), event comperes, the Eco Stall lead enquiry, event helpers and smaller fundraisers, alongside Co-Secretary, Fireworks shadowing, class reps, meetings and business connections. Summer Fete and Big Picnic organiser enquiries are labelled as plans/dates still to be confirmed, not confirmed event listings. Enquiries use the shared inbox; Uniform, Fundraising and Meeting Minutes remain the canonical sources for their practical details, impact and meeting records.
+
+**Reps Hub**
+- Approved, current messages, each linking to the canonical source page, with visible copy success/failure feedback. Native sharing optional. Messages need review and expiry dates; stale messages must not appear as current.
+
+**Community Notice Board (if restored)**
+- Only committee-approved notices, each with a category, publication state and expiry date; expired notices excluded automatically; no unmoderated publishing; a takedown/contact route.
+
+**Language support**
+- Correct document language; RTL set at document level; shareable locale routes if several locales launch; predictable and honest fallback; human review for safety-critical and transactional translations.
+
+**Content management (once a CMS exists)**
+- Non-technical editors can update time-sensitive content without code, preview before release, with validated required fields and dates, publication/expiry support, static rebuild on publish, and failed builds visible to an identified owner.
+
+### 4.2 Non-functional
+
+**Mobile and responsive**
+- Mobile-first from approximately 320px upward, with deliberate tablet and desktop layouts. Touch targets around 44×44 CSS pixels. Nothing important depends on hover.
+- At the narrowest widths, secondary brand text and multi-column layouts may simplify to protect readability.
+- On mobile, show useful task or event information early with a restrained heading scale.
+
+**Accessibility**
+- Target WCAG 2.2 AA. Semantic landmarks, headings, lists, links, buttons and forms; skip link and visible keyboard focus; do not rely on colour, icons or emoji alone; announce asynchronous feedback; respect `prefers-reduced-motion`; support 200% zoom and text enlargement.
+- Keep important body copy comfortably readable; avoid tiny text.
+
+**Performance**
+- Static rendering; no client JavaScript for non-interactive content; local CSS; system fonts or a minimal self-hosted set; optimised images with declared dimensions; test under representative mobile network conditions.
+- The homepage Fireworks photo uses 640px, 960px and 1600px WebP derivatives with identical responsive selection on the image and its high-priority preload. The original JPEG remains the event's social image. What's On uses a WebP derivative of the Welcome Tea poster and defers all past-event poster loading with asynchronous decoding; originals remain retained. Derivatives preserve the existing crop/layout and introduce no runtime dependencies. Recreate them using the existing build toolchain's Sharp package: Fireworks widths 640/960/1600 at WebP quality 82, Welcome Tea at original resolution and WebP quality 90.
+
+**Privacy and safeguarding**
+- Collect no personal information unless necessary for an approved feature. No CMS write credentials or private data in client code. Complete the publication-consent check for portraits and any biographies. Avoid child associations. Publish a privacy notice describing processors and retention. Define moderation, expiry and takedown for notices.
+
+**Security**
+- HTTPS via GitHub Pages. Secrets only in approved deployment secret stores; never GitHub tokens in webhook URLs or client code. Least-privilege CMS roles. A practical Content Security Policy compatible with required providers. Render external CMS content safely.
+
+**SEO and sharing**
+- Unique titles and descriptions; canonical URLs; sitemap and robots; Open Graph; accurate Organisation and Event structured data; `hreflang` only for complete shareable locale routes; a useful 404.
+
+**Maintainability**
+- Reusable layouts and components; central design tokens; **event facts in one structured source** rather than duplicated strings; documented content ownership and annual committee handover; build and deployment instructions in the repository.
+
+## 5. Technical Specification
+
+### 5.1 Current architecture
+
+```text
+Typed Astro content collections (src/content/)
+        |
+        v
+GitHub Actions: check -> build -> site tests -> Playwright/axe
+        |  (all must pass)
+        v
+GitHub Pages at www.thefriendsofashley.org
+        |
+        +--> External ticket provider (payment and ticket issuance)
+```
+
+Source layout:
+
+- `src/pages/`: one `.astro` file per route
+- `src/layouts/`, `src/components/`: shared shell, navigation, event and content components
+- `src/content/`: typed collections for events, newsletters, committee members and fundraising
+- `src/styles/global.css`: design tokens and responsive component styles
+- `assets/`: static files served from the site root, in sub-folders: `brand/`, `committee/`, `events/`, `sponsors/` and `documents/` (the paths used in content JSON and pages are relative to it)
+- Public asset names use URL-safe filenames where renamed: the approved logo is `brand/foa-logo.jpg`, Welcome Tea poster is `events/welcome-tea.png`, and AGM minutes are `documents/agm-minutes-2026-09-16.pdf`. The minutes have a `.pdf` extension so they are served as PDF. References, preloads, favicons, social metadata and content image paths use the new locations through `withBase()`; whole image paths are not passed through `encodeURIComponent`, which would escape folder separators. Old root-level asset URLs are not retained as aliases.
+- The unused full-size Fireworks image and redundant newsletter Markdown drafts are removed; the calendar PDF is replaced by the maintained Markdown summary. The hash-routed prototype and its unused styling are removed, while `fundraising-progress-options.html` is deliberately retained as the unlinked design reference. Git history retains removed source material.
+- `tests/site.test.mjs`, `tests/e2e/`: generated-site and browser tests
+- `fundraising-progress-options.html`: unlinked design reference
+- `.github/workflows/deploy.yml`: build, verify and deploy
+
+### 5.2 Hosting, domain and deployment
+
+- Pushes to `main` run `npm run verify`; `dist/` is uploaded and deployed only if it passes, with concurrency so older builds cannot overwrite newer ones. The workflow installs Chromium for Playwright.
+- The deployment workflow also runs daily at 08:00 UK time (`Europe/London`, automatically observing GMT and BST) and can be started manually. Scheduled runs rebuild the latest default-branch commit through the same verification gate, refreshing date-sensitive static content even without code changes. GitHub may delay scheduled starts and automatically disables schedules in public repositories after 60 days without repository activity.
+- The workflow builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`. The canonical domain is `www.thefriendsofashley.org`, with HTTPS enforced by GitHub Pages; the apex domain redirects to `www`. `SITE_URL` is not needed for ordinary local development.
+- DNS is at 123 Reg: apex A records point to GitHub Pages (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` is a CNAME to `nicholascaplan.github.io`. Existing email, SPF, DKIM, DMARC and nameserver records must not be changed.
+- The custom domain is assigned to this repository (`nicholascaplan/foa-website`). The earlier pre-launch holding page lives in `nicholascaplan/foa-holding-page` and no longer holds the domain.
+- The temporary repository-path review deployment at `https://nicholascaplan.github.io/foa-website/` uses a `/foa-website/` base path; it is not the canonical configuration. Navigation, metadata and assets must keep working at both root and base paths.
+- Define a failed-production-build notification route and preview builds before CMS publication (see [`ACTIONS.md`](ACTIONS.md)).
+
+### 5.3 CMS (not selected)
+
+Sanity is the candidate, not a dependency. Do not select or integrate a CMS until content ownership, editor access, preview and publishing workflows are confirmed. Required capabilities: friendly authentication for non-technical volunteers, structured schemas, draft preview, role-based access, validation, publication and expiry dates, image handling, API access during static builds, secure build triggering, and clear ownership with yearly access handover. Sanity pricing, editor limits, authentication and webhook behaviour must be revalidated before adoption.
+
+If adopted, the build would be triggered by an authenticated CMS publish event.
+
+### 5.4 Minimum content models
+
+Models for a future CMS (current Astro collections cover events, newsletters, committee members and fundraising). Do not include child information by default.
+
+- **Site settings:** site name, school relationship wording, charity number, shared contact address, social links, default locale, footer/legal links.
+- **Event:** title, slug, summary, start/end date-time and timezone, location, status, schedule items, ticket products/prices, external ticket URL, ticket availability, past-event display state and current-year archive inclusion, attractions, accessibility information, weather/cancellation and refund information, FAQs, publish/expiry dates, last reviewed date, SEO metadata, locale and translation review state.
+- **Committee member:** display name, role, optional approved biography, optional consented portrait, display order, start/end dates, visibility status, consent/review date.
+- **Role vacancy:** title, summary, responsibilities, estimated time commitment, support/handover details, contact action, status, opening/closing dates.
+- **Uniform information:** donation location and instructions, accepted/rejected items, sale dates, price rows, payment methods, contact/help text, last reviewed date.
+- **Rep message:** title, body, canonical page, locale, approval status, publish/expiry dates, last reviewed date.
+- **Fundraising appeal:** academic-year title, goal, source amounts, content-update date, donation URL, previous-year total/impact/sources, approved spending priorities with estimated costs and descriptions, and recurring annual support. Current-year totals and the sum of spending estimates are calculated, not separately editable.
+- **Notice (if restored):** title, summary/body, category, activity date-time, location, approved attribution, moderation status, publish/expiry dates, takedown state, internal moderation notes.
+
+### 5.5 Internationalisation
+
+- Locale-prefixed routes if several languages launch (for example `/ar/`, `/pl/`); correct `<html lang>` and `<html dir>`; locale-aware formatting; stored translation status and source revision; no silent mixing of incomplete English and translated content; defined fallback; `hreflang` for complete equivalents; test with genuine Arabic and Urdu content.
+
+### 5.6 Ticket integration
+
+- Payments and ticket issuance stay with the external provider. A normal external link is preferred; use an embed only if the provider officially supports it and it passes accessibility, privacy, cookie and CSP review. Show ticket availability only from a reliable data source. Never expose provider secret keys in browser code.
+
+### 5.7 Quality gates
+
+Required before launch and enforced in CI where noted:
+
+- Type checking and content validation (`npm run check`; CI)
+- Production build (CI)
+- Generated-site contracts, including internal links and assets (CI)
+- Playwright navigation journeys and representative axe scans (CI)
+- Dependency audit (`npm audit`)
+- Keyboard testing and representative screen-reader testing (manual)
+- Responsive visual checks and mobile performance checks (manual/scheduled)
+- Metadata and structured-data validation
+- CMS draft/publish/expiry testing and ticket-provider end-to-end testing (when those features exist)
+
+Scope, layers, cadence and implementation order are in [`TEST-STRATEGY.md`](TEST-STRATEGY.md).
