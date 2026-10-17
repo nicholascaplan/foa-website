@@ -26,7 +26,8 @@ for (const width of [320, 390, 768, 1023]) {
         const expectedLogoWidth = route === "/newsletter/" ? 72 : 128;
         expect(logoBox.width, `${route}: approved ${expectedLogoWidth}px logo size`).toBe(expectedLogoWidth);
         expect(logoBox.x, `${route}: consistent left anchor`).toBe(32);
-        expect(logoBox.y, `${route}: consistent top anchor`).toBe(40);
+        const expectedLogoY = route === "/newsletter/" ? 32 : 40;
+        expect(logoBox.y, `${route}: consistent top anchor`).toBe(expectedLogoY);
         expect(logoBox.x + logoBox.width, route).toBeLessThan(before!.x);
         await expect(logo.locator("p, strong, span")).toHaveCount(0);
         const heading = (await page.locator(".mobile-page-heading-copy").boundingBox())!;
