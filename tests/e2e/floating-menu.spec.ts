@@ -22,7 +22,9 @@ for (const width of [320, 390, 768, 1023]) {
         await expect(logo, route).toBeVisible();
         await expect(logo).toHaveAttribute("href", "/");
         const logoBox = (await logo.boundingBox())!;
-        expect(logoBox.width, `${route}: approved 128px logo size`).toBe(128);
+        // Newsletter uses a 72px logo (approved 17th October 2026); every other page keeps 128px.
+        const expectedLogoWidth = route === "/newsletter/" ? 72 : 128;
+        expect(logoBox.width, `${route}: approved ${expectedLogoWidth}px logo size`).toBe(expectedLogoWidth);
         expect(logoBox.x, `${route}: consistent left anchor`).toBe(32);
         expect(logoBox.y, `${route}: consistent top anchor`).toBe(40);
         expect(logoBox.x + logoBox.width, route).toBeLessThan(before!.x);
