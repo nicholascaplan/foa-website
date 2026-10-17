@@ -6,7 +6,7 @@ const standard = "foa-logo-ivory.svg";
 const routes = [
   ["index.html", standard],
   ["uniform/index.html", standard],
-  ["newsletter/index.html", "foa-logo-newsletter-ivory.svg"],
+  ["newsletter/index.html", standard],
   ["events/fireworks-2026/index.html", "foa-logo-fireworks-ivory.svg"],
   ["fireworks-volunteering/index.html", "foa-logo-fireworks-ivory.svg"],
   ["events/christmas-fayre-2026/index.html", "foa-logo-christmas-ivory.svg"],
