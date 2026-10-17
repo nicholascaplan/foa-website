@@ -30,8 +30,10 @@ test.describe("Newsletter envelope logo", () => {
         const envelopeRight = bounds!.x + bounds!.width * 454 / 550;
         expect(envelopeLeft).toBeGreaterThan(circle.x);
         expect(envelopeRight).toBeLessThan(circle.x + circle.width);
-        const intro = await page.locator(".view-hero-copy > p").boundingBox();
-        expect(intro!.y).toBeGreaterThanOrEqual(circle.y + circle.width * 483 / 380);
+        // Retitled header (approved 17th October 2026): the intro line is
+        // dropped, so assert the hero panel itself clears the envelope bottom.
+        const hero = await page.locator(".view-hero").boundingBox();
+        expect(hero!.y + hero!.height).toBeGreaterThanOrEqual(circle.y + circle.width * 483 / 380);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
       await page.goto("/uniform/");
