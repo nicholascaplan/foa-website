@@ -19,12 +19,13 @@ const latestBodyId = "newsletter-latest-more";
 const previous = newsletters.filter(({ id }) => id !== latestIssue.id);
 const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
 const newsletterLogo = "/brand/foa-logo-newsletter-ivory.svg";
+const issueName = latest.title.replace(/\s+News$/, "").trim();
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters." image="/brand/foa-logo-newsletter-og.png" headerLogo={newsletterLogo} bodyClass="newsletter-logo-page">
-  <PageHero eyebrow="The FOA updates" title="Newsletter" intro="The latest news and an archive of previous updates from The FOA." logo={newsletterLogo} />
+  <PageHero eyebrow="The FOA updates" title={`${issueName} Newsletter`} logo={newsletterLogo} />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
     <section class="newsletter-section newsletter-board">
-      <div class="section-heading"><p class="eyebrow">Latest newsletter</p><h2>{latest.title}</h2></div>
+      <div class="section-heading"><p class="eyebrow">Latest newsletter</p></div>
       <article class="newsletter-issue newsletter-sheet">
         <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.svg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
