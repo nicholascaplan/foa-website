@@ -1,0 +1,106 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import EventDate from "../../components/EventDate.astro";
+import { getCollection } from "astro:content";
+import { ordinalDateFormatter } from "../../lib/dates";
+import { withBase } from "../../lib/urls";
+
+const monthName = new Intl.DateTimeFormat("en-GB", { month: "long" });
+const formatDay = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
+const formatTime = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
+const events = (await getCollection("events")).map((entry) => entry.data).sort((a, b) => a.start.getTime() - b.start.getTime());
+const now = new Date();
+const currentKey = `${now.getFullYear()}-${now.getMonth()}`;
+
+const months = [] as { key: string; label: string; year: number; events: typeof events }[];
+for (let i = 0; i < 12; i++) {
+  const monthIndex = (8 + i) % 12;
+  const year = 2026 + Math.floor((8 + i) / 12);
+  months.push({ key: `${year}-${monthIndex}`, label: monthName.format(new Date(year, monthIndex, 1)), year, events: [] });
+}
+for (const event of events) {
+  const key = `${event.start.getFullYear()}-${event.start.getMonth()}`;
+  months.find((month) => month.key === key)?.events.push(event);
+}
+const isPast = (event: (typeof events)[number]) => (event.end ?? event.start) < now;
+const timeLabel = (event: (typeof events)[number]) =>
+  event.allDay ? "" : event.end ? `, ${formatTime.format(event.start)}-${formatTime.format(event.end)}` : `, ${formatTime.format(event.start)}`;
+
+const terms = [
+  { name: "Autumn term", note: "September to December 2026", months: months.slice(0, 4) },
+  { name: "Spring term", note: "January to March 2027", months: months.slice(4, 7) },
+  { name: "Summer term", note: "April to August 2027", months: months.slice(7) },
+];
+---
+<BaseLayout title="The year, term by term" description="Every event from The Friends of Ashley in 2026/27, grouped term by term with the months shown." noindex>
+  <PageHero eyebrow="Dates for the diary" title="The year, term by term" intro="Every event from The Friends of Ashley in 2026/27, grouped into the three school terms." />
+  {terms.map((term, index) => (
+    <section class:list={["content-section", "content-section--compact", index === 1 && "tinted-section"]}>
+      <div class="site-width">
+        <div class="section-heading"><p class="eyebrow">{term.note}</p><h2>{term.name}</h2></div>
+        {term.months.every((month) => month.events.length === 0) ? (
+          <p class="term-empty">Nothing planned yet for this term.</p>
+        ) : (
+          term.months.filter((month) => month.events.length > 0).map((month) => (
+            <div class="term-month">
+              <h3 class="term-month-heading">
+                {month.label}
+                {month.key === currentKey && <span class="term-chip">This month</span>}
+              </h3>
+              <div class="event-list">
+                {month.events.map((event) => (
+                  <article class:list={["event-list-item", { "term-past": isPast(event) }]}>
+                    <EventDate date={event.start} compact />
+                    <span>
+                      <h3>{event.path ? <a href={withBase(event.path)}>{event.title}</a> : event.title}</h3>
+                      <p>{formatDay(event.start)}{timeLabel(event)} · {event.location}</p>
+                    </span>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+  ))}
+</BaseLayout>
+
+<style>
+  .term-month {
+    margin-bottom: 2rem;
+  }
+  .term-month:last-child {
+    margin-bottom: 0;
+  }
+  .term-month-heading {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 500;
+    color: var(--green-dark);
+    margin: 0 0 0.75rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+  .term-chip {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber-dark, #92400e);
+  }
+  .term-month .event-list-item p {
+    margin: 0.25rem 0 0;
+    color: var(--ink-soft);
+  }
+  .term-past {
+    opacity: 0.5;
+  }
+  .term-empty {
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+</style>
