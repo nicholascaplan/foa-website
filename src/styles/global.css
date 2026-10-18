@@ -1329,6 +1329,10 @@ a {
   grid-template-columns: 3.8rem minmax(0, 1fr);
 }
 
+.event-list-item > .compact-date {
+  align-self: start;
+}
+
 .event-list {
   container-type: inline-size;
 }

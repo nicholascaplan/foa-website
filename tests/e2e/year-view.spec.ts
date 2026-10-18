@@ -7,6 +7,39 @@ const event = load("fireworks-2026");
 const boundary = Date.parse(event.end);
 const monthLabel = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date(event.start));
 
+for (const width of [320, 390, 1440]) {
+  for (const textScale of [100, 200]) {
+    test(`Happy Bags date stays anchored when its explanation opens and closes at ${width}px with ${textScale}% text`, async ({ page }) => {
+      const happyBags = load("happy-bags-january-2027");
+      await page.clock.setFixedTime(new Date(Date.parse(happyBags.start) - 7 * 86400000));
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/whats-on/");
+      await page.addStyleTag({ content: `html { font-size: ${textScale}% !important; }` });
+      const row = page.locator('[data-past="false"]').filter({ hasText: happyBags.title }).first();
+      const details = row.locator("details");
+      const measure = () => row.evaluate((element) => {
+        const row = element.getBoundingClientRect();
+        const badge = element.querySelector(".compact-date")!.getBoundingClientRect();
+        return { top: badge.top - row.top, left: badge.left - row.left, width: badge.width, height: badge.height, rowHeight: row.height };
+      });
+      const before = await measure();
+      await details.locator("summary").click();
+      await expect(details).toHaveAttribute("open", "");
+      const expanded = await measure();
+      expect(expanded.rowHeight).toBeGreaterThan(before.rowHeight);
+      for (const key of ["top", "left", "width", "height"] as const) {
+        expect(expanded[key], `Expanded badge ${key}`).toBeCloseTo(before[key], 1);
+      }
+      await details.locator("summary").click();
+      await expect(details).not.toHaveAttribute("open", "");
+      const collapsed = await measure();
+      for (const key of ["top", "left", "width", "height", "rowHeight"] as const) {
+        expect(collapsed[key], `Collapsed badge ${key}`).toBeCloseTo(before[key], 1);
+      }
+    });
+  }
+}
+
 for (const width of [390, 1440]) {
   test(`archive keeps events, month headings and focus through refreshes at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
