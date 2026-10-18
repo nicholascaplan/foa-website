@@ -81,27 +81,34 @@ test("the newsletter page presents the latest issue first and archives the rest"
   const newsletters = await loadCollection("newsletters");
   const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
   const archiveStart = html.indexOf("Previous newsletters");
-  const latestStart = html.indexOf("Latest newsletter");
+  const latestStart = html.indexOf("newsletter-board");
   assert.ok(latestStart !== -1 && archiveStart > latestStart, "latest section should come before the archive");
 
   const escape = (text) => text.replaceAll("&", "&amp;");
+  // Retitled header (approved 17th October 2026): the page h1 names the latest
+  // issue ("Half Term News" becomes "Half Term Newsletter") and the board
+  // carries no heading, so membership is checked through the h1 and the
+  // section content instead of a board h2 with the issue name.
+  const heroTitle = (title) => escape(`${title.replace(/\s+News$/, "").trim()} Newsletter`);
+  const beforeArchive = html.slice(0, archiveStart);
   const latestSection = html.slice(latestStart, archiveStart);
   const archiveSection = html.slice(archiveStart);
   for (const { id, data } of newsletters) {
     const title = escape(data.title);
     if (data.latest) {
-      assert.ok(latestSection.includes(title), `${id} is marked latest but is not in the latest section`);
+      assert.ok(beforeArchive.includes(`<h1>${heroTitle(data.title)}</h1>`), `${id} is marked latest but its title does not name the page`);
+      assert.ok(latestSection.includes("newsletter-issue newsletter-sheet"), "latest section should present the issue sheet");
       assert.ok(!archiveSection.includes(`>${title}<`), `${id} is latest but also appears in the archive`);
     } else {
       assert.ok(archiveSection.includes(title), `${id} should be in the archive`);
-      assert.ok(!latestSection.includes(`<h2>${title}</h2>`), `${id} is not marked latest but is shown as the latest issue`);
+      assert.ok(!beforeArchive.includes(`<h1>${heroTitle(data.title)}</h1>`), `${id} is not marked latest but names the page`);
     }
   }
 });
 
 test("the half term newsletter omits email-only copy and renders clean links", async () => {
   const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
-  const latest = html.slice(html.indexOf("Latest newsletter"), html.indexOf("Previous newsletters"));
+  const latest = html.slice(html.indexOf("newsletter-board"), html.indexOf("Previous newsletters"));
   assert.ok(latest.includes("Friday 16th October"));
   assert.ok(latest.includes('datetime="2026-10-16T00:00:00.000Z"'));
   assert.ok(latest.includes("two-week half term break"));
@@ -115,7 +122,7 @@ test("the half term newsletter omits email-only copy and renders clean links", a
 
 test("newsletter links to our pages stay internal while ticket links remain external", async () => {
   const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
-  const latest = html.slice(html.indexOf("Latest newsletter"), html.indexOf("Previous newsletters"));
+  const latest = html.slice(html.indexOf("newsletter-board"), html.indexOf("Previous newsletters"));
   const links = [...latest.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
   for (const route of ["/events/fireworks-2026/", "/fireworks-volunteering/", "/events/christmas-fayre-2026/", "/uniform/", "/fundraising/", "/"]) {
     const link = links.find(([, attributes]) => {
