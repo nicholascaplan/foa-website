@@ -120,6 +120,13 @@ When the user says "close session", "end session" or clearly wraps up:
 
 Material decisions must not exist only in the conversation.
 
+### Documentation-only pull requests
+
+- Documentation updates still use pull requests; branch protections and required checks must not be bypassed.
+- After creating a PR containing only `README.md` and/or Markdown under `docs/`, run `node scripts/docs-auto-merge.mjs <PR number>` to request GitHub's native squash auto-merge. This shortcut was approved on 18 October 2026. The guard excludes `AGENTS.md` at any depth, checks both sides of renames and pins the merge request to the validated head commit.
+- Code, workflow, asset and agent-instruction changes require the normal reviewed PR process. Never use `--admin` or weaken branch protection to merge documentation.
+- The guard is an agent-operated convenience, not a server-enforced path policy. If GitHub queues auto-merge, do not add non-documentation changes to that PR: disable auto-merge and use the normal review process instead.
+
 ## Resuming Work
 
 When asked "What are the next steps?":

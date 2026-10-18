@@ -60,4 +60,6 @@ Individual steps: `npm run check` (Astro/TypeScript and content schema), `npm ru
 
 ## Deployment
 
+For documentation-only PRs, run `node scripts/docs-auto-merge.mjs <PR number>` after creating the PR. It validates the changed paths and requests native squash auto-merge after required checks pass. Eligibility and agent rules are in [`AGENTS.md`](AGENTS.md#documentation-only-pull-requests). GitHub CLI authentication and repository auto-merge support are required; no bypass credentials are used.
+
 Pushes to `main` run `.github/workflows/deploy.yml`: it runs `npm run verify` and deploys to GitHub Pages only if all checks pass. Domain, DNS and build configuration are described in [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md) → Technical Specification → Hosting, domain and deployment.
