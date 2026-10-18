@@ -44,6 +44,17 @@ test("Fireworks defaults to immersive experience with shared guide facts and no 
   }
 });
 
+test("the Christmas Fayre page keeps its social card within chat size limits", async () => {
+  const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
+  assert.match(html, /<meta\b[^>]*property="og:image"[^>]*foa-logo-christmas-og\.png/);
+  // WhatsApp drops link preview images over 600KB, so the Christmas
+  // preview is a compact PNG card (approved 18 October 2026).
+  const image = await readFile(path.join(dist, "brand/foa-logo-christmas-og.png"));
+  assert.equal(image.readUInt32BE(16), 1200);
+  assert.equal(image.readUInt32BE(20), 630);
+  assert.ok(image.length < 600 * 1024, `foa-logo-christmas-og.png is ${image.length} bytes`);
+});
+
 test("the immersive Fireworks page keeps its social image within chat size limits", async () => {
   const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
   assert.doesNotMatch(html, /<link\b[^>]*rel="preload"[^>]*fireworks-1600\.jpg/);
