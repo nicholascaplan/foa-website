@@ -10,6 +10,7 @@ export interface VisibilityRules {
   showFrom?: string;
   expiresAt?: string;
   expiresOn?: string;
+  showFromDay?: string;
 }
 
 export const ukDateKey = (date: Date) => dateKeyFormatter.format(date);
@@ -24,7 +25,7 @@ export const relativeDayLabel = (eventDateKey: string, now: number) => {
   return daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : "";
 };
 
-export const isHidden = ({ showBefore, showFrom, expiresAt, expiresOn }: VisibilityRules, now: number) =>
+export const isHidden = ({ showBefore, showFrom, expiresAt, expiresOn, showFromDay }: VisibilityRules, now: number) =>
   Boolean(
     (showBefore && now >= Date.parse(showBefore))
     || (showFrom && now < Date.parse(showFrom))
@@ -33,12 +34,15 @@ export const isHidden = ({ showBefore, showFrom, expiresAt, expiresOn }: Visibil
     // same function in the browser without waiting for a module download.
     || (expiresOn && new Intl.DateTimeFormat("en-CA", {
       year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London",
-    }).format(new Date(now)) >= expiresOn),
+    }).format(new Date(now)) >= expiresOn)
+    || (showFromDay && new Intl.DateTimeFormat("en-CA", {
+      year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Europe/London",
+    }).format(new Date(now)) < showFromDay),
   );
 
 export const syncEventVisibility = (now = Date.now()) => {
   document
-    .querySelectorAll<HTMLElement>("[data-show-before], [data-show-from], [data-expires-at], [data-expires-on]")
+    .querySelectorAll<HTMLElement>("[data-show-before], [data-show-from], [data-expires-at], [data-expires-on], [data-show-from-day]")
     .forEach((element) => {
       element.hidden = isHidden(element.dataset, now);
     });

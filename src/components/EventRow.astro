@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from "astro:content";
+import EventDate from "./EventDate.astro";
+import { withBase } from "../lib/urls";
+import { ordinalDateFormatter } from "../lib/dates";
+import { isHidden } from "../lib/event-visibility";
+import { eventVisibilityRules } from "../lib/event-lifecycle";
+interface Props {
+  event: CollectionEntry<"events">["data"];
+  past?: boolean;
+  timed?: boolean;
+  now?: number;
+  headingLevel?: "h3" | "h4";
+}
+const { event, past = false, timed = true, now = Date.now(), headingLevel: Heading = "h3" } = Astro.props;
+const rules = timed ? eventVisibilityRules(event, past) : {};
+const date = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
+const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
+const ticketed = Boolean(event.path && event.ticketUrl);
+// Details must never be nested inside a whole-row link.
+const wholeRowLink = Boolean(event.path && !ticketed && !event.info && !past);
+const Wrapper = wholeRowLink ? "a" : "article";
+---
+<Wrapper class="event-list-item" href={wholeRowLink ? withBase(event.path!) : undefined}
+  data-yearview-event data-event-title={event.title} data-past={past ? "true" : "false"}
+  data-show-before={rules.showBefore} data-show-from={rules.showFrom}
+  data-expires-at={rules.expiresAt} data-expires-on={rules.expiresOn} data-show-from-day={rules.showFromDay}
+  hidden={isHidden(rules, now)}>
+  <EventDate date={event.start} compact />
+  <div>
+    <Heading>{event.path && !wholeRowLink ? <a href={withBase(event.path)}>{event.title}</a> : event.title}</Heading>
+    <p><time datetime={event.start.toISOString()}>{date(event.start)}{event.allDay ? "" : `, ${time.format(event.start)}${event.end ? `-${time.format(event.end)}` : ""}`}</time> · {event.location}</p>
+    {!past && (ticketed ? <span class="event-list-actions"><a class="button button--amber" href={withBase(event.path!)}>{event.ctaLabel ?? "View event details"} <span aria-hidden="true">&rarr;</span></a></span> : event.ctaLabel && <span class:list={["event-list-cta", event.ctaButton && "event-list-cta--button"]}>{event.ctaLabel} <span aria-hidden="true">&rarr;</span></span>)}
+    {!past && event.info && <details class="event-list-info"><summary>{event.info.label}</summary><p>{event.info.text}</p></details>}
+  </div>
+</Wrapper>
