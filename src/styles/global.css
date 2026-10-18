@@ -294,7 +294,7 @@ a {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.75rem 1.6rem;
+  gap: 0.75rem 1.2rem;
 }
 
 .desktop-nav a {
@@ -3103,6 +3103,27 @@ body.menu-open .cookie-banner {
   transform: translateY(-2px);
 }
 
+/* The full navigation shows only where it fits on a single row beside the
+   branding at the default text size; below 75rem the burger menu takes over
+   and Night Mode moves inside it. Enlarged text may still wrap links between
+   items rather than overflow. */
+@media (min-width: 75rem) {
+  .desktop-nav {
+    display: flex;
+  }
+
+  .menu-toggle,
+  .menu-toggle--floating {
+    display: none;
+  }
+}
+
+@media (min-width: 64rem) and (max-width: 74.99rem) {
+  .site-header .header-theme-toggle {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .event-list-cta--button {
     transition: none;
@@ -3686,15 +3707,6 @@ body.menu-open .cookie-banner {
     /* Reserve the envelope's overhang on every interior page, outside the
        shared branding row, so names and navigation never shift by route. */
     padding-bottom: max(1.5rem, calc(var(--introduction-logo-size) * var(--newsletter-logo-extra-height)));
-  }
-
-  .desktop-nav {
-    display: flex;
-  }
-
-  .menu-toggle,
-  .menu-toggle--floating {
-    display: none;
   }
 
   .hero-copy h1 {
