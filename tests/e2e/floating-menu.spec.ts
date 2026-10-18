@@ -127,8 +127,9 @@ for (const width of [320, 390, 768, 1023]) {
   });
 }
 
-// The full navigation shows from 75rem (1200px) up; below that the burger takes
-// over so links never wrap (approved 18 October 2026).
+// The full navigation shows from 80rem (1280px) up, where the header runs
+// wider than the page column; below that the burger takes over so links never
+// wrap (approved 18 October 2026).
 for (const width of [1280, 1440]) {
   test(`${width}px: all pages use the homepage desktop navigation, with no burger after scrolling`, async ({ page }) => {
     test.setTimeout(60_000);
