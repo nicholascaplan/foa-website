@@ -82,9 +82,7 @@ test("every public page embeds one mobile home-linked logo beside its heading", 
     assert.equal(main.match(/class="mobile-page-logo page-logo-home"/g)?.length, 1, path.pathname);
     assert.match(main, /class="mobile-page-heading">[\s\S]*?class="mobile-page-logo page-logo-home"[\s\S]*?class="mobile-page-heading-copy">[\s\S]*?<h1/, path.pathname);
     if (html.includes('class="view-hero')) {
-      // The intro paragraph after the heading is optional: the Newsletter page
-      // drops it (approved 17th October 2026).
-      assert.match(main, /<section class="view-hero[\s\S]*?class="mobile-page-heading"[\s\S]*?<\/h1>\s*<\/div>\s*<\/div>(\s*<p>|\s*<\/div>)/, path.pathname);
+      assert.match(main, /<section class="view-hero[\s\S]*?class="mobile-page-heading"[\s\S]*?<\/h1>\s*<\/div>\s*<\/div>\s*<p>/, path.pathname);
     }
   }
 });
