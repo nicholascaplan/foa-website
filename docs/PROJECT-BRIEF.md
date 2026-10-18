@@ -98,6 +98,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The Committee page shows the vacant Co-Secretary role as an eighth card, visually distinct from confirmed members, linking to the shared Co-Secretary enquiry email; a full-width recruitment callout remains below the grid.
 - Footer: independent link columns and a larger 112px home-linked logo; Ashley School Website and Donate via JustGiving links open in a new tab and are labelled as such.
 - Removed on purpose: draft/readiness banners in public pages; the hash router; the earlier public Community and Accessibility pages.
+- The year view prototype direction is option C: events grouped term by term with the months shown, chosen for its simplicity (approved 17 October 2026). Before it ships it needs restyling to the site's existing look. The year view and the feedback forms are still prototypes and not on the live site.
 
 ### Information architecture
 
