@@ -47,11 +47,11 @@ test("Fireworks defaults to immersive experience with shared guide facts and no 
 test("the immersive Fireworks page keeps its social image within chat size limits", async () => {
   const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
   assert.doesNotMatch(html, /<link\b[^>]*rel="preload"[^>]*fireworks-1600\.jpg/);
-  assert.match(html, /<meta\b[^>]*property="og:image"[^>]*fireworks-og\.jpg/);
-  // WhatsApp drops link preview images over 600KB, so the social variant
-  // stays compressed (approved 18 October 2026).
-  const image = await readFile(path.join(dist, "events/fireworks-og.jpg"));
-  assert.ok(image.length < 600 * 1024, `fireworks-og.jpg is ${image.length} bytes`);
+  assert.match(html, /<meta\b[^>]*property="og:image"[^>]*foa-logo-fireworks-og\.png/);
+  // WhatsApp drops link preview images over 600KB, so the Fireworks
+  // preview is a compact PNG card (approved 18 October 2026).
+  const image = await readFile(path.join(dist, "brand/foa-logo-fireworks-og.png"));
+  assert.ok(image.length < 600 * 1024, `foa-logo-fireworks-og.png is ${image.length} bytes`);
 });
 
 test("Get Involved exposes the AGM volunteer teams and shared enquiry route", async () => {
