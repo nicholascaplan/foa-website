@@ -621,15 +621,20 @@ body.fw-theme::before {
 }
 
 .fw-theme .event-summary {
+  container: fireworks-summary / inline-size;
+  overflow-wrap: anywhere;
   padding-top: 2.5rem;
   backdrop-filter: none;
 }
 
 .fw-theme .event-summary dt {
+  min-width: 0;
   color: var(--fw-label);
 }
 
 .fw-theme .event-summary dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--fw-ink);
 }
 
@@ -980,17 +985,24 @@ body.fw-theme::before {
     gap: 0.25rem;
   }
 
-  .fw-theme .event-summary dl > div:first-child dd,
-  .fw-theme .event-summary .fw-map-link {
-    white-space: nowrap;
-  }
-
   .fw-theme .event-summary .fw-ticket-price__unbreakable {
     white-space: nowrap;
   }
 
   .fw-theme .event-summary .fw-map-link {
     font-size: 0.85rem;
+  }
+}
+
+/* Reflow within the parchment, including when the visitor enlarges text. */
+@container fireworks-summary (max-width: 14rem) {
+  .fw-theme .event-summary dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.125rem;
+  }
+
+  .fw-theme .event-summary .fw-ticket-price__unbreakable {
+    white-space: normal;
   }
 }
 

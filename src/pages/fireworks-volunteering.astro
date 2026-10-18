@@ -11,7 +11,7 @@ const event = entry?.data;
 if (!event?.volunteerRoles) throw new Error("Fireworks volunteering content is missing");
 const eventDate = ordinalDateFormatter({ timeZone: "Europe/London" })(event.start);
 ---
-<BaseLayout title="Fireworks Volunteering" description="Sign up to help at Fireworks on the Field. Choose a slot with your year group's team on Volunteer Sign Up." image="/events/fireworks-1600.jpg" headerLogo="/brand/foa-logo-fireworks-ivory.svg" bodyClass="fw-theme">
+<BaseLayout title="Fireworks Volunteering" description="Sign up to help at Fireworks on the Field. Choose a slot with your year group's team on Volunteer Sign Up." image="/brand/foa-logo-fireworks-og.png" headerLogo="/brand/foa-logo-fireworks-ivory.svg" bodyClass="fw-theme">
   <div class="fw-vol fw-stage" data-fw-paused>
     <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
     <div class="fw-content">
