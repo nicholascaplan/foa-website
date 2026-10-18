@@ -127,7 +127,9 @@ for (const width of [320, 390, 768, 1023]) {
   });
 }
 
-for (const width of [1024, 1440]) {
+// The full navigation shows from 75rem (1200px) up; below that the burger takes
+// over so links never wrap (approved 18 October 2026).
+for (const width of [1280, 1440]) {
   test(`${width}px: all pages use the homepage desktop navigation, with no burger after scrolling`, async ({ page }) => {
     test.setTimeout(60_000);
     await page.setViewportSize({ width, height: 900 });
@@ -150,5 +152,16 @@ for (const width of [1024, 1440]) {
       await page.evaluate(() => window.scrollTo(0, 800));
       await expect(page.locator(".menu-toggle"), route).toBeHidden();
     }
+  });
+}
+
+for (const route of ["/", "/newsletter/", "/uniform/"]) {
+  test(`${route}: 1024px shows the burger instead of navigation links, with no wrapping`, async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.goto(route);
+    await expect(page.locator(".site-header"), route).toBeVisible();
+    await expect(page.locator(".desktop-nav"), route).toBeHidden();
+    await expect(page.getByRole("button", { name: "Open menu" }), route).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), route).toBeLessThanOrEqual(0);
   });
 }
