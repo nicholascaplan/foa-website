@@ -99,6 +99,13 @@ Compare equivalent revisions, worker counts and clean pass/failure outcomes; agg
 
 ## Later
 
+- **Owner / Dev:** Revisit desktop-specific layouts after the What's On work (deferred 18 October 2026). Compare options before implementation, preserving the mobile reading order and comfortable text widths rather than filling space for its own sake. Priorities:
+  - Get Involved: compare the first two opportunity groups side by side, with the longer year-round group below and the Co-Secretary appeal retained above.
+  - Newsletter: compare a main reading column with a narrower archive alongside it, retaining the approved paper-and-cork treatment.
+  - Fireworks event body: compare a narrower schedule column beside practical/travel information, with volunteering below; do not add sticky ticket controls without separate review.
+  - Homepage: review introduction/actions/artwork balance at ordinary laptop heights, especially 720px and 768px.
+  - Fundraising and Reps Hub: refine existing column proportions, spacing, action alignment and interaction stability rather than adding more grids. Keep Uniform, Committee and Contact simple unless rendered review identifies a specific problem.
+  - Across the site: check readable line lengths, uneven column heights, expansion-induced movement and reflow with enlarged text. These are ideas to assess, not approved redesigns.
 - A live pre-loved uniform stock list remains a maybe, not approved scope (17th October 2026). Confirm an owner and a reliable stock-update process before building it.
 - Select and integrate a CMS, only after editor ownership, preview/publish workflow, annual access handover, urgent-update and failed-build procedures are confirmed (see *Open questions → Content management*).
 - Formal manual accessibility testing (keyboard, zoom, screen reader), then publish a public accessibility statement.

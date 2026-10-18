@@ -7,6 +7,48 @@ const event = load("fireworks-2026");
 const boundary = Date.parse(event.end);
 const monthLabel = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date(event.start));
 
+for (const width of [320, 1440]) {
+  for (const theme of ["day", "night"]) {
+    test(`month bands mark empty, upcoming and archived months at ${width}px in ${theme} mode`, async ({ page }) => {
+      await page.clock.setFixedTime(new Date(Date.parse(event.start) - 10 * 86400000));
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/whats-on/");
+      await page.evaluate((theme) => document.documentElement.dataset.theme = theme, theme);
+      const emptyMonth = page.locator('[data-month-key="2026-10"]');
+      await expect(emptyMonth.locator("[data-empty-note]")).toBeVisible();
+      await page.locator(".term-earlier summary").click();
+      for (const textScale of [100, 200]) {
+        await page.addStyleTag({ content: `html { font-size: ${textScale}% !important; }` });
+        const headings = page.locator(".term-month-heading:visible");
+        expect(await headings.count()).toBeGreaterThan(2);
+        for (const heading of await headings.all()) {
+          const band = await heading.evaluate((element) => {
+            const style = getComputedStyle(element);
+            const box = element.getBoundingClientRect();
+            const month = element.parentElement!.getBoundingClientRect();
+            const probe = document.createElement("span");
+            probe.style.background = "var(--paper-deep)";
+            element.append(probe);
+            const expectedBackground = getComputedStyle(probe).backgroundColor;
+            probe.remove();
+            return { background: style.backgroundColor, expectedBackground,
+              border: style.borderBottomWidth, padding: parseFloat(style.paddingInlineStart),
+              width: box.width, monthWidth: month.width, left: box.left, monthLeft: month.left };
+          });
+          expect(band.background).toBe(band.expectedBackground);
+          expect(band.border).toBe("1px");
+          expect(band.padding).toBeGreaterThan(0);
+          expect(band.width).toBeCloseTo(band.monthWidth, 1);
+          expect(band.left).toBeCloseTo(band.monthLeft, 1);
+        }
+        const list = page.locator('[data-month-key="2026-11"] > .event-list');
+        expect(await list.evaluate((element) => getComputedStyle(element).borderTopWidth)).toBe("0px");
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      }
+    });
+  }
+}
+
 for (const width of [320, 390, 1440]) {
   for (const textScale of [100, 200]) {
     test(`Happy Bags date stays anchored when its explanation opens and closes at ${width}px with ${textScale}% text`, async ({ page }) => {

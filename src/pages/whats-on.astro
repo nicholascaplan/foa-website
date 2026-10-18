@@ -82,18 +82,23 @@ const year = academicYearLabel();
 </script>
 
 <style>
-  .term-months { display: grid; gap: 2rem; }
+  .term-months { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .term-month-heading {
     font-family: var(--font-display);
     font-size: 1.45rem;
     font-weight: 500;
     color: var(--heading);
     margin: 0 0 0.75rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     align-items: baseline;
   }
+  .term-month > .event-list { border-top: 0; }
   .term-chip {
     font-family: var(--font-body);
     font-size: 0.8rem;
