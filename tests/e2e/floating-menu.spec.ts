@@ -3,7 +3,8 @@ import { routes } from "./routes";
 
 for (const width of [320, 390, 768, 1023]) {
   test(`${width}px: every page has no header and a clear, fixed mobile burger`, async ({ page }) => {
-    test.setTimeout(120_000);
+    // A healthy sweep of every route takes ~20s per width; 60s caps a genuinely missing element without failing slow-but-healthy runs.
+    test.setTimeout(60_000);
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const route of routes) {
