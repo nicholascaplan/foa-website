@@ -955,14 +955,17 @@ body.fw-theme::before {
   margin-top: calc(2rem + var(--fw-roll-overhang));
 }
 
-/* No torches on phones: they would sit over the copy, so use the full width. */
+/* The mobile/tablet title panel uses the torch gutters for copy. */
+@media (max-width: 63.99rem) {
+  .fw-theme .fw-vol .fw-torches {
+    display: none;
+  }
+}
+
+/* No torches on phones, so use the full width. */
 @media (max-width: 47.999rem) {
   .fw-theme .fw-vol {
     --fw-gutter: 0.75rem;
-  }
-
-  .fw-theme .fw-vol .fw-torches {
-    display: none;
   }
 
   .fw-theme .fw-vol .vol-grid {

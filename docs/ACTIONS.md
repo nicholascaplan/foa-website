@@ -39,6 +39,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 - **Owner:** Review the Fireworks summary at 320px and 390px with normal and enlarged text. The quality-review fix allows wrapping and stacks labels when the parchment content is narrow. Regression coverage checks the rendered text inside its own columns, not only page-level overflow, in `tests/e2e/fireworks.spec.ts`.
 
+- **Owner:** Recheck Fireworks volunteering at tablet widths, including 768px and 1000px, with normal and enlarged text. The torches now hide throughout the mobile/tablet title-panel layout below 64rem; desktop regression checks retain static torches outside the introduction.
+
 - **Owner / Dev:** Review the term-by-term year-view prototype in PR #15 before approving publication. Keep it separate from the live What's On page until approved; verify month headings, repeated one-minute archive updates, current-month empty states and mobile/desktop presentation.
 
 - **Owner / Dev:** Resume the feedback-form prototype designs requested on 17th October 2026. Review an engaging design before implementation. Before publication, the owner must supply a Formspree form ID targeting the shared inbox; confirm handling, retention and Privacy Notice changes before adding a new processor. Do not publish a placeholder form action.

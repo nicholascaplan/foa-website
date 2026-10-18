@@ -144,6 +144,38 @@ for (const width of [320, 390, 1440]) {
   }
 }
 
+for (const width of [390, 768, 1000, 1023, 1024, 1440]) {
+  for (const textSize of [100, 200]) {
+    test(`volunteering torches stay clear of the introduction at ${width}px with ${textSize}% text`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.goto("/fireworks-volunteering/");
+      await page.evaluate((size) => { document.documentElement.style.fontSize = `${size}%`; }, textSize);
+      if (width < 1024) {
+        await expect(page.locator(".fw-torches")).toBeHidden();
+      } else {
+        await expect(page.locator(".fw-torches")).toBeVisible();
+        const overlaps = await page.locator(".fw-title-copy").evaluate(async (copy) => {
+          await document.fonts.ready;
+          const torches = [...document.querySelectorAll(".fw-torch__head, .fw-torch__flames, .fw-torch__pole")].map((torch) => torch.getBoundingClientRect());
+          const walker = document.createTreeWalker(copy, NodeFilter.SHOW_TEXT);
+          const collisions = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (!node.textContent?.trim() || node.parentElement?.closest(".visually-hidden")) continue;
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            for (const rect of range.getClientRects()) {
+              if (rect.width > 0 && torches.some((torch) => rect.left < torch.right && rect.right > torch.left && rect.top < torch.bottom && rect.bottom > torch.top)) collisions.push(node.textContent);
+            }
+          }
+          return collisions;
+        });
+        expect(overlaps).toEqual([]);
+      }
+    });
+  }
+}
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   test(`the Fireworks experience fits without overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
