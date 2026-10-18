@@ -21,7 +21,7 @@ const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: 
 const issueName = latest.title.replace(/\s+News$/, "").trim();
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters." image="/brand/foa-logo-newsletter-og.png">
-  <PageHero eyebrow="The FOA updates" title={`${issueName} Newsletter`} />
+  <PageHero eyebrow="The FOA updates" title={`${issueName} Newsletter`} intro="The latest news from the FOA." />
   <section class="content-section content-section--compact"><div class="site-width newsletter-page">
     <section class="newsletter-section newsletter-board">
       <div class="section-heading"><p class="eyebrow">Latest newsletter</p></div>
