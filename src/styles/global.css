@@ -192,6 +192,13 @@ a {
   gap: 1rem;
 }
 
+/* The header runs wider than the page column and keeps its 1rem side margins
+   at every width, so the full navigation fits on one row beside the branding
+   and Night Mode even with fallback serif fonts (approved 18 October 2026). */
+.site-header .site-width {
+  width: min(calc(100% - 2rem), 80rem);
+}
+
 .site-header .home-introduction {
   flex: 1;
   min-width: 0;
@@ -3104,10 +3111,10 @@ body.menu-open .cookie-banner {
 }
 
 /* The full navigation shows only where it fits on a single row beside the
-   branding at the default text size; below 75rem the burger menu takes over
+   branding at the default text size; below 80rem the burger menu takes over
    and Night Mode moves inside it. Enlarged text may still wrap links between
    items rather than overflow. */
-@media (min-width: 75rem) {
+@media (min-width: 80rem) {
   .desktop-nav {
     display: flex;
   }
@@ -3118,7 +3125,7 @@ body.menu-open .cookie-banner {
   }
 }
 
-@media (min-width: 64rem) and (max-width: 74.99rem) {
+@media (min-width: 64rem) and (max-width: 79.99rem) {
   .site-header .header-theme-toggle {
     display: none;
   }
