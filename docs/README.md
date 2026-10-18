@@ -44,6 +44,7 @@ Lifecycle of an item: it starts in `ACTIONS.md` (a task, question or provisional
 - **Do not create a second backlog.** Open work, open questions and provisional content appear only in `ACTIONS.md`.
 - **Do not put status in the README or brief.** No "current state" narratives, "next step" paragraphs or "last session" notes. They go stale immediately. Use `ACTIONS.md`.
 - **Keep `AGENTS.md` about behaviour.** Product detail belongs in the brief.
+- **Record design intent, not a CSS transcript.** The brief should explain responsive behaviour and approved visual outcomes. Keep routine breakpoints, spacing values and layout formulas in styles and regression tests; include an exact measurement in the brief only when it is itself an explicit design requirement.
 - **Replace, don't append.** When a decision changes, edit the existing decision; do not add a later entry that contradicts it.
 - **Update `Last updated` in the brief** only when decisions, scope, requirements or architecture change.
 - **Link, don't copy.** Use relative links to sections or files.

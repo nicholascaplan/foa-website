@@ -31,11 +31,19 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Dev / Owner:** Review the [approved warm-ivory website logos](PROJECT-BRIEF.md#design) on standard, Fireworks, Christmas, Newsletter and 404 pages at mobile and desktop widths in Day/Night Mode, including title-panel/menu alignment and unchanged white newsletter letterheads. Verify that desktop branding/navigation stays in place when clicking to Newsletter and back: its page-specific logo margin has been replaced by shared header clearance. Astro check/build and all 112 site/unit tests pass, including image budgets. CI exercises the focused coverage in `tests/e2e/ivory-logos.spec.ts` and `tests/e2e/newsletter-logo.spec.ts`; the envelope-clearance check allows half a pixel for browser rounding while header alignment retains its tighter comparison. Local rendered verification remains blocked by Chrome-launch sandbox permissions and unavailable Review-pane tools; real-device review is still required.
+- **Dev / Owner:** Review the [approved warm-ivory website logos](PROJECT-BRIEF.md#design) on standard, Fireworks, Christmas, Newsletter and 404 pages at mobile and desktop widths in Day/Night Mode, including title-panel/menu alignment and unchanged white newsletter letterheads. Newsletter now uses the standard site logo, not the retired envelope artwork. Verify header alignment when switching between Newsletter and other pages. Regression coverage is in `tests/e2e/ivory-logos.spec.ts` and `tests/e2e/newsletter-logo.spec.ts`; real-device review is still required.
 
 - **Owner:** Review the [Uniform layout and desktop navigation](PROJECT-BRIEF.md#design) on real devices in Day/Night Mode and with enlarged text, including price-badge alignment. The owner confirmed the focused browser suites pass; [full verification and deployment passed](https://github.com/nicholascaplan/foa-website/actions/runs/38471027975), including 249 browser tests. Agent-side rendered checks remain blocked by browser-launch sandbox permissions and unavailable Review tools.
 
-- **Dev / Owner:** Review the approved compact Newsletter envelope logo at 320px and 390px in the title panel and mobile menu, including Day/Night Mode and enlarged text. Confirm its circle matches the other pages and the narrower envelope clears the panel edge. Local automated rendered checks are blocked by Chrome-launch sandbox permissions; production regression coverage is in `tests/e2e/newsletter-logo.spec.ts`. After deployment, check a real share of `/newsletter/` to confirm the new PNG envelope-logo preview, allowing for apps caching the previous image.
+- **Owner:** Check real shares of Newsletter, Fireworks, Fireworks volunteering and Christmas Fayre after the compact social-card changes are published. Allow for chat apps caching previous images; Newsletter uses the standard roundel, both Fireworks pages use the Fireworks roundel and the Fayre uses its festive roundel.
+
+- **Owner:** Review the Fireworks summary at 320px and 390px with normal and enlarged text. The quality-review fix allows wrapping and stacks labels when the parchment content is narrow. Regression coverage checks the rendered text inside its own columns, not only page-level overflow, in `tests/e2e/fireworks.spec.ts`.
+
+- **Owner:** Recheck Fireworks volunteering at tablet widths, including 768px and 1000px, with normal and enlarged text. The torches now hide throughout the mobile/tablet title-panel layout below 64rem; desktop regression checks retain static torches outside the introduction.
+
+- **Owner / Dev:** Review the term-by-term year-view prototype in PR #15 before approving publication. Keep it separate from the live What's On page until approved; verify month headings, repeated one-minute archive updates, current-month empty states and mobile/desktop presentation.
+
+- **Owner / Dev:** Resume the feedback-form prototype designs requested on 17th October 2026. Review an engaging design before implementation. Before publication, the owner must supply a Formspree form ID targeting the shared inbox; confirm handling, retention and Privacy Notice changes before adding a new processor. Do not publish a placeholder form action.
 
 - **Dev / Owner:** Review the newsletter's five-line faded peeks (continuing into following sections when needed) and green "Read the full newsletter" buttons on real mobile and desktop devices, including Day/Night Mode, enlarged text, keyboard access, expansion/collapse scroll position and reduced motion. Also check archive-sheet spacing, matching introduction/body text sizes and wrapping of the organisers' full names and class labels on Newsletter, Christmas Fayre, Get Involved and Reps Hub. Astro check/build and all 98 site/unit tests pass; [production browser verification and deployment passed](https://github.com/nicholascaplan/foa-website/actions/runs/38404908628), including the 320px overflow fix. Local rendered and interaction verification remains blocked by Chrome-launch sandbox permissions and unavailable Review tools. Regression coverage, including five-line preview sizing at 390px and 1440px and collapsed/expanded layout at 320px, is in `tests/e2e/newsletter.spec.ts`.
 
@@ -89,6 +97,7 @@ Compare equivalent revisions, worker counts and clean pass/failure outcomes; agg
 
 ## Later
 
+- A live pre-loved uniform stock list remains a maybe, not approved scope (17th October 2026). Confirm an owner and a reliable stock-update process before building it.
 - Select and integrate a CMS, only after editor ownership, preview/publish workflow, annual access handover, urgent-update and failed-build procedures are confirmed (see *Open questions → Content management*).
 - Formal manual accessibility testing (keyboard, zoom, screen reader), then publish a public accessibility statement.
 - Moderated Community Notice Board (deferred; no public route). Needs the decisions listed under *Open questions → Notice Board*.

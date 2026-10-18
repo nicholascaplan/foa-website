@@ -108,6 +108,74 @@ for (const width of [360, 390, 430]) {
   });
 }
 
+for (const width of [320, 390, 1440]) {
+  for (const textSize of [100, 200]) {
+    test(`Fireworks summary content fits its own columns at ${width}px with ${textSize}% text`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.goto("/events/fireworks-2026/");
+      await page.evaluate((size) => { document.documentElement.style.fontSize = `${size}%`; }, textSize);
+      const layout = await page.locator(".event-summary").evaluate(async (summary) => {
+        await document.fonts.ready;
+        const panel = summary.getBoundingClientRect();
+        return [...summary.querySelectorAll("dt, dd, .fw-date")].map((element) => {
+          const bounds = element.getBoundingClientRect();
+          const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+          const textBounds = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (!node.textContent?.trim() || node.parentElement?.closest(".visually-hidden")) continue;
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            textBounds.push(...[...range.getClientRects()].filter((rect) => rect.width > 0));
+          }
+          return {
+            text: element.textContent?.trim(),
+            width: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            contained: textBounds.every((rect) => rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1 && rect.left >= panel.left && rect.right <= panel.right && rect.right <= innerWidth),
+          };
+        });
+      });
+      for (const element of layout) {
+        expect(element.scrollWidth, element.text).toBeLessThanOrEqual(element.width + 1);
+        expect(element.contained, element.text).toBe(true);
+      }
+    });
+  }
+}
+
+for (const width of [390, 768, 1000, 1023, 1024, 1440]) {
+  for (const textSize of [100, 200]) {
+    test(`volunteering torches stay clear of the introduction at ${width}px with ${textSize}% text`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1100 });
+      await page.goto("/fireworks-volunteering/");
+      await page.evaluate((size) => { document.documentElement.style.fontSize = `${size}%`; }, textSize);
+      if (width < 1024) {
+        await expect(page.locator(".fw-torches")).toBeHidden();
+      } else {
+        await expect(page.locator(".fw-torches")).toBeVisible();
+        const overlaps = await page.locator(".fw-title-copy").evaluate(async (copy) => {
+          await document.fonts.ready;
+          const torches = [...document.querySelectorAll(".fw-torch__head, .fw-torch__flames, .fw-torch__pole")].map((torch) => torch.getBoundingClientRect());
+          const walker = document.createTreeWalker(copy, NodeFilter.SHOW_TEXT);
+          const collisions = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (!node.textContent?.trim() || node.parentElement?.closest(".visually-hidden")) continue;
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            for (const rect of range.getClientRects()) {
+              if (rect.width > 0 && torches.some((torch) => rect.left < torch.right && rect.right > torch.left && rect.top < torch.bottom && rect.bottom > torch.top)) collisions.push(node.textContent);
+            }
+          }
+          return collisions;
+        });
+        expect(overlaps).toEqual([]);
+      }
+    });
+  }
+}
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   test(`the Fireworks experience fits without overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
