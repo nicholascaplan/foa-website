@@ -30,7 +30,7 @@ const outputPath = (urlPath) => {
 const welcomeTea = JSON.parse(await readFile(path.resolve("src/content/events/welcome-tea-2026.json"), "utf8"));
 const archiveFrom = new Date(welcomeTea.archiveFrom).toISOString();
 const appeal = JSON.parse(await readFile(path.resolve("src/content/fundraising/current-appeal.json"), "utf8"));
-const money = (value) => `Â£${value.toLocaleString("en-GB")}`;
+const money = (value) => `£${value.toLocaleString("en-GB")}`;
 
 test("Fireworks defaults to immersive experience with shared guide facts and no poster", async () => {
   const html = await readFile(path.join(dist, "events/fireworks-2026/index.html"), "utf8");
@@ -79,7 +79,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.ok(cards[0].includes("Buy Fireworks tickets"));
   assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Buy Fireworks tickets: ${fireworks.ticketUrl}`));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" });
-  const range = `${time.format(new Date(uniform.start))}â${time.format(new Date(uniform.end))}`;
+  const range = `${time.format(new Date(uniform.start))}–${time.format(new Date(uniform.end))}`;
   assert.ok(cards[2].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
   for (const date of [uniform.start, uniform.end]) {
     assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
@@ -98,7 +98,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   for (const role of fireworks.volunteerRoles) {
     assert.ok(cards[1].includes(role.name.toLowerCase()));
   }
-  assert.doesNotMatch(cards.join(""), /â|Tombola, Entrance &amp; Tokens, and Glitter Tattoos/);
+  assert.doesNotMatch(cards.join(""), /—|Tombola, Entrance &amp; Tokens, and Glitter Tattoos/);
   assert.doesNotMatch(html, /class leads for the Christmas Fayre/);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 2);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 2);
