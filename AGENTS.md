@@ -25,7 +25,7 @@ Read the brief before substantial design, content or architecture work.
 - Warm modern editorial community noticeboard; mobile-first with deliberate desktop layouts.
 - Prioritise current events and practical parent tasks. Do not make the public site feel like a SaaS dashboard.
 - Primary navigation: Home, What's On, Fundraising, Get Involved, Uniform. Newsletter also appears in the desktop header and mobile menu, between Home and What's On.
-- Follow the [confirmed header and mobile title-panel design](docs/PROJECT-BRIEF.md#design). The branded header appears from 64rem; full inline navigation and header Night Mode appear from 80rem. Below 80rem, keep the burger fixed outside the header and Night Mode inside its menu; below 64rem, hide the branded header entirely. Preserve the approved home-linked 128px mobile logo, shared top-left anchor and event-specific variants. The Newsletter page uses the standard logo, not the retired envelope treatment.
+- Follow the [confirmed header and mobile title-panel design](docs/PROJECT-BRIEF.md#design). Keep the burger fixed outside the header whenever full navigation is hidden, and preserve the approved mobile logo treatment. Read exact responsive thresholds from the shared styles and regression tests rather than duplicating them here.
 - Heritage green is primary; amber is mainly for events and celebration.
 - Ticket purchases use an external provider. Auctions, parent accounts and unmoderated publishing are out of scope.
 
