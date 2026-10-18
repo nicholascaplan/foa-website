@@ -25,7 +25,7 @@ test.describe("Newsletter standard logo", () => {
     });
   }
 
-  // Desktop menu shows from 75rem (1200px) after the single-row nav change
+  // Desktop menu shows from 80rem (1280px) after the single-row nav change
   // (approved 18 October 2026); at 1024px the menu button shows instead.
   for (const width of [1280, 1440]) {
     test(`desktop branding and navigation stay aligned when opening Newsletter at ${width}px`, async ({ page }) => {
