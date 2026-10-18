@@ -14,6 +14,7 @@
   --dark-action: var(--ink);
   --sponsor-green: #0e2b26;
   --amber: #d97706;
+  --amber-dark: #92400e;
   --amber-light: #f8e4b7;
   --logo-teal: #1b6e63;
   --logo-gold: #f1b94b;
@@ -1354,6 +1355,7 @@ a {
 }
 
 .event-list-item h3,
+.event-list-item h4,
 .notice-list-item h3 {
   margin: 0;
   font-family: var(--font-display);
@@ -3063,12 +3065,12 @@ body.menu-open .cookie-banner {
   line-height: 1.05;
 }
 
-.event-list-item h3 a {
+.event-list-item :is(h3, h4) a {
   color: inherit;
   text-decoration: none;
 }
 
-.event-list-item h3 a:hover {
+.event-list-item :is(h3, h4) a:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

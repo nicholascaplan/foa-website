@@ -86,16 +86,8 @@ test("homepage image and preload share responsive candidates without downloading
   assert.doesNotMatch(preload, /fireworks-1600\.jpg/);
 });
 
-test("past-event posters are deferred and the Welcome Tea derivative remains compact", async () => {
+test("the term-by-term listing does not download event posters", async () => {
   const html = await readFile(path.join(dist, "whats-on/index.html"), "utf8");
-  const posters = [...html.matchAll(/<article class="past-event"[^>]*>([\s\S]*?)<\/article>/g)];
-  assert.ok(posters.length);
-  for (const [, article] of posters) {
-    const image = article.match(/<img\b[^>]*>/)?.[0];
-    assert.ok(image);
-    assert.equal(attribute(image, "loading"), "lazy");
-    assert.equal(attribute(image, "decoding"), "async");
-  }
-  assert.ok(html.includes(`${base}/events/welcome-tea.webp`));
-  assert.ok((await stat(localFile(`${base}/events/welcome-tea.webp`))).size <= 180 * kib);
+  assert.match(html, /data-yearview-earlier/);
+  assert.doesNotMatch(html, /<img[^>]*src="[^"]*\/events\//);
 });

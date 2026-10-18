@@ -25,17 +25,12 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 
-  test(`past-event poster is available when scrolled into view at ${viewport.width}px`, async ({ page }) => {
+  test(`the compact archive stays readable without loading event posters at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/whats-on/");
-    const poster = page.locator('.past-event img[src$="welcome-tea.webp"]');
-    await expect(poster).toHaveAttribute("loading", "lazy");
-    await poster.scrollIntoViewIfNeeded();
-    await expect.poll(() => poster.evaluate((element) => {
-      const image = element as HTMLImageElement;
-      return image.complete && image.naturalWidth > 0;
-    })).toBe(true);
-    await expect(poster).toBeVisible();
+    await page.getByText("Earlier this year", { exact: true }).click();
+    await expect(page.locator('[data-past="true"]').filter({ hasText: "Welcome Tea" })).toBeVisible();
+    await expect(page.locator('[data-yearview-earlier] img')).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }

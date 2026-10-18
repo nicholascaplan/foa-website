@@ -255,10 +255,10 @@ test("What's On delivers build-time visibility and a standalone early date check
   assert.ok(initializer.index < html.indexOf("<footer"));
   assert.doesNotMatch(initializer[0], /\b(?:src|type|defer|async)=/);
 
-  const entries = [...html.matchAll(/<(?:article|a)\b[^>]*class="(?:event-list-item|past-event)"[^>]*>/g)].map(([tag]) => {
-    const dataset = Object.fromEntries([...tag.matchAll(/data-(show-before|show-from|expires-at|expires-on)="([^"]+)"/g)]
+  const entries = [...html.matchAll(/<(?:article|a)\b[^>]*class="event-list-item"[^>]*>/g)].map(([tag]) => {
+    const dataset = Object.fromEntries([...tag.matchAll(/data-(show-before|show-from|expires-at|expires-on|show-from-day)="([^"]+)"/g)]
       .map(([, name, value]) => [name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()), value]));
-    return { dataset, hidden: /\shidden(?:\s|>|=)/.test(tag), past: tag.includes('class="past-event"') };
+    return { dataset, hidden: /\shidden(?:\s|>|=)/.test(tag), past: tag.includes('data-past="true"') };
   });
   assert.ok(entries.length > 0);
   for (const entry of entries) {
@@ -279,8 +279,8 @@ test("What's On delivers build-time visibility and a standalone early date check
       Date: FixedDate,
       Intl,
       document: {
-        querySelectorAll: () => nodes,
-        querySelector: () => pastSection,
+        querySelectorAll: (selector) => selector.startsWith("[data-show-before]") ? nodes : [],
+        querySelector: (selector) => selector === "[data-past-events-section]" ? pastSection : null,
       },
     });
     for (const node of nodes) assert.equal(node.hidden, isHidden(node.dataset, now), `${iso}: ${JSON.stringify(node.dataset)}`);
