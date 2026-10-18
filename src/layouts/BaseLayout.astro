@@ -8,7 +8,7 @@ import "../styles/global.css";
 import "../styles/night-mode.css";
 
 interface Props { title: string; description: string; image?: string; headerLogo?: string; preloadImage?: string; preloadImageSrcset?: string; preloadImageSizes?: string; noindex?: boolean; bodyClass?: string; }
-const { title, description, image = "/brand/foa-logo.jpg", headerLogo, preloadImage, preloadImageSrcset, preloadImageSizes, noindex = false, bodyClass } = Astro.props;
+const { title, description, image = "/brand/foa-logo-og.png", headerLogo, preloadImage, preloadImageSrcset, preloadImageSizes, noindex = false, bodyClass } = Astro.props;
 const pageTitle = title === "The Friends of Ashley" ? "The Friends of Ashley | Ashley C of E Primary School PTA" : `${title} | The Friends of Ashley`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(withBase(image), Astro.site);

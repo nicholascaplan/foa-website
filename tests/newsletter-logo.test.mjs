@@ -15,7 +15,7 @@ test("the newsletter uses the standard site logo on desktop, mobile and in the m
     assert.ok(region);
     assert.match(region, /src="[^"]*\/brand\/foa-logo-ivory\.svg"/);
   }
-  assert.match(html, /property="og:image" content="[^"]*\/brand\/foa-logo-newsletter-og\.png"/);
+  assert.match(html, /property="og:image" content="[^"]*\/brand\/foa-logo-og\.png"/);
   assert.match(html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "", /src="[^"]*\/brand\/foa-logo-ivory\.svg"/);
   const letterheads = html.match(/class="newsletter-letterhead"[^>]*>[\s\S]*?<\/div>/g);
   assert.ok(letterheads?.length);
@@ -24,8 +24,8 @@ test("the newsletter uses the standard site logo on desktop, mobile and in the m
   }
 });
 
-test("the newsletter social preview is a 1200 by 630 PNG", async () => {
-  const image = await readFile(new URL("../dist/brand/foa-logo-newsletter-og.png", import.meta.url));
+test("the default social preview is a 1200 by 630 PNG", async () => {
+  const image = await readFile(new URL("../dist/brand/foa-logo-og.png", import.meta.url));
   assert.equal(image.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
   assert.equal(image.readUInt32BE(16), 1200);
   assert.equal(image.readUInt32BE(20), 630);
