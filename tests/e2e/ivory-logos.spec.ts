@@ -5,7 +5,7 @@ const routes = [
   ["/uniform/", "foa-logo-ivory.svg"],
   ["/events/fireworks-2026/", "foa-logo-fireworks-ivory.svg"],
   ["/events/christmas-fayre-2026/", "foa-logo-christmas-ivory.svg"],
-  ["/newsletter/", "foa-logo-newsletter-ivory.svg"],
+  ["/newsletter/", "foa-logo-ivory.svg"],
 ];
 
 for (const width of [390, 1440]) {
