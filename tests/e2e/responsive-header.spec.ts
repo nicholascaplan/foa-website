@@ -68,18 +68,20 @@ test.describe("homepage heading without JavaScript", () => {
   });
 });
 
-// Below 75rem the burger takes over so links never wrap at the default text
+// Below 80rem the burger takes over so links never wrap at the default text
 // size; enlarged text may still wrap between items (approved 18 October 2026).
 for (const route of ["/", "/uniform/", "/events/christmas-fayre-2026/"]) {
-  test(`${route}: 1024px shows the burger instead of the navigation links`, async ({ page }) => {
-    await page.setViewportSize({ width: 1024, height: 900 });
-    await page.goto(route);
-    await expect(page.locator(".site-header .home-introduction")).toBeVisible();
-    await expect(page.locator(".desktop-nav")).toBeHidden();
-    await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-    expect(await page.locator(".header-inner").evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
-  });
+  for (const width of [1024, 1200]) {
+    test(`${route}: ${width}px shows the burger instead of the navigation links`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route);
+      await expect(page.locator(".site-header .home-introduction")).toBeVisible();
+      await expect(page.locator(".desktop-nav")).toBeHidden();
+      await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+      expect(await page.locator(".header-inner").evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    });
+  }
 
   test(`${route}: desktop navigation and Night Mode fit enlarged text at 1440px`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -168,3 +170,29 @@ test("enlarged homepage text keeps the menu and hero actions inside a narrow vie
     }),
   )).toBe(true);
 });
+
+// The header runs wider than the page column (80rem against 75rem) so the
+// full navigation fits on one row beside the branding at desktop widths
+// (approved 18 October 2026).
+for (const width of [1280, 1440]) {
+  for (const route of ["/", "/newsletter/", "/uniform/", "/events/christmas-fayre-2026/", "/fireworks-volunteering/"]) {
+    test(`${route}: ${width}px keeps the desktop navigation on a single row`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator(".desktop-nav")).toBeVisible();
+      const layout = await page.locator(".desktop-nav a").evaluateAll((links) =>
+        links.map((link) => {
+          const bounds = link.getBoundingClientRect();
+          return { label: link.textContent?.trim(), top: Math.round(bounds.top), right: bounds.right, viewport: innerWidth };
+        }),
+      );
+      expect(layout.length).toBeGreaterThan(1);
+      for (const link of layout) {
+        expect(link.top, link.label ?? route).toBe(layout[0].top);
+        expect(link.right, link.label ?? route).toBeLessThanOrEqual(link.viewport);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+    });
+  }
+}
