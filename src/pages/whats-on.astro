@@ -29,7 +29,7 @@ const terms = [
 const year = academicYearLabel();
 ---
 <BaseLayout title="What's On" description={`Events listed by The Friends of Ashley for ${year}, grouped term by term with earlier events to look back on.`}>
-  <PageHero eyebrow="Dates for the diary" title="What's on at Ashley" intro={`The year, term by term. Events listed for ${year}, with the next dates first and earlier events to look back on.`} />
+  <PageHero eyebrow="Dates for the diary" title="What's on at Ashley" intro="The academic year, term by term." />
   <section class="content-section content-section--compact" data-yearview-empty hidden={months.some((month) => month.events.some(upcoming))}>
     <div class="site-width"><p>No upcoming events are listed for {year}. We’ll share more dates when they are confirmed.</p></div>
   </section>
