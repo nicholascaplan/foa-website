@@ -22,6 +22,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -29,13 +33,32 @@ jobs:
           node-version: '>=22.18.0 <23'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium webkit
+      - name: Cache Playwright browsers
+        id: playwright-browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      # The libraries WebKit needs are not in the base image, so dependencies install
+      # every run even when the browser cache hits; only the download is skipped.
+      - name: Install Playwright system dependencies
+        run: npx playwright install-deps chromium webkit
+      - name: Install Playwright browsers
+        if: steps.playwright-browsers.outputs.cache-hit != 'true'
+        run: npx playwright install chromium webkit
       - name: Verify generated site under the GitHub Pages project base path
         run: npm run build && npm run test:site
         env:
           SITE_URL: https://www.thefriendsofashley.org
           BASE_PATH: /foa-website/
-      - run: npm run verify
+      # Same steps as npm run verify, split so the browser suite can run as two shards.
+      - name: Type checks, build and content tests
+        run: npm run check && npm run build && npm run test:site
+        env:
+          SITE_URL: https://www.thefriendsofashley.org
+          BASE_PATH: /
+      - name: Browser tests (shard ${{ matrix.shard }} of 2)
+        run: npx playwright test --shard=${{ matrix.shard }}/2
         env:
           SITE_URL: https://www.thefriendsofashley.org
           BASE_PATH: /
@@ -43,11 +66,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: browser-test-results
+          name: browser-test-results-shard-${{ matrix.shard }}
           path: test-results/
           if-no-files-found: ignore
           retention-days: 14
-      - if: github.event_name != 'pull_request'
+      - if: github.event_name != 'pull_request' && matrix.shard == 1
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
