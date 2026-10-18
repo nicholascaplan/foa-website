@@ -10,62 +10,128 @@ const monthName = new Intl.DateTimeFormat("en-GB", { month: "long" });
 const formatDay = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
 const formatTime = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const events = (await getCollection("events")).map((entry) => entry.data).sort((a, b) => a.start.getTime() - b.start.getTime());
-const now = new Date();
-const currentKey = `${now.getFullYear()}-${now.getMonth()}`;
 
 const months = [] as { key: string; label: string; year: number; events: typeof events }[];
 for (let i = 0; i < 12; i++) {
   const monthIndex = (8 + i) % 12;
   const year = 2026 + Math.floor((8 + i) / 12);
-  months.push({ key: `${year}-${monthIndex}`, label: monthName.format(new Date(year, monthIndex, 1)), year, events: [] });
+  const key = `${year}-${String(monthIndex + 1).padStart(2, "0")}`;
+  months.push({ key, label: monthName.format(new Date(year, monthIndex, 1)), year, events: [] });
 }
 for (const event of events) {
-  const key = `${event.start.getFullYear()}-${event.start.getMonth()}`;
+  const key = `${event.start.getFullYear()}-${String(event.start.getMonth() + 1).padStart(2, "0")}`;
   months.find((month) => month.key === key)?.events.push(event);
 }
-const isPast = (event: (typeof events)[number]) => (event.end ?? event.start) < now;
-const timeLabel = (event: (typeof events)[number]) =>
-  event.allDay ? "" : event.end ? `, ${formatTime.format(event.start)}-${formatTime.format(event.end)}` : `, ${formatTime.format(event.start)}`;
 
 const terms = [
   { name: "Autumn term", note: "September to December 2026", months: months.slice(0, 4) },
   { name: "Spring term", note: "January to March 2027", months: months.slice(4, 7) },
   { name: "Summer term", note: "April to August 2027", months: months.slice(7) },
 ];
+
+const timeLabel = (event: (typeof events)[number]) =>
+  event.allDay ? "" : event.end ? `, ${formatTime.format(event.start)}-${formatTime.format(event.end)}` : `, ${formatTime.format(event.start)}`;
 ---
 <BaseLayout title="The year, term by term" description="Every event from The Friends of Ashley in 2026/27, grouped term by term with the months shown." noindex>
   <PageHero eyebrow="Dates for the diary" title="The year, term by term" intro="Every event from The Friends of Ashley in 2026/27, grouped into the three school terms." />
   {terms.map((term, index) => (
-    <section class:list={["content-section", "content-section--compact", index === 1 && "tinted-section"]}>
+    <section class:list={["content-section", "content-section--compact", index === 1 && "tinted-section"]} data-yearview-term>
       <div class="site-width">
         <div class="section-heading"><p class="eyebrow">{term.note}</p><h2>{term.name}</h2></div>
-        {term.months.every((month) => month.events.length === 0) ? (
-          <p class="term-empty">Nothing planned yet for this term.</p>
-        ) : (
-          term.months.filter((month) => month.events.length > 0).map((month) => (
-            <div class="term-month">
-              <h3 class="term-month-heading">
-                {month.label}
-                {month.key === currentKey && <span class="term-chip">This month</span>}
-              </h3>
-              <div class="event-list">
-                {month.events.map((event) => (
-                  <article class:list={["event-list-item", { "term-past": isPast(event) }]}>
-                    <EventDate date={event.start} compact />
-                    <span>
-                      <h3>{event.path ? <a href={withBase(event.path)}>{event.title}</a> : event.title}</h3>
-                      <p>{formatDay(event.start)}{timeLabel(event)} · {event.location}</p>
-                    </span>
-                  </article>
-                ))}
-              </div>
+        {term.months.map((month) => (
+          <div class="term-month" data-month-key={month.key} hidden={month.events.length === 0}>
+            <h3 class="term-month-heading">
+              {month.label}
+              <span class="term-chip" data-current-chip hidden>This month</span>
+            </h3>
+            <p class="term-empty" data-empty-note hidden>Nothing else planned this month.</p>
+            <div class="event-list">
+              {month.events.map((event) => (
+                <article
+                  class="event-list-item"
+                  data-yearview-event
+                  data-event-month={month.key}
+                  data-start={event.start.toISOString()}
+                  data-end={event.end?.toISOString()}
+                  data-all-day={event.allDay ? "true" : "false"}
+                >
+                  <EventDate date={event.start} compact />
+                  <span>
+                    <h3>{event.path ? <a href={withBase(event.path)}>{event.title}</a> : event.title}</h3>
+                    <p>{formatDay(event.start)}{timeLabel(event)} · {event.location}</p>
+                  </span>
+                </article>
+              ))}
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </section>
   ))}
+  <section class:list={["content-section", "content-section--compact", terms.length % 2 === 1 && "tinted-section"]} data-yearview-earlier-section hidden>
+    <div class="site-width">
+      <details class="term-earlier">
+        <summary>
+          <span class="section-heading"><p class="eyebrow">Looking back</p><h2>Earlier this year</h2></span>
+        </summary>
+        <div data-yearview-earlier></div>
+      </details>
+    </div>
+  </section>
 </BaseLayout>
+
+<script>
+  import { ukDateKey } from "../../lib/event-visibility";
+
+  const syncYearView = () => {
+    const now = Date.now();
+    const todayKey = ukDateKey(new Date(now));
+    const currentMonthKey = todayKey.slice(0, 7);
+
+    const earlier = document.querySelector<HTMLElement>("[data-yearview-earlier]");
+    const earlierSection = document.querySelector<HTMLElement>("[data-yearview-earlier-section]");
+    if (!earlier || !earlierSection) return;
+    earlier.replaceChildren();
+
+    document.querySelectorAll<HTMLElement>("[data-yearview-event]").forEach((item) => {
+      const start = new Date(item.dataset.start!);
+      const end = item.dataset.end ? new Date(item.dataset.end) : start;
+      const past = item.dataset.allDay === "true" ? ukDateKey(start) < todayKey : end.getTime() < now;
+      if (!past) return;
+      const monthKey = item.dataset.eventMonth!;
+      let block = earlier.querySelector<HTMLElement>(`[data-earlier-month="${monthKey}"]`);
+      if (!block) {
+        block = document.createElement("div");
+        block.className = "term-month";
+        block.dataset.earlierMonth = monthKey;
+        const heading = item.closest(".term-month")!.querySelector(".term-month-heading")!.cloneNode() as HTMLElement;
+        heading.querySelector("[data-current-chip]")?.remove();
+        block.append(heading, document.createElement("div"));
+        block.lastElementChild!.className = "event-list";
+        earlier.prepend(block);
+      }
+      block.querySelector(".event-list")!.prepend(item);
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-month-key]").forEach((month) => {
+      const key = month.dataset.monthKey!;
+      const remaining = month.querySelectorAll(".event-list > [data-yearview-event]").length;
+      const isCurrent = key === currentMonthKey;
+      month.hidden = !isCurrent && remaining === 0;
+      month.querySelector<HTMLElement>("[data-current-chip]")!.hidden = !isCurrent;
+      month.querySelector<HTMLElement>("[data-empty-note]")!.hidden = !(isCurrent && remaining === 0);
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-yearview-term]").forEach((term) => {
+      term.hidden = ![...term.querySelectorAll<HTMLElement>("[data-month-key]")].some((month) => !month.hidden);
+    });
+
+    earlierSection.hidden = earlier.childElementCount === 0;
+  };
+
+  syncYearView();
+  window.setInterval(syncYearView, 60000);
+</script>
 
 <style>
   .term-month {
@@ -96,11 +162,17 @@ const terms = [
     margin: 0.25rem 0 0;
     color: var(--ink-soft);
   }
-  .term-past {
-    opacity: 0.5;
-  }
   .term-empty {
     color: var(--ink-soft);
     font-style: italic;
+  }
+  .term-earlier summary {
+    cursor: pointer;
+  }
+  .term-earlier summary .section-heading {
+    display: inline-block;
+  }
+  .term-earlier[open] summary {
+    margin-bottom: 1.5rem;
   }
 </style>
