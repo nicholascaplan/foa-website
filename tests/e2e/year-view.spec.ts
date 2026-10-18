@@ -74,7 +74,15 @@ test("upcoming actions and information survive refreshes and narrow enlarged tex
   await page.clock.runFor(60_000);
   await expect(info).toHaveAttribute("open", "");
   await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const overflow = await page.evaluate(() => ({
+    width: innerWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    elements: [...document.querySelectorAll("main *")].filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);
+    }).map((element) => ({ tag: element.tagName, class: element.className, text: element.textContent?.trim().slice(0, 60) })),
+  }));
+  expect(overflow.scrollWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.width);
   await page.evaluate(() => document.documentElement.dataset.theme = "night");
   expect((await new AxeBuilder({ page }).analyze()).violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });

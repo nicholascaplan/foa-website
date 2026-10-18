@@ -1329,6 +1329,22 @@ a {
   grid-template-columns: 3.8rem minmax(0, 1fr);
 }
 
+.event-list {
+  container-type: inline-size;
+}
+
+.event-list-item > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Preserve the date/copy row normally, but give enlarged text the full width. */
+@container (max-width: 14rem) {
+  .event-list-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .compact-date {
   position: relative;
   display: grid;
