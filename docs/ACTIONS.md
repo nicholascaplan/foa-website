@@ -31,8 +31,6 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
-- **Owner:** Coordinate the CI check-name migration when merging the workflow naming PR: replace required `main` branch checks `build (1)` and `build (2)` with `Verify site (shard 1 of 2)` and `Verify site (shard 2 of 2)`. Keep both verification shards required. Repository settings are not changed by the workflow file; coordinate the switch with any open PRs still using the old names and do not merge until the workflow has passed with empty and warm Playwright caches.
-
 - **Owner:** Complete a post-deployment real-device check of the term-by-term What's On page: empty/current-month heading bands, Day/Night Mode, Happy Bags expansion with a stationary date badge, the collapsed archive and enlarged text on a narrow phone and desktop. Automated coverage passes in CI, including 332 browser tests; local agent browser launches remain sandbox-blocked and Review-pane tools are unavailable. The production replacement is merged in PR #17; no further merge approval is outstanding for that change.
 
 - **Owner / Dev:** Before publishing 2027/28 dates, confirm the next academic year's event content and approve the rollover of `academicYearStart` in `src/lib/academic-year.ts`. Do not advance the displayed year automatically; the current page has an honest no-upcoming-dates state after its year ends. Future-year dates deliberately fail the build until the configured year is reviewed.
