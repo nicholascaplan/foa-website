@@ -111,6 +111,8 @@ Night Mode is covered by `tests/e2e/night-mode.spec.ts` against the production b
 
 Month-heading band coverage in `tests/e2e/year-view.spec.ts` checks empty, upcoming and archived months at 320px and 1440px in Day/Night Mode with normal and 200% text: bands use the shared deeper-paper colour, span their month container, retain the fine bottom rule and padding, omit the redundant event-list top rule and avoid horizontal overflow.
 
+Narrow large-text coverage in `tests/e2e/large-text-narrow.spec.ts` loads every built page at 320px in Day/Night Mode with text enlarged to 200% (every element's font size doubled, a harsher test than a browser setting). It asserts there is no sideways scrolling and that no text or box ends beyond the screen, apart from decorative elements clipped on purpose. Focused checks cover the footer link columns, the Fireworks parchment panels, the Christmas Fayre facts and email button, and the About panel buttons.
+
 ### 4. Automated accessibility checks
 
 The floating-menu regression suite covers the mobile homepage (a 48px trigger is available from arrival alongside the introduction, with no recruitment banner), full desktop homepage navigation with no burger even after scrolling, branding from 64rem and full navigation from 80rem, and interior-page scrolling (the header leaves the viewport while one trigger stays fixed below 80rem). It also checks menu focus containment, close/focus recovery, mobile Night Mode inside the menu, responsive theme placement and overflow. The footer logo remains a working home link. The shared accessibility tests check a rendered touch target of at least 44px, not an exact legacy CSS minimum. Browser execution is still required to verify rendered positioning and interactions.
