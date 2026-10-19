@@ -4424,6 +4424,7 @@ body.menu-open .cookie-banner {
   max-width: 44rem;
   margin: 0.25rem 0 0;
   color: var(--ink-soft);
+  overflow-wrap: anywhere;
 }
 
 .involved-badge {

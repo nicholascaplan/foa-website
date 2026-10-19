@@ -111,6 +111,26 @@ for (const width of [320, 390, 768, 1024, 1440]) {
   }
 }
 
+test("narrow enlarged descriptions wrap wide words within their own column", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/get-involved/");
+  await page.addStyleTag({ content: "html { font-size: 200% !important; } .involved-text p { letter-spacing: 0.15em; }" });
+  await page.evaluate(() => document.fonts.ready);
+  const description = page.locator(".involved-text p").filter({ hasText: "Help with announcements and music" });
+  const wordWidth = await description.evaluate((element) => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d")!;
+    const style = getComputedStyle(element);
+    context.font = `${style.fontSize} ${style.fontFamily}`;
+    return context.measureText("announcements").width + 12 * parseFloat(style.letterSpacing);
+  });
+  const bounds = await description.boundingBox();
+  expect(wordWidth, "The word would overflow without a wrapping fallback").toBeGreaterThan(bounds!.width);
+  const layout = await opportunityLayout(page);
+  expect(layout.overflow).toEqual([]);
+  expect(layout.pageWidth).toBeLessThanOrEqual(layout.viewportWidth);
+});
+
 test("paired opportunity rows stay aligned when copy and a button wrap", async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.goto("/get-involved/");
