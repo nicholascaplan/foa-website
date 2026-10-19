@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("Newsletter expansion", () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
     await page.goto("/newsletter/");
   });
 
@@ -38,7 +39,7 @@ test.describe("Newsletter expansion", () => {
     await expect(trigger).toBeFocused();
   });
 
-  for (const width of [390, 1440]) {
+  for (const width of [390, 1024]) {
     test(`newsletter peeks fill a five-line fade at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       for (const peek of await page.locator("[data-newsletter-peek]").all()) {
@@ -77,8 +78,8 @@ test.describe("Newsletter expansion", () => {
 
   for (const [name, bodyId, hiddenText] of [
     ["latest", "newsletter-latest-more", "Santa’s Grotto"],
-    ["previous issue", "newsletter-autumn-term-2026-more", "A Heartfelt Thank You to Sarah and Katy"],
-    ["archive", "newsletter-back-to-school-2026-more", "Call for Event Leads"],
+    ["previous issue", "newsletter-autumn-term-2026-more", "Committee & Volunteer Shout-Outs: Could you be our Co-Secretary?"],
+    ["archive", "newsletter-back-to-school-2026-more", "AGM: Come Along & Have Your Say!"],
   ]) {
     test(`${name} newsletter hides the rest until Read more is used`, async ({ page }) => {
       await expect(page.locator(`#${bodyId}`)).toBeHidden();
@@ -108,5 +109,206 @@ test.describe("Newsletter expansion", () => {
       await expect(trigger).toContainText("Read the full newsletter");
       await expect(peek).toBeVisible();
     });
+  }
+});
+
+test.describe("Newsletter reading room", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/newsletter/");
+    await page.getByRole("button", { name: "Reject analytics cookies" }).click();
+  });
+
+  test("every issue uses the same reading width and preserves expansion state", async ({ page }) => {
+    const board = page.getByRole("region", { name: "Newsletter reading board" });
+    const selector = page.getByRole("navigation", { name: "Newsletter issues" });
+    const links = selector.getByRole("link");
+    const latest = page.locator(".newsletter-issue");
+    const width = (await latest.boundingBox())!.width;
+    await expect(latest.locator(".newsletter-summary-label")).toHaveText(await links.first().locator("strong").innerText().then(text => text.replace(/^Latest\s*/i, "")));
+    await expect(latest.locator(":scope > .newsletter-summary-section")).toHaveCount(3);
+    expect(width).toBeGreaterThan(650);
+    const bounds = (await board.boundingBox())!;
+    const paperInset = (await latest.boundingBox())!.y - bounds.y;
+    const indexBounds = (await page.locator(".newsletter-issue-index").boundingBox())!;
+    expect(indexBounds.x).toBeGreaterThan(bounds.x + bounds.width);
+    expect(indexBounds.y).toBeCloseTo(bounds.y, 0);
+    for (let issue = 1; issue < await links.count(); issue++) {
+      await links.nth(issue).focus();
+      await page.keyboard.press("Enter");
+      const sheet = board.locator("article:visible");
+      await expect(sheet.locator(":scope > .newsletter-summary-section")).toHaveCount(3);
+      await expect(sheet).toBeFocused();
+      await expect(sheet.locator(".newsletter-summary-label")).toHaveText(await links.nth(issue).locator("strong").innerText());
+      await expect(latest).toBeHidden();
+      await expect(links.nth(issue)).toHaveAttribute("aria-current", "true");
+      expect((await sheet.boundingBox())!.width).toBeCloseTo(width, 0);
+      expect((await sheet.boundingBox())!.y - (await board.boundingBox())!.y).toBeCloseTo(paperInset, 0);
+      await expect(page.getByRole("button", { name: "Back to the latest newsletter" })).toHaveCount(0);
+      const trigger = sheet.locator(".newsletter-read-more");
+      const peek = sheet.locator("[data-newsletter-peek]");
+      const fade = await peek.evaluate(element => ({
+        height: element.getBoundingClientRect().height,
+        expected: 5 * parseFloat(getComputedStyle(element).lineHeight) + 3 * parseFloat(getComputedStyle(document.documentElement).fontSize),
+      }));
+      expect(fade.height).toBeCloseTo(fade.expected, 0);
+      await trigger.click();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await links.nth(0).click();
+      await expect(latest).toBeVisible();
+      await links.nth(issue).click();
+      await expect(board.getByRole("button", { name: "Show less" })).toBeVisible();
+      await links.first().focus();
+      await page.keyboard.press("Enter");
+      await expect(latest).toBeFocused();
+      await expect(links.first()).toHaveAttribute("aria-current", "true");
+    }
+    await expect(page.locator("article[id^='newsletter-issue-']")).toHaveCount(await links.count());
+  });
+
+  test("returning to stacked layouts restores all issues and keyboard focus", async ({ page }) => {
+    const links = page.getByRole("navigation", { name: "Newsletter issues" }).getByRole("link");
+    await links.nth(1).click();
+    const trigger = page.locator(".newsletter-reading-board article:visible .newsletter-read-more");
+    await trigger.click();
+    const id = await trigger.getAttribute("aria-controls");
+    await links.nth(1).focus();
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect(page.locator(".newsletter-issue-index")).toBeHidden();
+    await expect(page.locator(".newsletter-archive article")).toHaveCount(2);
+    const previous = page.locator(".newsletter-archive article").first();
+    await expect(previous).toBeFocused();
+    await expect(page.locator(`#${id}`)).toBeVisible();
+    await expect(page.locator(".newsletter-issue")).toBeVisible();
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect(page.locator(".newsletter-reading-board article:visible")).toBeFocused();
+    await expect(page.locator(`#${id}`)).toBeVisible();
+  });
+
+  for (const night of [false, true]) {
+    for (const enlarged of [false, true]) {
+      test(`whole issue rows highlight without shifting in ${night ? "Night" : "Day"} Mode with ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+        await page.setViewportSize({ width: enlarged ? 2880 : 1440, height: 1200 });
+        await page.evaluate(({ night, enlarged }) => {
+          document.documentElement.dataset.theme = night ? "night" : "day";
+          document.documentElement.style.fontSize = enlarged ? "200%" : "100%";
+        }, { night, enlarged });
+        const links = page.getByRole("navigation", { name: "Newsletter issues" }).getByRole("link");
+        const row = links.nth(1);
+        await expect(row).toHaveCSS("font-size", enlarged ? "32px" : "16px");
+        const highlight = await row.evaluate(element => {
+          const probe = document.createElement("span");
+          probe.style.backgroundColor = "var(--green-light)";
+          element.append(probe);
+          const colour = getComputedStyle(probe).backgroundColor;
+          probe.remove();
+          return colour;
+        });
+        await expect(row).toBeVisible();
+        const textPosition = () => row.locator("strong").evaluate(element => {
+          const text = element.getBoundingClientRect();
+          const row = element.parentElement!.getBoundingClientRect();
+          return { x: text.x - row.x, y: text.y - row.y, width: text.width, height: text.height };
+        });
+        const before = await textPosition();
+        await row.hover();
+        await expect(row).toHaveCSS("background-color", highlight);
+        await expect(row.locator("strong")).toHaveCSS("text-decoration-line", "none");
+        expect(await textPosition()).toEqual(before);
+        await page.mouse.move(0, 0);
+        await links.first().focus();
+        await page.keyboard.press("Tab");
+        await expect(row).toBeFocused();
+        await expect(row).toHaveCSS("background-color", highlight);
+        await expect(row).toHaveCSS("outline-style", "solid");
+        const bounds = (await row.boundingBox())!;
+        const date = (await row.locator("time").boundingBox())!;
+        expect(date.y + date.height).toBeLessThan(bounds.y + bounds.height);
+        // Click the empty bottom-right padding, not the title or date.
+        await row.click({ position: { x: bounds.width - 5, y: bounds.height - 5 } });
+        await page.mouse.move(0, 0);
+        await expect(row).toHaveAttribute("aria-current", "true");
+        await expect(row).toHaveCSS("background-color", highlight);
+        await expect(links.first()).not.toHaveAttribute("aria-current");
+        expect(await textPosition()).toEqual(before);
+        await expect(page.locator(".newsletter-reading-board .newsletter-summary:visible")).toBeVisible();
+      });
+    }
+  }
+
+  test("a direct archive fragment opens that issue in the reading board", async ({ page }) => {
+    await page.goto("/newsletter/#newsletter-issue-autumn-term-2026");
+    await expect(page.locator(".newsletter-reading-board #newsletter-issue-autumn-term-2026")).toBeVisible();
+  });
+
+  test("switching issues during collapse settles the animation without leaving a scroll loop", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    const selector = page.getByRole("navigation", { name: "Newsletter issues" });
+    await selector.getByRole("link").nth(1).click();
+    const trigger = page.locator(".newsletter-reading-board article:visible .newsletter-read-more");
+    await trigger.click();
+    await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0);
+    await page.evaluate(() => {
+      document.querySelector<HTMLButtonElement>(".newsletter-reading-board article:not([hidden]) .newsletter-read-more")!.click();
+      document.querySelector<HTMLAnchorElement>(".newsletter-issue-index a")!.click();
+    });
+    await expect(page.locator(".newsletter-issue")).toBeVisible();
+    await selector.getByRole("link").nth(1).click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator(".newsletter-reading-board article:visible [data-newsletter-peek]")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0);
+    const top = await page.evaluate(() => {
+      window.scrollTo({ top: 600, behavior: "instant" });
+      return scrollY;
+    });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    expect(await page.evaluate(() => scrollY)).toBe(top);
+  });
+
+  test("without JavaScript all issues and their full text remain readable", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await page.goto("/newsletter/");
+    await expect(page.locator(".newsletter-issue-index")).toBeHidden();
+    for (const issue of await page.locator(".newsletter-sheet").all()) {
+      await expect(issue).toBeVisible();
+      await expect(issue.locator(".newsletter-more")).toBeVisible();
+      await expect(issue.locator(".newsletter-read-more")).toBeHidden();
+    }
+    await context.close();
+  });
+
+  for (const width of [320, 390, 768, 1024, 1280, 1440]) {
+    for (const night of [false, true]) {
+      for (const enlarged of [false, true]) {
+        test(`layout at ${width}px, ${night ? "Night" : "Day"}, ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await page.evaluate(({ night, enlarged }) => {
+            document.documentElement.dataset.theme = night ? "night" : "day";
+            document.documentElement.style.fontSize = enlarged ? "200%" : "100%";
+          }, { night, enlarged });
+          const index = page.locator(".newsletter-issue-index");
+          if (width >= 1280 && !enlarged) {
+            await expect(index).toBeVisible();
+            await index.getByRole("link").nth(1).click();
+          } else {
+            await expect(index).toBeHidden();
+            await expect(page.locator(".newsletter-archive")).toBeVisible();
+          }
+          const trigger = page.locator(".newsletter-sheet:visible .newsletter-read-more").first();
+          await trigger.click();
+          await expect(trigger).toHaveAttribute("aria-expanded", "true");
+          expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+          const overflow = await page.locator(".newsletter-page p:visible, .newsletter-page h2:visible, .newsletter-page h3:visible, .newsletter-page a:visible, .newsletter-page button:visible").evaluateAll(elements => elements.filter(element => element.scrollWidth > element.clientWidth + 1).map(element => element.textContent));
+          expect(overflow).toEqual([]);
+          // Leave room for platform-dependent emoji glyphs as well as wrapped text.
+          const crampedHeadings = await page.locator(".newsletter-sheet h3:visible").evaluateAll(elements => elements.filter(element => element.clientWidth < 1.5 * parseFloat(getComputedStyle(element).fontSize)).map(element => element.textContent));
+          expect(crampedHeadings).toEqual([]);
+          await trigger.click();
+          await expect(trigger).toHaveAttribute("aria-expanded", "false");
+        });
+      }
+    }
   }
 });

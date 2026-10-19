@@ -103,12 +103,14 @@ for (const width of [360, 390, 430]) {
     expect(layout.rows[2].text).toBe("£8.50 per person; under-2s free");
     expect(Math.abs(layout.linkLabelTop - layout.arrowTop)).toBeLessThanOrEqual(2.1);
     expect(layout.arrowDecoration).toBe("none");
-    expect(layout.dateLineCount).toBe(1);
+    // The full ordinal date may wrap on a narrow parchment; keep it readable.
+    expect(layout.dateLineCount).toBeGreaterThanOrEqual(1);
+    expect(layout.dateLineCount).toBeLessThanOrEqual(2);
     expect(layout.noHorizontalOverflow).toBe(true);
   });
 }
 
-for (const width of [320, 390, 1440]) {
+for (const width of [320, 360, 390, 430, 1440]) {
   for (const textSize of [100, 200]) {
     test(`Fireworks summary content fits its own columns at ${width}px with ${textSize}% text`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1100 });

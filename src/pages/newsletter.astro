@@ -11,10 +11,10 @@ const newsletters = (await getCollection("newsletters"))
 const latestIssue = newsletters.find(({ data }) => data.latest);
 if (!latestIssue) throw new Error("No latest newsletter is configured");
 const latest = latestIssue.data;
-const latestPreviewCount = 3;
+const previewSectionCount = 3;
 const latestSections = latest.sections ?? [];
-const latestPreview = latestSections.slice(0, latestPreviewCount);
-const latestRest = latestSections.slice(latestPreviewCount);
+const latestPreview = latestSections.slice(0, previewSectionCount);
+const latestRest = latestSections.slice(previewSectionCount);
 const latestBodyId = "newsletter-latest-more";
 const previous = newsletters.filter(({ id }) => id !== latestIssue.id);
 const formatDateWithOrdinal = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
@@ -22,10 +22,11 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
 ---
 <BaseLayout title="Newsletter" description="The latest news from The Friends of Ashley and previous newsletters.">
   <PageHero eyebrow="The FOA updates" title={`${issueName} Newsletter`} intro="The latest news from the FOA." />
-  <section class="content-section content-section--compact"><div class="site-width newsletter-page">
-    <section class="newsletter-section newsletter-board">
-      <article class="newsletter-issue newsletter-sheet">
+  <section class="content-section content-section--compact newsletter-reader-container"><div class="site-width newsletter-page">
+    <section class="newsletter-section newsletter-board newsletter-reading-board" aria-label="Newsletter reading board">
+      <article class="newsletter-issue newsletter-sheet" id={`newsletter-issue-${latestIssue.id}`} tabindex="-1">
         <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.svg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{latest.published && <time class="newsletter-letterhead-date" datetime={latest.published.toISOString()}>Sent on {formatDateWithOrdinal(latest.published)}</time>}</div>
+        <p class="newsletter-summary-label">{latest.title}</p>
         {latestPreview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />)}
         {latestRest.length > 0 && <>
           <NewsletterPeek sections={latestRest} />
@@ -40,15 +41,17 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
         </>}
       </article>
     </section>
-    <section class="newsletter-section newsletter-board">
+    <section class="newsletter-section newsletter-board newsletter-archive">
       <div class="section-heading"><p class="eyebrow">Previous newsletters</p><h2>From the archive</h2><p>Earlier updates from The FOA. Open a newsletter to read it in full.</p></div>
       {previous.map(({ id, data }) => {
-        const [first, ...rest] = data.sections ?? [];
+        const sections = data.sections ?? [];
+        const preview = sections.slice(0, previewSectionCount);
+        const rest = sections.slice(previewSectionCount);
         const bodyId = `newsletter-${id}-more`;
-        return <article class="newsletter-summary newsletter-sheet">
+        return <article class="newsletter-summary newsletter-sheet" id={`newsletter-issue-${id}`} tabindex="-1">
           <div class="newsletter-letterhead"><img src={withBase("/brand/foa-logo.svg")} alt="" width="44" height="44"><span>The Friends of Ashley</span>{data.published && <time class="newsletter-letterhead-date" datetime={data.published.toISOString()}>Sent on {formatDateWithOrdinal(data.published)}</time>}</div>
           <p class="newsletter-summary-label">{data.title}</p>
-          {first ? <NewsletterSection section={first} lead /> : <p>{data.summary}</p>}
+          {preview.length > 0 ? preview.map((section, index) => <NewsletterSection section={section} lead={index === 0} />) : <p>{data.summary}</p>}
           {rest.length > 0 && <>
             <NewsletterPeek sections={rest} />
             <div class="newsletter-more" id={bodyId} hidden>
@@ -63,11 +66,98 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
         </article>;
       })}
     </section>
+    <aside class="newsletter-issue-index" aria-labelledby="newsletter-index-heading" hidden>
+      <h2 id="newsletter-index-heading">Choose an issue</h2>
+      <p>Read the latest news or revisit an earlier newsletter.</p>
+      <nav aria-label="Newsletter issues">
+        {[latestIssue, ...previous].map(({ id, data }, index) => <a href={`#newsletter-issue-${id}`} aria-current={index === 0 ? "true" : undefined}>
+          <strong>{index === 0 && <span class="newsletter-index-latest">Latest</span>}{data.title}</strong>
+          {data.published && <time datetime={data.published.toISOString()}>{formatDateWithOrdinal(data.published)}</time>}
+        </a>)}
+      </nav>
+    </aside>
   </div></section>
+  <noscript><style>.newsletter-more[hidden] { display: block !important; } .newsletter-read-more, .newsletter-peek { display: none !important; }</style></noscript>
 </BaseLayout>
 
 
 <script>
+  const layout = document.querySelector<HTMLElement>(".newsletter-reader-container")!;
+  const reader = layout.querySelector<HTMLElement>(".newsletter-page")!;
+  const board = reader.querySelector<HTMLElement>(".newsletter-reading-board")!;
+  const index = reader.querySelector<HTMLElement>(".newsletter-issue-index")!;
+  const links = [...index.querySelectorAll<HTMLAnchorElement>("a")];
+  const issues = links.map((link) => document.getElementById(link.hash.slice(1))!);
+  const positions = issues.map((issue) => {
+    const position = document.createComment("Newsletter's stacked position");
+    issue.before(position);
+    return position;
+  });
+  let wide = false;
+  let focusedIssue: HTMLElement | undefined;
+  let focusedSelector = false;
+  document.addEventListener("focusin", () => {
+    focusedIssue = issues.find((issue) => issue.contains(document.activeElement));
+    focusedSelector = index.contains(document.activeElement);
+  });
+
+  const restoreIssues = () => {
+    issues.forEach((issue, position) => {
+      issue.querySelector(".newsletter-read-more")?.dispatchEvent(new Event("newsletter:layout-change"));
+      positions[position].after(issue);
+      issue.hidden = false;
+    });
+    links.forEach((link, position) => {
+      if (position === 0) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  const selectIssue = (selected: number, moveFocus = true) => {
+    restoreIssues();
+    if (selected !== 0) {
+      issues[0].hidden = true;
+      board.append(issues[selected]);
+    }
+    links.forEach((link, position) => {
+      if (position === selected) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+    if (moveFocus) {
+      issues[selected].focus({ preventScroll: true });
+      board.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  };
+
+  links.forEach((link, selected) => link.addEventListener("click", (event) => {
+    if (!wide || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    selectIssue(selected);
+  }));
+  window.addEventListener("hashchange", () => {
+    const selected = issues.findIndex((issue) => `#${issue.id}` === location.hash);
+    if (wide && selected >= 0) selectIssue(selected);
+  });
+  index.hidden = false;
+  reader.dataset.readerReady = "";
+  const updateLayout = () => {
+    const nextWide = getComputedStyle(reader).getPropertyValue("--newsletter-reader-wide").trim() === "1";
+    const becameWide = !wide && nextWide;
+    if (wide && !nextWide) {
+      const focusWasHidden = focusedSelector;
+      const selected = links.findIndex((link) => link.hasAttribute("aria-current"));
+      restoreIssues();
+      if (focusWasHidden) issues[Math.max(selected, 0)].focus({ preventScroll: true });
+    }
+    wide = nextWide;
+    if (becameWide) {
+      const selected = issues.findIndex((issue) => issue === focusedIssue || `#${issue.id}` === location.hash);
+      if (selected >= 0) selectIssue(selected, issues[selected] === focusedIssue);
+    }
+  };
+  new ResizeObserver(updateLayout).observe(layout);
+  updateLayout();
+
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const timing: KeyframeAnimationOptions = { duration: 350, easing: "ease-in-out", fill: "forwards" };
 
@@ -76,6 +166,15 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
     if (!more) return;
     const peek = more.previousElementSibling as HTMLElement | null;
     let animation: Animation | undefined;
+
+    button.addEventListener("newsletter:layout-change", () => {
+      animation?.cancel();
+      animation = undefined;
+      const expanded = button.getAttribute("aria-expanded") === "true";
+      more.hidden = !expanded;
+      if (peek) peek.hidden = expanded;
+      more.style.overflow = "";
+    });
 
     button.addEventListener("click", () => {
       const expand = button.getAttribute("aria-expanded") !== "true";
