@@ -67,6 +67,12 @@ for (const theme of ["day", "night"] as const) {
       expect(await blocks.count()).toBeGreaterThan(0);
       const rights = await blocks.evaluateAll((items) => items.map((item) => item.getBoundingClientRect().right));
       for (const right of rights) expect(right).toBeLessThanOrEqual(320);
+      const spill = await page.locator(".event-main > .event-block").evaluateAll((items) =>
+        items.flatMap((item) => {
+          const edge = item.getBoundingClientRect().right;
+          return [...item.querySelectorAll("h2, p, li, dd, dt, span")].filter((inner) => inner.getBoundingClientRect().right > edge + 0.5).map((inner) => inner.textContent?.trim().slice(0, 30));
+        }));
+      expect(spill, "text that runs past the parchment edge").toEqual([]);
     });
 
     test("Christmas Fayre When, Where and Led by rows wrap instead of clipping", async ({ page }) => {
