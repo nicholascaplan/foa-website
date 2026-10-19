@@ -59,7 +59,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Newsletter issue-selector rows highlight across their full width, including the title, date and padding, on hover, keyboard focus and selection (approved 19 October 2026). This replaces title-only hover underlining; the current issue retains its left-hand marker and keyboard focus retains a visible outline. Row padding and text positions stay unchanged between states.
 - Newsletter links to `https://www.thefriendsofashley.org` render as base-aware internal links in the same tab using the existing green text-link style, without external-link markers. Links to third-party sites retain the external-link icon and new-tab announcement. Source newsletters keep their full public URLs for reuse outside the site.
 - External-link arrows are never underlined; underline only the link text.
-- Newsletter sheets allow long words and URLs to wrap within the paper width, including faded previews and expanded issues on narrow phones.
+- Newsletter sheets allow long words and URLs to wrap within the paper width, including faded previews and expanded issues on narrow phones. Side padding is bounded by the viewport rather than a text-relative minimum so 320px screens with enlarged text retain room for headings and platform-dependent emoji glyphs.
 - The Meeting Minutes page archives approved FOA meeting records; the first entry is the 16th September 2026 AGM minutes. Minutes are published only after review and removal of personal or sensitive information.
 - A FAQs page is later, low-priority scope.
 

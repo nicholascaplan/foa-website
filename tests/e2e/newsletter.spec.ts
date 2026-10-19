@@ -302,6 +302,9 @@ test.describe("Newsletter reading room", () => {
           expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
           const overflow = await page.locator(".newsletter-page p:visible, .newsletter-page h2:visible, .newsletter-page h3:visible, .newsletter-page a:visible, .newsletter-page button:visible").evaluateAll(elements => elements.filter(element => element.scrollWidth > element.clientWidth + 1).map(element => element.textContent));
           expect(overflow).toEqual([]);
+          // Leave room for platform-dependent emoji glyphs as well as wrapped text.
+          const crampedHeadings = await page.locator(".newsletter-sheet h3:visible").evaluateAll(elements => elements.filter(element => element.clientWidth < 1.5 * parseFloat(getComputedStyle(element).fontSize)).map(element => element.textContent));
+          expect(crampedHeadings).toEqual([]);
           await trigger.click();
           await expect(trigger).toHaveAttribute("aria-expanded", "false");
         });

@@ -1931,7 +1931,8 @@ a {
   position: relative;
   max-width: 64rem;
   overflow-wrap: anywhere;
-  padding: clamp(1.75rem, 6vw, 3.5rem) clamp(1.5rem, 6vw, 3.75rem);
+  /* Keep side gutters viewport-bounded when enlarged text narrows the paper. */
+  padding: clamp(1.75rem, 6vw, 3.5rem) min(6vw, 3.75rem);
   border: 1px solid var(--line);
   border-top: 0.5rem solid var(--green);
   border-radius: 0.35rem;
