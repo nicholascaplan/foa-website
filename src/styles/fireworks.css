@@ -680,6 +680,7 @@ body.fw-theme::before {
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 .fw-theme .event-block .eyebrow {
