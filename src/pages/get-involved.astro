@@ -60,29 +60,32 @@ const groups: {
     ],
   },
 ];
+const pairedGroupTracks = 1 + Math.max(...groups.slice(0, 2).map((group) => group.roles.length)) * 2;
 ---
 <BaseLayout title="Get Involved" description="Ways to volunteer, attend meetings and support The Friends of Ashley.">
   <PageHero wideTitle eyebrow="Everyone is welcome" title="A little time. A big difference." intro="Help on the day, lend a skill or support us behind the scenes. Meetings are informal and open to parents, carers and staff." />
   <section class="content-section content-section--compact" aria-labelledby="volunteering-title">
-    <div class="site-width">
+    <div class="site-width involved-content">
       <article class="involved-feature">
         <div class="involved-feature__copy"><p class="eyebrow">Role vacancy</p><h2 id="volunteering-title">Could you be our <span class="co-secretary">Co-Secretary?</span></h2><p>A light, termly role that one person can do or two can share: agendas, minutes and keeping our paperwork in order. Sarah Parish and Katy Furber, who previously held this role, are happy to have a quick chat first.</p></div>
         <div class="involved-feature__actions"><a class="button button--amber involved-action" href={enquiry("The FOA Co-Secretary role")}>Get in touch</a><a class="button involved-action involved-action--light" href={withBase("/committee/")}>Meet the committee</a></div>
       </article>
-      {groups.map((group) => (
-        <section class={`involved-group involved-group--${group.tone}`} aria-labelledby={`group-${group.tone}`}>
-          <h2 id={`group-${group.tone}`}>{group.title}</h2>
-          <ul class="involved-list">
-            {group.roles.map((role) => (
-              <li class="involved-row">
-                <span class="involved-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d={icons[role.icon]} /></svg></span>
-                <div class="involved-text"><h3>{role.name}{role.badge && <span class="involved-badge">{role.badge}</span>}</h3><p>{role.text}</p></div>
-                <div class="involved-actions">{role.actions.map((action) => <a class="button button--secondary involved-action" href={action.href}>{action.label}</a>)}</div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      <div class="involved-groups" style={`--involved-paired-tracks: ${pairedGroupTracks}`}>
+        {groups.map((group) => (
+          <section class={`involved-group involved-group--${group.tone}`} aria-labelledby={`group-${group.tone}`}>
+            <h2 id={`group-${group.tone}`}>{group.title}</h2>
+            <ul class="involved-list">
+              {group.roles.map((role) => (
+                <li class="involved-row">
+                  <span class="involved-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d={icons[role.icon]} /></svg></span>
+                  <div class="involved-text"><h3>{role.name}{role.badge && <span class="involved-badge">{role.badge}</span>}</h3><p>{role.text}</p></div>
+                  <div class="involved-actions">{role.actions.map((action) => <a class="button button--secondary involved-action" href={action.href}>{action.label}</a>)}</div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
       <section class="involved-closing" aria-labelledby="closing-title">
         <div><h2 id="closing-title">Not sure where you fit?</h2><p>Tell us what interests you and we'll put you in touch with the right team.</p></div>
         <a class="button button--primary involved-action" href={enquiry("Volunteering with The FOA")}>Tell us how you'd like to help</a>

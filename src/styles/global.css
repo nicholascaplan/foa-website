@@ -41,6 +41,10 @@
   --mobile-heading-control-clearance: 2rem;
   --home-heading-fit-max: 3rem;
   --home-heading-line-height: 1.2;
+  --involved-section-gap: clamp(2rem, 5vw, 3rem);
+  --involved-column-gap: 2.5rem;
+  --involved-skills-accent: #9a5400;
+  --involved-heading-rule-size: 2px;
   --font-display: Georgia, "Times New Roman", serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -4267,8 +4271,20 @@ body.menu-open .cookie-banner {
   }
 }
 
+.involved-content {
+  container: involved / inline-size;
+  display: grid;
+  gap: var(--involved-section-gap);
+}
+
+.involved-groups {
+  display: grid;
+  gap: var(--involved-section-gap) var(--involved-column-gap);
+}
+
 .involved-feature {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem 2rem;
   align-items: center;
   padding: clamp(1.25rem, 4vw, 2rem);
@@ -4297,6 +4313,20 @@ body.menu-open .cookie-banner {
   margin: 0.8rem 0 0;
 }
 
+.involved-feature__copy,
+.involved-closing > div {
+  min-width: 0;
+}
+
+.involved-feature h2,
+.involved-closing h2 {
+  overflow-wrap: break-word;
+}
+
+.involved-feature .co-secretary {
+  white-space: normal;
+}
+
 .involved-feature__actions,
 .involved-actions {
   display: flex;
@@ -4322,11 +4352,11 @@ body.menu-open .cookie-banner {
 .involved-group {
   --group-accent: var(--green);
   --group-tint: var(--green-light);
-  margin-top: clamp(2rem, 5vw, 3rem);
+  min-width: 0;
 }
 
 .involved-group--amber {
-  --group-accent: #9a5400;
+  --group-accent: var(--involved-skills-accent);
   --group-tint: var(--amber-light);
 }
 
@@ -4338,7 +4368,7 @@ body.menu-open .cookie-banner {
 .involved-group > h2 {
   margin: 0;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--group-accent);
+  border-bottom: var(--involved-heading-rule-size) solid var(--group-accent);
   color: var(--heading);
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 1.9rem);
@@ -4356,7 +4386,7 @@ body.menu-open .cookie-banner {
   display: grid;
   grid-template-columns: 3.25rem minmax(0, 1fr);
   gap: 0.75rem 1rem;
-  align-items: center;
+  align-items: start;
   padding: 1.1rem 0;
   border-bottom: 1px solid var(--line);
 }
@@ -4376,6 +4406,10 @@ body.menu-open .cookie-banner {
   height: 1.6rem;
 }
 
+.involved-text {
+  min-width: 0;
+}
+
 .involved-text h3 {
   margin: 0;
   color: var(--heading);
@@ -4383,12 +4417,14 @@ body.menu-open .cookie-banner {
   font-size: 1.3rem;
   font-weight: 500;
   line-height: 1.2;
+  overflow-wrap: break-word;
 }
 
 .involved-text p {
   max-width: 44rem;
   margin: 0.25rem 0 0;
   color: var(--ink-soft);
+  overflow-wrap: anywhere;
 }
 
 .involved-badge {
@@ -4406,7 +4442,13 @@ body.menu-open .cookie-banner {
 }
 
 .involved-actions {
-  grid-column: 1 / -1;
+  grid-column: 2;
+  align-items: start;
+}
+
+.involved-actions .involved-action {
+  width: auto;
+  max-width: 100%;
 }
 
 .involved-closing {
@@ -4414,7 +4456,6 @@ body.menu-open .cookie-banner {
   grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem 2rem;
   align-items: center;
-  margin-top: clamp(2rem, 5vw, 3rem);
   padding: clamp(1.25rem, 4vw, 2rem);
   border-radius: var(--radius-lg);
   background: var(--green-light);
@@ -4436,7 +4477,8 @@ body.menu-open .cookie-banner {
   white-space: normal;
 }
 
-@media (min-width: 48rem) {
+/* em queries follow the container's current text size, including text enlargement. */
+@container involved (min-width: 48em) {
   .involved-feature {
     grid-template-columns: minmax(0, 1fr) 14rem;
   }
@@ -4445,16 +4487,87 @@ body.menu-open .cookie-banner {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
+  .involved-closing .involved-action {
+    width: auto;
+  }
+}
+
+@container involved (max-width: 16em) {
   .involved-row {
-    grid-template-columns: 3.25rem minmax(0, 1fr) 11.5rem;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .involved-actions {
-    grid-column: auto;
+    grid-column: 1;
+  }
+}
+
+@container involved (min-width: 60em) {
+  .involved-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 0;
   }
 
-  .involved-closing .involved-action {
-    width: auto;
+  /* Paint both heading strokes in one box, with a clear column gutter.
+     Separate borders can snap independently at fractional device pixels. */
+  .involved-groups::before {
+    grid-area: 1 / 1 / 2 / -1;
+    z-index: 1;
+    align-self: end;
+    height: var(--involved-heading-rule-size);
+    background-image:
+      linear-gradient(var(--green), var(--green)),
+      linear-gradient(var(--involved-skills-accent), var(--involved-skills-accent));
+    background-size: calc((100% - var(--involved-column-gap)) / 2) 100%;
+    background-position: left, right;
+    background-repeat: no-repeat;
+    content: "";
+    pointer-events: none;
+  }
+
+  .involved-group:nth-child(-n + 2) > h2 {
+    border-bottom-color: transparent;
+  }
+
+  .involved-group:last-child {
+    grid-column: 1 / -1;
+    grid-row: calc(var(--involved-paired-tracks) + 1);
+    margin-top: var(--involved-section-gap);
+  }
+
+  /* Share the heading, copy and action tracks across both opportunity groups.
+     The track count comes from the role lists, never from fixed pixel heights. */
+  .involved-group:nth-child(-n + 2) {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: 1 / span var(--involved-paired-tracks);
+  }
+
+  .involved-group:first-child {
+    grid-column: 1;
+  }
+
+  .involved-group:nth-child(2) {
+    grid-column: 2;
+  }
+
+  .involved-group:nth-child(-n + 2) .involved-list {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: 2 / span calc(var(--involved-paired-tracks) - 1);
+  }
+
+  .involved-group:nth-child(-n + 2) .involved-row {
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+  }
+
+  .involved-group:nth-child(-n + 2) .involved-actions {
+    align-self: stretch;
+  }
+
+  .involved-group:nth-child(-n + 2) .involved-action {
+    flex: 1;
   }
 }
 
