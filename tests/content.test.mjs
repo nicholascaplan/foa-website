@@ -85,19 +85,18 @@ test("the newsletter page presents the latest issue first and archives the rest"
   assert.ok(latestStart !== -1 && archiveStart > latestStart, "latest section should come before the archive");
 
   const escape = (text) => text.replaceAll("&", "&amp;");
-  // Retitled header (approved 17th October 2026): the page h1 names the latest
-  // issue ("Half Term News" becomes "Half Term Newsletter") and the board
-  // carries no heading, so membership is checked through the h1 and the
-  // section content instead of a board h2 with the issue name.
+  // The page h1 names the latest issue; every paper sheet also carries its
+  // original collection title beneath the letterhead.
   const heroTitle = (title) => escape(`${title.replace(/\s+News$/, "").trim()} Newsletter`);
   const beforeArchive = html.slice(0, archiveStart);
   const latestSection = html.slice(latestStart, archiveStart);
-  const archiveSection = html.slice(archiveStart);
+  const archiveSection = html.slice(archiveStart, html.indexOf('<aside class="newsletter-issue-index"'));
   for (const { id, data } of newsletters) {
     const title = escape(data.title);
     if (data.latest) {
       assert.ok(beforeArchive.includes(`<h1>${heroTitle(data.title)}</h1>`), `${id} is marked latest but its title does not name the page`);
       assert.ok(latestSection.includes("newsletter-issue newsletter-sheet"), "latest section should present the issue sheet");
+      assert.ok(latestSection.includes(`<p class="newsletter-summary-label">${title}</p>`), `${id} should show its collection title on the paper`);
       assert.ok(!archiveSection.includes(`>${title}<`), `${id} is latest but also appears in the archive`);
     } else {
       assert.ok(archiveSection.includes(title), `${id} should be in the archive`);

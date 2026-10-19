@@ -24,7 +24,7 @@ The strategy complements, rather than replaces, stakeholder content review, real
 - Users can reach the main task routes and the generated links and assets resolve.
 - Mobile navigation opens, closes and exposes the correct state to assistive technology.
 - Time-sensitive event and uniform information is rendered from valid structured content in the intended order.
-- Reps Hub copy actions and newsletter dialogs work, including keyboard and failure states.
+- Reps Hub copy actions and newsletter issue selection and expansion work, including keyboard and failure states.
 - Pages retain essential accessibility foundations: landmarks, heading structure, names, focusable controls and no detectable WCAG violations in representative routes.
 - Canonical URLs, social metadata, robots rules, sitemap entries and Event structured data remain correct across deployment base paths.
 
@@ -85,7 +85,7 @@ Initial browser scenarios:
 
 1. Navigate from Home to What's On, Fundraising, Uniform and Get Involved using normal links; verify the destination and current-page indication.
 2. At a mobile viewport, open the menu, verify `aria-expanded` and visibility, close it with the close button, backdrop and Escape key, and verify sensible focus behaviour.
-3. Open a previous newsletter, verify its title and content, close it by button and backdrop, and verify page-scroll locking is removed.
+3. Select a previous newsletter in the desktop reading room, verify its content and full reading width, expand/collapse it and return to the latest issue. Retain the stacked archive on mobile/tablet and with enlarged text; preserve content, expansion state and keyboard focus across layout changes.
 4. Copy a Reps Hub message with a mocked clipboard, verify success feedback, and verify the feedback clears. Simulate an unavailable or rejected clipboard and verify failure feedback.
 5. Follow a key parent journey to find the Fireworks time and uniform donation information.
 6. Verify Today/Tomorrow labels using a fixed browser clock near a date boundary rather than depending on the day the test runs.
@@ -111,6 +111,8 @@ Night Mode is covered by `tests/e2e/night-mode.spec.ts` against the production b
 
 Month-heading band coverage in `tests/e2e/year-view.spec.ts` checks empty, upcoming and archived months at 320px and 1440px in Day/Night Mode with normal and 200% text: bands use the shared deeper-paper colour, span their month container, retain the fine bottom rule and padding, omit the redundant event-list top rule and avoid horizontal overflow.
 
+Newsletter coverage in `tests/e2e/newsletter.spec.ts` protects the option C reading room and stacked fallback at 320px, 390px, 768px, 1024px, 1280px and 1440px in Day/Night Mode with normal and 200% text. Tests compare the reading width of latest and older issues, check the issue selector's top alignment, keyboard selection and return focus, expansion-state retention, fragment navigation and full-text no-JavaScript fallback. Existing preview, five-line fade, typography and archive-gap checks run in the stacked layout; desktop selection checks also measure the selected issue's fade. Accessibility suites cover the issue selector and an expanded older issue, including Night Mode.
+
 ### 4. Automated accessibility checks
 
 The floating-menu regression suite covers the mobile homepage (a 48px trigger is available from arrival alongside the introduction, with no recruitment banner), full desktop homepage navigation with no burger even after scrolling, branding from 64rem and full navigation from 80rem, and interior-page scrolling (the header leaves the viewport while one trigger stays fixed below 80rem). It also checks menu focus containment, close/focus recovery, mobile Night Mode inside the menu, responsive theme placement and overflow. The footer logo remains a working home link. The shared accessibility tests check a rendered touch target of at least 44px, not an exact legacy CSS minimum. Browser execution is still required to verify rendered positioning and interactions.
@@ -122,7 +124,7 @@ The floating-menu regression suite covers the mobile homepage (a 48px trigger is
 - Fireworks event detail
 - Uniform
 - Committee
-- Newsletter with its dialog both closed and open
+- Newsletter with its issue selector and expanded content
 - Reps Hub
 - Contact
 - 404
