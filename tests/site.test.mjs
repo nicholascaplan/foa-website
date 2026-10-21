@@ -238,13 +238,21 @@ test("the homepage omits the recruitment notice and every footer logo links home
   }
 });
 
-test("the footer links to the FOA Instagram and the Facebook parent group in a new tab", async () => {
+test("the footer and mobile menu share social links without adding them to primary navigation", async () => {
   const html = await readFile(path.join(dist, "index.html"), "utf8");
-  const group = html.match(/<div class="footer-follow" role="group" aria-label="([^"]+)">/);
+  const group = html.match(/<div class="social-links footer-follow" role="group" aria-label="([^"]+)">/);
   assert.ok(group, "footer social group is present");
-  assert.equal(group[1], "Follow the Friends of Ashley");
-  assert.match(html, /<a class="footer-follow-link" href="https:\/\/www\.instagram\.com\/thefriendsofashley\/" target="_blank" rel="noopener noreferrer" aria-label="[^"]*\(opens in a new tab\)"/);
-  assert.match(html, /<a class="footer-follow-link" href="https:\/\/www\.facebook\.com\/groups\/friendsofashley\/" target="_blank" rel="noopener noreferrer" aria-label="[^"]*\(opens in a new tab\)"/);
+  assert.equal(group[1], "Follow The Friends of Ashley");
+  for (const location of ["footer-follow", "mobile-menu-follow"]) {
+    const social = html.match(new RegExp(`<div class="social-links ${location}"[^>]*>([\\s\\S]*?)</div>`))?.[1];
+    assert.ok(social, location);
+    assert.match(social, /href="https:\/\/www\.instagram\.com\/thefriendsofashley\/" target="_blank" rel="noopener noreferrer" aria-label="[^"]*\(opens in a new tab\)"/);
+    assert.match(social, /href="https:\/\/www\.facebook\.com\/groups\/friendsofashley\/" target="_blank" rel="noopener noreferrer" aria-label="[^"]*\(opens in a new tab\)"/);
+  }
+  const primary = html.match(/<nav class="desktop-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(primary);
+  assert.doesNotMatch(primary, /instagram|facebook/);
+  assert.match(html, /Contact Us<\/a>\s*<\/nav>\s*<div class="social-links mobile-menu-follow"/);
 });
 
 test("the homepage shows Fireworks in the initial HTML without Welcome Tea or date switching", async () => {
@@ -325,11 +333,12 @@ test("external links communicate their destination and open safely in a new tab"
     assert.match(link, /target="_blank"/);
     assert.match(link, /rel="noopener noreferrer"/);
   }
-  // The two footer social buttons are exempt from the visible arrow: the brand
+  // The shared footer/menu social links are exempt from the visible arrow: the brand
   // icon plus service name already makes the destination obvious (approved
   // 21 October 2026, see docs/PROJECT-BRIEF.md). Every other external link
   // keeps the indicator.
-  const socialExemptions = externalLinkTags.filter((tag) => tag.includes('class="footer-follow-link"')).length;
+  const socialExemptions = externalLinkTags.filter((tag) => tag.includes('class="social-link"')
+    && /href="https:\/\/(?:www\.instagram\.com\/thefriendsofashley\/|www\.facebook\.com\/groups\/friendsofashley\/)"/.test(tag)).length;
   assert.ok(externalLinkIndicators + socialExemptions >= externalLinkTags.length);
 });
 

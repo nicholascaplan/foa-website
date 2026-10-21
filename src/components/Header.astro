@@ -3,6 +3,7 @@ import { withBase } from "../lib/urls";
 import ThemeToggle from "./ThemeToggle.astro";
 import DevMobilePreview from "./DevMobilePreview.astro";
 import HomeIntroduction from "./HomeIntroduction.astro";
+import SocialLinks from "./SocialLinks.astro";
 import { getCollection } from "astro:content";
 
 interface Props { logo?: string; }
@@ -73,6 +74,7 @@ const isCurrent = (href: string) =>
       </>)}
       {mobileOnly.map((item) => <a class="button button--primary mobile-menu-cta" href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>)}
     </nav>
+    <SocialLinks class="mobile-menu-follow" />
   </div>
 </div>
 
