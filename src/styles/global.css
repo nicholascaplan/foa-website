@@ -1528,6 +1528,11 @@ a {
   color: var(--ink-soft);
   font-size: 0.9rem;
   font-weight: 750;
+  white-space: normal;
+}
+
+.message-time time {
+  display: inline-block;
   white-space: nowrap;
 }
 

@@ -7,7 +7,7 @@ const beforeFireworks = new Date(Date.parse(fireworks.start) - 86400000);
 for (const width of [320, 390, 768, 1440]) {
   for (const theme of ["day", "night"]) {
     for (const enlarged of [false, true]) {
-      test(`message headings and timings fit their columns at ${width}px, ${theme}, ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+      test(`message headings and timings fit their columns at ${width}px, ${theme}, ${enlarged ? "200% text with wider timings" : "normal text"}`, async ({ page }) => {
         await page.clock.setFixedTime(beforeFireworks);
         await page.setViewportSize({ width, height: 900 });
         await page.addInitScript((theme) => {
@@ -15,7 +15,7 @@ for (const width of [320, 390, 768, 1440]) {
           localStorage.setItem("foa-cookie-preferences", "essential");
         }, theme);
         await page.goto("/reps/");
-        if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
+        if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; } .message-time { letter-spacing: 0.08em; font-family: Verdana, sans-serif; }" });
         await expect(page.locator("html")).toHaveCSS("font-size", enlarged ? "32px" : "16px");
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         expect(await page.locator(".message-card h2").count()).toBeGreaterThan(0);
@@ -49,6 +49,17 @@ for (const width of [320, 390, 768, 1440]) {
             expect(bounds.time.left).toBeCloseTo(bounds.badge.left, 1);
           } else {
             expect(bounds.time.bottom).toBeGreaterThan(bounds.badge.top);
+          }
+          for (const time of await row.locator("time").all()) {
+            const clock = await time.evaluate((element) => {
+              const range = document.createRange();
+              range.selectNodeContents(element);
+              return { left: element.getBoundingClientRect().left, right: element.getBoundingClientRect().right,
+                lines: [...range.getClientRects()].map(({ left, right }) => ({ left, right })) };
+            });
+            expect(clock.lines).toHaveLength(1);
+            expect(clock.lines[0].left).toBeGreaterThanOrEqual(bounds.left - 0.5);
+            expect(clock.lines[0].right).toBeLessThanOrEqual(bounds.right + 0.5);
           }
         }
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
