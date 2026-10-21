@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 19 October 2026
+**Last updated:** 21 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -102,7 +102,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - A global `[hidden] { display: none !important; }` rule protects date-driven visibility; component display rules otherwise override `hidden`.
 - Quick-action rows must not animate padding on hover (it shifts text wrapping on touch devices).
 - The Committee page shows the vacant Co-Secretary role as an eighth card, visually distinct from confirmed members, linking to the shared Co-Secretary enquiry email; a full-width recruitment callout remains below the grid.
-- Footer: independent link columns and a larger 112px home-linked logo; Ashley School Website and Donate via JustGiving links open in a new tab and are labelled as such.
+- Footer: independent link columns and a larger 112px home-linked logo; Ashley School Website and Donate via JustGiving links open in a new tab and are labelled as such. The footer also links to the FOA's social channels as two separate bordered buttons with no visible label (approved 21 October 2026): Instagram (instagram.com/thefriendsofashley) and Facebook (the Ashley School - Parent Community group, facebook.com/groups/friendsofashley), both opening in a new tab and labelled as such; the pair is announced to screen readers as "Follow the Friends of Ashley". Unlike other external links they carry no visible new-tab arrow, because the brand icon and service name already make the destination obvious (exception to the site-wide arrow rule approved 21 October 2026; the rule is unchanged everywhere else).
 - Removed on purpose: draft/readiness banners in public pages; the hash router; the earlier public Community and Accessibility pages.
 - What's On uses the approved option C term-by-term layout at `/whats-on/`, replacing the flat listing and the separate year-view prototype (production promotion approved 18 October 2026). Navigation remains “What's On”. The current month and upcoming events lead, with completed events collapsed under “Earlier this year”. The academic year is explicit, not inferred from the visitor's clock; empty future months are hidden and the current empty month says “No more events listed this month.” Feedback forms remain prototypes.
 - What's On month headings use the approved option B subtle heading band: a full-width inset strip in the existing deeper-paper colour, with a fine bottom rule and the current-month marker inside it (approved 18 October 2026). This replaces the unframed month headings, including empty months and the archive. Event rows stay unboxed and omit their redundant top rule beneath the band. Day/Night colours follow the shared tokens and labels may wrap with enlarged text. A desktop grid remains unapproved.
