@@ -1,4 +1,4 @@
-name: Deploy Astro site to GitHub Pages
+name: Verify and deploy site
 
 on:
   push:
@@ -20,7 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
+    name: Verify site (shard ${{ matrix.shard }} of 2)
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -70,16 +71,18 @@ jobs:
           path: test-results/
           if-no-files-found: ignore
           retention-days: 14
-      - if: github.event_name != 'pull_request' && matrix.shard == 1
+      - name: Upload verified site for deployment
+        if: github.event_name != 'pull_request' && matrix.shard == 1
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
   deploy:
+    name: Deploy to GitHub Pages
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-24.04
-    needs: build
+    needs: verify
     if: github.event_name != 'pull_request'
     steps:
       - name: Deploy to GitHub Pages
