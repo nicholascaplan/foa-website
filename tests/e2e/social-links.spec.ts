@@ -1,5 +1,36 @@
 import { expect, test } from "@playwright/test";
 
+for (const theme of ["day", "night"]) {
+  test(`320px menu pills keep wide-font labels beside their icons in ${theme} mode`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 667 });
+    await page.addInitScript((theme) => {
+      localStorage.setItem("foa-theme", theme);
+      localStorage.setItem("foa-cookie-preferences", "essential");
+    }, theme);
+    await page.goto("/contact/");
+    await page.addStyleTag({ content: ".mobile-menu-follow { font-family: Verdana, sans-serif; }" });
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const pills = await page.locator(".mobile-menu-follow a").evaluateAll((links) => links.map((link) => {
+      const pill = link.getBoundingClientRect();
+      const label = link.querySelector("span")!.getBoundingClientRect();
+      const icon = link.querySelector("svg")!.getBoundingClientRect();
+      return { left: pill.left, right: pill.right, top: pill.top, height: pill.height,
+        labelLeft: label.left, labelRight: label.right, labelTop: label.top, labelBottom: label.bottom,
+        iconRight: icon.right, iconTop: icon.top, iconBottom: icon.bottom };
+    }));
+    expect(pills).toHaveLength(2);
+    expect(pills[0].top).toBeCloseTo(pills[1].top, 1);
+    for (const pill of pills) {
+      expect(pill.height).toBeGreaterThanOrEqual(44);
+      expect(pill.iconRight).toBeLessThanOrEqual(pill.labelLeft);
+      expect(pill.iconBottom).toBeGreaterThan(pill.labelTop);
+      expect(pill.labelBottom).toBeGreaterThan(pill.iconTop);
+      expect(pill.labelLeft).toBeGreaterThanOrEqual(pill.left);
+      expect(pill.labelRight).toBeLessThanOrEqual(pill.right);
+    }
+  });
+}
+
 for (const width of [390, 768, 1024]) {
   for (const theme of ["day", "night"]) {
     for (const enlarged of [false, true]) {
