@@ -45,6 +45,20 @@ for (const route of ["/about/", "/committee/", "/contact/", "/meeting-minutes/",
             }
           }
           if (route === "/about/") {
+            // Exercise long body words independently of the platform's font metrics.
+            if (enlarged) await page.locator(".impact-callout > p:not(.eyebrow)").first().evaluate(element => {
+              element.textContent = "Community opportunities and contributions.";
+              (element as HTMLElement).style.letterSpacing = "0.06em";
+            });
+            for (const paragraph of await page.locator(".impact-callout > p:not(:has(a))").all()) {
+              const bounds = await paragraph.evaluate(element => {
+                const range = document.createRange();
+                range.selectNodeContents(element);
+                const column = element.getBoundingClientRect();
+                return { textRight: range.getBoundingClientRect().right, columnRight: column.right };
+              });
+              expect(bounds.textRight, "impact copy wraps inside its own column").toBeLessThanOrEqual(bounds.columnRight + 1);
+            }
             for (const heading of await page.locator(".pillar h3").all()) {
               const bounds = await heading.evaluate(element => {
                 const range = document.createRange();
