@@ -6,7 +6,38 @@ import { getCollection } from "astro:content";
 const appeal = (await getCollection("fundraising")).find(({ id }) => id === "current-appeal")?.data;
 if (!appeal) throw new Error("About fundraising content is missing");
 ---
-<BaseLayout title="About The FOA" description="How The Friends of Ashley brings the school community together and supports pupils.">
+<BaseLayout title="About The FOA" description="How The Friends of Ashley brings the school community together and supports pupils." bodyClass="about-page">
   <PageHero eyebrow="About The Friends of Ashley" title="All welcome. Every contribution matters." intro="The FOA is the parent teacher association for Ashley C of E Primary School." />
-  <section class="content-section content-section--compact"><div class="site-width"><div class="section-heading"><p class="eyebrow">What The FOA does</p><h2>Community effort with visible impact.</h2><p>The FOA welcomes parents, carers, teachers and volunteers. You do not need a committee title to take part.</p><p><a class="button button--secondary" href={withBase("/committee/")}>Meet the Committee <span aria-hidden="true">&rarr;</span></a></p></div><div class="pillars-grid"><article class="pillar"><span class="pillar-number">01</span><h3>Contribution</h3><p>Families give time, ideas, donations and practical help in ways that suit them.</p></article><article class="pillar"><span class="pillar-number">02</span><h3>Collaboration</h3><p>Parents, carers, teachers and volunteers work together on events and initiatives.</p></article><article class="pillar"><span class="pillar-number">03</span><h3>Community</h3><p>The FOA creates welcoming opportunities to meet and support other Ashley families.</p></article></div><article class="impact-callout"><p class="eyebrow eyebrow--light">Last year's impact</p><strong>£{appeal.previousYear.raised.toLocaleString("en-GB")} raised</strong><p>{appeal.previousYear.impact}</p><p><a class="button button--secondary" href={withBase("/fundraising/")}>See Our Fundraising Plans <span aria-hidden="true">&rarr;</span></a></p><p><a class="button button--amber" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></p></article></div></section>
+  <section class="content-section content-section--compact content-section--desktop-snug"><div class="site-width"><div class="section-heading"><p class="eyebrow">What The FOA does</p><h2>Community effort with visible impact.</h2><p>The FOA welcomes parents, carers, teachers and volunteers. You do not need a committee title to take part.</p><p><a class="button button--secondary" href={withBase("/committee/")}>Meet the Committee <span aria-hidden="true">&rarr;</span></a></p></div><div class="pillars-grid"><article class="pillar"><span class="pillar-number">01</span><h3>Contribution</h3><p>Families give time, ideas, donations and practical help in ways that suit them.</p></article><article class="pillar"><span class="pillar-number">02</span><h3>Collaboration</h3><p>Parents, carers, teachers and volunteers work together on events and initiatives.</p></article><article class="pillar"><span class="pillar-number">03</span><h3>Community</h3><p>The FOA creates welcoming opportunities to meet and support other Ashley families.</p></article></div><article class="impact-callout"><p class="eyebrow eyebrow--light">Last year's impact</p><strong>£{appeal.previousYear.raised.toLocaleString("en-GB")} raised</strong><p>{appeal.previousYear.impact}</p><p><a class="button button--secondary" href={withBase("/fundraising/")}>See Our Fundraising Plans <span aria-hidden="true">&rarr;</span></a></p><p><a class="button button--amber" href={appeal.donateUrl} target="_blank" rel="noopener noreferrer">Donate via JustGiving <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></p></article></div></section>
 </BaseLayout>
+
+<style>
+  :global(.about-page .content-section) {
+    container: about-content / inline-size;
+    overflow-wrap: anywhere;
+  }
+
+  .pillars-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section-heading h2,
+  .pillar h3,
+  .impact-callout strong {
+    overflow-wrap: anywhere;
+  }
+
+  .button {
+    display: inline-grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    max-width: 100%;
+    padding-inline: min(1.15rem, 8%);
+    overflow-wrap: anywhere;
+  }
+
+  @container about-content (min-width: 48em) {
+    .pillars-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

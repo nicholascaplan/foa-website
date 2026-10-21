@@ -2,7 +2,25 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 ---
-<BaseLayout title="Contact Us" description="Contact The Friends of Ashley through the shared committee inbox or Google Form.">
+<BaseLayout title="Contact Us" description="Contact The Friends of Ashley through the shared committee inbox or Google Form." bodyClass="contact-page">
   <PageHero eyebrow="Contact The FOA" title="Start with the shared inbox." intro="Questions, ideas and offers of help are welcome." />
-  <section class="content-section content-section--compact"><div class="site-width split-layout"><div><h2 class="editorial-heading">Get in touch</h2><p class="section-copy">Use the shared address for The FOA so the right committee member can respond.</p><a class="button button--primary" href="mailto:thefriendsofashley@gmail.com">Email The Friends of Ashley</a></div><article class="info-card"><h2>Send us a message</h2><p>Use our Google Form if you would prefer to send your question online.</p><a class="button button--secondary" href="https://forms.gle/xCJ7mhcNS6CoVK37A" target="_blank" rel="noopener noreferrer">Open the contact form <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></article></div></section>
+  <section class="content-section content-section--compact content-section--desktop-snug"><div class="site-width split-layout"><div><h2 class="editorial-heading">Get in touch</h2><p class="section-copy">Use the shared address for The FOA so the right committee member can respond.</p><a class="button button--primary" href="mailto:thefriendsofashley@gmail.com">Email The Friends of Ashley</a></div><article class="info-card"><h2>Send us a message</h2><p>Use our Google Form if you would prefer to send your question online.</p><a class="button button--secondary" href="https://forms.gle/xCJ7mhcNS6CoVK37A" target="_blank" rel="noopener noreferrer">Open the contact form <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a></article></div></section>
 </BaseLayout>
+
+<style>
+  :global(.contact-page .content-section) {
+    container: contact-details / inline-size;
+  }
+
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  @container contact-details (min-width: 48em) {
+    .split-layout {
+      grid-template-columns: minmax(16rem, 0.65fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+</style>
