@@ -1,5 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { routes } from "./routes";
+import { readFileSync } from "node:fs";
+
+const fireworks = JSON.parse(readFileSync(new URL("../../src/content/events/fireworks-2026.json", import.meta.url), "utf8"));
 
 // Emulates 200% text on the narrowest supported screen by doubling every element's computed font size.
 // Layout units (rem, px, container widths) are unchanged, so this is a harsher test than a browser text-size setting.
@@ -58,6 +61,32 @@ for (const theme of ["day", "night"] as const) {
       expect(Math.max(...rights)).toBeLessThanOrEqual(320);
       const columns = await page.locator(".footer-link-column").evaluateAll((items) => items.map((item) => item.getBoundingClientRect().top));
       expect(columns[1], "second column sits below the first").toBeGreaterThan(columns[0]);
+    });
+
+    test("Reps Hub headings wrap inside their own cards with wider text", async ({ page }) => {
+      await page.clock.setFixedTime(new Date(Date.parse(fireworks.start) - 86400000));
+      await page.goto("/reps/");
+      await useLargeText(page);
+      expect(await page.locator(".message-card h2").count()).toBeGreaterThan(0);
+      // Keep the long-word regression reproducible across platform font metrics.
+      await page.locator(".message-card h2").evaluateAll((headings) => {
+        headings.forEach((heading) => (heading as HTMLElement).style.letterSpacing = "0.06em");
+      });
+      for (const heading of await page.locator(".message-card h2").all()) {
+        const bounds = await heading.evaluate((element) => {
+          const column = element.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          return { left: column.left, right: column.right,
+            lines: [...range.getClientRects()].map(({ left, right }) => ({ left, right })) };
+        });
+        expect(bounds.lines.length).toBeGreaterThan(0);
+        for (const line of bounds.lines) {
+          expect(line.left).toBeGreaterThanOrEqual(bounds.left - 0.5);
+          expect(line.right).toBeLessThanOrEqual(bounds.right + 0.5);
+        }
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     });
 
     test("Fireworks parchment panels fit inside their column", async ({ page }) => {
