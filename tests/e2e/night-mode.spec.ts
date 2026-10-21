@@ -229,9 +229,12 @@ for (const width of [390, 1440]) {
       await closeMenu(page);
       if (route === "/newsletter/") {
         for (const id of ["newsletter-latest-more", "newsletter-back-to-school-2026-more"]) {
+          if (width === 1440 && id !== "newsletter-latest-more") {
+            await page.getByRole("navigation", { name: "Newsletter issues" }).locator('a[href="#newsletter-issue-back-to-school-2026"]').click();
+          }
           await page.locator(`[aria-controls="${id}"]`).click();
         }
-        await expect(page.getByRole("button", { name: /Show less/ })).toHaveCount(2);
+        await expect(page.getByRole("button", { name: /Show less/ })).toHaveCount(width === 1440 ? 1 : 2);
         await page.waitForFunction(() => document.getAnimations().length === 0);
         await expect(page.locator(".newsletter-sheet").first()).toHaveCSS("color", "rgb(25, 49, 39)");
         await expect(page.locator(".newsletter-sheet").first()).toHaveCSS("background-color", "rgb(231, 222, 204)");

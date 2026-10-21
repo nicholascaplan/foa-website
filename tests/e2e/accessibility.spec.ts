@@ -23,6 +23,7 @@ for (const route of routes) {
 }
 
 test("expanded newsletters have no serious or critical accessibility violations", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 900 });
   await page.goto("/newsletter/");
   for (const id of ["newsletter-latest-more", "newsletter-back-to-school-2026-more"]) {
     await page.locator(`[aria-controls="${id}"]`).click();
@@ -39,6 +40,19 @@ test("expanded newsletters have no serious or critical accessibility violations"
   );
 
   expect(violations).toEqual([]);
+});
+
+test("the reading room selector and an expanded older issue are accessible", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/newsletter/");
+  await page.getByRole("navigation", { name: "Newsletter issues" }).getByRole("link").nth(1).click();
+  await page.locator(".newsletter-reading-board .newsletter-read-more:visible").click();
+  const results = await new AxeBuilder({ page })
+    .include(".newsletter-page")
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });
 
 test.describe("mobile viewport", () => {
