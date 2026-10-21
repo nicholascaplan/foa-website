@@ -1,4 +1,61 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+
+const fireworks = JSON.parse(readFileSync(new URL("../../src/content/events/fireworks-2026.json", import.meta.url), "utf8"));
+const beforeFireworks = new Date(Date.parse(fireworks.start) - 86400000);
+
+for (const width of [320, 390, 768, 1440]) {
+  for (const theme of ["day", "night"]) {
+    for (const enlarged of [false, true]) {
+      test(`message headings and timings fit their columns at ${width}px, ${theme}, ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+        await page.clock.setFixedTime(beforeFireworks);
+        await page.setViewportSize({ width, height: 900 });
+        await page.addInitScript((theme) => {
+          localStorage.setItem("foa-theme", theme);
+          localStorage.setItem("foa-cookie-preferences", "essential");
+        }, theme);
+        await page.goto("/reps/");
+        if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
+        await expect(page.locator("html")).toHaveCSS("font-size", enlarged ? "32px" : "16px");
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        expect(await page.locator(".message-card h2").count()).toBeGreaterThan(0);
+        for (const heading of await page.locator(".message-card h2").all()) {
+          const bounds = await heading.evaluate((element) => {
+            const column = element.getBoundingClientRect();
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            return { left: column.left, right: column.right,
+              lines: [...range.getClientRects()].map(({ left, right }) => ({ left, right })) };
+          });
+          expect(bounds.lines.length).toBeGreaterThan(0);
+          for (const line of bounds.lines) {
+            expect(line.left).toBeGreaterThanOrEqual(bounds.left - 0.5);
+            expect(line.right).toBeLessThanOrEqual(bounds.right + 0.5);
+          }
+        }
+        for (const row of await page.locator(".message-when").all()) {
+          const bounds = await row.evaluate((element) => {
+            const column = element.getBoundingClientRect();
+            const badge = element.querySelector(".message-date")!.getBoundingClientRect();
+            const time = element.querySelector(".message-time")!.getBoundingClientRect();
+            return { left: column.left, right: column.right, top: column.top,
+              badge: { left: badge.left, top: badge.top, bottom: badge.bottom },
+              time: { left: time.left, right: time.right, top: time.top, bottom: time.bottom } };
+          });
+          expect(bounds.time.left).toBeGreaterThanOrEqual(bounds.left - 0.5);
+          expect(bounds.time.right).toBeLessThanOrEqual(bounds.right + 0.5);
+          expect(bounds.badge.top).toBeCloseTo(bounds.top, 1);
+          if (bounds.time.top >= bounds.badge.bottom) {
+            expect(bounds.time.left).toBeCloseTo(bounds.badge.left, 1);
+          } else {
+            expect(bounds.time.bottom).toBeGreaterThan(bounds.badge.top);
+          }
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      });
+    }
+  }
+}
 
 test("Reps Hub actions align across desktop cards", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });

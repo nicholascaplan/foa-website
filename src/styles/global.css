@@ -1496,6 +1496,7 @@ a {
 
 .message-card h2 {
   margin-top: 0.4rem;
+  overflow-wrap: anywhere;
 }
 
 .message-card > p:not(.copy-feedback) {
@@ -1517,6 +1518,7 @@ a {
 
 .message-when {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 0.4rem;
