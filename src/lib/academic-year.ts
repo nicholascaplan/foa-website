@@ -27,9 +27,8 @@ export const syncYearView = (now = Date.now(), root: Document = document) => {
   root.querySelectorAll<HTMLElement>("[data-month-key]").forEach((month) => {
     const remaining = Boolean(month.querySelector(".event-list-item:not([hidden])"));
     const current = month.dataset.monthKey === currentMonth;
-    month.hidden = !current && !remaining;
+    month.hidden = !remaining;
     month.querySelector<HTMLElement>("[data-current-chip]")!.hidden = !current;
-    month.querySelector<HTMLElement>("[data-empty-note]")!.hidden = !current || remaining;
     month.querySelector<HTMLElement>(".event-list")!.hidden = !remaining;
   });
   root.querySelectorAll<HTMLElement>("[data-yearview-term]").forEach((term) => {

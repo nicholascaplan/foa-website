@@ -20,7 +20,7 @@ const now = Date.now();
 const currentMonth = ukDateKey(new Date(now)).slice(0, 7);
 const upcoming = (event: (typeof events)[number]) => !isHidden(eventVisibilityRules(event), now);
 const past = (event: (typeof events)[number]) => !isHidden(eventVisibilityRules(event, true), now);
-const monthVisible = (month: (typeof months)[number]) => month.key === currentMonth || month.events.some(upcoming);
+const monthVisible = (month: (typeof months)[number]) => month.events.some(upcoming);
 const terms = [
   { name: "Autumn term", note: `September to December ${academicYearStart}`, months: months.slice(0, 4) },
   { name: "Spring term", note: `January to March ${academicYearStart + 1}`, months: months.slice(4, 7) },
@@ -41,7 +41,6 @@ const year = academicYearLabel();
           {term.months.map((month) => (
             <div class="term-month" data-month-key={month.key} hidden={!monthVisible(month)}>
               <h3 class="term-month-heading">{month.label}<span class="term-chip" data-current-chip hidden={month.key !== currentMonth}>This month</span></h3>
-              <p class="term-empty" data-empty-note hidden={month.key !== currentMonth || month.events.some(upcoming)}>No more events listed this month.</p>
               <div class="event-list" hidden={!month.events.some(upcoming)}>{month.events.map((event) => <EventRow event={event} now={now} headingLevel="h4" />)}</div>
             </div>
           ))}
@@ -82,6 +81,16 @@ const year = academicYearLabel();
 </script>
 
 <style>
+  .section-heading .eyebrow { margin: 0 0 var(--whats-on-term-date-gap); line-height: 1; }
+  .section-heading h2 { line-height: 1; }
+  .term-month :global(.event-list-item) {
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: var(--whats-on-event-date-gap);
+    align-items: start;
+  }
+  @container (max-width: 14rem) {
+    .term-month :global(.event-list-item) { grid-template-columns: minmax(0, 1fr); }
+  }
   .term-months { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .term-month-heading {
     font-family: var(--font-display);
@@ -108,7 +117,6 @@ const year = academicYearLabel();
     color: var(--amber-dark);
   }
   :root[data-theme="night"] .term-chip { color: var(--night-amber-ink); }
-  .term-empty { color: var(--ink-soft); font-style: italic; margin: 0; }
   .term-earlier summary { cursor: pointer; min-height: 44px; }
   .term-earlier summary h2 { display: inline; }
   .term-earlier[open] summary { margin-bottom: 1.5rem; }

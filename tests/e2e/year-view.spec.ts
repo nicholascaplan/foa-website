@@ -7,15 +7,71 @@ const event = load("fireworks-2026");
 const boundary = Date.parse(event.end);
 const monthLabel = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "Europe/London" }).format(new Date(event.start));
 
+for (const width of [320, 390, 768, 1440]) {
+  for (const theme of ["day", "night"]) {
+    for (const scale of [100, 200]) {
+      test(`date and heading gaps stay compact at ${width}px in ${theme} mode with ${scale}% text`, async ({ page }) => {
+        await page.clock.setFixedTime(new Date("2026-10-21T12:00:00Z"));
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/whats-on/");
+        await page.evaluate(({ theme, scale }) => {
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.fontSize = `${scale}%`;
+        }, { theme, scale });
+        const metrics = await page.locator('[data-yearview-term]:visible').first().evaluate((term) => {
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+          const label = term.querySelector(".section-heading .eyebrow")!.getBoundingClientRect();
+          const title = term.querySelector("h2")!.getBoundingClientRect();
+          const rows = [...term.querySelectorAll<HTMLElement>('[data-month-key]:not([hidden]) .event-list-item:not([hidden])')].map((row) => {
+            const badge = row.querySelector(".compact-date")!.getBoundingClientRect();
+            const copy = row.querySelector(":scope > div:not(.compact-date)")!.getBoundingClientRect();
+            const heading = row.querySelector("h4")!.getBoundingClientRect();
+            return { gap: copy.left - badge.right, stacked: copy.top >= badge.bottom,
+              copyLeft: copy.left, headingLeft: heading.left, badgeTop: badge.top, copyTop: copy.top };
+          });
+          return { rem, termGap: title.top - label.bottom, rows };
+        });
+        expect(metrics.termGap).toBeCloseTo(0.125 * metrics.rem, 1);
+        expect(metrics.rows.length).toBeGreaterThan(1);
+        const copyLeft = metrics.rows[0].copyLeft;
+        for (const row of metrics.rows) {
+          expect(row.headingLeft).toBeCloseTo(row.copyLeft, 1);
+          expect(row.copyLeft).toBeCloseTo(copyLeft, 1);
+          if (!row.stacked) {
+            expect(row.gap).toBeCloseTo(0.625 * metrics.rem, 1);
+            expect(row.copyTop).toBeCloseTo(row.badgeTop, 1);
+          }
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      });
+    }
+  }
+}
+
+test("the current month disappears when its last event expires and upcoming months lead", async ({ page }) => {
+  const tea = load("welcome-tea-2026");
+  const expiry = Date.parse(tea.archiveFrom ?? tea.end ?? tea.start);
+  await page.clock.install({ time: new Date(expiry - 30_000) });
+  await page.goto("/whats-on/");
+  const october = page.locator('[data-month-key="2026-10"]');
+  await expect(october).toBeVisible();
+  await expect(october.locator("[data-current-chip]")).toBeVisible();
+  await page.clock.runFor(60_000);
+  await expect(october).toBeHidden();
+  await expect(page.locator("[data-month-key]:visible").first()).toHaveAttribute("data-month-key", "2026-11");
+  await page.locator(".term-earlier summary").click();
+  await expect(page.locator('[data-earlier-month="2026-10"]')).toBeVisible();
+});
+
 for (const width of [320, 1440]) {
   for (const theme of ["day", "night"]) {
-    test(`month bands mark empty, upcoming and archived months at ${width}px in ${theme} mode`, async ({ page }) => {
+    test(`month bands hide empty months and mark upcoming and archived months at ${width}px in ${theme} mode`, async ({ page }) => {
       await page.clock.setFixedTime(new Date(Date.parse(event.start) - 10 * 86400000));
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/whats-on/");
       await page.evaluate((theme) => document.documentElement.dataset.theme = theme, theme);
       const emptyMonth = page.locator('[data-month-key="2026-10"]');
-      await expect(emptyMonth.locator("[data-empty-note]")).toBeVisible();
+      await expect(emptyMonth).toBeHidden();
       await page.locator(".term-earlier summary").click();
       for (const textScale of [100, 200]) {
         await page.addStyleTag({ content: `html { font-size: ${textScale}% !important; }` });
@@ -128,10 +184,8 @@ for (const date of ["2026-08-01T12:00:00Z", "2027-02-01T12:00:00Z", "2027-07-01T
     await page.clock.setFixedTime(new Date(date));
     await page.goto("/whats-on/");
     const current = page.locator("[data-current-chip]:visible");
-    if (date.startsWith("2027-02") || date.startsWith("2027-07")) {
-      await expect(current).toHaveCount(1);
-      await expect(page.locator("[data-empty-note]:visible")).toHaveText("No more events listed this month.");
-    } else await expect(current).toHaveCount(0);
+    await expect(current).toHaveCount(0);
+    await expect(page.locator("[data-empty-note]")).toHaveCount(0);
     if (date.startsWith("2027-09")) {
       await expect(page.locator("[data-yearview-term]:visible")).toHaveCount(0);
       await expect(page.locator("[data-yearview-empty]")).toBeVisible();

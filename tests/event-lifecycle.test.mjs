@@ -49,7 +49,7 @@ test("academic months use UK dates, sort events and derive year labels", () => {
 
 test("year-view section updates cover empty months, hidden terms and the end of the year without moving nodes", () => {
   const month = (key, hasEvents) => {
-    const controls = { "[data-current-chip]": {}, "[data-empty-note]": {}, ".event-list": {} };
+    const controls = { "[data-current-chip]": {}, ".event-list": {} };
     return { dataset: { monthKey: key }, controls, hidden: false,
       querySelector: (selector) => selector === ".event-list-item:not([hidden])" ? (hasEvents ? {} : null) : controls[selector] };
   };
@@ -73,12 +73,11 @@ test("year-view section updates cover empty months, hidden terms and the end of 
   };
   syncYearView(Date.parse("2027-02-01T12:00:00Z"), root);
   assert.equal(january.hidden, true);
-  assert.equal(february.hidden, false);
+  assert.equal(february.hidden, true);
   assert.equal(february.controls["[data-current-chip]"].hidden, false);
-  assert.equal(february.controls["[data-empty-note]"].hidden, false);
   assert.equal(february.controls[".event-list"].hidden, true);
   assert.equal(april.hidden, false);
-  assert.equal(spring.hidden, false);
+  assert.equal(spring.hidden, true);
   assert.equal(summer.hidden, false);
   assert.equal(archive.hidden, false);
   assert.equal(archiveMonth.hidden, false);
