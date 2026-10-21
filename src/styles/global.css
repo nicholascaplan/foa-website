@@ -2224,6 +2224,7 @@ a {
 }
 
 .site-footer {
+  container: footer / inline-size;
   padding: 3rem 0 2rem;
   color: #d5e2d7;
   background: var(--green-dark);
@@ -2300,6 +2301,70 @@ a {
   display: block;
 }
 
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 100%;
+}
+
+.social-link {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.6rem;
+  max-width: 100%;
+  min-height: 2.75rem;
+  scroll-margin-block: 0.5rem;
+  padding: 0.35rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: inherit;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background: var(--paper-deep);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.social-link svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: none;
+}
+
+.social-link span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer-follow {
+  margin-top: 2.25rem;
+  color: var(--white);
+}
+
+.footer-follow .social-link {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-follow .social-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-follow {
+  flex-shrink: 0;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  color: var(--heading);
+}
+
 .footer-bottom {
   display: flex;
   margin-top: 2.5rem;
@@ -2321,6 +2386,41 @@ a {
   font: inherit;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+}
+
+/* Container em units follow text enlargement, unlike viewport media queries. */
+@container footer (min-width: 48em) {
+  .site-width {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    column-gap: 2.5rem;
+  }
+
+  .footer-grid {
+    display: contents;
+  }
+
+  .footer-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .footer-links {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .footer-follow {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    margin-top: 1.5rem;
+  }
+
+  .footer-bottom {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
 }
 
 .cookie-banner {
@@ -3431,10 +3531,6 @@ body.menu-open .cookie-banner {
   .notices-layout {
     grid-template-columns: minmax(16rem, 0.65fr) minmax(0, 1fr);
     gap: 4rem;
-  }
-
-  .footer-grid {
-    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
   }
 
   .event-hero-grid {
