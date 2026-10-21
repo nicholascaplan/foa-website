@@ -1,5 +1,32 @@
 import { expect, test } from "@playwright/test";
 
+for (const width of [390, 768, 1024]) {
+  for (const theme of ["day", "night"]) {
+    for (const enlarged of [false, true]) {
+      test(`social links follow Contact Us without a tall-screen spacer at ${width}px, ${theme}, ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.addInitScript((theme) => {
+          localStorage.setItem("foa-theme", theme);
+          localStorage.setItem("foa-cookie-preferences", "essential");
+        }, theme);
+        await page.goto("/contact/");
+        if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
+        await page.getByRole("button", { name: "Open menu" }).click();
+        const layout = await page.locator(".mobile-menu-follow").evaluate((group) => {
+          const contact = document.querySelector(".mobile-menu-cta")!.getBoundingClientRect();
+          const separator = group.getBoundingClientRect();
+          const firstPill = group.querySelector("a")!.getBoundingClientRect();
+          return { beforeRule: separator.top - contact.bottom, afterRule: firstPill.top - separator.top,
+            pillLeft: firstPill.left, contactLeft: contact.left, fontSize: parseFloat(getComputedStyle(group).fontSize) };
+        });
+        expect(layout.beforeRule).toBeCloseTo(0.75 * layout.fontSize, 1);
+        expect(layout.afterRule).toBeCloseTo(0.75 * layout.fontSize + 1, 1);
+        expect(layout.pillLeft).toBeCloseTo(layout.contactLeft, 1);
+      });
+    }
+  }
+}
+
 for (const width of [320, 390, 768, 1024, 1440]) {
   for (const theme of ["day", "night"]) {
     for (const enlarged of [false, true]) {
@@ -72,6 +99,21 @@ for (const width of [320, 390, 768, 1024]) {
           contactBottom: document.querySelector(".mobile-menu-cta")!.getBoundingClientRect().bottom,
         }));
         expect(order.top).toBeGreaterThan(order.contactBottom);
+        const pills = await group.getByRole("link").evaluateAll((links) => links.map((link) => {
+          const pill = link.getBoundingClientRect();
+          const icon = link.querySelector("svg")!.getBoundingClientRect();
+          const label = link.querySelector("span")!.getBoundingClientRect();
+          return { top: pill.top, bottom: pill.bottom, left: pill.left, right: pill.right,
+            iconRight: icon.right, labelLeft: label.left };
+        }));
+        if (!enlarged) {
+          expect(pills[0].top).toBeCloseTo(pills[1].top, 1);
+          expect(pills[0].bottom).toBeCloseTo(pills[1].bottom, 1);
+          expect(pills[0].right).toBeLessThan(pills[1].left);
+          for (const pill of pills) expect(pill.iconRight).toBeLessThanOrEqual(pill.labelLeft);
+        } else if (width <= 390) {
+          expect(pills[1].top).toBeGreaterThanOrEqual(pills[0].bottom);
+        }
         for (const link of await group.getByRole("link").all()) {
           await link.scrollIntoViewIfNeeded();
           await expect(link).toBeInViewport({ ratio: 1 });

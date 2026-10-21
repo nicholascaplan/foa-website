@@ -499,7 +499,7 @@ a {
 
 .mobile-menu nav {
   display: grid;
-  flex: 1;
+  flex: none;
   align-content: start;
   padding-block: 0.25rem 0;
 }
@@ -2359,12 +2359,19 @@ a {
 }
 
 .mobile-menu-follow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr));
   flex-shrink: 0;
   gap: 0.5rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
   color: var(--heading);
+}
+
+.mobile-menu-follow .social-link {
+  padding-inline: 0.25rem;
+  column-gap: 0.25rem;
 }
 
 .footer-bottom {
