@@ -370,7 +370,8 @@ body.xmas-theme::before {
 }
 
 .xmas-nowrap {
-  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
 }
 
 @media (max-width: 24rem) {

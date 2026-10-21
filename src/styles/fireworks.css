@@ -668,6 +668,7 @@ body.fw-theme::before {
 }
 
 .fw-theme .event-main > .event-block {
+  min-width: 0;
   padding: clamp(1.4rem, 3.5vw, 2.25rem);
   padding-top: 2.5rem;
 }
@@ -679,6 +680,7 @@ body.fw-theme::before {
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 .fw-theme .event-block .eyebrow {
