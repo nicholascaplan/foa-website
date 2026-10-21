@@ -47,6 +47,7 @@
   --involved-heading-rule-size: 2px;
   --newsletter-index-width: 20rem;
   --newsletter-reader-gap: 1.5rem;
+  --desktop-section-gap: 2.25rem;
   --whats-on-term-date-gap: 0.125rem;
   --whats-on-event-date-gap: 0.625rem;
   --font-display: Georgia, "Times New Roman", serif;
@@ -1495,6 +1496,22 @@ a {
 
 .reps-role .section-heading {
   margin-bottom: 0;
+}
+
+@media (min-width: 64rem) {
+  .content-section--compact.content-section--desktop-snug {
+    padding-block: var(--desktop-section-gap);
+  }
+
+  .content-section--desktop-snug > .site-width > :first-child,
+  .content-section--desktop-snug > .site-width > :first-child > :first-child {
+    margin-top: 0;
+  }
+
+  .content-section--desktop-snug > .site-width > :last-child,
+  .content-section--desktop-snug > .site-width > :last-child > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 .content-section.content-section--snug.reps-role {

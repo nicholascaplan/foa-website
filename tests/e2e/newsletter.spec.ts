@@ -289,6 +289,25 @@ test.describe("Newsletter reading room", () => {
             document.documentElement.style.fontSize = enlarged ? "200%" : "100%";
           }, { night, enlarged });
           const index = page.locator(".newsletter-issue-index");
+          await expect(page.locator("html")).toHaveCSS("font-size", enlarged ? "32px" : "16px");
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          const spacing = await page.evaluate(() => {
+            const hero = document.querySelector(".view-hero")!.getBoundingClientRect();
+            const board = document.querySelector(".newsletter-reading-board")!.getBoundingClientRect();
+            const reader = document.querySelector(".newsletter-reader-container")!;
+            const index = document.querySelector(".newsletter-issue-index")!;
+            return {
+              gap: board.top - hero.bottom,
+              paddingBottom: parseFloat(getComputedStyle(reader).paddingBottom),
+              indexTop: getComputedStyle(index).display === "none" ? null : index.getBoundingClientRect().top,
+              boardTop: board.top,
+            };
+          });
+          const rootSize = enlarged ? 32 : 16;
+          const expectedGap = width < 768 || width >= 1024 ? 2.25 * rootSize : Math.max(2.5 * rootSize, Math.min(width * 0.06, 4.5 * rootSize));
+          expect(spacing.gap, "gap from title panel to cork board").toBeCloseTo(expectedGap, 0);
+          expect(spacing.paddingBottom, "matching gap before footer").toBeCloseTo(expectedGap, 0);
+          if (spacing.indexTop !== null) expect(spacing.indexTop).toBeCloseTo(spacing.boardTop, 0);
           if (width >= 1280 && !enlarged) {
             await expect(index).toBeVisible();
             await index.getByRole("link").nth(1).click();

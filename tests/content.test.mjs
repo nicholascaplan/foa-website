@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
+import { ordinalDateFormatter } from "../src/lib/dates.ts";
 
 const contentDir = path.resolve("src/content");
 const assetsDir = path.resolve("assets");
@@ -102,6 +103,17 @@ test("the newsletter page presents the latest issue first and archives the rest"
       assert.ok(archiveSection.includes(title), `${id} should be in the archive`);
       assert.ok(!beforeArchive.includes(`<h1>${heroTitle(data.title)}</h1>`), `${id} is not marked latest but names the page`);
     }
+  }
+});
+
+test("newsletter letterheads show just the publication date without an email label", async () => {
+  const newsletters = await loadCollection("newsletters");
+  const html = await readFile(path.join(dist, "newsletter", "index.html"), "utf8");
+  const dates = [...html.matchAll(/<time class="newsletter-letterhead-date" datetime="([^"]+)">([^<]+)<\/time>/g)];
+  assert.equal(dates.length, newsletters.length);
+  const formatter = ordinalDateFormatter({ weekday: "long", timeZone: "UTC" });
+  for (const [, datetime, label] of dates) {
+    assert.equal(label, formatter(new Date(datetime)));
   }
 });
 
