@@ -11,6 +11,25 @@ test.describe("Newsletter expansion", () => {
     await expect(page.locator(".newsletter-issue").getByText("Christmas Fayre: Saturday 5th December")).toBeVisible();
   });
 
+  test("every issue ends with the Instagram and Facebook group sign-off", async ({ page }) => {
+    const issues = page.locator(".newsletter-sheet");
+    expect(await issues.count()).toBeGreaterThan(1);
+    for (const issue of await issues.all()) {
+      const signOff = issue.locator(".newsletter-sign-off");
+      await expect(signOff).toHaveCount(1);
+      const instagram = signOff.locator("a", { hasText: "@thefriendsofashley" });
+      await expect(instagram).toHaveAttribute("href", "https://www.instagram.com/thefriendsofashley/");
+      await expect(instagram).toHaveAttribute("target", "_blank");
+      await expect(instagram).toContainText("↗");
+      const facebook = signOff.locator("a", { hasText: "Ashley School - Parent Community" });
+      await expect(facebook).toHaveAttribute("href", "https://www.facebook.com/groups/friendsofashley/");
+      await expect(facebook).toHaveAttribute("target", "_blank");
+      await expect(facebook).toContainText("↗");
+      // The sign-off comes after the issue's last section.
+      expect(await signOff.evaluate((el) => !el.nextElementSibling || el.nextElementSibling.matches(".newsletter-expansion-actions"))).toBe(true);
+    }
+  });
+
   test("collapsed and expanded newsletters fit a 320px screen", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });

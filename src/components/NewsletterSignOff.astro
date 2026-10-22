@@ -1,0 +1,10 @@
+---
+import { renderInline } from "../lib/inline";
+import { withBase } from "../lib/urls";
+
+const inline = (value: string) => renderInline(value, withBase);
+---
+<section class="newsletter-sign-off" aria-label="Follow The FOA">
+  <p set:html={inline("Follow us on Instagram: [@thefriendsofashley](https://www.instagram.com/thefriendsofashley/)")} />
+  <p set:html={inline("Join our Facebook group: [Ashley School - Parent Community](https://www.facebook.com/groups/friendsofashley/)")} />
+</section>
