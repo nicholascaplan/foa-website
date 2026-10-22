@@ -2090,6 +2090,14 @@ a {
   margin-top: 0.5rem;
 }
 
+.newsletter-sign-off {
+  margin-top: 1.5rem;
+}
+.newsletter-sign-off p {
+  margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
+}
+
 .newsletter-peek {
   /* Five body lines, with extra room for the opening heading and its gap. */
   max-height: calc(5lh + 3rem);
