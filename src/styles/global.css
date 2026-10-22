@@ -2106,6 +2106,14 @@ a {
   overflow-wrap: anywhere;
 }
 
+/* Keeps the last word with its arrow so the arrow never wraps alone. */
+.newsletter-sign-off .sign-off-last-word {
+  display: inline-block;
+  max-width: 100%;
+  text-decoration: inherit;
+  text-decoration-thickness: inherit;
+}
+
 .newsletter-sign-off .sign-off-icon {
   width: 1.15em;
   height: 1.15em;
