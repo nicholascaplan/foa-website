@@ -21,12 +21,12 @@ test.describe("Newsletter expansion", () => {
       await expect(instagram).toHaveAttribute("href", "https://www.instagram.com/thefriendsofashley/");
       await expect(instagram).toHaveAttribute("target", "_blank");
       await expect(instagram).toContainText("↗");
-      const facebook = signOff.locator("a", { hasText: "Facebook group" });
+      const facebook = signOff.locator("a", { hasText: "Join our Facebook group" });
       await expect(facebook).toHaveAttribute("href", "https://www.facebook.com/groups/friendsofashley/");
       await expect(facebook).toHaveAttribute("target", "_blank");
       await expect(facebook).toContainText("↗");
-      // The group's name stays as plain text so the linked text is short.
-      await expect(signOff).toContainText("Ashley School - Parent Community");
+      // The line is just the link; the group's name is not repeated.
+      await expect(signOff).not.toContainText("Parent Community");
       // Each line starts with the service's logo, hidden from assistive technology.
       const icons = signOff.locator("svg.sign-off-icon");
       await expect(icons).toHaveCount(2);
@@ -358,3 +358,4 @@ test.describe("Newsletter reading room", () => {
     }
   }
 });
+
