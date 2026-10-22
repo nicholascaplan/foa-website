@@ -128,10 +128,7 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
       if (position === selected) link.setAttribute("aria-current", "true");
       else link.removeAttribute("aria-current");
     });
-    if (moveFocus) {
-      issues[selected].focus({ preventScroll: true });
-      board.scrollIntoView({ block: "start", behavior: "instant" });
-    }
+    if (moveFocus) issues[selected].focus({ preventScroll: true });
   };
 
   links.forEach((link, selected) => link.addEventListener("click", (event) => {

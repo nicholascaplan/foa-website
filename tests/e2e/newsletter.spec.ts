@@ -269,6 +269,23 @@ test.describe("Newsletter reading room", () => {
     await expect(page.locator(".newsletter-reading-board #newsletter-issue-autumn-term-2026")).toBeVisible();
   });
 
+  test("switching issues keeps the page where it is", async ({ page }) => {
+    const links = page.getByRole("navigation", { name: "Newsletter issues" }).getByRole("link");
+    // Scroll so the selector sits at the bottom of the viewport, away from the top of the board.
+    await page.evaluate(() => {
+      const index = document.querySelector(".newsletter-issue-index")!;
+      window.scrollTo({ top: index.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 40, behavior: "instant" });
+    });
+    const position = await page.evaluate(() => scrollY);
+    expect(position).toBeGreaterThan(0);
+    await links.nth(1).click();
+    await expect(page.locator(".newsletter-reading-board .newsletter-summary:visible")).toBeVisible();
+    expect(await page.evaluate(() => scrollY)).toBe(position);
+    await links.first().click();
+    await expect(page.locator(".newsletter-reading-board .newsletter-issue:visible")).toBeVisible();
+    expect(await page.evaluate(() => scrollY)).toBe(position);
+  });
+
   test("switching issues during collapse settles the animation without leaving a scroll loop", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     const selector = page.getByRole("navigation", { name: "Newsletter issues" });
