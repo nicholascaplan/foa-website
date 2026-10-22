@@ -5,6 +5,7 @@ import { withBase } from "../lib/urls";
 import { ordinalDateFormatter } from "../lib/dates";
 import NewsletterSection from "../components/NewsletterSection.astro";
 import NewsletterPeek from "../components/NewsletterPeek.astro";
+import NewsletterSignOff from "../components/NewsletterSignOff.astro";
 import { getCollection } from "astro:content";
 const newsletters = (await getCollection("newsletters"))
   .sort((a, b) => (b.data.published?.getTime() ?? 0) - (a.data.published?.getTime() ?? 0));
@@ -32,6 +33,7 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
           <NewsletterPeek sections={latestRest} />
           <div class="newsletter-more" id={latestBodyId} hidden>
             {latestRest.map((section) => <NewsletterSection section={section} />)}
+            <NewsletterSignOff />
           </div>
           <div class="newsletter-expansion-actions">
             <button class="button button--primary newsletter-read-more" type="button" aria-expanded="false" aria-controls={latestBodyId}>
@@ -39,6 +41,7 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
             </button>
           </div>
         </>}
+        {latestRest.length === 0 && <NewsletterSignOff />}
       </article>
     </section>
     <section class="newsletter-section newsletter-board newsletter-archive">
@@ -56,6 +59,7 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
             <NewsletterPeek sections={rest} />
             <div class="newsletter-more" id={bodyId} hidden>
               {rest.map((section) => <NewsletterSection section={section} />)}
+              <NewsletterSignOff />
             </div>
             <div class="newsletter-expansion-actions">
               <button class="button button--primary newsletter-read-more" type="button" aria-expanded="false" aria-controls={bodyId}>
@@ -63,6 +67,7 @@ const issueName = latest.title.replace(/\s+News$/, "").trim();
               </button>
             </div>
           </>}
+          {rest.length === 0 && <NewsletterSignOff />}
         </article>;
       })}
     </section>
