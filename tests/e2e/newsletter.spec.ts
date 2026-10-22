@@ -358,4 +358,3 @@ test.describe("Newsletter reading room", () => {
     }
   }
 });
-
