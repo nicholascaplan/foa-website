@@ -31,6 +31,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
+- **Dev / Owner:** Update the vulnerable npm packages found by the first OSV-Scanner full scan (23 October 2026): `vite` 8.3.1 to 8.3.3 (six advisories, one high), `source-map-js` 1.2.1 to 1.2.2 (high) and `http-cache-semantics` 4.2.0 (high, no fix released; check whether it reaches the built site or is build tooling only). Until fixes land, the push and weekly `Dependency scan (full)` runs fail as a visible reminder.
+
 - **Owner:** Complete a post-deployment real-device check of the term-by-term What's On page: empty/current-month heading bands, Day/Night Mode, Happy Bags expansion with a stationary date badge, the collapsed archive and enlarged text on a narrow phone and desktop. Automated coverage passes in CI, including 332 browser tests; local agent browser launches remain sandbox-blocked and Review-pane tools are unavailable. The production replacement is merged in PR #17; no further merge approval is outstanding for that change.
 
 - **Owner / Dev:** Before publishing 2027/28 dates, confirm the next academic year's event content and approve the rollover of `academicYearStart` in `src/lib/academic-year.ts`. Do not advance the displayed year automatically; the current page has an honest no-upcoming-dates state after its year ends. Future-year dates deliberately fail the build until the configured year is reviewed.
