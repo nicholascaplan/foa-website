@@ -47,28 +47,38 @@ const linkColumns = [
 </footer>
 
 <style>
-  .footer-bottom { align-items: center; gap: 1.5rem; }
+  .footer-bottom { align-items: center; gap: 1rem; }
+
+.footer-bottom > * {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+@container footer (max-width: 47.999em) {
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
 .designer-credit {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   min-height: 2.75rem;
   max-width: 100%;
-  color: #d5e0d7;
-  font-size: 0.875rem;
+  color: inherit;
+  font: inherit;
   text-decoration: none;
 }
 
 .designer-credit .credit-name {
-  color: #f3ead6;
-  font: italic 1.125rem/1.3 var(--font-display);
+  color: inherit;
+  font: inherit;
   text-decoration: underline;
   text-underline-offset: 0.1875rem;
 }
 
 .credit-heart {
   color: #dca956;
-  font-size: 0.9375rem;
+  font-size: 1em;
 }
 
 .designer-credit:hover .credit-name {
