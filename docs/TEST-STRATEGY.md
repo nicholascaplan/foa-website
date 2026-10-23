@@ -184,7 +184,7 @@ Recommended cadence:
 
 - Every pull request and push to `main`: check, build, generated-site tests, Chromium browser journeys and automated accessibility scans.
 - Before launch and after changes to shared CSS, navigation or interactions: Chromium plus WebKit, Firefox and manual mobile review.
-- Scheduled or pre-launch: dependency audit, deployed-site link check and mobile performance run.
+- Scheduled or pre-launch: deployed-site link check and mobile performance run. Dependency vulnerability scanning runs in CI; see [`PROJECT-BRIEF.md` → Hosting, domain and deployment](PROJECT-BRIEF.md#52-hosting-domain-and-deployment).
 
 CI uses the latest available Node 22.x version at or above 22.18.0, which supports the default TypeScript type stripping required by the direct `src/lib/*.ts` unit-test imports. Cache Playwright browser downloads in CI only if it materially improves build time without obscuring failures.
 

@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 22 October 2026
+**Last updated:** 23 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -188,6 +188,8 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - CSS is built locally with central tokens; no Tailwind CDN. Prefer zero client JavaScript for static content.
 - Client JavaScript is limited to the mobile menu, Today/Tomorrow labels, time-sensitive event placement, the newsletter expand/collapse, Reps Hub clipboard actions, the cookie banner, the progressive-enhancement fundraising animation, the homepage's wrap-preserving heading fit and Fireworks canvas effects.
 - GitHub Pages hosting, deployed from `main` through a verification gate. Production builds target `https://www.thefriendsofashley.org/` at the root path.
+- npm dependencies are scanned for known vulnerabilities in CI using Google's open-source OSV-Scanner (approved 23 October 2026). Pull requests fail only when they introduce a new vulnerability; pushes to `main`, manual runs and a weekly scan report all findings to the repository's Security code-scanning page and fail while any remain. Dependabot alerts and automatic update PRs stay an owner-controlled repository setting and are not configured.
+- The dependency security update merged on 23 October 2026 in PR #36 moves Vite to 8.3.5 and source-map-js to 1.2.2, with their transitive build dependencies updated within the existing package ranges. The site remains static output with no server-side runtime on GitHub Pages.
 - Routine verification retains mobile-menu navigation correctness and generated-output asset budgets; synthetic throttled navigation timings are an opt-in diagnostic outside the deployment gate. Coverage and methodology live in `TEST-STRATEGY.md`.
 - Metadata: canonical, Open Graph and Twitter tags, compact FOA favicon (white square, bold heritage-green `F`, with PNG fallback), Event structured data, sitemap, robots rules, a useful 404 page. The 404 shows a cute, gentle crying version of the FOA logo (the real logo artwork from `assets/brand/foa-logo.svg` with a sad face drawn over it, `src/components/CryingLogo.astro`; motion settles within 30 seconds and remains static for reduced-motion preferences) beside the page explanation on desktop and stacked compactly on mobile. The landing puddle starts as a small dot and grows to a capped size; tears fall slowly and ripples only begin once the first tear lands. Fireworks ticket and volunteer actions are followed by tiles linking to What's On, Fundraising, Get Involved and Uniform.
 - The closed mobile menu is `inert` so hidden links cannot take keyboard focus.
@@ -328,6 +330,7 @@ Source layout:
 - Both verification shards run inside the official Playwright container image (`mcr.microsoft.com/playwright:v1.63.0-noble`, Ubuntu 24.04), pinned to the `@playwright/test` version in `package-lock.json`. The browsers and their system libraries are already in the image, so jobs no longer download browser system packages on every run. This was tried on 22 October 2026 at the owner's request, after one run took about 11 minutes because the package download was slow. A first step fails with a clear message if the installed Playwright version and the image tag differ: when Playwright is upgraded, change the tag in `.github/workflows/deploy.yml` to match. Every test, both shards, Chromium and focused WebKit, the base-path build check, failure evidence and the deployment gate are unchanged. If the container proves slower or less stable than installing on the runner, revert to the previous install steps.
 - Branch protection on `main` requires both named verification shards from GitHub Actions. These replace the required `build (1)` and `build (2)` checks, with the repository-setting migration authorised and applied on 19 October 2026. Workflow check-name changes must be coordinated with branch protection and any open pull requests using the previous names.
 - The deployment workflow also runs daily at 08:00 UK time (`Europe/London`, automatically observing GMT and BST) and can be started manually. Scheduled runs rebuild the latest default-branch commit through the same verification gate, refreshing date-sensitive static content even without code changes. GitHub may delay scheduled starts and automatically disables schedules in public repositories after 60 days without repository activity.
+- Dependency scanning is a separate workflow named `OSV-Scanner` (`.github/workflows/osv-scanner.yml`), with jobs `Dependency scan (new vulnerabilities)` on pull requests and `Dependency scan (full)` on pushes to `main`, manual runs and a weekly Monday 07:30 UTC schedule. It reports to the repository's Security code-scanning page and becomes a required branch-protection check only if the owner adds it in settings.
 - The workflow builds with `SITE_URL=https://www.thefriendsofashley.org` and `BASE_PATH=/`. The canonical domain is `www.thefriendsofashley.org`, with HTTPS enforced by GitHub Pages; the apex domain redirects to `www`. `SITE_URL` is not needed for ordinary local development.
 - DNS is at 123 Reg: apex A records point to GitHub Pages (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` is a CNAME to `nicholascaplan.github.io`. Existing email, SPF, DKIM, DMARC and nameserver records must not be changed.
 - The custom domain is assigned to this repository (`nicholascaplan/foa-website`). The earlier pre-launch holding page lives in `nicholascaplan/foa-holding-page` and no longer holds the domain.
@@ -369,7 +372,7 @@ Required before launch and enforced in CI where noted:
 - Production build (CI)
 - Generated-site contracts, including internal links and assets (CI)
 - Playwright navigation journeys and representative axe scans (CI)
-- Dependency audit (`npm audit`)
+- Dependency vulnerability scan (OSV-Scanner; CI on pull requests, pushes to `main` and weekly)
 - Keyboard testing and representative screen-reader testing (manual)
 - Responsive visual checks and mobile performance checks (manual/scheduled)
 - Metadata and structured-data validation

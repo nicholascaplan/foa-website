@@ -31,6 +31,8 @@ The site is live at `https://www.thefriendsofashley.org`. These items must be re
 
 ## Soon
 
+- **Dev / Owner:** Monitor `http-cache-semantics` 4.2.0 for a fix to GHSA-ch52-4w7c-c8xp (high severity, no patched version published as of 23 October 2026), then update the Astro dependency tree and rerun the full vulnerability scan. It is an Astro build-tool dependency, not a shared HTTP cache serving visitors on this static GitHub Pages site. The push and weekly `Dependency scan (full)` runs remain red while this finding is unresolved. The dependency-scanning policy is recorded in [`PROJECT-BRIEF.md` → Technical direction](PROJECT-BRIEF.md#technical-direction).
+
 - **Owner:** Complete a post-deployment real-device check of the term-by-term What's On page: empty/current-month heading bands, Day/Night Mode, Happy Bags expansion with a stationary date badge, the collapsed archive and enlarged text on a narrow phone and desktop. Automated coverage passes in CI, including 332 browser tests; local agent browser launches remain sandbox-blocked and Review-pane tools are unavailable. The production replacement is merged in PR #17; no further merge approval is outstanding for that change.
 
 - **Owner / Dev:** Before publishing 2027/28 dates, confirm the next academic year's event content and approve the rollover of `academicYearStart` in `src/lib/academic-year.ts`. Do not advance the displayed year automatically; the current page has an honest no-upcoming-dates state after its year ends. Future-year dates deliberately fail the build until the configured year is reviewed.
