@@ -17,7 +17,7 @@ test.describe("Newsletter expansion", () => {
     for (const issue of await issues.all()) {
       const signOff = issue.locator(".newsletter-sign-off");
       await expect(signOff).toHaveCount(1);
-      const instagram = signOff.locator("a", { hasText: "@thefriendsofashley" });
+      const instagram = signOff.getByRole("link", { name: "Follow us on Instagram", includeHidden: true });
       await expect(instagram).toHaveAttribute("href", "https://www.instagram.com/thefriendsofashley/");
       await expect(instagram).toHaveAttribute("target", "_blank");
       await expect(instagram).toContainText("↗");
@@ -25,7 +25,13 @@ test.describe("Newsletter expansion", () => {
       await expect(facebook).toHaveAttribute("href", "https://www.facebook.com/groups/friendsofashley/");
       await expect(facebook).toHaveAttribute("target", "_blank");
       await expect(facebook).toContainText("↗");
-      // The line is just the link; the group's name is not repeated.
+      // Both rows are a single linked action, without a plain-text introduction.
+      await expect(signOff).not.toContainText("@thefriendsofashley");
+      for (const row of await signOff.locator("p").all()) {
+        expect(await row.textContent()).toBe(await row.locator("a").textContent());
+        await expect(row.locator(".sign-off-last-word .external-link-icon")).toHaveCount(1);
+      }
+      // The group's name is not repeated.
       await expect(signOff).not.toContainText("Parent Community");
       // Each line starts with the service's logo, hidden from assistive technology.
       const icons = signOff.locator("svg.sign-off-icon");
@@ -37,6 +43,55 @@ test.describe("Newsletter expansion", () => {
       expect(await signOff.evaluate((el) => !el.nextElementSibling || el.nextElementSibling.matches(".newsletter-expansion-actions"))).toBe(true);
     }
   });
+
+  for (const width of [320, 768, 1440]) {
+    for (const night of [false, true]) {
+      for (const enlarged of [false, true]) {
+        test(`sign-off rows align at ${width}px, ${night ? "Night" : "Day"}, ${enlarged ? "200%" : "normal"} text`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await page.emulateMedia({ reducedMotion: "reduce" });
+          await page.evaluate(({ night, enlarged }) => {
+            document.documentElement.dataset.theme = night ? "night" : "day";
+            document.documentElement.style.fontSize = enlarged ? "200%" : "100%";
+          }, { night, enlarged });
+          await page.locator(".newsletter-issue .newsletter-read-more").click();
+          const rows = await page.locator(".newsletter-issue .newsletter-sign-off p").evaluateAll(elements => elements.map(element => {
+            const link = element.querySelector("a")!;
+            const icon = element.querySelector("svg")!;
+            const lastWord = element.querySelector(".sign-off-last-word")!;
+            const arrow = lastWord.querySelector(".external-link-icon")!;
+            const style = getComputedStyle(link);
+            const range = document.createRange();
+            range.selectNodeContents(link);
+            return {
+              textLeft: range.getClientRects()[0].left,
+              iconLeft: icon.getBoundingClientRect().left,
+              weight: style.fontWeight,
+              colour: style.color,
+              decoration: style.textDecorationLine,
+              right: link.getBoundingClientRect().right,
+              rowRight: element.getBoundingClientRect().right,
+              lastWordTop: lastWord.getBoundingClientRect().top,
+              arrowTop: arrow.getBoundingClientRect().top,
+              lastWordBottom: lastWord.getBoundingClientRect().bottom,
+            };
+          }));
+          expect(rows).toHaveLength(2);
+          expect(rows[0].textLeft).toBeCloseTo(rows[1].textLeft, 0);
+          expect(rows[0].iconLeft).toBeCloseTo(rows[1].iconLeft, 0);
+          expect(rows[0].weight).toBe(rows[1].weight);
+          expect(rows[0].colour).toBe(rows[1].colour);
+          for (const row of rows) {
+            expect(row.decoration).toContain("underline");
+            expect(row.right).toBeLessThanOrEqual(row.rowRight + 1);
+            expect(row.arrowTop).toBeGreaterThanOrEqual(row.lastWordTop);
+            expect(row.arrowTop).toBeLessThan(row.lastWordBottom);
+          }
+          expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+        });
+      }
+    }
+  }
 
   test("collapsed and expanded newsletters fit a 320px screen", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });
