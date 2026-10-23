@@ -7,7 +7,7 @@ import { withBase } from "../lib/urls";
   <PageHero eyebrow="Privacy" title="How we handle website information." intro="This notice explains the limited information The FOA handles through this website." />
   <section class="content-section content-section--compact content-section--desktop-snug">
     <div class="site-width policy-copy">
-      <p class="planned-label">Last updated: 10th October 2026</p>
+      <p class="planned-label">Last updated: 23rd October 2026</p>
       <h2>Who we are</h2>
       <p>The Friends of Ashley (The FOA) is the parent teacher association for Ashley C of E Primary School. For questions about this notice or your information, contact us through the <a class="text-link" href={withBase("/contact/")}>shared FOA contact route</a>.</p>
 
@@ -15,10 +15,17 @@ import { withBase } from "../lib/urls";
       <p>If you email The FOA or send a message through the linked Google Form, we use the information you provide to read your enquiry and respond. The Google Form is provided by Google and opens on its own website. Please do not include unnecessary sensitive information in an enquiry.</p>
       <p>The FOA is confirming the final access and retention arrangements for the shared inbox and Google Form. This notice will be updated when those operational arrangements are approved.</p>
 
-      <h2>Analytics cookies</h2>
+      <div class="cookie-settings" id="cookie-settings">
+      <h2>Cookie settings</h2>
+      <p>Use <strong>Cookie preferences</strong> to allow, reject or withdraw consent for analytics cookies at any time. You can return here using <strong>Privacy &amp; cookies</strong> in the footer of any page.</p>
+      <button class="button button--secondary" type="button" data-cookie-preferences aria-controls="cookie-consent-panel">Cookie preferences</button>
+      <noscript><p>Analytics cookies stay off without JavaScript. Enable JavaScript to use the cookie preferences panel.</p></noscript>
+      <h3>Analytics cookies</h3>
       <p>With your permission, we use Google Analytics to understand how visitors use this website, such as which pages are visited. This helps us improve the site. Google Analytics cookies are optional and are not used unless you select <strong>Allow analytics cookies</strong>.</p>
-      <p>If you reject analytics cookies, Google Analytics will not be loaded. We use local browser storage to remember your choice so that we do not repeatedly ask you. You can change your choice at any time using the <strong>Cookie preferences</strong> button in the site footer.</p>
+      <p>If you reject analytics cookies, Google Analytics will not be loaded. We use local browser storage to remember your choice so that we do not repeatedly ask you. You can change your choice at any time using the <strong>Cookie preferences</strong> button above.</p>
       <p>Google Analytics is provided by Google. Read <a class="text-link" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy <span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>.</p>
+
+      </div>
 
       <h2>Display preference</h2>
       <p>This website follows the light or dark setting of your device. If you use the <strong>Night mode</strong> button in the site header, we save your choice (day or night) in your browser's local storage so that the site looks the same next time you visit. This setting stays on your device, is not sent to The FOA or anyone else, and is not used for analytics or tracking. You can remove it at any time by clearing this site's data in your browser.</p>
@@ -31,3 +38,8 @@ import { withBase } from "../lib/urls";
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .cookie-settings { scroll-margin-top: 2rem; }
+  .cookie-settings .button { margin-block: 0.5rem 1rem; }
+</style>

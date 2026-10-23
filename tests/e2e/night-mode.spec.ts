@@ -313,7 +313,8 @@ test("mobile menu and cookie controls remain accessible at enlarged scale", asyn
   expect((await scan()).violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
-  await page.getByRole("button", { name: "Cookie preferences" }).click();
+  await page.getByRole("contentinfo").getByRole("link", { name: "Privacy & cookies", exact: true }).click();
+  await page.getByRole("button", { name: "Cookie preferences", exact: true }).click();
   await expect(page.locator("[data-cookie-banner]")).toBeVisible();
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);

@@ -1,7 +1,7 @@
 ---
 import { withBase } from "../lib/urls";
 ---
-<aside class="cookie-banner" aria-labelledby="cookie-banner-title" data-cookie-banner hidden>
+<aside id="cookie-consent-panel" class="cookie-banner" aria-labelledby="cookie-banner-title" data-cookie-banner hidden>
   <div class="cookie-banner-copy">
     <p class="eyebrow">Your choice</p>
     <h2 id="cookie-banner-title">Analytics cookies</h2>
@@ -88,6 +88,8 @@ import { withBase } from "../lib/urls";
     removeAnalyticsCookies();
   };
 
+  let returnFocus: HTMLButtonElement | null = null;
+
   const showBanner = () => {
     if (!banner) return;
     banner.hidden = false;
@@ -100,6 +102,8 @@ import { withBase } from "../lib/urls";
       // The site remains usable when a browser blocks local storage.
     }
     if (banner) banner.hidden = true;
+    returnFocus?.focus();
+    returnFocus = null;
     if (preference === "analytics") loadAnalytics();
     else disableAnalytics();
     announcePreference(preference);
@@ -111,7 +115,7 @@ import { withBase } from "../lib/urls";
     else disableAnalytics();
     announcePreference(savedPreference);
   } else if (!import.meta.env.DEV) {
-    // Local dev servers never prompt automatically; the footer link still opens it.
+    // Local dev servers never prompt automatically; the Privacy control still opens it.
     showBanner();
   }
 
@@ -120,7 +124,11 @@ import { withBase } from "../lib/urls";
   });
 
   preferencesButtons.forEach((button) => {
-    button.addEventListener("click", showBanner);
+    button.addEventListener("click", () => {
+      returnFocus = button;
+      showBanner();
+      preferenceButtons[0]?.focus();
+    });
   });
 
 </script>

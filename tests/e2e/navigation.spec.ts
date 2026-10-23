@@ -79,7 +79,8 @@ test("cookie choices are unobtrusive, remembered and can be changed", async ({ p
   await page.reload();
   await expect(banner).toBeHidden();
 
-  await page.getByRole("button", { name: "Cookie preferences" }).click();
+  await page.getByRole("contentinfo").getByRole("link", { name: "Privacy & cookies", exact: true }).click();
+  await page.getByRole("button", { name: "Cookie preferences", exact: true }).click();
   await expect(banner).toBeVisible();
   await page.getByRole("button", { name: "Allow analytics cookies" }).click();
   await expect(banner).toBeHidden();

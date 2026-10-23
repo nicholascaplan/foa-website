@@ -136,7 +136,8 @@ test.describe("Analytics consent", () => {
       document.cookie = "unrelated=keep; path=/";
     }, measurementId);
 
-    await page.getByRole("button", { name: "Cookie preferences" }).click();
+    await page.getByRole("contentinfo").getByRole("link", { name: "Privacy & cookies", exact: true }).click();
+    await page.getByRole("button", { name: "Cookie preferences", exact: true }).click();
     await expect(page.locator("[data-cookie-banner]")).toBeVisible();
     await page.getByRole("button", { name: "Reject analytics cookies" }).click();
 
