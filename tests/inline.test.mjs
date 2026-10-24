@@ -14,7 +14,7 @@ test("external links open safely in a new tab and announce it", () => {
   assert.match(html, /target="_blank"/);
   assert.match(html, /rel="noopener noreferrer"/);
   assert.match(html, /\(opens in a new tab\)/);
-  assert.match(html, />Donate&nbsp;<span class="external-link-icon" aria-hidden="true">/);
+  assert.match(html, /><span class="cta-tail">Donate<span class="external-link-icon" aria-hidden="true">/);
 });
 
 test("mailto links are plain links", () => {
