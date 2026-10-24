@@ -4,6 +4,7 @@ import { getEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChristmasBaubles from "../../components/ChristmasBaubles.astro";
 import ChristmasTrees from "../../components/ChristmasTrees.astro";
+import AddToCalendar from "../../components/AddToCalendar.astro";
 import "../../styles/christmas.css";
 import { withBase } from "../../lib/urls";
 import { ordinalDateFormatter } from "../../lib/dates";
@@ -71,7 +72,7 @@ const eventJsonLd = {
             <div><dt>Where</dt><dd>{event.location}</dd></div>
             <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
-          <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a></p>
+          <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a><AddToCalendar eventId={entry.id} /></p>
         </div>
       </div>
     </section>

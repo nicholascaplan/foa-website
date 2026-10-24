@@ -3388,6 +3388,27 @@ body.menu-open .cookie-banner {
   font-weight: 800;
 }
 
+.event-list-calendar {
+  display: inline-flex;
+  margin-top: 0.55rem;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-underline-offset: 0.2em;
+}
+
+.event-list-calendar .calendar-icon {
+  width: 0.95em;
+  height: 0.95em;
+  flex: none;
+}
+
+.event-list-actions .event-list-calendar {
+  margin-top: 0;
+}
+
 .event-list-cta--button {
   display: inline-flex;
   min-height: 2.75rem;
