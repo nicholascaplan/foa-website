@@ -42,7 +42,7 @@ const eventDate = ordinalDateFormatter({ timeZone: "Europe/London" })(event.star
                 <dl class="vol-shifts">
                   {role.shifts.map((shift) => <div><dt>{shift.label}</dt><dd>{shift.when}<span>{shift.helpers} {shift.helpers === 1 ? "helper" : "helpers"} {role.shifts.length > 1 && shift.label !== "Setup" && shift.label !== "Clear up" ? "per shift" : "per slot"}</span></dd></div>)}
                 </dl>
-                <a class="button button--amber vol-card__action" href={role.url} target="_blank" rel="noopener noreferrer"><span class="cta-label">Sign up for {role.name.toLowerCase()}{"\u00A0"}<span class="external-link-icon cta-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens Volunteer Sign Up in a new tab)</span></span></a>
+                <a class="button button--amber vol-card__action" href={role.url} target="_blank" rel="noopener noreferrer"><span class="cta-label">Sign up for <span class="cta-tail">{role.name.toLowerCase()}<span class="external-link-icon cta-icon" aria-hidden="true">↗</span></span><span class="visually-hidden"> (opens Volunteer Sign Up in a new tab)</span></span></a>
               </li>
             ))}
           </ul>
