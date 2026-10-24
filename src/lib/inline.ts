@@ -16,7 +16,7 @@ export const renderInline = (value: string, internalHref: (path: string) => stri
       }
       const external = href.startsWith("http");
       return external
-        ? `<a class="text-link" href="${href}" target="_blank" rel="noopener noreferrer">${text}<span class="external-link-icon" aria-hidden="true"> ↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>`
+        ? `<a class="text-link" href="${href}" target="_blank" rel="noopener noreferrer">${text}&nbsp;<span class="external-link-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>`
         : `<a class="text-link" href="${href}">${text}</a>`;
     })
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
