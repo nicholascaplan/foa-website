@@ -23,7 +23,9 @@ test.describe("Add to calendar", () => {
     expect(ics).toContain("DTEND:20261105T183000Z");
     expect(ics).toContain("LOCATION:Ashley School field\\, Ashley Road\\, Walton-on-Thames KT12 1HX");
     expect(ics).toContain("STATUS:CONFIRMED");
-    expect(ics).toContain("URL:https://www.thefriendsofashley.org/events/fireworks-2026/");
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+    expect(canonical).toBeTruthy();
+    expect(ics.replace(/\r\n[ \t]/g, "")).toContain(`URL:${canonical}`);
   });
 
   test("the Christmas Fayre page offers a start-only tentative download while the end time is unconfirmed", async ({ page }) => {

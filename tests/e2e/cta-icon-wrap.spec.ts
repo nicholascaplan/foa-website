@@ -57,10 +57,13 @@ const widths = [320, 390, 1440];
 
 test.describe("CTA trailing icons stay with the label", () => {
   for (const width of widths) {
-    test.use({ viewport: { width, height: 900 } });
     for (const path of pages) {
       test(`${path} at ${width}px`, async ({ page }) => {
+        // Set each test's viewport explicitly: test.use() inside this loop
+        // would overwrite the shared suite's viewport for every width.
+        await page.setViewportSize({ width, height: 900 });
         await page.goto(path);
+        expect(await page.evaluate(() => innerWidth)).toBe(width);
         expect(await strandedIcons(page)).toEqual([]);
       });
     }
