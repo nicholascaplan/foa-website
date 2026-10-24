@@ -638,6 +638,14 @@ body.fw-theme::before {
   color: var(--fw-ink);
 }
 
+.fw-theme .summary-calendar {
+  margin: 0.9rem 0 0;
+}
+
+.fw-theme .summary-calendar .button {
+  width: 100%;
+}
+
 .fw-theme .ticket-cta {
   border-top-color: rgba(38, 54, 26, 0.3);
 }

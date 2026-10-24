@@ -114,7 +114,7 @@ Compare equivalent revisions, worker counts and clean pass/failure outcomes; agg
 - Select and integrate a CMS, only after editor ownership, preview/publish workflow, annual access handover, urgent-update and failed-build procedures are confirmed (see *Open questions → Content management*).
 - Formal manual accessibility testing (keyboard, zoom, screen reader), then publish a public accessibility statement.
 - Moderated Community Notice Board (deferred; no public route). Needs the decisions listed under *Open questions → Notice Board*.
-- Additional reviewed translations and RTL testing; FAQs page; native share; add-to-calendar downloads.
+- Additional reviewed translations and RTL testing; FAQs page; native share.
 - Optional homepage fundraising enhancement: milestone ticks (25%, 50%, 75%, 100%) that light up amber as the bar passes them, with short labels such as "Halfway!". Needs FOA-approved wording. Other ideas considered: moving end-marker, progress-based message under the bar.
 - Low-priority "Inspiration" archive of past event posters (standalone page or within What's On).
 - Selective screenshot visual regression, after the visual design is approved.

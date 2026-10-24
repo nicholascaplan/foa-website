@@ -798,6 +798,41 @@ a {
   transform: translateY(-2px);
 }
 
+/* A CTA's trailing icon stays glued to the final word of its label: the
+   whole label sits in one .cta-label item and there is no whitespace between
+   the final word and the icon, so wrapping can never strand the icon on its
+   own line (Nick's rule, 24 Oct 2026). */
+.cta-label {
+  min-width: 0;
+}
+
+.cta-icon {
+  margin-inline-start: 0.25em;
+}
+
+/* The final word and its icon as one unbreakable unit: replaced elements
+   such as SVG can otherwise break away from the preceding word even with no
+   whitespace between them. */
+.cta-tail {
+  white-space: nowrap;
+}
+
+.button .cta-icon {
+  margin-inline-start: 0.6rem;
+}
+
+.event-list-calendar .cta-icon {
+  margin-inline-start: 0.35rem;
+}
+
+.event-list-cta--button .cta-icon {
+  margin-inline-start: 0;
+}
+
+svg.cta-icon {
+  vertical-align: -0.2em;
+}
+
 .button--primary {
   color: var(--action-foreground);
   background: var(--action-background);
@@ -3386,6 +3421,27 @@ body.menu-open .cookie-banner {
   color: var(--green);
   font-size: 0.85rem;
   font-weight: 800;
+}
+
+.event-list-calendar {
+  display: inline-flex;
+  margin-top: 0.55rem;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-underline-offset: 0.2em;
+}
+
+.event-list-calendar .calendar-icon {
+  width: 0.95em;
+  height: 0.95em;
+  flex: none;
+}
+
+.event-list-actions .event-list-calendar {
+  margin-top: 0;
 }
 
 .event-list-cta--button {
