@@ -325,7 +325,7 @@ test("external links communicate their destination and open safely in a new tab"
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
     externalLinkTags.push(...html.matchAll(/<a\s+[^>]*href="https?:\/\/[^>]+>/g).map((match) => match[0]));
-    externalLinkIndicators += html.match(/class="external-link-icon"/g)?.length ?? 0;
+    externalLinkIndicators += html.match(/class="[^"]*external-link-icon[^"]*"/g)?.length ?? 0;
   }
 
   assert.ok(externalLinkTags.length > 0);
@@ -383,7 +383,7 @@ test("the Christmas Fayre page uses the Fayre inbox for every sign-up link, with
   for (const link of links) {
     assert.equal(link, `mailto:${christmas.contactEmail}?subject=Helping%20at%20the%20Christmas%20Fayre`);
   }
-  assert.equal([...html.matchAll(/>Email the Fayre team <span/g)].length, 2);
+  assert.equal([...html.matchAll(/>Email the Fayre <span class="cta-tail">team<span/g)].length, 2);
 });
 
 test("the Christmas Fayre page keeps reminders in a plain list, separate from the help areas", async () => {
