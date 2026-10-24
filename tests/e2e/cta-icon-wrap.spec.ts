@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 // A compliant CTA keeps its whole label (including the icon) in a single
 // .cta-label span, with no whitespace between the final word and the icon.
 
-const ctas = "a.button, .event-list-cta, a.event-list-calendar";
+const ctas = "a.button, .event-list-cta, a.event-list-calendar, a.text-link";
 
 // Returns a description of every CTA whose trailing icon sits on a different
 // line from the end of its label.
@@ -50,7 +50,9 @@ const useLargeText = (page: Page) =>
     elements.forEach((element, index) => element.style.setProperty("font-size", `${sizes[index] * 2}px`, "important"));
   });
 
-const pages = ["/events/fireworks-2026/", "/events/christmas-fayre-2026/", "/whats-on/"];
+// Every public route is covered: the rule is site-wide.
+import { routes } from "./routes";
+const pages = routes;
 const widths = [320, 390, 1440];
 
 test.describe("CTA trailing icons stay with the label", () => {
