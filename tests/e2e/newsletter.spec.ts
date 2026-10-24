@@ -29,7 +29,7 @@ test.describe("Newsletter expansion", () => {
       await expect(signOff).not.toContainText("@thefriendsofashley");
       for (const row of await signOff.locator("p").all()) {
         expect(await row.textContent()).toBe(await row.locator("a").textContent());
-        await expect(row.locator(".sign-off-last-word .external-link-icon")).toHaveCount(1);
+        await expect(row.locator(".cta-word .cta-tail .external-link-icon")).toHaveCount(1);
       }
       // The group's name is not repeated.
       await expect(signOff).not.toContainText("Parent Community");
@@ -58,7 +58,7 @@ test.describe("Newsletter expansion", () => {
           const rows = await page.locator(".newsletter-issue .newsletter-sign-off p").evaluateAll(elements => elements.map(element => {
             const link = element.querySelector("a")!;
             const icon = element.querySelector("svg")!;
-            const lastWord = element.querySelector(".sign-off-last-word")!;
+            const lastWord = element.querySelector(".cta-word")!;
             const arrow = lastWord.querySelector(".external-link-icon")!;
             const style = getComputedStyle(link);
             const range = document.createRange();

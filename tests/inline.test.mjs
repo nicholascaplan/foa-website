@@ -14,13 +14,27 @@ test("external links open safely in a new tab and announce it", () => {
   assert.match(html, /target="_blank"/);
   assert.match(html, /rel="noopener noreferrer"/);
   assert.match(html, /\(opens in a new tab\)/);
-  assert.match(html, /><span class="cta-tail">Donate<span class="external-link-icon" aria-hidden="true">/);
+  assert.match(html, /><span class="cta-word">Donat<span class="cta-tail">e<span class="external-link-icon" aria-hidden="true">/);
 });
 
 test("mailto links are plain links", () => {
   const html = renderInline("[Email us](mailto:hello@example.org)");
   assert.match(html, /href="mailto:hello@example\.org"/);
   assert.doesNotMatch(html, /target=/);
+});
+
+test("URL labels keep only their final character with the icon so domains can wrap", () => {
+  for (const label of ["ashleyschool.org.uk/calendar", "tinyurl.com/foa-feedback", "Visit ashleyschool.org.uk/calendar"]) {
+    const html = renderInline(`[${label}](https://example.org/)`);
+    assert.ok(html.includes(`>${label.slice(0, -1)}<span class="cta-tail">${label.slice(-1)}<span`));
+    assert.ok(!html.includes(`<span class="cta-tail">${label}`));
+  }
+  const escaped = renderInline('[example.org/&](https://example.org/)');
+  assert.match(escaped, /example\.org\/<span class="cta-tail">&amp;<span/);
+});
+
+test("ordinary multiword labels glue only the final word to the icon", () => {
+  assert.match(renderInline("[Read the calendar](https://example.org/)"), /Read the <span class="cta-word">calenda<span class="cta-tail">r<span/);
 });
 
 test("links to our website use the existing text-link style and open in the same tab", () => {

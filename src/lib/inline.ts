@@ -16,10 +16,20 @@ export const renderInline = (value: string, internalHref: (path: string) => stri
       }
       const external = href.startsWith("http");
       if (!external) return `<a class="text-link" href="${href}">${text}</a>`;
-      const split = text.lastIndexOf(" ");
-      const labelled = split === -1
-        ? `<span class="cta-tail">${text}<span class="external-link-icon" aria-hidden="true">↗</span></span>`
-        : `${text.slice(0, split)} <span class="cta-tail">${text.slice(split + 1)}<span class="external-link-icon" aria-hidden="true">↗</span></span>`;
+      const split = text.lastIndexOf(" ") + 1;
+      const prefix = text.slice(0, split);
+      const lastWord = text.slice(split);
+      const icon = '<span class="external-link-icon" aria-hidden="true">↗</span>';
+      // Preserve emphasis delimiters together so the final Markdown pass
+      // cannot create crossing tags. Plain words can fall back to wrapping
+      // within a very narrow column, keeping their final character and arrow
+      // together. Escaped HTML entities must remain intact too.
+      const ending = lastWord.replace(/(&[a-z]+;|.)$/u, `<span class="cta-tail">$1${icon}</span>`);
+      const labelled = lastWord.includes("*")
+        ? `${prefix}<span class="cta-tail">${lastWord}${icon}</span>`
+        : /[./]/.test(lastWord)
+          ? prefix + ending
+          : `${prefix}<span class="cta-word">${ending}</span>`;
       return `<a class="text-link" href="${href}" target="_blank" rel="noopener noreferrer">${labelled}<span class="visually-hidden"> (opens in a new tab)</span></a>`;
     })
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")

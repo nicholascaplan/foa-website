@@ -21,25 +21,37 @@ for (const width of [320, 390, 554, 768, 1023, 1024, 1200, 1440]) {
         await expect(button).toBeVisible();
         const layout = await button.evaluate((element) => {
           const bounds = element.getBoundingClientRect();
-          const label = element.querySelector("span")!.getBoundingClientRect();
+          const label = element.querySelector(".cta-label")!;
+          const range = document.createRange();
+          const walker = document.createTreeWalker(label, NodeFilter.SHOW_TEXT);
+          const lines: DOMRect[] = [];
+          let node = walker.nextNode();
+          while (node) {
+            if (node.textContent?.trim() && !node.parentElement?.closest('.visually-hidden, [aria-hidden="true"]')) {
+              range.selectNodeContents(node);
+              lines.push(...range.getClientRects());
+            }
+            node = walker.nextNode();
+          }
+          const lastLine = lines[lines.length - 1];
           const icon = element.querySelector('[aria-hidden="true"]')!.getBoundingClientRect();
           const container = element.closest(".view-hero-inner")!.getBoundingClientRect();
           const containerStyle = getComputedStyle(element.closest(".view-hero-inner")!);
           return {
-            labelRight: label.right,
+            labelRight: lastLine.right,
             iconLeft: icon.left,
-            centreDifference: Math.abs((label.top + label.height / 2) - (icon.top + icon.height / 2)),
+            sameLine: icon.top < lastLine.bottom && icon.bottom > lastLine.top,
             iconRight: icon.right,
             buttonRight: bounds.right,
             height: bounds.height,
             width: bounds.width,
             availableWidth: container.width - parseFloat(containerStyle.paddingLeft) - parseFloat(containerStyle.paddingRight),
-            labelHeight: label.height,
+            labelHeight: Math.max(...lines.map((line) => line.bottom)) - Math.min(...lines.map((line) => line.top)),
             lineHeight: parseFloat(getComputedStyle(element).lineHeight),
           };
         });
         expect(layout.iconLeft).toBeGreaterThan(layout.labelRight);
-        expect(layout.centreDifference).toBeLessThan(1);
+        expect(layout.sameLine).toBe(true);
         expect(layout.iconRight).toBeLessThan(layout.buttonRight);
         expect(layout.height).toBeGreaterThanOrEqual(44);
         heights.push(layout.height);

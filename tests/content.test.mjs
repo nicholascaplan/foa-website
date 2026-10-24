@@ -127,9 +127,8 @@ test("the half term newsletter omits email-only copy and renders clean links", a
   assert.ok(!latest.includes("attached poster"));
   assert.ok(!latest.includes("\\!"));
   for (const label of ["Buy tickets", "Event information", "volunteer sign-up links", "Find out how to help", "uniform information and requests", "See our fundraising plans"]) {
-    const split = label.lastIndexOf(" ");
-    const glued = `${label.slice(0, split)} <span class="cta-tail">${label.slice(split + 1)}<`;
-    assert.ok(latest.includes(`>${label}<`) || latest.includes(glued), `${label} should render as a clean link label`);
+    const links = [...latest.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, ""));
+    assert.ok(links.some((text) => text.startsWith(label)), `${label} should render as a clean link label`);
   }
 });
 

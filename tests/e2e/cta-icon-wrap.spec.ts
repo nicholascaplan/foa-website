@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 // A compliant CTA keeps its whole label (including the icon) in a single
 // .cta-label span, with no whitespace between the final word and the icon.
 
-const ctas = "a.button, .event-list-cta, a.event-list-calendar, a.text-link";
+const ctas = "a.button, .event-list-cta, a.event-list-calendar, a.text-link, a.designer-credit, .member-vacancy a, .newsletter-sign-off a";
 
 // Returns a description of every CTA whose trailing icon sits on a different
 // line from the end of its label.
@@ -84,4 +84,54 @@ test.describe("CTA trailing icons stay with the label", () => {
       });
     }
   });
+});
+
+test.describe("Wrapping stays inside the neighbouring content column", () => {
+  for (const width of [320, 768, 1440]) {
+    for (const night of [false, true]) {
+      for (const textSize of ["normal", "200% per-element", "200% root"]) {
+        for (const path of ["/newsletter/", "/fireworks-volunteering/", "/uniform/"]) {
+          test(`${path} ${width}px ${night ? "Night" : "Day"} ${textSize}`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 900 });
+            await page.emulateMedia({ reducedMotion: "reduce" });
+            await page.addInitScript((theme) => localStorage.setItem("foa-theme", theme), night ? "night" : "day");
+            await page.goto(path === "/newsletter/" ? `${path}#newsletter-issue-autumn-term-2026` : path);
+            if (textSize === "200% per-element") await useLargeText(page);
+            if (textSize === "200% root") await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+            // Reproduce the wider fallback fonts used by Linux CI, not only macOS fonts.
+            await page.addStyleTag({ content: ".cta-label, .newsletter-more a { font-family: Verdana, sans-serif !important; }" });
+            await page.evaluate(() => document.fonts.ready);
+            if (path === "/fireworks-volunteering/") {
+              const columns = await page.locator(".vol-grid").evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
+              if (textSize === "normal") expect(columns).toBe(width === 1440 ? 3 : width === 768 ? 2 : 1);
+              else if (width <= 768) expect(columns, "enlarged narrow columns must stack").toBe(1);
+            }
+            if (path === "/newsletter/") {
+              await page.locator("#newsletter-issue-autumn-term-2026 .newsletter-read-more").click();
+              await expect(page.locator('.newsletter-more a[href="https://ashleyschool.org.uk/calendar"]')).toBeVisible();
+            }
+            expect(await strandedIcons(page)).toEqual([]);
+            expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+            const overflow = await page.locator(".newsletter-more a:visible, .vol-card__action, .uniform-action").evaluateAll((links) => links.flatMap((link) => {
+              const column = link.closest("p, li, .newsletter-more, .vol-card, .view-hero-action")!.getBoundingClientRect();
+              const range = document.createRange();
+              const rects = [...link.querySelectorAll(".cta-icon, .external-link-icon")].map((icon) => icon.getBoundingClientRect());
+              const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+              let node = walker.nextNode();
+              while (node) {
+                if (node.textContent?.trim() && !node.parentElement?.closest('.visually-hidden, [aria-hidden="true"]')) {
+                  range.selectNodeContents(node);
+                  rects.push(...range.getClientRects());
+                }
+                node = walker.nextNode();
+              }
+              const outside = rects.filter((rect) => rect.width > 1 && (rect.left < column.left - 1 || rect.right > column.right + 1));
+              return outside.length ? [{ text: link.textContent, column: { left: column.left, right: column.right }, outside: outside.map(({ left, right }) => ({ left, right })) }] : [];
+            }));
+            expect(overflow, "link text and icon must stay inside their own column").toEqual([]);
+          });
+        }
+      }
+    }
+  }
 });
