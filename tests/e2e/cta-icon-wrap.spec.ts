@@ -102,6 +102,10 @@ test.describe("Wrapping stays inside the neighbouring content column", () => {
             await page.addStyleTag({ content: ".cta-label, .newsletter-more a { font-family: Verdana, sans-serif !important; }" });
             await page.evaluate(() => document.fonts.ready);
             if (path === "/fireworks-volunteering/") {
+              // Emulating reduced motion triggers a media-change style recalc that can
+              // leave the root percentage font size unsettled for a few hundred ms;
+              // wait until the enlargement has actually taken effect before measuring.
+              if (textSize !== "normal") await expect(page.locator(".fw-vol .content-section").first()).toHaveCSS("font-size", "32px");
               const columns = await page.locator(".vol-grid").evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
               if (textSize === "normal") expect(columns).toBe(width === 1440 ? 3 : width === 768 ? 2 : 1);
               else if (width <= 768) expect(columns, "enlarged narrow columns must stack").toBe(1);
