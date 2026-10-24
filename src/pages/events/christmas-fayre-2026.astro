@@ -72,7 +72,7 @@ const eventJsonLd = {
             <div><dt>Where</dt><dd>{event.location}</dd></div>
             <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
-          <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a><AddToCalendar eventId={entry.id} /></p>
+          <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}><span class="cta-label">Email the Fayre <span class="cta-tail">team<span class="cta-icon" aria-hidden="true">&rarr;</span></span></span></a><AddToCalendar eventId={entry.id} /></p>
         </div>
       </div>
     </section>
@@ -106,7 +106,7 @@ const eventJsonLd = {
           <div class="xmas-contact__copy">
             <h2 id="xmas-contact-title">Get in touch</h2>
             <p>Email the Christmas Fayre team or chat with the team in the playground to find out more and to sign up.</p>
-            <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}>Email the Fayre team <span aria-hidden="true">&rarr;</span></a></p>
+            <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}><span class="cta-label">Email the Fayre <span class="cta-tail">team<span class="cta-icon" aria-hidden="true">&rarr;</span></span></span></a></p>
           </div>
           <ChristmasTrees />
         </div>
