@@ -817,6 +817,16 @@ a {
   white-space: nowrap;
 }
 
+/* Keep a generated link's final word together when it fits, but allow a
+   narrow enlarged-text column to break the word rather than clip it. Its
+   nested .cta-tail still keeps the final character and arrow together. */
+.cta-word {
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .button .cta-icon {
   margin-inline-start: 0.6rem;
 }
@@ -2128,6 +2138,7 @@ svg.cta-icon {
 }
 
 .newsletter-sign-off {
+  container: newsletter-sign-off / inline-size;
   margin-top: 1.5rem;
 }
 
@@ -2140,11 +2151,19 @@ svg.cta-icon {
 
 .newsletter-sign-off p > span {
   min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
 }
 
+@container newsletter-sign-off (max-width: 10em) {
+  .newsletter-sign-off p {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* Keeps the last word with its arrow so the arrow never wraps alone. */
-.newsletter-sign-off .sign-off-last-word {
+.newsletter-sign-off .cta-word {
   display: inline-block;
   max-width: 100%;
   text-decoration: inherit;
@@ -4904,6 +4923,10 @@ body.menu-open .cookie-banner {
   list-style: none;
 }
 
+.fw-vol .content-section {
+  container: volunteer-cards / inline-size;
+}
+
 .vol-card {
   display: flex;
   flex-direction: column;
@@ -5006,13 +5029,13 @@ body.menu-open .cookie-banner {
   margin: 1.5rem 0 0;
 }
 
-@media (min-width: 48rem) {
+@container volunteer-cards (min-width: 40em) {
   .vol-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 64rem) {
+@container volunteer-cards (min-width: 56em) {
   .vol-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
