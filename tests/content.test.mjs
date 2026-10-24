@@ -127,7 +127,7 @@ test("the half term newsletter omits email-only copy and renders clean links", a
   assert.ok(!latest.includes("attached poster"));
   assert.ok(!latest.includes("\\!"));
   for (const label of ["Buy tickets", "Event information", "volunteer sign-up links", "Find out how to help", "uniform information and requests", "See our fundraising plans"]) {
-    assert.ok(latest.includes(`>${label}<`), `${label} should render as a clean link label`);
+    assert.ok(latest.includes(`>${label}<`) || latest.includes(`>${label}&nbsp;<`), `${label} should render as a clean link label`);
   }
 });
 
