@@ -1,11 +1,11 @@
-// Builds "add this event" links for the named calendar services (Google Calendar
-// and Outlook) so visitors can save an event without downloading the .ics file.
-// Both services require an end: timed events without a confirmed end return no
-// link rather than inventing a duration. All-day events use the UK calendar
-// date with an exclusive end date, the same semantics as the ICS download.
-// URL formats follow the community-verified parameter documentation at
+// Builds the "add this event" link for Google Calendar so visitors can save an
+// event without downloading the .ics file. Google requires an end: timed events
+// without a confirmed end return no link rather than inventing a duration.
+// All-day events use the UK calendar date with an exclusive end date, the same
+// semantics as the ICS download. The URL format follows the community-verified
+// parameter documentation at
 // https://github.com/InteractionDesignFoundation/add-event-to-calendar-docs
-// (services/google.md and services/outlook-web.md).
+// (services/google.md).
 
 // The UK-day helpers mirror src/lib/ics.ts; lib modules stay self-contained so
 // the unit tests can import them without a bundler.
@@ -34,12 +34,8 @@ export interface LinkableEvent {
   url: string;
 }
 
-// 20261205T120000Z (Google) and 2026-12-05T12:00:00Z (Outlook), both exact UTC instants.
+// 20261205T120000Z: the exact UTC instant in Google's compact form.
 const googleStamp = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-const outlookStamp = (date: Date) => date.toISOString().replace(/\.\d{3}/, "");
-
-const londonDateDashed = (undashed: string) =>
-  `${undashed.slice(0, 4)}-${undashed.slice(4, 6)}-${undashed.slice(6, 8)}`;
 
 const details = (event: LinkableEvent) => `${event.summary}\n\nDetails: ${event.url}`;
 
@@ -58,23 +54,4 @@ export const buildGoogleCalendarUrl = (event: LinkableEvent) => {
   params.set("details", details(event));
   params.set("location", event.location);
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
-};
-
-export const buildOutlookCalendarUrl = (event: LinkableEvent) => {
-  if (!event.allDay && !event.end) return null;
-  const params = new URLSearchParams();
-  params.set("path", "/calendar/action/compose");
-  params.set("rru", "addevent");
-  if (event.allDay) {
-    params.set("startdt", londonDateDashed(londonDateValue(event.start)));
-    params.set("enddt", londonDateDashed(addLondonDays(event.start, 1)));
-    params.set("allday", "true");
-  } else {
-    params.set("startdt", outlookStamp(event.start));
-    params.set("enddt", outlookStamp(event.end!));
-  }
-  params.set("subject", event.title);
-  params.set("body", details(event));
-  params.set("location", event.location);
-  return `https://outlook.live.com/calendar/0/deeplink/compose?${params.toString()}`;
 };
