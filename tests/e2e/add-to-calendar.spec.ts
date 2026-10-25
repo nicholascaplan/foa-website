@@ -51,7 +51,10 @@ test.describe("Add to calendar", () => {
     const download = fileLink(page);
     await expect(download).toBeVisible();
     await expect(download).toHaveAttribute("href", /\/calendar\/fireworks-2026\.ics$/);
-    await expect(download).toHaveAttribute("download", "fireworks-2026.ics");
+    // Nick asked on 25 October 2026 for the link to open the calendar app rather
+    // than force a file save: no download attribute, so the browser/OS calendar
+    // handler decides (Safari on iPhone shows the add-event sheet).
+    expect(await download.getAttribute("download")).toBeNull();
 
     const ics = await fetchIcs(page, "/calendar/fireworks-2026.ics");
     expect(ics).toContain("SUMMARY:Fireworks on the Field");
@@ -93,7 +96,7 @@ test.describe("Add to calendar", () => {
       "/calendar/happy-bags-january-2027.ics",
       "/calendar/happy-bags-april-2027.ics",
     ]);
-    for (const link of await downloads.all()) await expect(link).toHaveAttribute("download", /.+\.ics/);
+    for (const link of await downloads.all()) expect(await link.getAttribute("download")).toBeNull();
     // Santa's Grotto is an all-day event: Google gets whole UK dates with an exclusive end.
     const grottoRow = page.locator(".event-list-item", { hasText: "Santa's Grotto" });
     const g = new URL((await grottoRow.getByRole("link", { name: "Google (opens in a new tab)" }).getAttribute("href"))!).searchParams;
