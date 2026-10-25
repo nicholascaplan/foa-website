@@ -388,6 +388,12 @@ body.xmas-theme::before {
   margin: 1.2rem 0 0;
 }
 
+/* The calendar choices sit on the dark Christmas stage, so they take the
+   stage's cream rather than the default page green. */
+.xmas-actions .add-calendar {
+  color: var(--xm-cream);
+}
+
 /* Paired hero actions share one width: equal columns side by side,
    each full width once they stack. */
 .xmas-hero__frame .xmas-actions {
