@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 // A compliant CTA keeps its whole label (including the icon) in a single
 // .cta-label span, with no whitespace between the final word and the icon.
 
-const ctas = "a.button, .event-list-cta, a.event-list-calendar, a.text-link, a.designer-credit, .member-vacancy a, .newsletter-sign-off a";
+const ctas = "a.button, .event-list-cta, a.event-list-calendar, .add-calendar a, a.text-link, a.designer-credit, .member-vacancy a, .newsletter-sign-off a";
 
 // Returns a description of every CTA whose trailing icon sits on a different
 // line from the end of its label.

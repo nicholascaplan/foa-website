@@ -5163,3 +5163,83 @@ body.menu-open .cookie-banner {
     font-size: 0.88rem;
   }
 }
+
+/* Add-to-calendar service choices (Google / iCal file) */
+.add-calendar {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.add-calendar-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+/* Each choice carries its own trailing separator, so a wrap never strands
+   a dot or orphans a link. */
+.add-calendar-unit {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.add-calendar-sep {
+  color: inherit;
+  opacity: 0.55;
+  padding: 0 0.3rem;
+}
+
+.add-calendar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.05rem;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.add-calendar .calendar-icon {
+  width: 0.95em;
+  height: 0.95em;
+  flex: none;
+}
+
+/* What's On rows: compact, with the label inline. */
+.add-calendar--row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.45rem;
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+}
+
+.add-calendar--row .add-calendar-label::after {
+  content: ":";
+}
+
+.event-list-actions .add-calendar--row {
+  margin-top: 0;
+}
+
+/* Event pages: the label sits on its own line, choices centred beneath. */
+.add-calendar--page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.add-calendar--page .add-calendar-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.add-calendar--page .add-calendar-links {
+  justify-content: center;
+}

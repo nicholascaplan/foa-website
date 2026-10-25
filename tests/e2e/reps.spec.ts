@@ -109,7 +109,10 @@ test("expired messages disappear and the empty state becomes visible", async ({ 
   await page.clock.fastForward(60000);
   await expect(page.locator(".message-card:visible")).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Christmas Fayre", exact: true })).toBeVisible();
-  await page.clock.setSystemTime(new Date("2026-12-05T12:00:00Z"));
+  await page.clock.setSystemTime(new Date("2026-12-05T13:00:00Z"));
+  await page.clock.fastForward(60000);
+  await expect(page.locator(".message-card:visible")).toHaveCount(1);
+  await page.clock.setSystemTime(new Date("2026-12-05T17:00:00Z"));
   await page.clock.fastForward(60000);
   await expect(page.locator(".message-card:visible")).toHaveCount(0);
   await expect(page.locator("[data-messages-empty]")).toBeVisible();

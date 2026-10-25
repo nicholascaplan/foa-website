@@ -642,6 +642,10 @@ body.fw-theme::before {
   margin: 0.9rem 0 0;
 }
 
+.fw-theme .summary-calendar .add-calendar-label {
+  color: var(--fw-label);
+}
+
 .fw-theme .summary-calendar .button {
   width: 100%;
 }

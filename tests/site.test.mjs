@@ -92,6 +92,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.equal(cards.length, 4);
   const fireworks = JSON.parse(await readFile(path.resolve("src/content/events/fireworks-2026.json"), "utf8"));
   const uniform = JSON.parse(await readFile(path.resolve("src/content/events/uniform-november-2026.json"), "utf8"));
+  const fayre = JSON.parse(await readFile(path.resolve("src/content/events/christmas-fayre-2026.json"), "utf8"));
   assert.ok(cards[0].includes(`href="${fireworks.ticketUrl}"`));
   assert.ok(cards[0].includes("Buy Fireworks tickets"));
   assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Buy Fireworks tickets: ${fireworks.ticketUrl}`));
@@ -101,9 +102,12 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   for (const date of [uniform.start, uniform.end]) {
     assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
   }
+  const fayreRange = `${time.format(new Date(fayre.start))}–${time.format(new Date(fayre.end))}`;
   assert.ok(cards[3].includes('class="message-time"'));
-  assert.ok(cards[3].includes("From "));
-  assert.ok(cards[3].includes("12:00"));
+  assert.ok(cards[3].replace(/<[^>]+>/g, "").includes(fayreRange));
+  for (const date of [fayre.start, fayre.end]) {
+    assert.ok(cards[3].includes(`datetime="${new Date(date).toISOString()}"`));
+  }
   assert.ok(cards[2].includes("weather permitting"));
   assert.ok(cards[3].includes("rather than stalls being assigned to year groups"));
   assert.ok(cards[3].includes("No experience needed"));
@@ -339,7 +343,11 @@ test("external links communicate their destination and open safely in a new tab"
   // keeps the indicator.
   const socialExemptions = externalLinkTags.filter((tag) => tag.includes('class="social-link"')
     && /href="https:\/\/(?:www\.instagram\.com\/thefriendsofashley\/|www\.facebook\.com\/groups\/friendsofashley\/)"/.test(tag)).length;
-  assert.ok(externalLinkIndicators + socialExemptions >= externalLinkTags.length);
+  // The Add to calendar Google choice drops the arrow by Nick's 25 October 2026
+  // steering: the pair shows one shared calendar icon and both service names are
+  // underlined as the link signal (see docs/PROJECT-BRIEF.md).
+  const addCalendarExemptions = externalLinkTags.filter((tag) => tag.includes('href="https://calendar.google.com/')).length;
+  assert.ok(externalLinkIndicators + socialExemptions + addCalendarExemptions >= externalLinkTags.length);
 });
 
 test("all generated internal links and assets resolve", async () => {

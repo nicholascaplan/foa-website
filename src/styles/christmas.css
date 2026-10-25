@@ -388,13 +388,35 @@ body.xmas-theme::before {
   margin: 1.2rem 0 0;
 }
 
-/* Paired hero actions share one width: equal columns side by side,
-   each full width once they stack. */
+/* The calendar choices sit on the dark Christmas stage, so they take the
+   stage's cream rather than the default page green. */
+.xmas-actions .add-calendar {
+  color: var(--xm-cream);
+}
+
+.xmas-actions .add-calendar-label {
+  color: var(--xm-gold-light);
+}
+
+/* Paired hero actions share one width on narrow screens; on wider screens
+   the button and the calendar choices stack centred at their own widths,
+   so the choices stay on one line. */
 .xmas-hero__frame .xmas-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
   max-width: 38rem;
   margin-inline: auto;
+}
+
+@media (min-width: 40rem) {
+  .xmas-hero__frame .xmas-actions {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .xmas-hero__frame .xmas-actions .button {
+    width: auto;
+  }
 }
 
 /* Sections */
