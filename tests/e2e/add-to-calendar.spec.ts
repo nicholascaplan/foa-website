@@ -40,6 +40,14 @@ test.describe("Add to calendar", () => {
     // Outlook was offered briefly, then Nick chose Google or iCal only (25 October 2026).
     await expect(page.getByRole("link", { name: /Outlook/ })).toHaveCount(0);
 
+    // Nick's 25 October steering: one shared calendar icon for the cluster, no
+    // per-link icons, and both choices carry an underline as the link signal.
+    const cluster = page.locator(".add-calendar");
+    await expect(cluster.locator(".calendar-icon")).toHaveCount(1);
+    await expect(cluster.locator(".external-link-icon")).toHaveCount(0);
+    await expect(google).toHaveCSS("text-decoration-line", /underline/);
+    await expect(fileLink(page)).toHaveCSS("text-decoration-line", /underline/);
+
     const download = fileLink(page);
     await expect(download).toBeVisible();
     await expect(download).toHaveAttribute("href", /\/calendar\/fireworks-2026\.ics$/);
