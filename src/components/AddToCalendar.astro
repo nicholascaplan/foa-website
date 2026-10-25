@@ -9,6 +9,9 @@ interface Props {
 }
 const { eventId, class: className = "button button--secondary" } = Astro.props;
 const entry = await getEntry("events", eventId);
+if (!entry) {
+  throw new Error(`AddToCalendar: unknown event "${eventId}"`);
+}
 const event = entry.data;
 const url = new URL(withBase(event.path ?? "/whats-on/"), Astro.site).href;
 const linkable = {
