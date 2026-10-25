@@ -343,7 +343,11 @@ test("external links communicate their destination and open safely in a new tab"
   // keeps the indicator.
   const socialExemptions = externalLinkTags.filter((tag) => tag.includes('class="social-link"')
     && /href="https:\/\/(?:www\.instagram\.com\/thefriendsofashley\/|www\.facebook\.com\/groups\/friendsofashley\/)"/.test(tag)).length;
-  assert.ok(externalLinkIndicators + socialExemptions >= externalLinkTags.length);
+  // The Add to calendar Google choice drops the arrow by Nick's 25 October 2026
+  // steering: the pair shows one shared calendar icon and both service names are
+  // underlined as the link signal (see docs/PROJECT-BRIEF.md).
+  const addCalendarExemptions = externalLinkTags.filter((tag) => tag.includes('href="https://calendar.google.com/')).length;
+  assert.ok(externalLinkIndicators + socialExemptions + addCalendarExemptions >= externalLinkTags.length);
 });
 
 test("all generated internal links and assets resolve", async () => {
