@@ -1,8 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const googleLink = (page: Page) => page.getByRole("link", { name: "Google (opens in a new tab)" });
-const outlookLink = (page: Page) => page.getByRole("link", { name: "Outlook (opens in a new tab)" });
-const fileLink = (page: Page) => page.getByRole("link", { name: "File (.ics)" });
+const fileLink = (page: Page) => page.getByRole("link", { name: "iCal" });
 
 const fetchIcs = async (page: Page, path: string) => {
   const response = await page.request.get(path);
@@ -22,7 +21,7 @@ const fireworksSummary = "An early quiet display, the main spectacular and an ev
 const fayreSummary = "Led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox).";
 
 test.describe("Add to calendar", () => {
-  test("the Fireworks page offers Google, Outlook and a download with exact times", async ({ page }) => {
+  test("the Fireworks page offers Google and the iCal download with exact times", async ({ page }) => {
     await page.goto("/events/fireworks-2026/");
     const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
     expect(canonical).toBeTruthy();
@@ -38,14 +37,8 @@ test.describe("Add to calendar", () => {
     expect(g.get("location")).toBe("Ashley School field, Ashley Road, Walton-on-Thames KT12 1HX");
     expectDetails(googleHref, fireworksSummary, canonical!);
 
-    const outlook = outlookLink(page);
-    await expect(outlook).toBeVisible();
-    const o = new URL((await outlook.getAttribute("href"))!).searchParams;
-    expect(o.get("rru")).toBe("addevent");
-    expect(o.get("subject")).toBe("Fireworks on the Field");
-    expect(o.get("startdt")).toBe("2026-11-05T16:30:00Z");
-    expect(o.get("enddt")).toBe("2026-11-05T18:30:00Z");
-    expect(o.get("location")).toBe("Ashley School field, Ashley Road, Walton-on-Thames KT12 1HX");
+    // Outlook was offered briefly, then Nick chose Google or iCal only (25 October 2026).
+    await expect(page.getByRole("link", { name: /Outlook/ })).toHaveCount(0);
 
     const download = fileLink(page);
     await expect(download).toBeVisible();
@@ -70,11 +63,7 @@ test.describe("Add to calendar", () => {
     expect(g.get("dates")).toBe("20261205T120000Z/20261205T160000Z");
     expect(g.get("ctz")).toBe("Europe/London");
 
-    const outlookHref = (await outlookLink(page).getAttribute("href"))!;
-    const o = new URL(outlookHref).searchParams;
-    expect(o.get("startdt")).toBe("2026-12-05T12:00:00Z");
-    expect(o.get("enddt")).toBe("2026-12-05T16:00:00Z");
-    expectDetails(outlookHref, fayreSummary, canonical!);
+    expectDetails((await googleLink(page).getAttribute("href"))!, fayreSummary, canonical!);
 
     const ics = await fetchIcs(page, "/calendar/christmas-fayre-2026.ics");
     expect(ics).toContain("DTSTART:20261205T120000Z");
@@ -86,7 +75,7 @@ test.describe("Add to calendar", () => {
     await page.goto("/whats-on/");
     // Fireworks, Santa's Grotto and both Happy Bags dates are upcoming.
     await expect(googleLink(page)).toHaveCount(4);
-    await expect(outlookLink(page)).toHaveCount(4);
+    await expect(page.getByRole("link", { name: /Outlook/ })).toHaveCount(0);
     const downloads = fileLink(page);
     await expect(downloads).toHaveCount(4);
     const hrefs = await downloads.evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href")));
@@ -97,14 +86,10 @@ test.describe("Add to calendar", () => {
       "/calendar/happy-bags-april-2027.ics",
     ]);
     for (const link of await downloads.all()) await expect(link).toHaveAttribute("download", /.+\.ics/);
-    // Santa's Grotto is an all-day event: both services get whole UK dates with an exclusive end.
+    // Santa's Grotto is an all-day event: Google gets whole UK dates with an exclusive end.
     const grottoRow = page.locator(".event-list-item", { hasText: "Santa's Grotto" });
     const g = new URL((await grottoRow.getByRole("link", { name: "Google (opens in a new tab)" }).getAttribute("href"))!).searchParams;
     expect(g.get("dates")).toBe("20261214/20261215");
-    const o = new URL((await grottoRow.getByRole("link", { name: "Outlook (opens in a new tab)" }).getAttribute("href"))!).searchParams;
-    expect(o.get("startdt")).toBe("2026-12-14");
-    expect(o.get("enddt")).toBe("2026-12-15");
-    expect(o.get("allday")).toBe("true");
     // Rows that are one whole link (Christmas Fayre, uniform sales) cannot nest calendar links.
     await expect(page.locator("a.event-list-item", { hasText: "Christmas Fayre" }).getByRole("link", { name: "Google (opens in a new tab)" })).toHaveCount(0);
   });
