@@ -36,10 +36,12 @@ for (const width of [320, 390, 820, 1440]) {
         const utility = page.locator(".footer-bottom");
         await expect(utility).toHaveCSS("font-size", enlarged ? "26.24px" : "13.12px");
         await expect(utility).toContainText("Registered charity 1024028");
+        await expect(utility).not.toContainText("Child-focused");
+        await expect(utility.locator(":scope > *")).toHaveCount(2);
         const rhythm = await utility.evaluate(element => {
           const items = [...element.children] as HTMLElement[];
           const boxes = items.map(item => item.getBoundingClientRect());
-          const fonts = [items[0], items[2], items[2].querySelector(".credit-name")!].map(item => {
+          const fonts = [items[0], items[1], items[1].querySelector(".credit-name")!].map(item => {
             const style = getComputedStyle(item);
             return [style.fontFamily, style.fontSize, style.fontWeight, style.fontStyle];
           });
@@ -48,14 +50,12 @@ for (const width of [320, 390, 820, 1440]) {
         expect(rhythm.fonts[1]).toEqual(rhythm.fonts[0]);
         expect(rhythm.fonts[2]).toEqual(rhythm.fonts[0]);
         if (!enlarged && width === 390) {
-          expect(Math.abs((rhythm.boxes[0].top + rhythm.boxes[0].bottom) / 2 - (rhythm.boxes[2].top + rhythm.boxes[2].bottom) / 2)).toBeLessThanOrEqual(1);
-          expect(rhythm.boxes[2].left - rhythm.boxes[0].right).toBeGreaterThanOrEqual(16);
-          expect(rhythm.boxes[1].top).toBeGreaterThanOrEqual(rhythm.boxes[2].bottom);
+          expect(Math.abs((rhythm.boxes[0].top + rhythm.boxes[0].bottom) / 2 - (rhythm.boxes[1].top + rhythm.boxes[1].bottom) / 2)).toBeLessThanOrEqual(1);
+          expect(rhythm.boxes[1].left - rhythm.boxes[0].right).toBeGreaterThanOrEqual(16);
           expect(rhythm.boxes[0].height).toBeLessThan(30);
         }
         if (width === 320 || (enlarged && width <= 390)) {
           expect(rhythm.boxes[1].top).toBeGreaterThanOrEqual(rhythm.boxes[0].bottom);
-          expect(rhythm.boxes[2].top).toBeGreaterThanOrEqual(rhythm.boxes[1].bottom);
           expect(rhythm.boxes[1].top - rhythm.boxes[0].bottom).toBeLessThanOrEqual(8);
         }
 

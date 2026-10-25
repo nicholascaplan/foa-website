@@ -42,7 +42,7 @@ const linkColumns = [
       </nav>
     </div>
     <SocialLinks class="footer-follow" />
-    <div class="footer-bottom"><span>Registered charity 1024028</span><span>Parent-led. Child-focused. All welcome.</span><a class="designer-credit" href="https://nickcaplan.github.io/websites-by-nick/" target="_blank" rel="noopener noreferrer" aria-label="Made with love by Nick (opens in a new tab)"><span>Made with <span class="credit-heart" aria-hidden="true">♥</span> by <span class="cta-tail"><span class="credit-name">Nick</span><span class="external-link-icon" aria-hidden="true">↗</span></span></span></a></div>
+    <div class="footer-bottom"><span>Registered charity 1024028</span><a class="designer-credit" href="https://nickcaplan.github.io/websites-by-nick/" target="_blank" rel="noopener noreferrer" aria-label="Made with love by Nick (opens in a new tab)"><span>Made with <span class="credit-heart" aria-hidden="true">♥</span> by <span class="cta-tail"><span class="credit-name">Nick</span><span class="external-link-icon" aria-hidden="true">↗</span></span></span></a></div>
   </div>
 </footer>
 
@@ -53,13 +53,11 @@ const linkColumns = [
 
 @container footer (max-width: 47.999em) {
   .footer-bottom { justify-content: flex-start; }
-  .footer-bottom > :nth-child(2) { order: 3; flex-basis: 100%; }
   .footer-bottom > .designer-credit { margin-left: auto; }
 }
 
 @container footer (max-width: 21.999em) {
   .footer-bottom { flex-direction: column; align-items: flex-start; }
-  .footer-bottom > :nth-child(2) { order: initial; flex-basis: auto; }
   .footer-bottom > .designer-credit { margin-left: 0; }
 }
 .designer-credit {

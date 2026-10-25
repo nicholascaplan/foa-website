@@ -460,5 +460,6 @@ test("every built footer uses the verified charity disclosure", async () => {
     if (!html.includes('class="footer-bottom"')) continue;
     assert.ok(html.includes("Registered charity 1024028"), file);
     assert.ok(!html.includes("1042944"), file);
+    assert.ok(!html.includes("Parent-led. Child-focused. All welcome."), file);
   }
 });
