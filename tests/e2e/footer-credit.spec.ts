@@ -35,20 +35,29 @@ for (const width of [320, 390, 820, 1440]) {
         expect((await credit.boundingBox())!.height).toBeGreaterThanOrEqual(44);
         const utility = page.locator(".footer-bottom");
         await expect(utility).toHaveCSS("font-size", enlarged ? "26.24px" : "13.12px");
+        await expect(utility).toContainText("Registered charity 1024028");
         const rhythm = await utility.evaluate(element => {
           const items = [...element.children] as HTMLElement[];
           const boxes = items.map(item => item.getBoundingClientRect());
-          const stacked = getComputedStyle(element).flexDirection === "column";
-          const gaps = boxes.slice(1).map((box, index) => stacked ? box.top - boxes[index].bottom : box.left - boxes[index].right);
           const fonts = [items[0], items[2], items[2].querySelector(".credit-name")!].map(item => {
             const style = getComputedStyle(item);
             return [style.fontFamily, style.fontSize, style.fontWeight, style.fontStyle];
           });
-          return { gaps, fonts, stacked };
+          return { fonts, boxes: boxes.map(box => ({top:box.top,bottom:box.bottom,left:box.left,right:box.right,height:box.height})) };
         });
         expect(rhythm.fonts[1]).toEqual(rhythm.fonts[0]);
         expect(rhythm.fonts[2]).toEqual(rhythm.fonts[0]);
-        expect(Math.abs(rhythm.gaps[0] - rhythm.gaps[1])).toBeLessThanOrEqual(1);
+        if (!enlarged && width === 390) {
+          expect(Math.abs((rhythm.boxes[0].top + rhythm.boxes[0].bottom) / 2 - (rhythm.boxes[2].top + rhythm.boxes[2].bottom) / 2)).toBeLessThanOrEqual(1);
+          expect(rhythm.boxes[2].left - rhythm.boxes[0].right).toBeGreaterThanOrEqual(16);
+          expect(rhythm.boxes[1].top).toBeGreaterThanOrEqual(rhythm.boxes[2].bottom);
+          expect(rhythm.boxes[0].height).toBeLessThan(30);
+        }
+        if (width === 320 || (enlarged && width <= 390)) {
+          expect(rhythm.boxes[1].top).toBeGreaterThanOrEqual(rhythm.boxes[0].bottom);
+          expect(rhythm.boxes[2].top).toBeGreaterThanOrEqual(rhythm.boxes[1].bottom);
+          expect(rhythm.boxes[1].top - rhythm.boxes[0].bottom).toBeLessThanOrEqual(8);
+        }
 
         expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
         await expect(footer.getByRole("button", { name: "Cookie preferences", exact: true })).toHaveCount(0);

@@ -79,7 +79,7 @@ export const GET: APIRoute = () => new Response(`<!doctype html>
           <div class="footer-brand"><h2>The Friends of Ashley</h2><p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p></div>
           <nav class="footer-links" aria-label="Footer navigation">${links(footerLinks)}</nav>
         </div>
-        <div class="footer-bottom"><span>Registered Charity No. 1042944</span><span>Parent-led. Child-focused. All welcome.</span></div>
+        <div class="footer-bottom"><span>Registered charity 1024028</span><span>Parent-led. Child-focused. All welcome.</span></div>
       </div>
     </footer>
     <script>
