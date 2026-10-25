@@ -452,3 +452,14 @@ test("Fireworks volunteering links back to the event page and never asks for per
   assert.ok(html.includes(`href="${basePath}${fireworks.path}"`));
   assert.doesNotMatch(html, /<form|<input|type="tel"/);
 });
+
+
+test("every built footer uses the verified charity disclosure", async () => {
+  for (const file of (await filesUnder(dist)).filter(file => file.endsWith(".html"))) {
+    const html = await readFile(file, "utf8");
+    if (!html.includes('class="footer-bottom"')) continue;
+    assert.ok(html.includes("Registered charity 1024028"), file);
+    assert.ok(!html.includes("1042944"), file);
+    assert.ok(!html.includes("Parent-led. Child-focused. All welcome."), file);
+  }
+});
