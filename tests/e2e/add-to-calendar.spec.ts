@@ -28,7 +28,7 @@ test.describe("Add to calendar", () => {
     expect(ics.replace(/\r\n[ \t]/g, "")).toContain(`URL:${canonical}`);
   });
 
-  test("the Christmas Fayre page offers a start-only tentative download while the end time is unconfirmed", async ({ page }) => {
+  test("the Christmas Fayre page offers a tentative download with its confirmed start and finish", async ({ page }) => {
     await page.goto("/events/christmas-fayre-2026/");
     const link = calendarLink(page);
     await expect(link).toBeVisible();
@@ -36,7 +36,7 @@ test.describe("Add to calendar", () => {
 
     const ics = await fetchIcs(page, "/calendar/christmas-fayre-2026.ics");
     expect(ics).toContain("DTSTART:20261205T120000Z");
-    expect(ics).not.toContain("DTEND");
+    expect(ics).toContain("DTEND:20261205T160000Z");
     expect(ics).toContain("STATUS:TENTATIVE");
   });
 
