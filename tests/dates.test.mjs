@@ -36,10 +36,10 @@ test("Date objects are accepted as well as strings", () => {
 });
 
 
-test("event time ranges use UK 24-hour times joined by to", () => {
-  assert.equal(formatEventTimeRange(new Date("2026-12-05T12:00:00Z"), new Date("2026-12-05T15:00:00Z")), "12:00 to 15:00");
-  assert.equal(formatEventTimeRange(new Date("2026-07-01T12:30:00Z"), new Date("2026-07-01T14:45:00Z")), "13:30 to 15:45");
+test("event time ranges use UK 24-hour times joined by a hyphen", () => {
+  assert.equal(formatEventTimeRange(new Date("2026-12-05T12:00:00Z"), new Date("2026-12-05T15:00:00Z")), "12:00-15:00");
+  assert.equal(formatEventTimeRange(new Date("2026-07-01T12:30:00Z"), new Date("2026-07-01T14:45:00Z")), "13:30-15:45");
   assert.equal(formatEventTimeRange(new Date("2026-12-05T12:00:00Z")), "12:00");
-  for (const separator of ["-", "\u2013", "\u2014"]) assert.equal(formatTimeRangeText(`15:30${separator}16:30`), "15:30 to 16:30");
+  for (const separator of ["-", "\u2013", "\u2014", " to "]) assert.equal(formatTimeRangeText(`15:30${separator}16:30`), "15:30-16:30");
   assert.equal(formatTimeRangeText("2nd–5th November"), "2nd–5th November");
 });
