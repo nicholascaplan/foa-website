@@ -181,7 +181,7 @@ test("every dedicated event page includes its UK date in sharing metadata", asyn
     const suffix = day % 100 >= 11 && day % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] || "th");
     const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "long", timeZone: "Europe/London" }).format(date);
     const monthYear = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "Europe/London" }).format(date);
-    const expectedDate = `${weekday}, ${day}${suffix} ${monthYear}`;
+    const expectedDate = `${weekday} ${day}${suffix} ${monthYear}`;
     const title = metaContent(html, "property", "og:title");
     const description = metaContent(html, "property", "og:description");
     assert.equal(title, `${event.title} - ${expectedDate} | The Friends of Ashley`, event.path);
