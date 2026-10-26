@@ -161,3 +161,38 @@ test("the development-only tools are not shipped in the production build", async
     assert.ok(!html.includes("dev-tools"), `${route} contains developer tooling markup`);
   }
 });
+
+
+test("every dedicated event page includes its UK date in sharing metadata", async () => {
+  const files = await readdir(path.resolve("src/content/events"));
+  const eventRoutes = [];
+  for (const file of files.filter((name) => name.endsWith(".json"))) {
+    const event = JSON.parse(await read(path.resolve("src/content/events", file)));
+    if (!event.path?.startsWith("/events/")) continue;
+    eventRoutes.push(event.path);
+    const html = await read(htmlFor(event.path));
+    const date = new Date(event.start);
+    const day = Number(new Intl.DateTimeFormat("en-GB", { day: "numeric", timeZone: "Europe/London" }).format(date));
+    const suffix = day % 100 >= 11 && day % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] || "th");
+    const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "long", timeZone: "Europe/London" }).format(date);
+    const monthYear = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "Europe/London" }).format(date);
+    const expectedDate = `${weekday}, ${day}${suffix} ${monthYear}`;
+    const title = metaContent(html, "property", "og:title");
+    const description = metaContent(html, "property", "og:description");
+    assert.equal(title, `${event.title} - ${expectedDate} | The Friends of Ashley`, event.path);
+    assert.ok(description.startsWith(`${expectedDate}. `), event.path);
+    assert.equal(metaContent(html, "name", "description"), description, event.path);
+    assert.equal(metaContent(html, "name", "twitter:title"), title, event.path);
+    assert.equal(metaContent(html, "name", "twitter:description"), description, event.path);
+    assert.ok(html.includes(`<title>${event.title} | The Friends of Ashley</title>`), "browser title stays unchanged");
+  }
+  assert.deepEqual(eventRoutes.sort(), publicRoutes.filter((route) => route.startsWith("/events/")), "every dedicated event route must have a canonical event record");
+});
+
+test("non-event pages keep their existing metadata without a sale date", async () => {
+  for (const route of publicRoutes.filter((route) => !route.startsWith("/events/"))) {
+    const html = await read(htmlFor(route));
+    assert.equal(metaContent(html, "property", "og:title"), html.match(/<title>([^<]+)<\/title>/)?.[1].replaceAll("&#39;", "'").replaceAll("&amp;", "&"), route);
+    assert.equal(metaContent(html, "property", "og:description"), metaContent(html, "name", "description"), route);
+  }
+});
