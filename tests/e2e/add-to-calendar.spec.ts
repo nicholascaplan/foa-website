@@ -71,14 +71,14 @@ test.describe("Add to calendar", () => {
 
     const g = new URL((await googleLink(page).getAttribute("href"))!).searchParams;
     expect(g.get("text")).toBe("Christmas Fayre");
-    expect(g.get("dates")).toBe("20261205T120000Z/20261205T160000Z");
+    expect(g.get("dates")).toBe("20261205T120000Z/20261205T150000Z");
     expect(g.get("ctz")).toBe("Europe/London");
 
     expectDetails((await googleLink(page).getAttribute("href"))!, fayreSummary, canonical!);
 
     const ics = await fetchIcs(page, "/calendar/christmas-fayre-2026.ics");
     expect(ics).toContain("DTSTART:20261205T120000Z");
-    expect(ics).toContain("DTEND:20261205T160000Z");
+    expect(ics).toContain("DTEND:20261205T150000Z");
     expect(ics).toContain("STATUS:TENTATIVE");
   });
 
