@@ -28,10 +28,15 @@ const publicRoutes = (await discoverRoutes()).filter((route) => !excluded.has(ro
 const htmlFor = (route) => path.join(dist, route.replace(/^\//, ""), route.endsWith("/") ? "index.html" : "");
 const read = (file) => readFile(file, "utf8");
 
+const decodeHtml = (value) => value?.replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos);/gi, (entity, code) => {
+  if (code[0] === "#") return String.fromCodePoint(parseInt(code.slice(code[1].toLowerCase() === "x" ? 2 : 1), code[1].toLowerCase() === "x" ? 16 : 10));
+  return { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" }[code.toLowerCase()] ?? entity;
+});
+const titleOf = (html) => decodeHtml(html.match(/<title>([^<]+)<\/title>/)?.[1]);
 const attribute = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 const tagsOf = (html, name) => [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, "g"))].map((match) => match[0]);
 const metaContent = (html, key, value) =>
-  attribute(tagsOf(html, "meta").find((tag) => attribute(tag, key) === value) ?? "", "content");
+  decodeHtml(attribute(tagsOf(html, "meta").find((tag) => attribute(tag, key) === value) ?? "", "content"));
 const canonicalOf = (html) =>
   attribute(tagsOf(html, "link").find((tag) => attribute(tag, "rel") === "canonical") ?? "", "href");
 const exists = async (file) => stat(file).then(() => true, () => false);
@@ -160,4 +165,51 @@ test("the development-only tools are not shipped in the production build", async
     assert.ok(!html.includes("data-reset-cookie-preferences"), `${route} contains the cookie-reset developer control`);
     assert.ok(!html.includes("dev-tools"), `${route} contains developer tooling markup`);
   }
+});
+
+
+test("every dedicated event page includes its UK date in sharing metadata", async () => {
+  const files = await readdir(path.resolve("src/content/events"));
+  const eventRoutes = [];
+  for (const file of files.filter((name) => name.endsWith(".json"))) {
+    const event = JSON.parse(await read(path.resolve("src/content/events", file)));
+    if (!event.path?.startsWith("/events/")) continue;
+    eventRoutes.push(event.path);
+    const html = await read(htmlFor(event.path));
+    const date = new Date(event.start);
+    const day = Number(new Intl.DateTimeFormat("en-GB", { day: "numeric", timeZone: "Europe/London" }).format(date));
+    const suffix = day % 100 >= 11 && day % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] || "th");
+    const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "long", timeZone: "Europe/London" }).format(date);
+    const monthYear = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "Europe/London" }).format(date);
+    const expectedDate = `${weekday} ${day}${suffix} ${monthYear}`;
+    const title = metaContent(html, "property", "og:title");
+    const description = metaContent(html, "property", "og:description");
+    assert.equal(title, `${event.title} - ${expectedDate} | The Friends of Ashley`, event.path);
+    assert.ok(description.startsWith(`${expectedDate}. `), event.path);
+    assert.equal(metaContent(html, "name", "description"), description, event.path);
+    assert.equal(metaContent(html, "name", "twitter:title"), title, event.path);
+    assert.equal(metaContent(html, "name", "twitter:description"), description, event.path);
+    assert.equal(titleOf(html), `${event.title} | The Friends of Ashley`, "browser title stays unchanged");
+  }
+  assert.deepEqual(eventRoutes.sort(), publicRoutes.filter((route) => route.startsWith("/events/")), "every dedicated event route must have a canonical event record");
+});
+
+test("non-event pages keep their existing metadata without a sale date", async () => {
+  for (const route of publicRoutes.filter((route) => !route.startsWith("/events/"))) {
+    const html = await read(htmlFor(route));
+    assert.equal(metaContent(html, "property", "og:title"), titleOf(html), route);
+    assert.equal(metaContent(html, "property", "og:description"), metaContent(html, "name", "description"), route);
+    assert.equal(metaContent(html, "name", "twitter:title"), titleOf(html), route);
+    assert.equal(metaContent(html, "name", "twitter:description"), metaContent(html, "name", "description"), route);
+  }
+});
+
+
+test("metadata comparisons decode escaped event titles without double decoding", () => {
+  const text = `Santa's \"Crafts\" & Games <2027>`;
+  const encoded = "Santa&#39;s &quot;Crafts&quot; &amp; Games &lt;2027&gt;";
+  assert.equal(titleOf(`<title>${encoded}</title>`), text);
+  assert.equal(metaContent(`<meta property="og:title" content="${encoded}">`, "property", "og:title"), text);
+  assert.equal(decodeHtml("&#x27;&#34;&apos;"), `'"'`);
+  assert.equal(decodeHtml("&amp;lt;"), "&lt;");
 });

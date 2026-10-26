@@ -1,4 +1,6 @@
 ---
+import { getCollection } from "astro:content";
+import { ordinalDateFormatter } from "../lib/dates";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieBanner from "../components/CookieBanner.astro";
@@ -10,6 +12,13 @@ import "../styles/night-mode.css";
 interface Props { title: string; description: string; image?: string; headerLogo?: string; preloadImage?: string; preloadImageSrcset?: string; preloadImageSizes?: string; noindex?: boolean; bodyClass?: string; }
 const { title, description, image = "/brand/foa-logo-og.png", headerLogo, preloadImage, preloadImageSrcset, preloadImageSizes, noindex = false, bodyClass } = Astro.props;
 const pageTitle = title === "The Friends of Ashley" ? "The Friends of Ashley | Ashley C of E Primary School PTA" : `${title} | The Friends of Ashley`;
+// Only dedicated event routes get a date; shared listings such as Uniform do not.
+const event = (await getCollection("events", ({ data }) =>
+  !!data.path?.startsWith("/events/") && withBase(data.path) === Astro.url.pathname,
+))[0]?.data;
+const eventDate = event && ordinalDateFormatter({ weekday: "long", year: "numeric", timeZone: "Europe/London" })(event.start).replace(",", "");
+const socialTitle = eventDate ? `${title} - ${eventDate} | The Friends of Ashley` : pageTitle;
+const socialDescription = eventDate ? `${eventDate}. ${description}` : description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(withBase(image), Astro.site);
 const fireworksImage = `url("${withBase("/events/fireworks-1600.jpg")}")`;
@@ -19,18 +28,20 @@ const fireworksImage = `url("${withBase("/events/fireworks-1600.jpg")}")`;
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content={description}>
+    <meta name="description" content={socialDescription}>
     <link rel="icon" href={withBase("/brand/favicon.svg")} type="image/svg+xml">
     <link rel="icon" href={withBase("/brand/favicon.png")} type="image/png">
     {noindex && <meta name="robots" content="noindex">}
     <link rel="canonical" href={canonical}>
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="The Friends of Ashley">
-    <meta property="og:title" content={pageTitle}>
-    <meta property="og:description" content={description}>
+    <meta property="og:title" content={socialTitle}>
+    <meta property="og:description" content={socialDescription}>
     <meta property="og:url" content={canonical}>
     <meta property="og:image" content={socialImage}>
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={socialTitle}>
+    <meta name="twitter:description" content={socialDescription}>
     {preloadImage && <link rel="preload" as="image" href={withBase(preloadImage)} imagesrcset={preloadImageSrcset} imagesizes={preloadImageSizes} fetchpriority="high">}
     <title>{pageTitle}</title>
     <ThemeInit />
