@@ -199,6 +199,8 @@ test("non-event pages keep their existing metadata without a sale date", async (
     const html = await read(htmlFor(route));
     assert.equal(metaContent(html, "property", "og:title"), titleOf(html), route);
     assert.equal(metaContent(html, "property", "og:description"), metaContent(html, "name", "description"), route);
+    assert.equal(metaContent(html, "name", "twitter:title"), titleOf(html), route);
+    assert.equal(metaContent(html, "name", "twitter:description"), metaContent(html, "name", "description"), route);
   }
 });
 
