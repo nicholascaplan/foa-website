@@ -69,6 +69,10 @@ test.describe("Add to calendar", () => {
     await page.goto("/events/christmas-fayre-2026/");
     const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
 
+    await expect(page.locator(".xmas-facts")).toContainText("12:00–15:00");
+    const eventData = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
+    expect(eventData.startDate).toBe("2026-12-05T12:00:00.000Z");
+    expect(eventData.endDate).toBe("2026-12-05T15:00:00.000Z");
     const g = new URL((await googleLink(page).getAttribute("href"))!).searchParams;
     expect(g.get("text")).toBe("Christmas Fayre");
     expect(g.get("dates")).toBe("20261205T120000Z/20261205T150000Z");
