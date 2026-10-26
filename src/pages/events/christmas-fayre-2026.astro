@@ -7,7 +7,7 @@ import ChristmasTrees from "../../components/ChristmasTrees.astro";
 import AddToCalendar from "../../components/AddToCalendar.astro";
 import "../../styles/christmas.css";
 import { withBase } from "../../lib/urls";
-import { ordinalDateFormatter } from "../../lib/dates";
+import { ordinalDateFormatter, formatEventTimeRange } from "../../lib/dates";
 
 const entry = await getEntry("events", "christmas-fayre-2026");
 if (!entry?.data.helpAreas || !entry.data.contactEmail) throw new Error("Christmas Fayre content is missing");
@@ -15,7 +15,6 @@ const event = entry.data;
 const helpAreas = event.helpAreas!;
 const email = event.contactEmail!;
 const dateFormatter = ordinalDateFormatter({ weekday: "long", timeZone: "Europe/London" });
-const timeFormatter = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Europe/London" });
 const mailto = `mailto:${email}?subject=${encodeURIComponent("Helping at the Christmas Fayre")}`;
 
 const icons = {
@@ -69,7 +68,7 @@ const eventJsonLd = {
           <p class="xmas-hero__intro">This year we’re trying something new to make helping out easier, more social and more fun for everyone.</p>
           <ChristmasBaubles placement="mobile" />
           <dl class="xmas-facts">
-            <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{timeFormatter.format(event.start)}{event.end && <> to {timeFormatter.format(event.end)}</>}</span></dd></div>
+            <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{formatEventTimeRange(event.start, event.end)}</span></dd></div>
             <div><dt>Where</dt><dd>{event.location}</dd></div>
             <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
