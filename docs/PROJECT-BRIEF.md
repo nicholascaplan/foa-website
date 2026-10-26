@@ -1,6 +1,6 @@
 # The Friends of Ashley Website: Project Brief
 
-**Last updated:** 25 October 2026
+**Last updated:** 26 October 2026
 **Organisation:** Parent Teacher Association for Ashley C of E Primary School, Walton-on-Thames
 **Live site:** <https://www.thefriendsofashley.org/>
 
@@ -153,7 +153,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - Fireworks volunteering lives at `/fireworks-volunteering/` (not in primary navigation). It lists five activities (token presales: Y1 and Y2; prize table: Y3; bar: Y4; entrance: Y5; tokens: Y6), each with its shifts, helpers needed and a link to a Volunteer Sign Up sheet that opens in a new tab and is described on the page as a third-party site. Activities and links are stored as `volunteerRoles` in the Fireworks event content. It uses the [Fireworks volunteering design described above](#design), with parchment scroll cards and no sky canvas or Fireworks script. It is linked from the Fireworks event page and replaces the Uniform quick link on the homepage. Shift times and helper counts were read from the Volunteer Sign Up sheets and must be updated in the event content if the sheets change. The Privacy Notice is deliberately unchanged.
 - Confirmed Fireworks facts: Thursday 5th November 2026; 16:30–18:30; quiet display 17:00; main display 18:00; £8.50 per person; under-2s free; Helen Platt is event lead. Public attraction wording omits the specific wheel. The supplied 2026 Event Guide informs the structured food/payment, parking, wristband/lost-child help and first-aid information, the closing schedule entry and conditional gate-ticket advice. Event facts live in `src/content/events/fireworks-2026.json`.
 - Confirmed Pre-loved Uniform prices: £3 for coats and new-logo items, £1 for all other items, card only. Donation instruction: "If you have any uniform which you would like to donate, please drop it in the green bins by the School Office - no torn items please!"
-- Christmas Fayre is Saturday 5th December 2026, led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox). Welcome Tea is Saturday 3rd October. Santa's Grotto is Monday 14th December 2026, run by parents and carers during the school day.
+- Christmas Fayre is Saturday 5th December 2026, 12:00–15:00 (timing corrected by the project owner on 26 October 2026), led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox). Welcome Tea is Saturday 3rd October. Santa's Grotto is Monday 14th December 2026, run by parents and carers during the school day.
 
 ### Notice Board
 
@@ -168,7 +168,7 @@ These are confirmed unless the project owner explicitly revises them. Edit entri
 - The role introduction summarises the supplied [Class Rep Charter](../assets/documents/Class%20Rep%20Charter.md): volunteer liaison between teachers, parents and The FOA; messages, volunteer coordination, contact information, class gift collections and social events; boundaries around school communications, event leadership, complaints and disagreements. Sharing responsibilities is optional, not a mandated team structure. Messages are shareable copy with copy-to-clipboard actions, visible success/failure feedback (success clears after three seconds), class-representative wording and "Learn more" links to canonical pages. No draft or workflow labels in public copy.
 - The Fireworks message includes the ticket link (from the event content) in both the visible and the copied text.
 - All messages include the full public source-page URL in both visible and copied text, including for manual copying. The current set covers Fireworks tickets, Fireworks volunteering, pre-loved uniform and Christmas Fayre helpers. Event dates, times, ticket information, volunteer activities and Fayre help areas are generated from the event collection. Fireworks volunteering follows the year-group rota; Christmas Fayre helpers can join any area with friends, with no experience required. The role guidance reflects this distinction rather than requesting class leads for the Fayre.
-- Messages carry internal review and expiry dates. They are excluded after expiry at build time and hidden on open pages using the shared event-visibility helper. Ticket and volunteer reminders expire when Fireworks ends, the November uniform reminder when that sale ends and the Fayre helper appeal when the Fayre ends (16:00 finish supplied by Nick on 25 October 2026 after the calendar download failed on his phone). An empty state links to What's On when no messages remain. Desktop uses two columns for the four messages.
+- Messages carry internal review and expiry dates. They are excluded after expiry at build time and hidden on open pages using the shared event-visibility helper. Ticket and volunteer reminders expire when Fireworks ends, the November uniform reminder when that sale ends and the Fayre helper appeal when the Fayre ends. An empty state links to What's On when no messages remain. Desktop uses two columns for the four messages.
 - The Fireworks quiet display is scheduled for 17:00 across all pages and messages.
 
 ### Contact, donations and analytics
