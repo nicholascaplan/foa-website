@@ -16,7 +16,7 @@ const pageTitle = title === "The Friends of Ashley" ? "The Friends of Ashley | A
 const event = (await getCollection("events", ({ data }) =>
   !!data.path?.startsWith("/events/") && withBase(data.path) === Astro.url.pathname,
 ))[0]?.data;
-const eventDate = event && ordinalDateFormatter({ weekday: "long", year: "numeric", timeZone: "Europe/London" })(event.start);
+const eventDate = event && ordinalDateFormatter({ weekday: "long", year: "numeric", timeZone: "Europe/London" })(event.start).replace(",", "");
 const socialTitle = eventDate ? `${title} - ${eventDate} | The Friends of Ashley` : pageTitle;
 const socialDescription = eventDate ? `${eventDate}. ${description}` : description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
