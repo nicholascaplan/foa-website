@@ -1,6 +1,6 @@
 # The Friends of Ashley (FOA): key events 2026–27
 
-Editable summary of information published on The Friends of Ashley website, checked on 5th October 2026. The published website is the source of truth; this reference follows it, not the superseded calendar PDF.
+Editable summary of information published on The Friends of Ashley website. Christmas Fayre hours updated on 26th October 2026. The published website is the source of truth; this reference follows it, not the superseded calendar PDF.
 
 ## Calendar
 
