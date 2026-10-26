@@ -43,6 +43,7 @@ const eventJsonLd = {
   name: event.title,
   description: "A magical Christmas afternoon for the Ashley school community, organised by The Friends of Ashley.",
   startDate: event.start.toISOString(),
+  ...(event.end ? { endDate: event.end.toISOString() } : {}),
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
   location: { "@type": "Place", name: event.location, address: { "@type": "PostalAddress", addressLocality: "Walton-on-Thames", addressCountry: "GB" } },
@@ -68,7 +69,7 @@ const eventJsonLd = {
           <p class="xmas-hero__intro">This year we’re trying something new to make helping out easier, more social and more fun for everyone.</p>
           <ChristmasBaubles placement="mobile" />
           <dl class="xmas-facts">
-            <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{timeFormatter.format(event.start)}</span></dd></div>
+            <div><dt>When</dt><dd><span class="xmas-nowrap">{dateFormatter(event.start)},</span> <span class="xmas-nowrap">{timeFormatter.format(event.start)}{event.end && <>–{timeFormatter.format(event.end)}</>}</span></dd></div>
             <div><dt>Where</dt><dd>{event.location}</dd></div>
             <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
