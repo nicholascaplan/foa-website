@@ -296,6 +296,7 @@ See [`ACTIONS.md`](ACTIONS.md) → Later.
 - HTTPS via GitHub Pages. Secrets only in approved deployment secret stores; never GitHub tokens in webhook URLs or client code. Least-privilege CMS roles. A practical Content Security Policy compatible with required providers. Render external CMS content safely.
 
 **SEO and sharing**
+- Dedicated event-page link previews include the full event date (weekday, ordinal day, month and year) in the Open Graph and Twitter titles and at the start of their descriptions and the page meta description (requested 26 October 2026). The shared layout matches the canonical event path and formats its structured start date in Europe/London, so future dedicated event pages inherit this automatically. Browser titles, visible page content and approved preview images stay unchanged. General listings such as Uniform do not inherit an individual event date. Sharing services may retain older cached previews after publication.
 - Unique titles and descriptions; canonical URLs; sitemap and robots; Open Graph; accurate Organisation and Event structured data; `hreflang` only for complete shareable locale routes; a useful 404.
 
 **Maintainability**
