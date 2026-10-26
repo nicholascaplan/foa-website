@@ -485,3 +485,8 @@ test("current event displays use a plain hyphen, preserving original newsletter 
     assert.doesNotMatch(visible, /\d{1,2}:\d{2}(?:\s*[\u2013\u2014]\s*|\s+to\s+)\d{1,2}:\d{2}/, file);
   }
 });
+
+test("published newsletter retains its original time-range prose", async () => {
+  const html = await readFile(path.join(dist, "newsletter/index.html"), "utf8");
+  assert.match(html, /16:30 to 18:30/);
+});
