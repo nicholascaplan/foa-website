@@ -190,8 +190,8 @@ test.describe("Reps Hub copy actions", () => {
 test("Christmas Fayre shows and copies the corrected full time range", async ({ page }) => {
   await page.goto("/reps/");
   const card = page.locator(".message-card", { has: page.getByRole("heading", { name: "Christmas Fayre", exact: true }) });
-  await expect(card.locator(".message-time")).toHaveText("12:00 to 15:00");
-  await expect(card).toContainText("12:00 to 15:00 at Ashley School");
-  expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text")).toContain("12:00 to 15:00 at Ashley School");
+  await expect(card.locator(".message-time")).toHaveText("12:00-15:00");
+  await expect(card).toContainText("12:00-15:00 at Ashley School");
+  expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text")).toContain("12:00-15:00 at Ashley School");
   await expect(card).toHaveAttribute("data-expires-at", "2026-12-05T15:00:00.000Z");
 });
