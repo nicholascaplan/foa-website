@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { getCollection } from "astro:content";
 import { withBase } from "../lib/urls";
-import { ordinalDateFormatter } from "../lib/dates";
+import { ordinalDateFormatter, formatEventTimeRange, timeRangeSeparator } from "../lib/dates";
 const events = await getCollection("events");
 const fireworks = events.find(({ id }) => id === "fireworks-2026")?.data;
 const uniform = events.find(({ id }) => id === "uniform-november-2026")?.data;
@@ -22,9 +22,8 @@ const timeFormatter = new Intl.DateTimeFormat("en-GB", {
 });
 const list = (items: string[]) => items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
 const publicUrl = (path: string) => new URL(withBase(path), "https://www.thefriendsofashley.org").href;
-const timeSeparator = (event: typeof uniform) => event.path === christmas.path ? " to " : "–";
 const timeRange = (event: typeof uniform) => event.end
-  ? `${timeFormatter.format(event.start)}${timeSeparator(event)}${timeFormatter.format(event.end)}`
+  ? formatEventTimeRange(event.start, event.end)
   : `from ${timeFormatter.format(event.start)}`;
 const quietDisplay = fireworks.schedule.find(({ label }) => label === "Quiet display");
 const mainDisplay = fireworks.schedule.find(({ label }) => label === "Main display");
@@ -96,7 +95,7 @@ const messages = [
               <div class="message-date" aria-label={dateFormatter(message.timing.start)}><span>{dateTileFormatter.format(message.timing.start).toUpperCase()}</span><strong>{dayFormatter.format(message.timing.start)}</strong></div>
               {message.timing && !message.timing.allDay && <span class="message-time">
                 {!message.timing.end && "From "}<time datetime={message.timing.start.toISOString()}>{timeFormatter.format(message.timing.start)}</time>
-                {message.timing.end && <>{timeSeparator(message.timing)}<time datetime={message.timing.end.toISOString()}>{timeFormatter.format(message.timing.end)}</time></>}
+                {message.timing.end && <>{timeRangeSeparator}<time datetime={message.timing.end.toISOString()}>{timeFormatter.format(message.timing.end)}</time></>}
               </span>}
             </div>
             <h2>{message.title}</h2>
