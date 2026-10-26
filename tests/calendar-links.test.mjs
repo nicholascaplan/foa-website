@@ -7,7 +7,7 @@ const fayre = {
   summary: "Led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox).",
   location: "Ashley School, Ashley Road, Walton-on-Thames KT12 1HX",
   start: new Date("2026-12-05T12:00:00+00:00"),
-  end: new Date("2026-12-05T16:00:00+00:00"),
+  end: new Date("2026-12-05T15:00:00+00:00"),
   url: "https://www.thefriendsofashley.org/events/christmas-fayre-2026/",
 };
 
@@ -22,7 +22,7 @@ test("a timed event with a confirmed end links Google to the exact UTC range", (
   assert.equal(`${url.origin}${url.pathname}`, "https://calendar.google.com/calendar/render");
   assert.equal(params.get("action"), "TEMPLATE");
   assert.equal(params.get("text"), "Christmas Fayre");
-  assert.equal(params.get("dates"), "20261205T120000Z/20261205T160000Z");
+  assert.equal(params.get("dates"), "20261205T120000Z/20261205T150000Z");
   assert.equal(params.get("ctz"), "Europe/London");
   assert.equal(params.get("details"), "Led by Rachel Briscoe (Squirrel and Otter) and Sophie Glass (Fox).\n\nDetails: https://www.thefriendsofashley.org/events/christmas-fayre-2026/");
   assert.equal(params.get("location"), fayre.location);

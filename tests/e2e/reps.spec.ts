@@ -112,7 +112,7 @@ test("expired messages disappear and the empty state becomes visible", async ({ 
   await page.clock.setSystemTime(new Date("2026-12-05T13:00:00Z"));
   await page.clock.fastForward(60000);
   await expect(page.locator(".message-card:visible")).toHaveCount(1);
-  await page.clock.setSystemTime(new Date("2026-12-05T17:00:00Z"));
+  await page.clock.setSystemTime(new Date("2026-12-05T15:00:00Z"));
   await page.clock.fastForward(60000);
   await expect(page.locator(".message-card:visible")).toHaveCount(0);
   await expect(page.locator("[data-messages-empty]")).toBeVisible();
@@ -184,4 +184,14 @@ test.describe("Reps Hub copy actions", () => {
     await expect(cards.nth(1).getByRole("status")).toHaveText("Copied to clipboard.");
     await expect(cards.nth(0).getByRole("status")).toHaveText("");
   });
+});
+
+
+test("Christmas Fayre shows and copies the corrected full time range", async ({ page }) => {
+  await page.goto("/reps/");
+  const card = page.locator(".message-card", { has: page.getByRole("heading", { name: "Christmas Fayre", exact: true }) });
+  await expect(card.locator(".message-time")).toHaveText("12:00-15:00");
+  await expect(card).toContainText("12:00-15:00 at Ashley School");
+  expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text")).toContain("12:00-15:00 at Ashley School");
+  await expect(card).toHaveAttribute("data-expires-at", "2026-12-05T15:00:00.000Z");
 });

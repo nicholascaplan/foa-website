@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ordinalDateFormatter, ordinalSuffix } from "../src/lib/dates.ts";
+import { ordinalDateFormatter, ordinalSuffix, formatEventTimeRange, formatTimeRangeText } from "../src/lib/dates.ts";
 
 test("ordinal suffixes follow English rules", () => {
   const expected = { 1: "st", 2: "nd", 3: "rd", 4: "th", 10: "th", 21: "st", 22: "nd", 23: "rd", 30: "th", 31: "st" };
@@ -33,4 +33,13 @@ test("the day is taken in the requested timezone, across British Summer Time", (
 test("Date objects are accepted as well as strings", () => {
   const format = ordinalDateFormatter({ timeZone: "Europe/London" });
   assert.equal(format(new Date("2026-11-05T19:00:00Z")), "5th November");
+});
+
+
+test("event time ranges use UK 24-hour times joined by a hyphen", () => {
+  assert.equal(formatEventTimeRange(new Date("2026-12-05T12:00:00Z"), new Date("2026-12-05T15:00:00Z")), "12:00-15:00");
+  assert.equal(formatEventTimeRange(new Date("2026-07-01T12:30:00Z"), new Date("2026-07-01T14:45:00Z")), "13:30-15:45");
+  assert.equal(formatEventTimeRange(new Date("2026-12-05T12:00:00Z")), "12:00");
+  for (const separator of ["-", "\u2013", "\u2014", " to "]) assert.equal(formatTimeRangeText(`15:30${separator}16:30`), "15:30-16:30");
+  assert.equal(formatTimeRangeText("2nd–5th November"), "2nd–5th November");
 });

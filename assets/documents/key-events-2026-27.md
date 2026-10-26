@@ -1,17 +1,17 @@
 # The Friends of Ashley (FOA): key events 2026–27
 
-Editable summary of information published on The Friends of Ashley website, checked on 5th October 2026. The published website is the source of truth; this reference follows it, not the superseded calendar PDF.
+Editable summary of information published on The Friends of Ashley website. Christmas Fayre hours updated on 26th October 2026. The published website is the source of truth; this reference follows it, not the superseded calendar PDF.
 
 ## Calendar
 
 | Event | Published date | Published time and place |
 |---|---|---|
 | Pre-loved Uniform sale | Friday 2nd October 2026 | 15:25, school playground |
-| Welcome Tea | Saturday 3rd October 2026 | 13:00–14:30, Ashley School |
-| Fireworks on the Field | Thursday 5th November 2026 | 16:30–18:30, Ashley School field |
+| Welcome Tea | Saturday 3rd October 2026 | 13:00-14:30, Ashley School |
+| Fireworks on the Field | Thursday 5th November 2026 | 16:30-18:30, Ashley School field |
 | Pre-loved Uniform sale | Friday 6th November 2026 | 15:25, school playground |
 | Pre-loved Uniform sale | Friday 4th December 2026 | 15:25, school playground |
-| Christmas Fayre | Saturday 5th December 2026 | 12:00, Ashley School |
+| Christmas Fayre | Saturday 5th December 2026 | 12:00-15:00, Ashley School |
 | Santa's Grotto | Monday 14th December 2026 | During the school day, Ashley School |
 | Happy Bags | Wednesday 13th January 2027 | No collection time published, Ashley School |
 | Happy Bags | Monday 26th April 2027 | No collection time published, Ashley School |
