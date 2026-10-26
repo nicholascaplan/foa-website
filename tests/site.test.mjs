@@ -102,7 +102,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   for (const date of [uniform.start, uniform.end]) {
     assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
   }
-  const fayreRange = `${time.format(new Date(fayre.start))}–${time.format(new Date(fayre.end))}`;
+  const fayreRange = `${time.format(new Date(fayre.start))} to ${time.format(new Date(fayre.end))}`;
   assert.ok(cards[3].includes('class="message-time"'));
   assert.ok(cards[3].replace(/<[^>]+>/g, "").includes(fayreRange));
   for (const date of [fayre.start, fayre.end]) {
@@ -124,7 +124,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 2);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 1);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-26"/g)].length, 1);
-  assert.equal(fayreRange, "12:00–15:00");
+  assert.equal(fayreRange, "12:00 to 15:00");
   assert.ok(cards[3].match(/data-copy-text="([^"]*)"/)?.[1].includes(`${fayreRange} at Ashley School`));
   assert.ok(html.includes('data-expires-at="2026-12-05T15:00:00.000Z"'));
   assert.ok(cards[0].includes("now on sale to the wider public"));
@@ -409,7 +409,7 @@ test("the Christmas Fayre page keeps reminders in a plain list, separate from th
 
 test("the Christmas Fayre page shows the date, place and lead from the event record, with decoration hidden from assistive technology", async () => {
   const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
-  assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00–15:00<\/span><\/dd>/);
+  assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00 to 15:00<\/span><\/dd>/);
   assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
   assert.ok(html.includes(`<dd>${christmas.lead.split(/(?<=\)) and /).map(escapeHtml).join("<br>")}</dd>`));
   // One visible decoration row at each breakpoint, in its approved position.
