@@ -97,7 +97,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.ok(cards[0].includes("Buy Fireworks tickets"));
   assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Buy Fireworks tickets: ${fireworks.ticketUrl}`));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" });
-  const range = `${time.format(new Date(uniform.start))}–${time.format(new Date(uniform.end))}`;
+  const range = `${time.format(new Date(uniform.start))} to ${time.format(new Date(uniform.end))}`;
   assert.ok(cards[2].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
   for (const date of [uniform.start, uniform.end]) {
     assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
@@ -438,7 +438,7 @@ test("the Fireworks volunteering page shows every role, shift and sign-up link f
     assert.ok(card.includes(escapeHtml(role.description)), `${role.name}: description`);
     for (const shift of role.shifts) {
       assert.ok(card.includes(`<dt>${escapeHtml(shift.label)}</dt>`), `${role.name}: ${shift.label} label`);
-      assert.ok(card.includes(escapeHtml(shift.when)), `${role.name}: ${shift.label} time`);
+      assert.ok(card.includes(escapeHtml(shift.when.replace(/(\d{1,2}:\d{2})[–-](?=\d{1,2}:\d{2})/g, "$1 to "))), `${role.name}: ${shift.label} time`);
       assert.match(card, new RegExp(`${shift.helpers} ${shift.helpers === 1 ? "helper" : "helpers"} per (?:slot|shift)`));
     }
     assert.ok(card.includes(`href="${role.url}"`), `${role.name}: sign-up link`);
@@ -473,5 +473,14 @@ test("every built footer uses the verified charity disclosure", async () => {
     assert.ok(html.includes("Registered charity 1024028"), file);
     assert.ok(!html.includes("1042944"), file);
     assert.ok(!html.includes("Parent-led. Child-focused. All welcome."), file);
+  }
+});
+
+
+test("all rendered event time ranges use to rather than dashes", async () => {
+  for (const file of (await filesUnder(dist)).filter((file) => file.endsWith(".html"))) {
+    const html = await readFile(file, "utf8");
+    const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, "");
+    assert.doesNotMatch(visible, /\d{1,2}:\d{2}\s*[\u2013\u2014-]\s*\d{1,2}:\d{2}/, file);
   }
 });
