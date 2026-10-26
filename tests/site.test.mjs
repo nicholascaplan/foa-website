@@ -97,12 +97,12 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.ok(cards[0].includes("Buy Fireworks tickets"));
   assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Buy Fireworks tickets: ${fireworks.ticketUrl}`));
   const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" });
-  const range = `${time.format(new Date(uniform.start))} to ${time.format(new Date(uniform.end))}`;
+  const range = `${time.format(new Date(uniform.start))}-${time.format(new Date(uniform.end))}`;
   assert.ok(cards[2].match(/data-copy-text="([^"]*)"/)?.[1].includes(range));
   for (const date of [uniform.start, uniform.end]) {
     assert.ok(cards[2].includes(`datetime="${new Date(date).toISOString()}"`));
   }
-  const fayreRange = `${time.format(new Date(fayre.start))} to ${time.format(new Date(fayre.end))}`;
+  const fayreRange = `${time.format(new Date(fayre.start))}-${time.format(new Date(fayre.end))}`;
   assert.ok(cards[3].includes('class="message-time"'));
   assert.ok(cards[3].replace(/<[^>]+>/g, "").includes(fayreRange));
   for (const date of [fayre.start, fayre.end]) {
@@ -124,7 +124,7 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 2);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 1);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-26"/g)].length, 1);
-  assert.equal(fayreRange, "12:00 to 15:00");
+  assert.equal(fayreRange, "12:00-15:00");
   assert.ok(cards[3].match(/data-copy-text="([^"]*)"/)?.[1].includes(`${fayreRange} at Ashley School`));
   assert.ok(html.includes('data-expires-at="2026-12-05T15:00:00.000Z"'));
   assert.ok(cards[0].includes("now on sale to the wider public"));
@@ -409,7 +409,7 @@ test("the Christmas Fayre page keeps reminders in a plain list, separate from th
 
 test("the Christmas Fayre page shows the date, place and lead from the event record, with decoration hidden from assistive technology", async () => {
   const html = await readFile(path.join(dist, "events/christmas-fayre-2026/index.html"), "utf8");
-  assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00 to 15:00<\/span><\/dd>/);
+  assert.match(html, /<dd><span class="xmas-nowrap">Saturday 5th December,<\/span> <span class="xmas-nowrap">12:00-15:00<\/span><\/dd>/);
   assert.match(html, new RegExp(`<dd>${christmas.location}</dd>`));
   assert.ok(html.includes(`<dd>${christmas.lead.split(/(?<=\)) and /).map(escapeHtml).join("<br>")}</dd>`));
   // One visible decoration row at each breakpoint, in its approved position.
@@ -438,7 +438,7 @@ test("the Fireworks volunteering page shows every role, shift and sign-up link f
     assert.ok(card.includes(escapeHtml(role.description)), `${role.name}: description`);
     for (const shift of role.shifts) {
       assert.ok(card.includes(`<dt>${escapeHtml(shift.label)}</dt>`), `${role.name}: ${shift.label} label`);
-      assert.ok(card.includes(escapeHtml(shift.when.replace(/(\d{1,2}:\d{2})[–-](?=\d{1,2}:\d{2})/g, "$1 to "))), `${role.name}: ${shift.label} time`);
+      assert.ok(card.includes(escapeHtml(shift.when.replace(/(\d{1,2}:\d{2})[–-](?=\d{1,2}:\d{2})/g, "$1-"))), `${role.name}: ${shift.label} time`);
       assert.match(card, new RegExp(`${shift.helpers} ${shift.helpers === 1 ? "helper" : "helpers"} per (?:slot|shift)`));
     }
     assert.ok(card.includes(`href="${role.url}"`), `${role.name}: sign-up link`);
@@ -477,10 +477,11 @@ test("every built footer uses the verified charity disclosure", async () => {
 });
 
 
-test("all rendered event time ranges use to rather than dashes", async () => {
+test("current event displays use a plain hyphen, preserving original newsletter prose", async () => {
   for (const file of (await filesUnder(dist)).filter((file) => file.endsWith(".html"))) {
+    if (file === path.join(dist, "newsletter/index.html")) continue; // Published newsletter prose is historical source copy.
     const html = await readFile(file, "utf8");
     const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, "");
-    assert.doesNotMatch(visible, /\d{1,2}:\d{2}\s*[\u2013\u2014-]\s*\d{1,2}:\d{2}/, file);
+    assert.doesNotMatch(visible, /\d{1,2}:\d{2}(?:\s*[\u2013\u2014]\s*|\s+to\s+)\d{1,2}:\d{2}/, file);
   }
 });
