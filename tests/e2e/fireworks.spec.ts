@@ -57,9 +57,15 @@ for (const width of [360, 390, 430]) {
         const mapLink = value.querySelector<HTMLAnchorElement>(".fw-map-link");
         const range = document.createRange();
         range.selectNodeContents(value);
-        const textLines = mapLink
-          ? mapLink.getClientRects().length
-          : new Set([...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top * 10) / 10)).size;
+        const walker = document.createTreeWalker(value, NodeFilter.SHOW_TEXT);
+        const textTops: number[] = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (!node.textContent?.trim() || node.parentElement?.closest(".visually-hidden, [aria-hidden='true']")) continue;
+          range.selectNodeContents(node);
+          textTops.push(...[...range.getClientRects()].filter((rect) => rect.width > 0).map((rect) => Math.round(rect.top * 10) / 10));
+        }
+        const textLines = new Set(textTops).size;
         const hyphenatedWord = value.querySelector<HTMLElement>(".fw-ticket-price__unbreakable");
         return {
           label: label.textContent?.trim(),

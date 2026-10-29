@@ -2,7 +2,9 @@
 interface Props { href: string; label: string; }
 const { href, label } = Astro.props;
 const words = label.trim().split(/\s+/);
-const lastWord = words.pop();
+const lastWord = words.pop() ?? "";
 const prefix = words.join(" ");
+const characters = Array.from(lastWord);
+const lastCharacter = characters.pop();
 ---
-<a class="fw-map-link" href={href} target="_blank" rel="noopener noreferrer">{prefix && <><span class="fw-map-link__label">{prefix}</span>{" "}</>}<span class="cta-tail"><span class="fw-map-link__label">{lastWord}</span><span class="external-link-icon" aria-hidden="true">↗</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
+<a class="fw-map-link" href={href} target="_blank" rel="noopener noreferrer">{prefix && <><span class="fw-map-link__label">{prefix}</span>{" "}</>}<span class="cta-word"><span class="fw-map-link__label">{characters.join("")}</span><span class="cta-tail"><span class="fw-map-link__label">{lastCharacter}</span><span class="external-link-icon" aria-hidden="true">↗</span></span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
