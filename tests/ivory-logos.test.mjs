@@ -51,3 +51,10 @@ test("the Fireworks logo keeps the standard badge sizing so there is no size jum
     assert.match(svg, /viewBox="-46\.75 -46\.75 550 550"/, name);
   }
 });
+
+test("the Christmas logo keeps its viewBox so badge sizing is unchanged", async () => {
+  for (const name of ["foa-logo-christmas", "foa-logo-christmas-ivory"]) {
+    const svg = await readFile(new URL(`../assets/brand/${name}.svg`, import.meta.url), "utf8");
+    assert.match(svg, /viewBox="-31\.5 -53\.5 522\.5 522\.5"/, name);
+  }
+});
