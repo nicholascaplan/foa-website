@@ -398,6 +398,10 @@ for (const width of [320, 390, 820, 1440]) {
         });
         await page.evaluate(() => document.fonts.ready);
         await expect(page.locator(".good-to-know").first()).toHaveCSS("font-size", enlargement === "normal" ? "16px" : "32px");
+        if (enlargement === "normal" && width >= 820) {
+          const columnCounts = await page.locator(".good-to-know").evaluateAll((lists) => lists.map((list) => getComputedStyle(list).gridTemplateColumns.split(" ").length));
+          expect(columnCounts).toEqual([2, 2]);
+        }
         const failures = await page.locator(".good-to-know").evaluateAll((lists) => lists.flatMap((list) => {
           const errors: string[] = [];
           for (const row of list.children) {
