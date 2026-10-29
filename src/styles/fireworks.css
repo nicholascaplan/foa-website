@@ -1065,13 +1065,8 @@ body.fw-theme::before {
   text-underline-offset: 0.2em;
 }
 
-/* Anchor the off-screen accessibility suffix to the link, not the next
-   inline static position where WebKit can include it in column overflow. */
-.fw-event .fw-map-link {
-  position: relative;
-}
-
-.fw-event .fw-map-link > .visually-hidden {
-  top: 0;
-  left: 0;
+/* An atomic tail gives WebKit a break opportunity before the final
+   character/icon pair when the rest of the word cannot fit. */
+.fw-event .fw-map-link .cta-tail {
+  display: inline-block;
 }
