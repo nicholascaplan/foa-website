@@ -44,3 +44,10 @@ test("the 404 badge and standalone contact branding also use ivory", async () =>
   const playground = await readFile(new URL("../dist/playground.html", import.meta.url), "utf8");
   assert.ok(playground.includes(`/brand/${standard}`));
 });
+
+test("the Fireworks logo keeps the standard badge sizing so there is no size jump between pages", async () => {
+  for (const name of ["foa-logo-fireworks", "foa-logo-fireworks-ivory"]) {
+    const svg = await readFile(new URL(`../assets/brand/${name}.svg`, import.meta.url), "utf8");
+    assert.match(svg, /viewBox="-46\.75 -46\.75 550 550"/, name);
+  }
+});
