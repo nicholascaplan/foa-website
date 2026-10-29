@@ -119,6 +119,8 @@ Newsletter coverage in `tests/e2e/newsletter.spec.ts` protects the option C read
 
 `tests/e2e/section-spacing.spec.ts` checks title-to-content and content-to-footer gaps on About, Committee, Contact, Meeting Minutes, Privacy and Get Involved at mobile, tablet and desktop widths in Day/Night Mode with normal and 200% text. It protects the desktop-only spacing reduction, unchanged mobile/tablet margins and unchanged What's On spacing. Contact's column alignment and stacked enlarged-text fallback, About's pillar-heading containment and page-level overflow are also checked. Newsletter's existing layout matrix checks its board gap and neighbouring issue-selector alignment.
 
+`tests/e2e/fireworks.spec.ts` also checks that event-page torches end at the first parchment and never follow the later panels while scrolling, at phone, tablet and desktop widths with normal and enlarged text.
+
 ### 4. Automated accessibility checks
 
 The 320px social-menu regressions also force a wider Verdana fallback in Day/Night Mode, checking that the icons remain beside the labels and that labels fit their own pill borders. This protects against Linux font wrapping that was not reproduced by the default macOS font.
