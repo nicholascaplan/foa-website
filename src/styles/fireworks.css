@@ -1064,3 +1064,14 @@ body.fw-theme::before {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+/* Anchor the off-screen accessibility suffix to the link, not the next
+   inline static position where WebKit can include it in column overflow. */
+.fw-event .fw-map-link {
+  position: relative;
+}
+
+.fw-event .fw-map-link > .visually-hidden {
+  top: 0;
+  left: 0;
+}
