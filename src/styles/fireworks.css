@@ -38,6 +38,8 @@
 
 .fw-event .good-to-know {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18em), 1fr));
+  align-items: start;
   gap: 0 2rem;
 }
 
@@ -55,12 +57,6 @@ body:not(.fw-theme) .fw-kicker {
   display: none;
 }
 
-@media (min-width: 48rem) {
-  .fw-event .good-to-know {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
-}
 
 body.fw-theme {
   --fw-blackletter: "UnifrakturCook", "Old English Text MT", Georgia, "Times New Roman", serif;
