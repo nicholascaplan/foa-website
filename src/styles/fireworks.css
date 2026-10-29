@@ -1064,3 +1064,9 @@ body.fw-theme::before {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+/* An atomic tail gives WebKit a break opportunity before the final
+   character/icon pair when the rest of the word cannot fit. */
+.fw-event .fw-map-link .cta-tail {
+  display: inline-block;
+}

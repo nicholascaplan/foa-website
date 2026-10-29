@@ -123,6 +123,8 @@ Newsletter coverage in `tests/e2e/newsletter.spec.ts` protects the option C read
 
 ### 4. Automated accessibility checks
 
+Fireworks map links share the trailing-icon regression selector, including the tablet width that previously left the arrow alone. Focused checks verify both links remain inside their parchment columns at normal and enlarged text.
+
 The 320px social-menu regressions also force a wider Verdana fallback in Day/Night Mode, checking that the icons remain beside the labels and that labels fit their own pill borders. This protects against Linux font wrapping that was not reproduced by the default macOS font.
 
 `tests/e2e/social-links.spec.ts` checks footer social-pill label and icon bounds inside each pill, corresponding column alignment and spacing at 320px, 390px, 768px, 1024px and 1440px in Day/Night Mode with normal and 200% text. This includes the 768px enlarged-text regression that page-level overflow checks miss. Menu checks retain the secondary placement below Contact Us, short-screen scrolling, enlarged-text label containment and keyboard focus wrapping through the added links. Tall-screen regressions at 390px, 768px and 1024px compare the separator and pill edges with Contact Us, retaining the 0.75rem gaps instead of a flexible spacer in both themes and text sizes. Menu checks also compare both pill edges on the same row and keep each icon beside its label at normal text size, including 320px phones; narrow enlarged-text views retain the stacked fallback. Existing navigation tests retain Contact Us visibility on a 667px-high phone.
