@@ -381,3 +381,55 @@ for (const width of [320, 393, 768, 1440]) {
     });
   }
 }
+
+// Detail grids must reflow from their own width, not only the viewport.
+for (const width of [320, 390, 820, 1440]) {
+  for (const theme of ["day", "night"]) {
+    for (const enlargement of ["normal", "root", "elements"]) {
+      test(`Fireworks detail columns contain their text at ${width}px ${theme} ${enlargement}`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.addInitScript((theme) => localStorage.setItem("foa-theme", theme), theme);
+        await page.goto("/events/fireworks-2026/");
+        if (enlargement === "root") await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+        if (enlargement === "elements") await page.evaluate(() => {
+          const elements = [...document.querySelectorAll<HTMLElement>("body *")];
+          const sizes = elements.map((element) => parseFloat(getComputedStyle(element).fontSize));
+          elements.forEach((element, index) => element.style.setProperty("font-size", `${sizes[index] * 2}px`, "important"));
+        });
+        await page.evaluate(() => document.fonts.ready);
+        await expect(page.locator(".good-to-know").first()).toHaveCSS("font-size", enlargement === "normal" ? "16px" : "32px");
+        if (enlargement === "normal" && width >= 820) {
+          const columnCounts = await page.locator(".good-to-know").evaluateAll((lists) => lists.map((list) => getComputedStyle(list).gridTemplateColumns.split(" ").length));
+          expect(columnCounts).toEqual([2, 2]);
+        }
+        const failures = await page.locator(".good-to-know").evaluateAll((lists) => lists.flatMap((list) => {
+          const errors: string[] = [];
+          for (const row of list.children) {
+            const label = row.querySelector("dt")!;
+            const value = row.querySelector("dd")!;
+            const rowBox = row.getBoundingClientRect();
+            const shouldStack = rowBox.width <= 17 * parseFloat(getComputedStyle(row).fontSize);
+            const labelBox = label.getBoundingClientRect();
+            const valueBox = value.getBoundingClientRect();
+            if (shouldStack && valueBox.top < labelBox.bottom - 1) errors.push("detail row did not stack");
+            if (valueBox.width < 1) errors.push("collapsed value column");
+            if (valueBox.top < labelBox.bottom - 1 && valueBox.left < labelBox.right - 1) errors.push("overlapping label/value");
+            for (const cell of [label, value]) {
+              const box = cell.getBoundingClientRect();
+              const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT);
+              const range = document.createRange();
+              while (walker.nextNode()) {
+                const node = walker.currentNode;
+                if (!node.textContent?.trim() || node.parentElement?.closest('.visually-hidden, [aria-hidden="true"]')) continue;
+                range.selectNodeContents(node);
+                if ([...range.getClientRects()].some((rect) => rect.width > 1 && (rect.left < box.left - 1 || rect.right > box.right + 1))) errors.push(`${cell.tagName}: text outside its column`);
+              }
+            }
+          }
+          return errors;
+        }));
+        expect(failures).toEqual([]);
+      });
+    }
+  }
+}
