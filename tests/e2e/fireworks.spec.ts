@@ -368,7 +368,7 @@ for (const width of [320, 393, 768, 1440]) {
         await panel.scrollIntoViewIfNeeded();
         const layout = await bounds();
         expect(Math.abs(layout.end - layout.paperEnd)).toBeLessThanOrEqual(1);
-        expect(layout.poles.every((bottom) => bottom <= layout.end + 1)).toBe(true);
+        expect(layout.poles.every((bottom) => Math.abs(bottom - layout.end) <= 1)).toBe(true);
         expect(layout.later.every((top) => top > layout.end)).toBe(true);
       }
     });
