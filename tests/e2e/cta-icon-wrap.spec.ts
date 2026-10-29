@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 // A compliant CTA keeps its whole label (including the icon) in a single
 // .cta-label span, with no whitespace between the final word and the icon.
 
-const ctas = "a.button, .event-list-cta, a.event-list-calendar, .add-calendar a, a.text-link, a.designer-credit, .member-vacancy a, .newsletter-sign-off a";
+const ctas = "a.fw-map-link, a.button, .event-list-cta, a.event-list-calendar, .add-calendar a, a.text-link, a.designer-credit, .member-vacancy a, .newsletter-sign-off a";
 
 // Returns a description of every CTA whose trailing icon sits on a different
 // line from the end of its label.
@@ -53,7 +53,7 @@ const useLargeText = (page: Page) =>
 // Every public route is covered: the rule is site-wide.
 import { routes } from "./routes";
 const pages = routes;
-const widths = [320, 390, 1440];
+const widths = [320, 390, 820, 1440];
 
 test.describe("CTA trailing icons stay with the label", () => {
   for (const width of widths) {
@@ -139,3 +139,32 @@ test.describe("Wrapping stays inside the neighbouring content column", () => {
     }
   }
 });
+
+for (const width of [320, 390, 820, 1440]) {
+  for (const textSize of [100, 200]) {
+    test(`Fireworks map arrows stay with the final word inside the paper at ${width}px/${textSize}%`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/events/fireworks-2026/");
+      if (textSize === 200) await useLargeText(page);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator(".fw-map-link")).toHaveCount(2);
+      expect(await strandedIcons(page)).toEqual([]);
+      const outside = await page.locator(".fw-map-link").evaluateAll((links) => links.flatMap((link) => {
+        const column = link.closest("dd")!.getBoundingClientRect();
+        const range = document.createRange();
+        const rects = [...link.querySelectorAll(".external-link-icon")].map((icon) => icon.getBoundingClientRect());
+        const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode();
+        while (node) {
+          if (node.textContent?.trim() && !node.parentElement?.closest('.visually-hidden, [aria-hidden="true"]')) {
+            range.selectNodeContents(node);
+            rects.push(...range.getClientRects());
+          }
+          node = walker.nextNode();
+        }
+        return rects.filter((rect) => rect.width > 1 && (rect.left < column.left - 1 || rect.right > column.right + 1)).map((rect) => ({ text: link.textContent, left: rect.left, right: rect.right, column: { left: column.left, right: column.right } }));
+      }));
+      expect(outside).toEqual([]);
+    });
+  }
+}
