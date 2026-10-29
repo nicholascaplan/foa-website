@@ -407,8 +407,11 @@ for (const width of [320, 390, 820, 1440]) {
           for (const row of list.children) {
             const label = row.querySelector("dt")!;
             const value = row.querySelector("dd")!;
+            const rowBox = row.getBoundingClientRect();
+            const shouldStack = rowBox.width <= 17 * parseFloat(getComputedStyle(row).fontSize);
             const labelBox = label.getBoundingClientRect();
             const valueBox = value.getBoundingClientRect();
+            if (shouldStack && valueBox.top < labelBox.bottom - 1) errors.push("detail row did not stack");
             if (valueBox.width < 1) errors.push("collapsed value column");
             if (valueBox.top < labelBox.bottom - 1 && valueBox.left < labelBox.right - 1) errors.push("overlapping label/value");
             for (const cell of [label, value]) {
