@@ -537,6 +537,37 @@ body.fw-theme::before {
   }
 }
 
+/* Event torches belong to the first parchment, never the later scrolls.
+   The hero bounds them even without JavaScript; measured paper height trims
+   the poles to its lower roll once layout is ready. */
+.fw-event .event-hero {
+  position: relative;
+  overflow: visible;
+}
+
+.fw-event .event-hero > .site-width {
+  position: relative;
+  z-index: 2;
+}
+
+.fw-event .event-hero > .fw-torches {
+  right: auto;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  bottom: auto;
+  height: var(--fw-torches-height, 100%);
+  overflow: clip;
+}
+
+.fw-event .fw-torch {
+  position: relative;
+  height: 100%;
+}
+
+.fw-event .fw-torch__pole {
+  top: min(calc(var(--fw-head-top) + 192px * var(--fw-s)), 100%);
+}
+
 /* Hero */
 .fw-theme .event-hero {
   padding-bottom: 0;

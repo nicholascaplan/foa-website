@@ -194,6 +194,7 @@ function createCanvasFlames(stage: HTMLElement) {
 
 function init(stage: HTMLElement) {
   const mobile = matchMedia("(max-width: 47.999rem)");
+  const titlePanel = matchMedia("(max-width: 63.99rem)");
   // Touch devices stay static even when a phone rotates to a wide viewport.
   // Also check capability: pointer media queries can report fine on hybrid devices.
   const touchCapable = navigator.maxTouchPoints > 0;
@@ -201,12 +202,23 @@ function init(stage: HTMLElement) {
   const summary = stage.querySelector<HTMLElement>(".event-summary");
   const hero = stage.querySelector<HTMLElement>(".event-hero");
   const positionTorches = () => {
-    if (!mobile.matches || !summary) {
+    if (stage.classList.contains("fw-event") && summary && hero) {
+      const roll = parseFloat(getComputedStyle(stage).getPropertyValue("--fw-roll-overhang")) || 0;
+      const end = summary.getBoundingClientRect().bottom - hero.getBoundingClientRect().top + roll;
+      stage.style.setProperty("--fw-torches-height", `${end}px`);
+    }
+    const eventPage = stage.classList.contains("fw-event");
+    if (!(eventPage ? titlePanel.matches : mobile.matches) || !summary) {
       stage.style.removeProperty("--fw-head-top");
       return;
     }
     const scale = Number(getComputedStyle(stage).getPropertyValue("--fw-s"));
-    const summaryTop = summary.getBoundingClientRect().top - stage.getBoundingClientRect().top;
+    const origin = stage.classList.contains("fw-event") && hero ? hero : stage;
+    const intro = stage.querySelector<HTMLElement>(".event-hero-intro");
+    const start = eventPage && !mobile.matches && intro
+      ? Math.max(summary.getBoundingClientRect().top, intro.getBoundingClientRect().bottom)
+      : summary.getBoundingClientRect().top;
+    const summaryTop = start - origin.getBoundingClientRect().top;
     // The flame canvas extends 200 head-coordinate pixels above the torch head.
     stage.style.setProperty("--fw-head-top", `${summaryTop + 200 * scale}px`);
   };
@@ -218,6 +230,7 @@ function init(stage: HTMLElement) {
   }
   void document.fonts?.ready.then(positionTorches);
   mobile.addEventListener("change", positionTorches);
+  titlePanel.addEventListener("change", positionTorches);
   positionTorches();
 
   const canvas = stage.querySelector<HTMLCanvasElement>("[data-fw-sky]");

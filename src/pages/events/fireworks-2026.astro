@@ -31,9 +31,9 @@ const eventJsonLd = {
 <BaseLayout title={event.title} description={event.summary} image="/brand/foa-logo-fireworks-og.png" headerLogo="/brand/foa-logo-fireworks-ivory.svg" bodyClass="fw-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
   <div class="fw-event fw-stage" data-fw-stage data-fw-paused>
-    <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
     <div class="fw-content">
       <section class="event-hero">
+        <div class="fw-torches" aria-hidden="true"><FireworksTorch /><FireworksTorch /></div>
         <div class="site-width">
           <div class="event-hero-grid">
             <div class="fw-title-copy">

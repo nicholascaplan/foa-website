@@ -347,3 +347,30 @@ test.describe("without JavaScript", () => {
     await expectStaticEffects(page);
   });
 });
+
+for (const width of [320, 393, 768, 1440]) {
+  for (const textSize of [100, 200]) {
+    test(`event torches end at the first parchment at ${width}px and ${textSize}% text`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 873 });
+      await page.goto("/events/fireworks-2026/");
+      await page.evaluate((size) => { document.documentElement.style.fontSize = `${size}%`; }, textSize);
+      const bounds = () => page.evaluate(async () => {
+        await document.fonts.ready;
+        const summary = document.querySelector(".event-summary")!.getBoundingClientRect();
+        const torches = document.querySelector(".fw-torches")!.getBoundingClientRect();
+        const poles = [...document.querySelectorAll(".fw-torch__pole")].map((pole) => pole.getBoundingClientRect().bottom);
+        const later = [...document.querySelectorAll(".event-main > .event-block")].map((panel) => panel.getBoundingClientRect().top);
+        const roll = parseFloat(getComputedStyle(document.body).getPropertyValue("--fw-roll-overhang"));
+        return { end: torches.bottom, paperEnd: summary.bottom + roll, poles, later };
+      });
+      await expect.poll(async () => Math.abs((await bounds()).end - (await bounds()).paperEnd)).toBeLessThanOrEqual(1);
+      for (const panel of await page.locator(".event-main > .event-block").all()) {
+        await panel.scrollIntoViewIfNeeded();
+        const layout = await bounds();
+        expect(Math.abs(layout.end - layout.paperEnd)).toBeLessThanOrEqual(1);
+        expect(layout.poles.every((bottom) => bottom <= layout.end + 1)).toBe(true);
+        expect(layout.later.every((top) => top > layout.end)).toBe(true);
+      }
+    });
+  }
+}

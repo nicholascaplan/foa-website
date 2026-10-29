@@ -25,7 +25,7 @@ function experience({ narrow = false, touch = false, touchPoints = 0, reduced = 
   const hosts = [0, 1].map(() => ({ append: (element) => flameCanvases.push(element) }));
   let paused = true;
   const stage = {
-    classList: { add() {} },
+    classList: { add() {}, contains() { return false; } },
     style: { removeProperty() {} },
     toggleAttribute(_name, value) { paused = value; },
     querySelector: (selector) => selector === "[data-fw-sky]" ? sky : null,
