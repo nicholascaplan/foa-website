@@ -677,6 +677,14 @@ body.fw-theme::before {
   width: 100%;
 }
 
+.fw-theme .summary-guide {
+  margin: 0.9rem 0 0;
+}
+
+.fw-theme .summary-guide .button {
+  width: 100%;
+}
+
 .fw-theme .ticket-cta {
   border-top-color: rgba(38, 54, 26, 0.3);
 }

@@ -122,7 +122,10 @@ test("Reps Hub puts shareable messages first and preserves ticket links and sale
   assert.doesNotMatch(cards.join(""), /—|Tombola, Entrance &amp; Tokens, and Glitter Tattoos/);
   assert.doesNotMatch(html, /class leads for the Christmas Fayre/);
   assert.equal([...html.matchAll(/data-reviewed="2026-10-11"/g)].length, 2);
-  assert.equal([...html.matchAll(/data-reviewed="2026-10-13"/g)].length, 1);
+  assert.equal([...html.matchAll(/data-reviewed="2026-10-30"/g)].length, 1);
+  assert.ok(cards[0].includes("Download the event guide"));
+  assert.ok(cards[0].includes(`>${`https://www.thefriendsofashley.org${basePath}`}/events/fireworks-2026-event-guide.pdf</a>`));
+  assert.ok(cards[0].match(/data-copy-text="([^"]*)"/)?.[1].includes(`Download the event guide: https://www.thefriendsofashley.org${basePath}/events/fireworks-2026-event-guide.pdf`));
   assert.equal([...html.matchAll(/data-reviewed="2026-10-26"/g)].length, 1);
   assert.equal(fayreRange, "12:00-15:00");
   assert.ok(cards[3].match(/data-copy-text="([^"]*)"/)?.[1].includes(`${fayreRange} at Ashley School`));

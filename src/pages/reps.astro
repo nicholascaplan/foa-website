@@ -28,7 +28,16 @@ const timeRange = (event: typeof uniform) => event.end
 const quietDisplay = fireworks.schedule.find(({ label }) => label === "Quiet display");
 const mainDisplay = fireworks.schedule.find(({ label }) => label === "Main display");
 if (!quietDisplay || !mainDisplay) throw new Error("Reps Hub Fireworks schedule is missing");
-const messages = [
+const messageList: {
+  title: string;
+  paragraphs: string[];
+  timing: typeof uniform;
+  href: string;
+  linkLabel: string;
+  ticketUrl?: string;
+  guide?: { path: string; fileName: string; size?: string };
+  reviewed?: string;
+}[] = [
   {
     title: fireworks.title,
     paragraphs: [
@@ -39,7 +48,8 @@ const messages = [
     href: fireworks.path!,
     linkLabel: "Event details and practical information",
     ticketUrl: fireworks.ticketUrl,
-    reviewed: "2026-10-13",
+    guide: fireworks.guide,
+    reviewed: "2026-10-30",
   },
   {
     title: "Fireworks volunteering",
@@ -72,7 +82,8 @@ const messages = [
     href: christmas.path!,
     linkLabel: "See how to get involved and contact the Fayre team",
   },
-].map((message) => ({
+];
+const messages = messageList.map((message) => ({
   ...message,
   reviewed: message.reviewed ?? "2026-10-11",
   expires: (message.timing.end ?? message.timing.start).toISOString(),
@@ -80,6 +91,7 @@ const messages = [
   copyText: [
     ...message.paragraphs,
     ...(message.ticketUrl ? [`Buy Fireworks tickets: ${message.ticketUrl}`] : []),
+    ...(message.guide ? [`Download the event guide: ${publicUrl(message.guide.path)}`] : []),
     `${message.linkLabel}: ${publicUrl(message.href)}`,
   ].join("\n\n"),
 })).filter(({ expires }) => Date.now() < Date.parse(expires));
@@ -101,6 +113,7 @@ const messages = [
             <h2>{message.title}</h2>
             {message.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
             {message.ticketUrl && <p>Buy Fireworks tickets: <a href={message.ticketUrl} target="_blank" rel="noopener noreferrer">{message.ticketUrl}<span class="visually-hidden"> (opens in a new tab)</span></a></p>}
+            {message.guide && <p>Download the event guide: <a href={withBase(message.guide.path)} download={message.guide.fileName}>{publicUrl(message.guide.path)}</a></p>}
             <p>{message.linkLabel}: <a href={withBase(message.href)}>{message.url}</a></p>
             <div class="message-actions">
               <button class="button button--secondary" type="button" data-copy-button data-copy-text={message.copyText}>Copy message</button>
