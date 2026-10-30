@@ -369,6 +369,10 @@ body.xmas-theme::before {
   line-height: 1.2;
 }
 
+.xmas-sponsor {
+  margin-inline: auto;
+}
+
 .xmas-nowrap {
   display: inline-block;
   max-width: 100%;
