@@ -66,6 +66,27 @@ test.describe("Christmas Fayre decoration", () => {
     });
   }
 
+  test("puts the fact labels beside their values on a phone", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+
+    const label = (await page.locator(".xmas-facts dt").first().boundingBox())!;
+    const value = (await page.locator(".xmas-facts dd").first().boundingBox())!;
+    expect(value.x, "value sits to the right of its label").toBeGreaterThanOrEqual(label.x + label.width);
+    expect(Math.abs(value.y - label.y), "label and value share a row").toBeLessThan(30);
+  });
+
+  test("stacks the fact labels above their values when text is enlarged", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+    await page.addStyleTag({ content: "html { font-size: 160%; }" });
+
+    const label = (await page.locator(".xmas-facts dt").first().boundingBox())!;
+    const value = (await page.locator(".xmas-facts dd").first().boundingBox())!;
+    expect(value.y, "value sits below its label").toBeGreaterThanOrEqual(label.y + label.height);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+  });
+
   test("is hidden from assistive technology and never takes focus", async ({ page }) => {
     await page.goto(route);
 

@@ -328,9 +328,15 @@ body.xmas-theme::before {
   align-items: center;
 }
 
-@media (min-width: 40rem) {
+/* Labels sit on the left and values on the right to save height. The choice follows the
+   frame's width in em, so enlarged text (or a very narrow phone) stacks them again. */
+.xmas-hero__frame {
+  container: xmas-hero / inline-size;
+}
+
+@container xmas-hero (min-width: 18em) {
   .xmas-facts {
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr;
     justify-content: center;
     column-gap: 1.2rem;
     row-gap: 0.4rem;
