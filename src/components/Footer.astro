@@ -2,6 +2,9 @@
 import { withBase } from "../lib/urls";
 import SocialLinks from "./SocialLinks.astro";
 
+interface Props { logo?: string; }
+const { logo = "/brand/foa-logo-ivory.svg" } = Astro.props;
+
 const linkColumns = [
   [
     ["/whats-on/", "What's On"],
@@ -25,7 +28,7 @@ const linkColumns = [
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="footer-brand-home" href={withBase("/")} aria-label="The Friends of Ashley home">
-          <img src={withBase("/brand/foa-logo-ivory.svg")} alt="" width="112" height="112">
+          <img src={withBase(logo)} alt="" width="112" height="112">
           <h2>The Friends of Ashley</h2>
         </a>
         <p>The parent teacher association for Ashley C of E Primary School, Walton-on-Thames.</p>
