@@ -5305,3 +5305,24 @@ body.menu-open .cookie-banner {
     inset-inline-end: 0.5rem;
   }
 }
+
+/* PROTOTYPE: larger pinned icons - at 1.05em the detached icon read small
+   against the pill; 1.35em balances the 800-weight labels. Lane grows to
+   match. */
+.button .cta-icon svg,
+.button svg.cta-icon,
+.event-list-cta--button .cta-icon svg {
+  width: 1.35em;
+  height: 1.35em;
+}
+
+.button:has(.cta-icon),
+.event-list-cta--button:has(.cta-icon) {
+  padding-inline-end: calc(1.35em + 1.5rem) !important;
+}
+
+@container fireworks-summary (max-width: 8rem) {
+  .fw-theme .event-summary .button:has(.cta-icon) {
+    padding-inline-end: calc(1.35em + 0.8rem) !important;
+  }
+}
