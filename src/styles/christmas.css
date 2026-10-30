@@ -376,15 +376,15 @@ body.xmas-theme::before {
   line-height: 1.2;
 }
 
-/* Small Martin Flashman and Co mark, centred at the foot of the hero frame under the buttons */
+/* Small Martin Flashman and Co mark, centred directly under the page title in the hero frame */
 .xmas-credit {
-  margin: 1rem 0 0;
+  margin: 0.6rem 0 0;
   line-height: 0;
 }
 
 .xmas-credit img {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 .xmas-nowrap {
