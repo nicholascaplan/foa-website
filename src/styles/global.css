@@ -5278,7 +5278,7 @@ body.menu-open .cookie-banner {
 .button:has(.cta-icon),
 .event-list-cta--button:has(.cta-icon) {
   position: relative;
-  padding-inline-end: calc(1.05em + 1.2rem) !important;
+  padding-inline-end: calc(1.05em + 1.5rem) !important;
 }
 
 .button:has(.cta-icon) .cta-label,
@@ -5290,7 +5290,7 @@ body.menu-open .cookie-banner {
 .button svg.cta-icon,
 .event-list-cta--button .cta-icon {
   position: absolute;
-  inset-inline-end: 0.6rem;
+  inset-inline-end: 0.9rem;
   top: 50%;
   translate: 0 -50%;
   margin-inline-start: 0;
@@ -5298,10 +5298,10 @@ body.menu-open .cookie-banner {
 
 @container fireworks-summary (max-width: 8rem) {
   .fw-theme .event-summary .button:has(.cta-icon) {
-    padding-inline-end: calc(1.05em + 0.6rem) !important;
+    padding-inline-end: calc(1.05em + 0.8rem) !important;
   }
 
   .fw-theme .event-summary .button .cta-icon {
-    inset-inline-end: 0.3rem;
+    inset-inline-end: 0.5rem;
   }
 }
