@@ -423,7 +423,7 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
   for (const [, row] of baubleRows) {
     assert.equal([...row.matchAll(/<li style="--i:\d+;/g)].length, 20);
   }
-  assert.equal([...html.matchAll(/<i style="--x:/g)].length, 28);
+  assert.equal([...html.matchAll(/<i style="--side:/g)].length, 28);
   assert.match(html, /<div class="xmas-snow" aria-hidden="true">/);
 });
 
