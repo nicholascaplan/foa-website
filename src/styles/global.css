@@ -831,6 +831,15 @@ a {
   margin-inline-start: 0.6rem;
 }
 
+/* One icon set for button CTAs: SVGs sized in em so every trailing icon shares
+   size and stroke weight and scales with enlarged text. */
+.button .cta-icon svg,
+.button svg.cta-icon {
+  width: 1.05em;
+  height: 1.05em;
+  vertical-align: -0.15em;
+}
+
 .event-list-calendar .cta-icon {
   margin-inline-start: 0.35rem;
 }
