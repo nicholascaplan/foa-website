@@ -22,8 +22,8 @@ test.describe("Christmas Fayre decoration", () => {
       // The snow layer fills the viewport while scrolling, so check every flake against the
       // content column (the widest section, 62rem, or the page width less 1rem each side).
       const result = await page.evaluate(() => {
-        const content = Math.min(innerWidth - 32, 62 * parseFloat(getComputedStyle(document.documentElement).fontSize));
-        const left = (innerWidth - content) / 2;
+        const content = Math.min(document.documentElement.clientWidth - 32, 62 * parseFloat(getComputedStyle(document.documentElement).fontSize));
+        const left = (document.documentElement.clientWidth - content) / 2;
         const right = left + content;
         const inside = [...document.querySelectorAll(".xmas-snow i")]
           .filter((flake) => getComputedStyle(flake).display !== "none")
