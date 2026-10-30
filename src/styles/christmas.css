@@ -641,6 +641,17 @@ body.xmas-theme::before {
   margin-right: -0.5rem;
 }
 
+/* On phones the trees would sit on their own row under the button, so hide them to keep the box compact */
+@media (max-width: 39.99rem) {
+  .xmas-contact {
+    padding-bottom: clamp(1.2rem, 5vw, 1.8rem);
+  }
+
+  .xmas-trees {
+    display: none;
+  }
+}
+
 @media (min-width: 40rem) {
   .xmas-contact {
     grid-template-columns: minmax(0, 1fr) auto;
