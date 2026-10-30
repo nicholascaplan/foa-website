@@ -80,8 +80,8 @@ for (const width of [320, 390, 768, 1023]) {
           await expect(page.locator(".xmas-baubles--desktop")).toBeHidden();
           await expect(page.locator(".xmas-baubles--mobile")).toBeVisible();
           const baubles = (await page.locator(".xmas-baubles--mobile").boundingBox())!;
-          const intro = (await page.locator(".xmas-hero__intro").boundingBox())!;
-          expect(baubles.y, "Baubles must not push the opening logo down").toBeGreaterThanOrEqual(intro.y + intro.height);
+          const title = (await page.locator("#xmas-title").boundingBox())!;
+          expect(baubles.y, "Baubles must not push the opening logo down").toBeGreaterThanOrEqual(title.y + title.height);
         }
       }
       const overlapping = await page.locator("main h1, main h2, main p, main a, main button").evaluateAll((elements) => {
