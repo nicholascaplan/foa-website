@@ -123,13 +123,13 @@ body.xmas-theme::before {
   top: 0;
   left: 50%;
   width: 1px;
-  height: var(--len);
+  height: calc(var(--len) * var(--string-scale, 1));
   background: rgba(243, 210, 124, 0.7);
 }
 
 .xmas-baubles__item {
   position: absolute;
-  top: var(--len);
+  top: calc(var(--len) * var(--string-scale, 1));
   left: 50%;
   transform-origin: 50% -1px;
   animation: xmas-sway 3s ease-in-out calc(var(--i) * -0.6s) infinite alternate;
@@ -369,7 +369,8 @@ body.xmas-theme::before {
   line-height: 1.2;
 }
 
-/* Small Martin Flashman and Co mark, centred directly under the page title in the hero frame */
+/* Small Martin Flashman and Co mark. On phones it sits directly below the Christmas logo;
+   on wider screens the hero has no logo, so it sits centred under the page title. */
 .xmas-credit {
   margin: 0.6rem 0 0;
   line-height: 0;
@@ -378,6 +379,28 @@ body.xmas-theme::before {
 .xmas-credit img {
   width: 3rem;
   height: 3rem;
+}
+
+@media (max-width: 63.99rem) {
+  .xmas-credit {
+    margin: 0.3rem 0 0;
+    text-align: center;
+  }
+
+  .xmas-credit img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* Pay for the mark's height with the hanging string length of the phone bauble row, so the
+     hero frame stays the same height as before. */
+  .xmas-baubles--mobile li {
+    height: 2.8rem;
+  }
+
+  .xmas-baubles--mobile {
+    --string-scale: 0.38;
+  }
 }
 
 .xmas-nowrap {
