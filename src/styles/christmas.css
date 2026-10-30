@@ -313,22 +313,6 @@ body.xmas-theme::before {
   }
 }
 
-.xmas-hero__lead {
-  margin: 0.4rem 0 0;
-  color: var(--xm-snow);
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 5vw, 2rem);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.xmas-hero__intro {
-  max-width: 34rem;
-  margin: 0.6rem auto 0;
-  font-size: clamp(1rem, 3.4vw, 1.15rem);
-  line-height: 1.6;
-}
-
 .xmas-facts {
   display: grid;
   gap: 0.5rem 2.4rem;
@@ -372,6 +356,44 @@ body.xmas-theme::before {
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 4.4vw, 1.85rem);
   line-height: 1.2;
+}
+
+/* Small Martin Flashman and Co mark. On phones it sits directly below the Christmas logo;
+   on wider screens the hero has no logo, so it sits centred under the page title. */
+.xmas-credit {
+  margin: 0.6rem 0 0;
+  line-height: 0;
+}
+
+.xmas-credit img {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* The wide-screen logo is hidden and the heading wrappers use display: contents, so the
+   mark would otherwise come before the kicker. Order it after the title. */
+@media (min-width: 64rem) {
+  .xmas-theme .mobile-page-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .xmas-theme .mobile-page-heading .xmas-credit {
+    order: 1;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .xmas-credit {
+    margin: 0.3rem 0 0;
+    text-align: center;
+  }
+
+  .xmas-credit img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 }
 
 .xmas-nowrap {
