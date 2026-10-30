@@ -34,15 +34,17 @@ body.xmas-theme::before {
     linear-gradient(#0c2f20 0%, #08241a 55%, #061c14 100%);
 }
 
-/* Snowfall: a viewport-height layer that stays in view while scrolling */
+/* Snowfall: a layer that stays in view while scrolling. It uses the large viewport height
+   (100lvh) so that on phones, when the browser toolbar slides away as you scroll, the layer
+   still reaches the bottom of the screen instead of ending early and cutting flakes off. */
 .xmas-snow {
   position: sticky;
   z-index: 1;
   top: 0;
   height: 100vh;
-  height: 100svh;
+  height: 100lvh;
   margin-bottom: -100vh;
-  margin-bottom: -100svh;
+  margin-bottom: -100lvh;
   overflow: hidden;
   pointer-events: none;
   /* Width of the empty margin either side of the page content */
