@@ -1,4 +1,7 @@
 ---
 import { withBase } from "../lib/urls";
+
+interface Props { thanks?: boolean; }
+const { thanks = true } = Astro.props;
 ---
-<span class="sponsor-ribbon"><span>With thanks to</span><img src={withBase("/sponsors/martin-flashman.jpeg")} alt="Martin Flashman and Co" width="225" height="33" loading="lazy"></span>
+<span class="sponsor-ribbon">{thanks && <span>With thanks to</span>}<img src={withBase("/sponsors/martin-flashman.jpeg")} alt="Martin Flashman and Co" width="225" height="33" loading="lazy"></span>

@@ -426,6 +426,7 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
   assert.equal([...html.matchAll(/<i style="--x:/g)].length, 28);
   assert.match(html, /<div class="xmas-snow" aria-hidden="true">/);
   assert.match(html, /<div class="event-hero-sponsor xmas-sponsor">[\s\S]*?martin-flashman\.jpeg[\s\S]*?alt="Martin Flashman and Co"/);
+  assert.doesNotMatch(html.match(/<div class="event-hero-sponsor xmas-sponsor">[\s\S]*?<\/div>/)?.[0] ?? "", /With thanks to/);
 });
 
 test("the Fireworks volunteering page shows every role, shift and sign-up link from the event record", async () => {
