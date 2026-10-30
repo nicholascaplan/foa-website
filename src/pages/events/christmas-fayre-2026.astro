@@ -73,6 +73,7 @@ const eventJsonLd = {
             <div><dt>Led by</dt><dd>{event.lead?.split(/(?<=\)) and /).map((lead, index) => <>{index > 0 && <br />}{lead}</>)}</dd></div>
           </dl>
           <p class="xmas-actions"><a class="button button--amber button--large" href={mailto}><span class="cta-label">Email the Fayre <span class="cta-word">tea<span class="cta-tail">m<span class="cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></span></span></span></a><AddToCalendar eventId={entry.id} /></p>
+          <p class="xmas-credit"><img src={withBase("/sponsors/martin-flashman-mark.png")} alt="Martin Flashman and Co" width="72" height="72" loading="lazy"></p>
         </div>
       </div>
     </section>
@@ -110,7 +111,6 @@ const eventJsonLd = {
           </div>
           <ChristmasTrees />
         </div>
-        <p class="xmas-credit"><img src={withBase("/sponsors/martin-flashman-mark.png")} alt="Martin Flashman and Co" width="72" height="72" loading="lazy"></p>
       </div>
     </section>
   </div>

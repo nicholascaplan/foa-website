@@ -369,15 +369,15 @@ body.xmas-theme::before {
   line-height: 1.2;
 }
 
-/* Small Martin Flashman and Co mark, bottom left under the contact box like on the poster */
+/* Small Martin Flashman and Co mark, centred at the foot of the hero frame under the buttons */
 .xmas-credit {
   margin: 1rem 0 0;
   line-height: 0;
 }
 
 .xmas-credit img {
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .xmas-nowrap {
