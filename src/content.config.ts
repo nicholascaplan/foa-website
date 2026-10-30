@@ -44,6 +44,8 @@ const events = defineCollection({
       shifts: z.array(z.object({ label: z.string(), when: z.string(), helpers: z.number().int().positive() })),
     })).optional(),
     contactEmail: z.email().optional(),
+    entry: z.string().optional(),
+    whatsOn: z.array(z.string()).optional(),
     helpAreas: z.array(z.object({
       name: z.string(),
       icon: z.enum(["funzone", "craft", "cafe", "photo", "tombola", "tokens", "sparkle"]),
