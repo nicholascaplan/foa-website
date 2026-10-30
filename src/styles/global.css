@@ -5265,3 +5265,43 @@ body.menu-open .cookie-banner {
 .add-calendar--page .add-calendar-links {
   justify-content: center;
 }
+
+/* PROTOTYPE ONLY (never merge): pin every button CTA's trailing icon to the
+   pill's right edge, vertically centred against the whole pill, so icon
+   positions match across labels that wrap to a different number of lines.
+   The label keeps the icon's room via extra end padding so text never runs
+   beneath it. Expected to fail cta-icon-wrap.spec.ts: the icon is no longer
+   on the label's final line. */
+/* !important: component pills (fireworks summary, uniform actions) set their
+   own padding shorthands with higher specificity; the reserved icon lane must
+   still win in this prototype. */
+.button:has(.cta-icon),
+.event-list-cta--button:has(.cta-icon) {
+  position: relative;
+  padding-inline-end: calc(1.05em + 1.2rem) !important;
+}
+
+.button:has(.cta-icon) .cta-label,
+.event-list-cta--button:has(.cta-icon) .cta-label {
+  overflow-wrap: anywhere;
+}
+
+.button .cta-icon,
+.button svg.cta-icon,
+.event-list-cta--button .cta-icon {
+  position: absolute;
+  inset-inline-end: 0.6rem;
+  top: 50%;
+  translate: 0 -50%;
+  margin-inline-start: 0;
+}
+
+@container fireworks-summary (max-width: 8rem) {
+  .fw-theme .event-summary .button:has(.cta-icon) {
+    padding-inline-end: calc(1.05em + 0.6rem) !important;
+  }
+
+  .fw-theme .event-summary .button .cta-icon {
+    inset-inline-end: 0.3rem;
+  }
+}
