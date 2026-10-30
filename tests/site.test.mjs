@@ -424,6 +424,8 @@ test("the Christmas Fayre page shows the date, place and lead from the event rec
     assert.equal([...row.matchAll(/<li style="--i:\d+;/g)].length, 20);
   }
   assert.equal([...html.matchAll(/<i style="--side:/g)].length, 28);
+  assert.match(html, /<dt>Entry<\/dt><dd>£2, under 12s go free<\/dd>/);
+  assert.match(html, /<dt>What’s on<\/dt><dd>Fun Zone games<br\/?>Art and craft stalls<br\/?>Festive food and drink<\/dd>/);
   assert.match(html, /<div class="xmas-snow" aria-hidden="true">/);
 });
 
