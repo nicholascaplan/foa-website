@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 for (const width of [320, 390, 554, 768, 1023, 1024, 1200, 1440]) {
   for (const enlargedText of [false, true]) {
-    test(`uniform action icons stay beside their labels at ${width}px${enlargedText ? " with enlarged text" : ""}`, async ({ page }) => {
+    test(`uniform action icons sit clear of their labels in the pill lane at ${width}px${enlargedText ? " with enlarged text" : ""}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/uniform/");
       if (enlargedText) {
@@ -35,12 +35,15 @@ for (const width of [320, 390, 554, 768, 1023, 1024, 1200, 1440]) {
           }
           const lastLine = lines[lines.length - 1];
           const icon = element.querySelector('[aria-hidden="true"]')!.getBoundingClientRect();
+          // Pinned lane (rule approved 30 Oct 2026): the icon must not
+          // intersect any label line - text never runs beneath it.
+          const overlapsLabel = lines.some((line) => !(icon.right < line.left + 1 || icon.left > line.right - 1 || icon.bottom < line.top + 1 || icon.top > line.bottom - 1));
           const container = element.closest(".view-hero-inner")!.getBoundingClientRect();
           const containerStyle = getComputedStyle(element.closest(".view-hero-inner")!);
           return {
             labelRight: lastLine.right,
             iconLeft: icon.left,
-            sameLine: icon.top < lastLine.bottom && icon.bottom > lastLine.top,
+            overlapsLabel,
             iconRight: icon.right,
             buttonRight: bounds.right,
             height: bounds.height,
@@ -51,7 +54,7 @@ for (const width of [320, 390, 554, 768, 1023, 1024, 1200, 1440]) {
           };
         });
         expect(layout.iconLeft).toBeGreaterThan(layout.labelRight);
-        expect(layout.sameLine).toBe(true);
+        expect(layout.overlapsLabel).toBe(false);
         expect(layout.iconRight).toBeLessThan(layout.buttonRight);
         expect(layout.height).toBeGreaterThanOrEqual(44);
         heights.push(layout.height);
