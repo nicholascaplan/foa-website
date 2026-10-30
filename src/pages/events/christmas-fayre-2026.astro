@@ -28,7 +28,8 @@ const icons = {
 };
 
 const flakes = Array.from({ length: 28 }, (_, i) => ({
-  x: (i * 37 + 11) % 100,
+  side: i % 2,
+  lane: ((i * 37 + 11) % 100) / 100,
   size: 10 + ((i * 5) % 9),
   duration: 11 + ((i * 7) % 10),
   delay: -((i * 3.300) % 20),
@@ -49,11 +50,11 @@ const eventJsonLd = {
   organizer: { "@type": "Organization", name: "The Friends of Ashley", url: new URL(withBase("/"), Astro.site).href },
 };
 ---
-<BaseLayout title={event.title} description="Something magical is coming. Help host the Ashley Christmas Fayre: join a slot with your friends, no experience needed." image="/brand/foa-logo-christmas-og.png" headerLogo="/brand/foa-logo-christmas-ivory.svg" bodyClass="xmas-theme">
+<BaseLayout title={event.title} description="Something magical is coming. Help host the Ashley Christmas Fayre: join a slot with your friends, no experience needed." image="/brand/foa-logo-christmas-og.png" headerLogo="/brand/foa-logo-christmas-ivory.svg" footerLogo="/brand/foa-logo-christmas-ivory.svg" bodyClass="xmas-theme">
   <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
   <div class="xmas-stage">
     <div class="xmas-snow" aria-hidden="true">
-      {flakes.map((f) => <i style={`--x:${f.x}%;--y:${f.y}%;--size:${f.size}px;--dur:${f.duration}s;--delay:${f.delay}s;--alpha:${f.alpha}`}></i>)}
+      {flakes.map((f) => <i style={`--side:${f.side};--lane:${f.lane};--y:${f.y}%;--size:${f.size}px;--dur:${f.duration}s;--delay:${f.delay}s;--alpha:${f.alpha}`}></i>)}
     </div>
 
     <section class="xmas-hero" aria-labelledby="xmas-title">

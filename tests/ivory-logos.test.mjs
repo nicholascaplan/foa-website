@@ -34,7 +34,9 @@ test("shared branding uses ivory artwork without giving the standard logo festiv
       if (logo === standard) assert.doesNotMatch(region, /brand-logo--festive/);
     }
     const footer = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0];
-    assert.ok(footer?.includes(`/brand/${standard}`), `${route}: ivory footer`);
+    // Only the Christmas Fayre page swaps in its own footer logo (30 October 2026).
+    const footerLogo = route.startsWith("events/christmas-fayre-2026/") ? logo : standard;
+    assert.ok(footer?.includes(`/brand/${footerLogo}`), `${route}: ivory footer`);
   }
 });
 
