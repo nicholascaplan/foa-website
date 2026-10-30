@@ -704,6 +704,20 @@ body.fw-theme::before {
   line-height: 1.2;
 }
 
+/* When extreme text zoom shrinks the summary card until a pill's padding
+   leaves no room for the final character and icon, trade padding for label
+   room so the label still fits inside the pill. At normal text sizes the
+   card is always wider than 8rem, so this never changes normal rendering. */
+@container fireworks-summary (max-width: 8rem) {
+  .fw-theme .event-summary :is(.ticket-cta .button, .summary-volunteer, .summary-guide .button) {
+    padding-inline: 0.25rem;
+  }
+
+  .fw-theme .event-summary .cta-icon {
+    margin-inline-start: 0.3rem;
+  }
+}
+
 .fw-theme .ticket-cta {
   border-top-color: rgba(38, 54, 26, 0.3);
 }
