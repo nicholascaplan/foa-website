@@ -47,6 +47,25 @@ test.describe("Christmas Fayre decoration", () => {
     });
   }
 
+  for (const width of [390, 820, 1280]) {
+    test(`places the sponsor mark below the logo on phones and tablets, below the title on wide screens at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route);
+
+      const mark = (await page.locator(".xmas-credit img").boundingBox())!;
+      const title = (await page.locator("#xmas-title").boundingBox())!;
+      const kicker = (await page.locator(".xmas-kicker").boundingBox())!;
+      if (width < 1024) {
+        const logo = (await page.locator(".mobile-page-logo").boundingBox())!;
+        expect(mark.y, "mark sits below the Christmas logo").toBeGreaterThanOrEqual(logo.y + logo.height);
+        expect(mark.x, "mark is in the logo column, not under the title").toBeLessThan(title.x);
+      } else {
+        expect(mark.y, "mark sits below the title").toBeGreaterThanOrEqual(title.y + title.height);
+        expect(mark.y, "mark is not above the kicker").toBeGreaterThan(kicker.y);
+      }
+    });
+  }
+
   test("is hidden from assistive technology and never takes focus", async ({ page }) => {
     await page.goto(route);
 
