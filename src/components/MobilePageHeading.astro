@@ -6,6 +6,9 @@ const { logo } = Astro.props;
 ---
 
 <div class="mobile-page-heading">
-  <PageLogo logo={logo} />
+  <div class="mobile-page-heading-brand">
+    <PageLogo logo={logo} />
+    <slot name="below-logo" />
+  </div>
   <div class="mobile-page-heading-copy"><slot /></div>
 </div>
