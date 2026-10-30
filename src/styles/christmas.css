@@ -45,15 +45,20 @@ body.xmas-theme::before {
   margin-bottom: -100svh;
   overflow: hidden;
   pointer-events: none;
+  /* Width of the empty margin either side of the page content */
+  --gutter: calc((100% - min(100% - 2rem, 62rem)) / 2);
 }
 
 .xmas-snow i {
   --flake: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath transform=%22rotate%280 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%2860 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28120 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28180 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28240 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3Cpath transform=%22rotate%28300 12 12%29%22 d=%22M12 12V1.5M9.4 7.6L12 5l2.6 2.6%22/%3E%3C/svg%3E");
   position: absolute;
   top: -20px;
-  left: var(--x);
-  width: var(--size);
-  height: var(--size);
+  /* Flakes only fall inside the side margins, never over the content.
+     --side is 0 (left margin) or 1 (right margin); --lane places the flake across that margin. */
+  --w: min(var(--size), calc(var(--gutter) * 0.75));
+  left: calc(var(--side) * (100% - var(--gutter)) + var(--lane) * (var(--gutter) - var(--w)));
+  width: var(--w);
+  height: var(--w);
   opacity: var(--alpha);
   animation: xmas-fall var(--dur) linear var(--delay) infinite;
   will-change: transform;
@@ -656,6 +661,17 @@ body.xmas-theme::before {
   height: auto;
   justify-self: end;
   margin-right: -0.5rem;
+}
+
+/* On phones the trees would sit on their own row under the button, so hide them to keep the box compact */
+@media (max-width: 39.99rem) {
+  .xmas-contact {
+    padding-bottom: clamp(1.2rem, 5vw, 1.8rem);
+  }
+
+  .xmas-trees {
+    display: none;
+  }
 }
 
 @media (min-width: 40rem) {

@@ -30,7 +30,8 @@ for (const width of [390, 1440]) {
       expect(await logo.getAttribute("src")).toContain(`/brand/${artwork}`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
       const footer = page.locator("footer img").first();
-      expect(await footer.getAttribute("src")).toContain("/brand/foa-logo-ivory.svg");
+      // Only the Christmas Fayre page uses its own logo in the footer.
+      expect(await footer.getAttribute("src")).toContain(route.includes("christmas-fayre") ? `/brand/${artwork}` : "/brand/foa-logo-ivory.svg");
     }
   });
 }
