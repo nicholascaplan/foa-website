@@ -27,7 +27,7 @@
     },
     {
       "label": "Food and payments",
-      "text": "The BBQ, bar, pizza van and coffee cart accept cash or card. Bring cash for the braid bar and face painting."
+      "text": "The BBQ and bar take card payments. The pizza van, coffee cart, braid bar and face painting accept cash or card."
     },
     {
       "label": "Parking",
@@ -58,7 +58,7 @@
       "urlLabel": "Google Maps"
     }
   ],
-  "reviewed": "2026-10-05",
+  "reviewed": "2026-10-30",
   "schedule": [
     {
       "time": "2026-11-05T16:30:00+00:00",
