@@ -88,7 +88,7 @@ Applies to site copy, metadata, navigation labels, structured data and documenta
 
 Provider requests fail with `HTTP 413` when a session's history is too large, almost always because of accumulated base64 images (pasted screenshots and browser tool screenshots). The full history is resent on every turn, so a session that crosses the limit keeps failing.
 
-- **Read PDFs through the `pdf-to-text` skill** (user-level, `~/.config/opencode/skills/pdf-to-text`), not by passing them whole to `read`. Run `--info` first, extract to markdown, then `grep`/`read` the output. For image-only pages (for example `assets/events/Fireworks 2026 Event Guide.pdf` page 1), render just the needed pages with `--images`. The skill is per-machine; if it is missing, say so rather than falling back to reading large PDFs directly.
+- **Read PDFs through the `pdf-to-text` skill** (user-level, `~/.config/opencode/skills/pdf-to-text`), not by passing them whole to `read`. Run `--info` first, extract to markdown, then `grep`/`read` the output. For image-only pages (for example `assets/events/fireworks-2026-event-guide.pdf` page 1), render just the needed pages with `--images`. The skill is per-machine; if it is missing, say so rather than falling back to reading large PDFs directly.
 
 - Avoid browser screenshots unless needed; prefer DOM or text checks. Do not retake full-page screenshots repeatedly.
 - After any turn that adds images, and every ~10 tool calls in a long session, check the current session's stored size:

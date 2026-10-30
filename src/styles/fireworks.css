@@ -43,6 +43,17 @@
   gap: 0 2rem;
 }
 
+.fw-event .good-to-know div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.25rem;
+}
+
+.fw-event .good-to-know dt {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .fw-event .schedule li {
   align-items: baseline;
 }
@@ -675,6 +686,22 @@ body.fw-theme::before {
 
 .fw-theme .summary-calendar .button {
   width: 100%;
+}
+
+.fw-theme .summary-guide {
+  margin: 0.9rem 0 0;
+}
+
+.fw-theme .summary-guide .button {
+  width: 100%;
+}
+
+/* Keep the summary card's CTA pills one consistent size: shared metrics, and room for a label to wrap to two lines inside the same 3.5rem pill, so the pills render at the same height at every phone width. */
+.fw-theme .event-summary :is(.ticket-cta .button, .summary-volunteer, .summary-guide .button) {
+  min-height: 3.5rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.94rem;
+  line-height: 1.2;
 }
 
 .fw-theme .ticket-cta {

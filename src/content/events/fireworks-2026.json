@@ -12,6 +12,11 @@
   "ticketPrice": "£8.50 per person; under-2s free",
   "ticketUrl": "https://buytickets.at/thefriendsofashley/2337508",
   "ticketNote": "Book early. Tickets on the gate are subject to availability, and the event usually sells out in advance.",
+  "guide": {
+    "path": "/events/fireworks-2026-event-guide.pdf",
+    "fileName": "Fireworks 2026 Event Guide.pdf",
+    "size": "9.9 MB"
+  },
   "goodToKnow": [
     {
       "label": "On the night",
@@ -27,7 +32,7 @@
     },
     {
       "label": "Food and payments",
-      "text": "The BBQ, bar, pizza van and coffee cart accept cash or card. Bring cash for the braid bar and face painting."
+      "text": "The BBQ and bar take card payments. The pizza van, coffee cart, braid bar and face painting accept cash or card."
     },
     {
       "label": "Parking",
@@ -58,7 +63,7 @@
       "urlLabel": "Google Maps"
     }
   ],
-  "reviewed": "2026-10-05",
+  "reviewed": "2026-10-30",
   "schedule": [
     {
       "time": "2026-11-05T16:30:00+00:00",

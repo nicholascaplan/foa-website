@@ -35,6 +35,17 @@ async function expectStaticEffects(page: import("@playwright/test").Page) {
   expect(await page.locator("[data-fw-sky]").evaluate((canvas) => ({ width: (canvas as HTMLCanvasElement).width, height: (canvas as HTMLCanvasElement).height }))).toEqual({ width: 0, height: 0 });
 }
 
+test("the Fireworks page offers the event guide PDF as a download", async ({ page }) => {
+  await page.goto("/events/fireworks-2026/");
+  const link = page.getByRole("link", { name: /Download the event guide/ });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute("href", /\/events\/fireworks-2026-event-guide\.pdf$/);
+  await expect(link).toHaveAttribute("download", "Fireworks 2026 Event Guide.pdf");
+  const response = await page.request.get("/events/fireworks-2026-event-guide.pdf");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("application/pdf");
+});
+
 test("clicking through from What's On does not show a return breadcrumb", async ({ page }) => {
   await page.goto("/whats-on/");
   await page.getByRole("link", { name: /Fireworks on the Field/ }).click();
