@@ -696,11 +696,11 @@ body.fw-theme::before {
   width: 100%;
 }
 
-/* Keep the summary card's CTA pills one consistent size. */
+/* Keep the summary card's CTA pills one consistent size: shared metrics keep every label on one line at phone widths, so the pills render at the same height. */
 .fw-theme .event-summary :is(.ticket-cta .button, .summary-volunteer, .summary-guide .button) {
   min-height: 3.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.05rem;
+  padding: 0.75rem;
+  font-size: 1rem;
 }
 
 .fw-theme .ticket-cta {
