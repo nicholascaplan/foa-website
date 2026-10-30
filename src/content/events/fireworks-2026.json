@@ -12,6 +12,11 @@
   "ticketPrice": "£8.50 per person; under-2s free",
   "ticketUrl": "https://buytickets.at/thefriendsofashley/2337508",
   "ticketNote": "Book early. Tickets on the gate are subject to availability, and the event usually sells out in advance.",
+  "guide": {
+    "path": "/events/fireworks-2026-event-guide.pdf",
+    "fileName": "Fireworks 2026 Event Guide.pdf",
+    "size": "9.9 MB"
+  },
   "goodToKnow": [
     {
       "label": "On the night",

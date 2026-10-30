@@ -26,6 +26,7 @@ const events = defineCollection({
     ticketUrl: z.url().optional(),
     ticketNote: z.string().optional(),
     goodToKnow: z.array(z.object({ label: z.string(), text: z.string() })).optional(),
+    guide: z.object({ path: z.string(), fileName: z.string(), size: z.string().optional() }).optional(),
     gettingThere: z.array(z.object({ label: z.string(), text: z.string(), url: z.url().optional(), urlLabel: z.string().optional() })).optional(),
     info: z.object({ label: z.string(), text: z.string() }).optional(),
     schedule: z.array(z.object({

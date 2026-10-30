@@ -96,8 +96,10 @@ test("Fireworks uses a readable ticket link and keeps its URL in copied text", a
 test("all messages keep their visible website URLs when copied", async ({ page }) => {
   await page.goto("/reps/");
   for (const card of await page.locator(".message-card").all()) {
-    const url = await card.getByRole("link", { name: /https:\/\/www\.thefriendsofashley\.org/ }).innerText();
-    expect(await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text")).toContain(url);
+    const copyText = await card.getByRole("button", { name: "Copy message" }).getAttribute("data-copy-text");
+    for (const link of await card.getByRole("link", { name: /https:\/\/www\.thefriendsofashley\.org/ }).all()) {
+      expect(copyText).toContain(await link.innerText());
+    }
   }
 });
 
