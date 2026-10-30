@@ -5265,3 +5265,51 @@ body.menu-open .cookie-banner {
 .add-calendar--page .add-calendar-links {
   justify-content: center;
 }
+
+/* Pill button CTAs pin their trailing icon to a reserved lane at the pill's
+   right edge, vertically centred against the whole pill, so icon positions
+   match across labels that wrap to a different number of lines and text can
+   never slide beneath the icon. (Rule change approved by Nick, 30 Oct 2026,
+   superseding the 24 Oct same-line rule for pill buttons only; inline links
+   still keep the icon beside the label's final word.) Icons sit at 1.35em so
+   they balance the 800-weight labels. */
+/* !important: component pills (fireworks summary, uniform actions) set their
+   own padding shorthands with higher specificity; the reserved icon lane must
+   still win. */
+.button:has(.cta-icon),
+.event-list-cta--button:has(.cta-icon) {
+  position: relative;
+  padding-inline-end: calc(1.35em + 1.5rem) !important;
+}
+
+.button:has(.cta-icon) .cta-label,
+.event-list-cta--button:has(.cta-icon) .cta-label {
+  overflow-wrap: anywhere;
+}
+
+.button .cta-icon,
+.button svg.cta-icon,
+.event-list-cta--button .cta-icon {
+  position: absolute;
+  inset-inline-end: 0.9rem;
+  top: 50%;
+  translate: 0 -50%;
+  margin-inline-start: 0;
+}
+
+.button .cta-icon svg,
+.button svg.cta-icon,
+.event-list-cta--button .cta-icon svg {
+  width: 1.35em;
+  height: 1.35em;
+}
+
+@container fireworks-summary (max-width: 8rem) {
+  .fw-theme .event-summary .button:has(.cta-icon) {
+    padding-inline-end: calc(1.35em + 0.8rem) !important;
+  }
+
+  .fw-theme .event-summary .button .cta-icon {
+    inset-inline-end: 0.5rem;
+  }
+}
