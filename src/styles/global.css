@@ -832,9 +832,11 @@ a {
 }
 
 /* One icon set for button CTAs: SVGs sized in em so every trailing icon shares
-   size and stroke weight and scales with enlarged text. */
+   size and stroke weight and scales with enlarged text. The event list's
+   button-styled text CTA is not a .button, so it is named explicitly. */
 .button .cta-icon svg,
-.button svg.cta-icon {
+.button svg.cta-icon,
+.event-list-cta .cta-icon svg {
   width: 1.05em;
   height: 1.05em;
   vertical-align: -0.15em;

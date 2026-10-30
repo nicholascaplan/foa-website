@@ -38,6 +38,15 @@ const strandedIcons = (page: Page) =>
       if (!sameLine) {
         failures.push(`${cta.textContent?.trim().replace(/\s+/g, " ").slice(0, 40)}: icon line y=${Math.round(iconBox.top)} but label's last line y=${Math.round(lastLine.top)}`);
       }
+      // Containment: a button CTA's icon must stay inside the button's own
+      // border box, including under 200% text - an icon hanging outside the
+      // pill is a bug even when it is not stranded on another line.
+      if (cta.matches("a.button, .event-list-cta--button")) {
+        const box = cta.getBoundingClientRect();
+        if (iconBox.right > box.right + 1 || iconBox.left < box.left - 1 || iconBox.top < box.top - 1 || iconBox.bottom > box.bottom + 1) {
+          failures.push(`${cta.textContent?.trim().replace(/\s+/g, " ").slice(0, 40)}: icon (right=${Math.round(iconBox.right)}, bottom=${Math.round(iconBox.bottom)}) lies outside its button (right=${Math.round(box.right)}, bottom=${Math.round(box.bottom)})`);
+        }
+      }
     }
     return failures;
   }, ctas);
