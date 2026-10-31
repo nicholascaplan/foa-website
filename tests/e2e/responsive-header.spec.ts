@@ -21,9 +21,9 @@ for (const width of [320, 390, 768, 1023]) {
           const range = document.createRange();
           range.setStart(walker.currentNode, word.index);
           range.setEnd(walker.currentNode, word.index + word[0].length);
-          for (const rect of range.getClientRects()) {
-            if (rect.left < bounds.left - 0.5 || rect.right > bounds.right + 0.5) return false;
-          }
+          const rects = range.getClientRects();
+          if (rects.length !== 1) return false;
+          if (rects[0].left < bounds.left - 0.5 || rects[0].right > bounds.right + 0.5) return false;
         }
       }
       return true;
@@ -48,9 +48,9 @@ test("homepage heading scales with enlarged text and stays whole", async ({ page
         const range = document.createRange();
         range.setStart(walker.currentNode, word.index);
         range.setEnd(walker.currentNode, word.index + word[0].length);
-        for (const rect of range.getClientRects()) {
-          if (rect.left < bounds.left - 0.5 || rect.right > bounds.right + 0.5) return false;
-        }
+        const rects = range.getClientRects();
+        if (rects.length !== 1) return false;
+        if (rects[0].left < bounds.left - 0.5 || rects[0].right > bounds.right + 0.5) return false;
       }
     }
     return true;
