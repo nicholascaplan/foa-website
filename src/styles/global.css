@@ -1038,13 +1038,6 @@ svg.cta-icon {
   color: var(--scroll-ink-soft);
 }
 
-.hero-event .hero-copy .hero-tagline {
-  max-width: 37rem;
-  margin: 0 0 1rem;
-  color: var(--scroll-ink-soft);
-  font-size: clamp(1.02rem, 2vw, 1.15rem);
-}
-
 /* The parchment is light in both modes, so the accent stays the dark poster green. */
 .hero-event .hero-copy h1 em {
   color: var(--scroll-forest);

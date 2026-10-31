@@ -42,7 +42,7 @@ for (const width of [320, 390, 768, 1023]) {
       if (route === "/") {
         const copy = page.locator(".hero-copy");
         await expect(copy.locator(".page-logo-home")).toBeVisible();
-        await expect(copy.locator(".eyebrow")).toHaveCount(1);
+        await expect(copy.locator(".eyebrow")).toHaveCount(0);
         const title = (await copy.locator("h1").boundingBox())!;
         expect(title.y, "Homepage heading sits below the logo, clear of the controls").toBeGreaterThanOrEqual(logoBottom);
         expect(await copy.locator("h1").evaluate((element) => parseFloat(getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(24);

@@ -274,9 +274,8 @@ test("the homepage shows Fireworks in the initial HTML without Welcome Tea or da
   assert.match(homepage, /<h1[^>]*>Fireworks on the <em>Field\.<\/em><\/h1>/);
   assert.doesNotMatch(homepage, /<h2>Fireworks on the Field<\/h2>/);
   assert.match(homepage, /<strong>Thursday 5th November, Ashley School field\.<\/strong> Gates open 16:30, event closes 18:30\./);
-  // The FOA introduction opens the hero as a tagline above the event title.
-  assert.match(homepage, /<p class="eyebrow">The Friends of Ashley<\/p>/);
-  assert.match(homepage, /<p class="hero-tagline">Bringing parents, carers and staff together to create memorable events, fund extra opportunities and strengthen our school community\.<\/p>/);
+  // Nick's call: no FOA introduction on the homepage hero; the panel is entirely about the event.
+  assert.doesNotMatch(homepage, /hero-tagline/);
   assert.doesNotMatch(homepage, /class="site-width home-intro"/);
   assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-960.webp"`));
   const heroActions = homepage.match(/<div class="hero-actions">([\s\S]*?)<\/div>/)?.[1];
