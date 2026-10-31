@@ -1037,6 +1037,11 @@ svg.cta-icon {
   color: var(--scroll-ink-soft);
 }
 
+/* The parchment is light in both modes, so the accent stays the dark poster green. */
+.hero-event .hero-copy h1 em {
+  color: var(--scroll-forest);
+}
+
 .hero-event .hero-copy .hero-actions {
   margin-top: 1.5rem;
 }
@@ -1126,7 +1131,8 @@ svg.cta-icon {
   }
 }
 
-.event-feature--poster :focus-visible {
+.event-feature--poster :focus-visible,
+.hero-event :focus-visible {
   outline-color: var(--scroll-forest);
 }
 
