@@ -994,6 +994,7 @@ svg.cta-icon {
 
 /* Homepage: one parchment panel unites the hero copy and the event poster card. */
 .hero-event {
+  grid-template-columns: minmax(0, 1fr);
   --scroll-ink: #2a1d0c;
   --scroll-ink-soft: #4d3b1f;
   --scroll-forest: #26361a;
@@ -1103,13 +1104,18 @@ svg.cta-icon {
     max-width: 5.5rem;
   }
 
+  .homepage .hero-event .mobile-page-heading-copy {
+    padding-top: 0;
+  }
+
   .homepage .hero-event .mobile-page-heading-copy,
   .homepage .hero-event .mobile-page-heading-copy h1 {
     overflow-wrap: normal;
   }
 
   .homepage .hero-event .hero-copy .mobile-page-heading h1 {
-    font-size: clamp(1.9rem, 8.5vw, 2.4rem);
+    /* Grows with the visitor's text size, capped by the viewport so an unbreakable word always fits the panel. */
+    font-size: min(clamp(1.9rem, 8.5vw, 2.4rem), 12.5vw);
   }
 }
 

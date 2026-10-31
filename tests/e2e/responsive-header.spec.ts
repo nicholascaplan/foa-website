@@ -116,9 +116,14 @@ for (const route of ["/", "/newsletter/", "/uniform/", "/events/christmas-fayre-
     const layout = await page.locator(".mobile-page-heading").evaluate((element) => {
       const logo = element.querySelector(".page-logo-home")!.getBoundingClientRect();
       const copy = element.querySelector(".mobile-page-heading-copy")!.getBoundingClientRect();
-      return { logoRight: logo.right, copyLeft: copy.left, copyRight: copy.right, viewport: innerWidth, overflow: document.documentElement.scrollWidth - innerWidth };
+      return { logoLeft: logo.left, logoRight: logo.right, copyLeft: copy.left, copyRight: copy.right, viewport: innerWidth, overflow: document.documentElement.scrollWidth - innerWidth };
     });
-    expect(layout.copyLeft, route).toBeGreaterThanOrEqual(layout.logoRight);
+    if (route === "/") {
+      // The combined Fireworks panel stacks the heading below the logo at the same left edge.
+      expect(layout.copyLeft, route).toBe(layout.logoLeft);
+    } else {
+      expect(layout.copyLeft, route).toBeGreaterThanOrEqual(layout.logoRight);
+    }
     expect(layout.copyRight, route).toBeLessThanOrEqual(layout.viewport);
     expect(layout.overflow, route).toBeLessThanOrEqual(0);
   });
