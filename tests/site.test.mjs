@@ -269,7 +269,12 @@ test("the footer and mobile menu share social links without adding them to prima
 test("the homepage shows Fireworks in the initial HTML without Welcome Tea or date switching", async () => {
   const homepage = await readFile(path.join(dist, "index.html"), "utf8");
   assert.match(homepage, /<article class="event-feature event-feature--poster">/);
-  assert.match(homepage, /<h2>Fireworks on the Field<\/h2>/);
+  // One parchment panel unites the hero copy and the event card; the h1 names the event once.
+  assert.match(homepage, /<div class="hero-event">/);
+  assert.match(homepage, /<h1[^>]*>Fireworks on the <em>Field\.<\/em><\/h1>/);
+  assert.doesNotMatch(homepage, /<h2>Fireworks on the Field<\/h2>/);
+  assert.match(homepage, /<strong>Thursday 5th November, Ashley School field\.<\/strong> Gates open 16:30, event closes 18:30\./);
+  assert.match(homepage, /<\/section>\s*<section class="site-width home-intro">/);
   assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-960.webp"`));
   assert.doesNotMatch(homepage, /Welcome Tea|welcome-tea|data-show-before|data-show-from/);
 });

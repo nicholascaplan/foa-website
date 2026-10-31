@@ -992,6 +992,134 @@ svg.cta-icon {
   bottom: calc(-1 * var(--scroll-overhang));
 }
 
+/* Homepage: one parchment panel unites the hero copy and the event poster card. */
+.hero-event {
+  --scroll-ink: #2a1d0c;
+  --scroll-ink-soft: #4d3b1f;
+  --scroll-forest: #26361a;
+  --scroll-gold: #f0c35a;
+  --scroll-edge: #9e7b35;
+  --scroll-overhang: 10px;
+  display: grid;
+  gap: 2rem;
+  margin-block: var(--scroll-overhang);
+  padding: 2rem 1.5rem;
+  border-inline: 2px solid #b08a356b;
+  border-radius: 3px;
+  color: var(--scroll-ink);
+  background: radial-gradient(ellipse at 30% 0%, #f2e5bd, #e0cc96 90%);
+  box-shadow:
+    inset 0 0 30px rgba(110, 75, 20, 0.22),
+    0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Inside the panel the card contributes its contents, not its own parchment. */
+.hero-event > .event-feature--poster {
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.hero-event .event-feature--poster::before,
+.hero-event .event-feature--poster::after {
+  display: none;
+}
+
+.hero-event .hero-copy {
+  min-width: 0;
+}
+
+.hero-event .hero-copy > p:not(.eyebrow) {
+  color: var(--scroll-ink-soft);
+}
+
+.hero-event .hero-copy .hero-actions {
+  margin-top: 1.5rem;
+}
+
+.hero-event .button--secondary {
+  background: #fdf7e4;
+}
+
+.home-intro {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.home-intro h2 {
+  max-width: 22ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.home-intro h2 em {
+  color: var(--green);
+  font-weight: inherit;
+}
+
+.home-intro p {
+  max-width: 37rem;
+  margin: 1rem 0 0;
+  color: var(--ink-soft);
+  font-size: clamp(1.05rem, 2vw, 1.22rem);
+}
+
+@media (min-width: 48rem) {
+  .hero-event {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    column-gap: 2rem;
+    padding: 2.4rem 2.6rem;
+  }
+
+  .hero-grid > .hero-event {
+    grid-column: 1 / -1;
+  }
+
+  .hero-event .hero-copy {
+    grid-area: auto;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .homepage .hero-event .hero-copy {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .homepage .hero-event .mobile-page-heading {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.9rem;
+  }
+
+  .homepage .hero-event .mobile-page-heading-brand {
+    max-width: 5.5rem;
+  }
+
+  .homepage .hero-event .mobile-page-heading-copy,
+  .homepage .hero-event .mobile-page-heading-copy h1 {
+    overflow-wrap: normal;
+  }
+
+  .homepage .hero-event .hero-copy .mobile-page-heading h1 {
+    font-size: clamp(1.9rem, 8.5vw, 2.4rem);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .hero-event {
+    gap: 1.75rem;
+    padding: 1.4rem 1.25rem 1.75rem;
+  }
+}
+
 .event-feature--poster :focus-visible {
   outline-color: var(--scroll-forest);
 }
