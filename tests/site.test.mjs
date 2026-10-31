@@ -271,6 +271,11 @@ test("the homepage shows Fireworks in the initial HTML without Welcome Tea or da
   assert.match(homepage, /<article class="event-feature event-feature--poster">/);
   assert.match(homepage, /<h2>Fireworks on the Field<\/h2>/);
   assert.match(homepage, new RegExp(`rel="preload" as="image" href="${basePath}/events/fireworks-960.webp"`));
+  const actions = homepage.match(/<div class="event-feature-actions">([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(actions, "homepage event feature actions are present");
+  assert.match(actions, new RegExp(`href="${basePath}/events/fireworks-2026-event-guide\\.pdf" download="Fireworks 2026 Event Guide\\.pdf"`));
+  assert.match(actions, /Download the event/);
+  assert.match(actions, /\(PDF, 9\.9 MB\)/);
   assert.doesNotMatch(homepage, /Welcome Tea|welcome-tea|data-show-before|data-show-from/);
 });
 
