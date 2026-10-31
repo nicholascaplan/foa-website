@@ -27,8 +27,8 @@ for (const width of [320, 390, 768, 1023]) {
         await expect(logo.locator("p, strong, span")).toHaveCount(0);
         const heading = (await page.locator(".mobile-page-heading-copy").boundingBox())!;
         if (route === "/") {
-          // The combined Fireworks panel stacks a smaller logo above a full-width heading.
-          expect(logoBox.width, "/: approved 88px panel logo").toBe(88);
+          // The combined Fireworks panel stacks the shared page-heading logo above a full-width heading.
+          expect(logoBox.width, "/: logo matches the shared 128px page-heading size").toBe(128);
           expect(heading.x, "/: the heading spans the panel under the logo").toBe(logoBox.x);
           expect(heading.y, "/: the heading sits below the logo").toBeGreaterThanOrEqual(logoBox.y + logoBox.height);
         } else {
@@ -42,7 +42,7 @@ for (const width of [320, 390, 768, 1023]) {
       if (route === "/") {
         const copy = page.locator(".hero-copy");
         await expect(copy.locator(".page-logo-home")).toBeVisible();
-        await expect(copy.locator(".eyebrow")).toHaveCount(0);
+        await expect(copy.locator(".eyebrow")).toHaveCount(1);
         const title = (await copy.locator("h1").boundingBox())!;
         expect(title.y, "Homepage heading sits below the logo, clear of the controls").toBeGreaterThanOrEqual(logoBottom);
         expect(await copy.locator("h1").evaluate((element) => parseFloat(getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(24);

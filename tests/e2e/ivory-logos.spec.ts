@@ -23,8 +23,8 @@ for (const width of [390, 1440]) {
       expect(day).not.toBeNull();
       if (artwork === "foa-logo-ivory.svg") {
         await expect(logo).not.toHaveClass(/brand-logo--festive/);
-        // The homepage panel stacks an 88px logo above the full-width heading; other pages keep 128px beside the heading.
-        expect(day!.width).toBeCloseTo(width < 1024 ? (route === "/" ? 88 : 128) : 112, 0);
+        // Every page's mobile heading logo is the shared 128px; the homepage stacks it above the heading, others place it beside.
+        expect(day!.width).toBeCloseTo(width < 1024 ? 128 : 112, 0);
       }
       await page.evaluate(() => document.documentElement.setAttribute("data-theme", "night"));
       expect(await logo.boundingBox()).toEqual(day);
