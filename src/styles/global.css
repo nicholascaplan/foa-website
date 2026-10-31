@@ -995,6 +995,8 @@ svg.cta-icon {
 /* Homepage: one parchment panel unites the hero copy and the event poster card. */
 .hero-event {
   grid-template-columns: minmax(0, 1fr);
+  /* Chrome stays viewport-sized so enlarged text keeps a wide, whole-word column. */
+  --hero-event-pad-inline: min(1.5rem, 5vw);
   --scroll-ink: #2a1d0c;
   --scroll-ink-soft: #4d3b1f;
   --scroll-forest: #26361a;
@@ -1004,7 +1006,7 @@ svg.cta-icon {
   display: grid;
   gap: 2rem;
   margin-block: var(--scroll-overhang);
-  padding: 2rem 1.5rem;
+  padding: 2rem var(--hero-event-pad-inline);
   border-inline: 2px solid #b08a356b;
   border-radius: 3px;
   color: var(--scroll-ink);
@@ -1094,6 +1096,10 @@ svg.cta-icon {
 }
 
 @media (max-width: 63.99rem) {
+  .homepage .hero .site-width.hero-grid {
+    width: min(calc(100% - min(2rem, 8vw)), var(--max-width));
+  }
+
   .homepage .hero-event .hero-copy {
     padding: 0;
     border-radius: 0;
@@ -1119,15 +1125,15 @@ svg.cta-icon {
   }
 
   .homepage .hero-event .hero-copy .mobile-page-heading h1 {
-    /* Grows with the visitor's text size, capped by the viewport so an unbreakable word always fits the panel. */
-    font-size: min(clamp(1.9rem, 8.5vw, 2.4rem), 12.5vw);
+    /* Scales with the visitor's text size; the viewport-capped panel chrome keeps every word inside the panel. */
+    font-size: clamp(1.9rem, 8.5vw, 2.4rem);
   }
 }
 
 @media (max-width: 47.99rem) {
   .hero-event {
     gap: 1.75rem;
-    padding: 1.4rem 1.25rem 1.75rem;
+    padding: 1.4rem min(1.25rem, 5vw) 1.75rem;
   }
 }
 
