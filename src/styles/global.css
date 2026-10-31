@@ -1038,6 +1038,13 @@ svg.cta-icon {
   color: var(--scroll-ink-soft);
 }
 
+.hero-event .hero-copy .hero-tagline {
+  max-width: 37rem;
+  margin: 0 0 1rem;
+  color: var(--scroll-ink-soft);
+  font-size: clamp(1.02rem, 2vw, 1.15rem);
+}
+
 /* The parchment is light in both modes, so the accent stays the dark poster green. */
 .hero-event .hero-copy h1 em {
   color: var(--scroll-forest);
@@ -1049,32 +1056,6 @@ svg.cta-icon {
 
 .hero-event .button--secondary {
   background: #fdf7e4;
-}
-
-.home-intro {
-  padding-block: clamp(1.5rem, 4vw, 3rem);
-}
-
-.home-intro h2 {
-  max-width: 22ch;
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
-}
-
-.home-intro h2 em {
-  color: var(--green);
-  font-weight: inherit;
-}
-
-.home-intro p {
-  max-width: 37rem;
-  margin: 1rem 0 0;
-  color: var(--ink-soft);
-  font-size: clamp(1.05rem, 2vw, 1.22rem);
 }
 
 @media (min-width: 48rem) {
@@ -1111,7 +1092,7 @@ svg.cta-icon {
   }
 
   .homepage .hero-event .mobile-page-heading-brand {
-    max-width: 5.5rem;
+    max-width: var(--mobile-page-logo-size);
   }
 
   .homepage .hero-event .mobile-page-heading-copy {
